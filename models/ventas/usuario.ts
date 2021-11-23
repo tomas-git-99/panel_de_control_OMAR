@@ -1,6 +1,6 @@
 import {DataTypes, Model} from 'sequelize';
+import db from '../../DB/conectarDB';
 
-import db from '../DB/conectarDB'
 
 export interface TodoAtributos {
     nombre: string;
