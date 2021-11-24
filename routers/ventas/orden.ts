@@ -1,13 +1,15 @@
 import { Router } from "express";
+import { generarOrden } from "../../controllers/ventas/orden";
 
 
 const router = Router();
 
 
+//GENERAR ORDEN
 
+router.post('/:idCliente/:idUsuario', generarOrden)
 
 // GENERAR DETALLES DE COMPRA
-
 
 
 
@@ -16,7 +18,9 @@ const router = Router();
 
 
 
+
 // BUSCAR ORDEN POR ID O DNI
+
 
 
 

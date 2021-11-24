@@ -1,19 +1,20 @@
 import { Router } from "express";
+import { buscarCliente, crearCliente, editarCliente } from "../../controllers/ventas/cliente";
 
 
 const router = Router();
 
 
 
-// OBTENER CLIENTE
-
+// BUSCAR CLIENTE
+router.get('/', buscarCliente)
 
 // CREAR NUEVO CLIENTE
-
+router.post('/', crearCliente);
 
 // EDITAR CLIENTE
 
-
+router.put('/', editarCliente)
 
 
 
