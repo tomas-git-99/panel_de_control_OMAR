@@ -3,11 +3,13 @@ import db from '../../DB/conectarDB';
 
 
 export interface TodoAtributos {
+
     nombre: string;
     correo: string;
     password: string;
     dni: number;
     rol: string;
+    
 }
 
 

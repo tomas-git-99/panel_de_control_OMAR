@@ -7,9 +7,8 @@ export interface TodoAtributos {
     local:string;
     tela:string;
     precio:number;
-    talles: number; // que talles ahi
-
-    talles_unidad: number;
+/*     talles: number;
+    talles_unidad: number; */
 }
 
 
@@ -20,8 +19,8 @@ export class Producto extends Model <TodoAtributos>{
     public local!:string;
     public tela!:string;
     public precio!:number;
-    public talles!: number; // que talles ahi 
-    public talles_unidad!: number;
+/*     public talles!: number;
+    public talles_unidad!: number; */
 
 }
 
@@ -43,13 +42,13 @@ Producto.init(
         },
         precio:{
             type:DataTypes.NUMBER
-        },
+        }/* ,
         talles:{
             type:DataTypes.NUMBER
         },
         talles_unidad:{
             type:DataTypes.NUMBER
-        }
+        } */
         
     },{
         sequelize: db,
