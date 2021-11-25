@@ -19,7 +19,7 @@ CREATE TABLE usuario(
     email VARCHAR(80),
     password VARCHAR(150)
 
-)
+);
 
 
 
@@ -79,7 +79,7 @@ CREATE TABLE orden_detalle(
 
     FOREIGN KEY fk_id_orden (id_orden)
     REFERENCES orden (id)
-)
+);
 
 
 /* OPCIONAL */
@@ -99,3 +99,8 @@ CREATE TABLE carrito(
     FOREIGN KEY fk_id_producto (id_producto)
     REFERENCES producto (id)
 );
+
+
+ALTER TABLE orden_detalle
+ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

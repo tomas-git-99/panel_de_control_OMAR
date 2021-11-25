@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Cliente } from "../../models/ventas/cliente";
+import { Producto } from "../../models/ventas/producto";
 
 
 
@@ -105,3 +106,5 @@ export const editarCliente = async (req: Request, res: Response) => {
 
     }
 }
+
+

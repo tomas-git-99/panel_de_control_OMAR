@@ -86,7 +86,10 @@ export const buscarProducto = async (req: Request, res: Response) => {
 
     const buscarProducto = req.query;
 
-    const producto = await Producto.findAll({ where:{ nombre:{ [Op.like]: '%' + buscarProducto + '%'} }});
+    const producto = await Producto.findAll({ where:{ 
+        nombre:{ [Op.like]: '%'+ buscarProducto.nombre +'%'},
+        // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+     }} );
 
 
     res.json({
@@ -101,6 +104,9 @@ export const eliminarProducto = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const producto = await Producto.findByPk(id);
+
+
+    await producto?.destroy()
 
     res.json({
         ok: true,
@@ -137,12 +143,11 @@ export const quitarStock = async (req: Request, res: Response) => {
 
     const { id } = req.params;
 
-    const { quitar:any } = req.body;
+    const { quitar } = req.body;
 
     const producto = await Producto.findByPk(id);
 
-    const nuevoStock = producto?.cantidad - quitar;
-
+    const nuevoStock = producto!.cantidad - quitar;
 
     await producto?.update({cantidad:nuevoStock});
 

@@ -64,7 +64,10 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.editarProducto = editarProducto;
 const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const buscarProducto = req.query;
-    const producto = yield producto_1.Producto.findAll({ where: { nombre: { [dist_1.Op.like]: '%' + buscarProducto + '%' } } });
+    const producto = yield producto_1.Producto.findAll({ where: {
+            nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        } });
     res.json({
         ok: true,
         producto
@@ -74,6 +77,7 @@ exports.buscarProducto = buscarProducto;
 const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const producto = yield producto_1.Producto.findByPk(id);
+    yield (producto === null || producto === void 0 ? void 0 : producto.destroy());
     res.json({
         ok: true,
         msg: `El producto ${producto === null || producto === void 0 ? void 0 : producto.nombre} fue eliminado con exito`
@@ -94,9 +98,9 @@ const agregarMasStock = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.agregarMasStock = agregarMasStock;
 const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { quitar: any } = req.body;
+    const { quitar } = req.body;
     const producto = yield producto_1.Producto.findByPk(id);
-    const nuevoStock = (producto === null || producto === void 0 ? void 0 : producto.cantidad) - quitar;
+    const nuevoStock = producto.cantidad - quitar;
     yield (producto === null || producto === void 0 ? void 0 : producto.update({ cantidad: nuevoStock }));
     res.json({
         ok: true,

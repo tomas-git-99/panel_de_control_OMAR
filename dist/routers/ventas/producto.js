@@ -8,7 +8,7 @@ router.post('/', producto_1.crearProducto);
 //AGREGAR STOCK DE buscarProducto
 router.put('/agregar/:id', producto_1.agregarMasStock);
 //QUITAR STOCK DE PRODCUTO
-router.put('/quitar/:id', producto_1.agregarMasStock);
+router.put('/quitar/:id', producto_1.quitarStock);
 //EDITAR PRODUCTO
 router.put('/:id', producto_1.editarProducto);
 //BUSCAR PRODUCTO POR NOMBRE

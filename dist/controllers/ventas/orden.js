@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const orden_1 = require("../../models/ventas/orden");
@@ -39,9 +39,9 @@ const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.generarOrden = generarOrden;
 const ordenDetalles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, idProducto } = req.params;
+        const { idOrden, idProducto } = req.params;
         const { cantidad } = req.body;
-        const orden = yield orden_1.Orden.findByPk(id);
+        const orden = yield orden_1.Orden.findByPk(idOrden);
         if (!orden) {
             res.status(404).json({
                 ok: false,
@@ -56,7 +56,7 @@ const ordenDetalles = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             });
         }
         const datos = {
-            id_orden: id,
+            id_orden: idOrden,
             id_producto: idProducto,
             cantidad,
             precio: producto === null || producto === void 0 ? void 0 : producto.precio
@@ -99,8 +99,7 @@ const confirmarCompra = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.confirmarCompra = confirmarCompra;
 const buscarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const buscarOrden = req.query;
-    //configurar para que señale el id del usuario
-    const orden = yield orden_1.Orden.findAll({ where: { id: { [dist_1.Op.like]: '%' + buscarOrden + '%' } } });
+    const orden = yield orden_1.Orden.findAll({ where: { id: { [dist_1.Op.like]: '%' + buscarOrden.id + '%' } } });
     res.json({
         ok: true,
         orden
@@ -129,4 +128,37 @@ const buscarOrdenDNI = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.buscarOrdenDNI = buscarOrdenDNI;
+const confirmarPedido = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idOrden } = req.params;
+    const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: idOrden } });
+    let fullTotal = 0;
+    yield ordenDetalle.map((e) => __awaiter(void 0, void 0, void 0, function* () {
+        //suma y multiplica todas las compras
+        const total = e.cantidad * e.precio;
+        const producto = yield producto_1.Producto.findByPk(e.id_producto);
+        //Descuenta del stock de la base de datos
+        if (e.cantidad < producto.cantidad) {
+            let actualStock = producto.cantidad - e.cantidad;
+            yield (producto === null || producto === void 0 ? void 0 : producto.update({ cantidad: actualStock }));
+        }
+        else {
+            res.json({
+                ok: true,
+                msg: "el producto con el id " + e.id_producto + " no tiene stock suficiente "
+            });
+        }
+        fullTotal = fullTotal + total;
+    }));
+    const orden = yield orden_1.Orden.findByPk(idOrden);
+    const body = {
+        total: fullTotal,
+    };
+    yield (orden === null || orden === void 0 ? void 0 : orden.update(body));
+    res.json({
+        ok: true,
+        orden,
+        ordenDetalle
+    });
+});
+exports.confirmarPedido = confirmarPedido;
 //# sourceMappingURL=orden.js.map

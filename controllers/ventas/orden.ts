@@ -42,11 +42,11 @@ export const ordenDetalles = async (req: Request, res: Response) => {
 
     try {
 
-    const { id, idProducto } = req.params;
+    const { idOrden, idProducto } = req.params;
 
     const { cantidad } = req.body;
 
-    const orden = await Orden.findByPk(id);
+    const orden = await Orden.findByPk(idOrden);
 
     if(!orden){
         res.status(404).json({
@@ -65,7 +65,7 @@ export const ordenDetalles = async (req: Request, res: Response) => {
     }
 
     const datos:any = {
-        id_orden:id,
+        id_orden:idOrden,
         id_producto:idProducto,
         cantidad,
         precio:producto?.precio
@@ -140,8 +140,7 @@ export const buscarOrden = async (req: Request, res: Response) => {
 
     const buscarOrden = req.query;
 
-    //configurar para que señale el id del usuario
-    const orden = await Orden.findAll({ where: { id:{ [Op.like]: '%' + buscarOrden + '%'} }})
+    const orden = await Orden.findAll({ where: { id:{ [Op.like]: '%' + buscarOrden.id + '%'} }})
 
 
     res.json({
@@ -183,3 +182,61 @@ export const buscarOrdenDNI = async (req: Request, res: Response) => {
         orden
     })
 }
+
+export const confirmarPedido = async (req: Request, res: Response) => {
+
+
+    const { idOrden } = req.params;
+
+    const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden: idOrden}});
+
+    
+    let fullTotal:number = 0;
+
+    await ordenDetalle.map( async(e) => {
+        
+        //suma y multiplica todas las compras
+        const total = e.cantidad * e.precio;
+
+        const producto = await Producto.findByPk(e.id_producto);
+
+        //Descuenta del stock de la base de datos
+        if( e.cantidad < producto!.cantidad){
+
+            let actualStock = producto!.cantidad - e.cantidad;
+    
+            await producto?.update({cantidad:actualStock})
+
+        }else{
+            res.json({ 
+                ok:true,
+                msg: "el producto con el id " + e.id_producto + " no tiene stock suficiente "
+            })
+        }
+
+
+        fullTotal = fullTotal + total;
+
+    });
+
+
+
+
+    const orden = await Orden.findByPk(idOrden);
+
+
+    const body = {
+        total: fullTotal,
+    }
+
+    await orden?.update(body);
+
+    res.json({
+        ok: true,
+        orden,
+        ordenDetalle
+    })
+
+}
+
+

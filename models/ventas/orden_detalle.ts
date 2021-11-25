@@ -6,7 +6,7 @@ export interface TodoAtributos {
     id_orden: number;
     id_producto: number;
     cantidad:number;
-    talle:string;
+    // talle:string;
     precio:number;
 }
 
@@ -16,7 +16,7 @@ export class OrdenDetalle extends Model <TodoAtributos>{
     public id_orden!: number;
     public id_producto!: number;
     public cantidad!:number;
-    public talle!:string;
+    // public talle!:string;
     public precio!:number;
 
 }
@@ -34,9 +34,9 @@ OrdenDetalle.init(
         cantidad:{
             type:DataTypes.NUMBER
         },
-        talle:{
-            type:DataTypes.STRING
-        },
+        // talle:{
+        //     type:DataTypes.STRING
+        // },
         precio:{
             type:DataTypes.NUMBER
         }
