@@ -1,0 +1,25 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+li{
+    list-style:none
+}
+
+
+.contenido {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    height: 100vh;
+
+}
+
+.menu{
+    background: #E5E6E4;
+    display: grid;
+}
+
+
+.centro{
+    border: 1px solid;
+}
