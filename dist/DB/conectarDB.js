@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const db = new sequelize_1.Sequelize('chat-destructivo', 'root', '12345', {
+const db = new sequelize_1.Sequelize(process.env.NOMBRE_DB || "", process.env.NOMBRE_USER_DB || "", process.env.PASSWORD_DB || "", {
     host: 'localhost',
     dialect: 'mysql',
     //logging: false,

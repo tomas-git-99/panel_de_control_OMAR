@@ -13,8 +13,7 @@ router.get('/', buscarCliente)
 router.post('/', crearCliente);
 
 // EDITAR CLIENTE
-
-router.put('/', editarCliente)
+router.put('/:id', editarCliente)
 
 
 

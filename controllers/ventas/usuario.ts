@@ -13,20 +13,19 @@ export const crearUsuario = async( req: Request, res: Response) => {
 
     try {
 
-        const { nombre, correo, password, dni, rol} = req.body;
-
+        const { nombre, email, password, dni_cuil, rol} = req.body;
 
         const salt = await bcryptjs.genSaltSync(10);
 
         const newPassword = await bcryptjs.hashSync( password, salt );
 
 
-        const datos = {
+        const datos:any = {
 
             nombre,
-            correo,
+            email,
             password:newPassword,
-            dni,
+            dni_cuil,
             rol
 
         }
@@ -34,6 +33,7 @@ export const crearUsuario = async( req: Request, res: Response) => {
 
 
         const usuario = new Usuario(datos);
+
         await usuario.save();
 
 
@@ -108,16 +108,16 @@ export const eliminarUsuario = async (req: Request, res: Response) => {
 
     const usuario = await Usuario.findByPk(id);
 
-/*     if (!usuario.estado){
+    if (!usuario?.estado){
         return res.status(400).json({ 
             ok: false,
-            msg:`El usuario ${usuario.nombre} no existe en la base de datos`
+            msg:`El usuario ${usuario?.nombre} no existe en la base de datos`
         })
-    } */
+    } 
 
-/*     usuario.estado = false;
+     usuario.estado = false;
 
-    await usuario.save(); */
+    await usuario.save();
 
     res.json({
         ok: true,

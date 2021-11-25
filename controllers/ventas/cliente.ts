@@ -9,23 +9,26 @@ import { Cliente } from "../../models/ventas/cliente";
 export const crearCliente = async (req: Request, res: Response) => {
     try {
 
-        const { nombre, apellido, dni_cuil, tel_cel, direccion, codigo_postal, provincia, localidad} = req.body;
+        const { nombre, apellido, dni_cuil, tel_cel, direccion, cp, provincia, localidad} = req.body;
 
 
 
 
-        const datos = {
+        const datos:any = {
 
             nombre,
             apellido,
             dni_cuil,
             tel_cel,
             direccion,
-            codigo_postal,
+            cp,
             provincia,
             localidad,
 
         }
+
+
+        console.log(datos);
 
 
 
@@ -50,9 +53,14 @@ export const crearCliente = async (req: Request, res: Response) => {
 
 
 export const buscarCliente = async (req: Request, res: Response) => {
-    const buscarCliente = req.query;
 
-    const cliente = await Cliente.findAll({ where:{ dni_cuil:{ [Op.like]: '%' + buscarCliente + '%'} }});
+    const buscarCliente:any = req.query;
+
+    console.log(buscarCliente)
+
+    
+    //const cliente = await Cliente.findAll({ where:{ dni_cuil:{ [Op.like]: '%' + buscarCliente + '%'} }});
+    const cliente = await Cliente.findAll({ where:{ dni_cuil:buscarCliente.dni_cuil} });
 
 
     res.json({

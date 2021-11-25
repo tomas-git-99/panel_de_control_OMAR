@@ -107,3 +107,48 @@ export const eliminarProducto = async (req: Request, res: Response) => {
         msg: `El producto ${producto?.nombre} fue eliminado con exito`
     })
 }
+
+
+
+
+export const agregarMasStock = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const { agregar } = req.body;
+
+    const producto = await Producto.findByPk(id);
+
+    const nuevoStock = agregar + producto?.cantidad;
+
+
+    await producto?.update({cantidad:nuevoStock});
+
+
+    res.json({
+        ok: true,
+        producto
+    })
+}
+
+
+
+export const quitarStock = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const { quitar:any } = req.body;
+
+    const producto = await Producto.findByPk(id);
+
+    const nuevoStock = producto?.cantidad - quitar;
+
+
+    await producto?.update({cantidad:nuevoStock});
+
+
+    res.json({
+        ok: true,
+        producto
+    })
+}

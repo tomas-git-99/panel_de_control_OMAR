@@ -14,13 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+//MIS IMPORTACIONES
+const cliente_1 = __importDefault(require("../routers/ventas/cliente"));
+const usuario_1 = __importDefault(require("../routers/ventas/usuario"));
+const orden_1 = __importDefault(require("../routers/ventas/orden"));
+const producto_1 = __importDefault(require("../routers/ventas/producto"));
+const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
         this.apiPaths = {
             //VENTAS
-            usuarios: '/api/usuarios',
-            auth: '/api/auth',
-            sala: '/api/sala',
+            usuario: '/api/usuario',
+            cliente: '/api/cliente',
+            orden: '/api/orden',
+            producto: '/api/producto',
             //PRODUCCION
         };
         this.app = (0, express_1.default)();
@@ -35,8 +42,8 @@ class ServerApp {
     dbConencion() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //await db.authenticate();
-                console.log('base de datos conectada');
+                yield conectarDB_1.default.authenticate();
+                console.log('Base de datos conectado');
             }
             catch (error) {
                 throw new Error("error" + error);
@@ -49,7 +56,12 @@ class ServerApp {
         this.app.use(express_1.default.static('public'));
     }
     router() {
-        this.app.use(this.apiPaths.usuarios);
+        //VENTAS
+        this.app.use(this.apiPaths.usuario, usuario_1.default);
+        this.app.use(this.apiPaths.cliente, cliente_1.default);
+        this.app.use(this.apiPaths.orden, orden_1.default);
+        this.app.use(this.apiPaths.producto, producto_1.default);
+        //PRODUCCION
     }
     listen() {
         this.app.listen(this.port, () => console.log(`En el port ${this.port}`));
