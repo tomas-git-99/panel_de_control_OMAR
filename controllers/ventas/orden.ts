@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
+import { Op } from "sequelize/dist";
+import { Cliente } from "../../models/ventas/cliente";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
+import cliente from "../../routers/ventas/cliente";
 
 
 export const generarOrden = async(req: Request, res: Response) => {
@@ -34,7 +37,7 @@ export const generarOrden = async(req: Request, res: Response) => {
     }
 }
 
-export const OrdenDetalles = async (req: Request, res: Response) => {
+export const ordenDetalles = async (req: Request, res: Response) => {
 
 
     try {
@@ -128,4 +131,55 @@ export const confirmarCompra = async (req: Request, res: Response) => {
 
 
 
+}
+
+
+export const buscarOrden = async (req: Request, res: Response) => {
+
+
+
+    const buscarOrden = req.query;
+
+    //configurar para que señale el id del usuario
+    const orden = await Orden.findAll({ where: { id_cliente:{ [Op.like]: '%' + buscarOrden + '%'} }})
+
+
+    res.json({
+        ok: true,
+        orden
+    })
+}
+
+
+
+
+export const buscarOrdenDNI = async (req: Request, res: Response) => {
+
+
+    const dni = req.query;
+
+    const cliente = await Cliente.findAll({ where:{ dni_cuil :{ [Op.like]: '%' + dni + '%' }}})
+
+    if(!cliente){
+        res.json({
+            ok: false,
+            msg: 'No existe ningun cliente con ese dni'
+        })
+    }
+
+    const orden = await Orden.findAll({ where:{ id_cliente: cliente.id }})
+
+
+    if (!orden){
+        res.json({
+            ok:false,
+            msg:"no ahi ninguna orden con ese DNI o CUIL"
+        })
+    }
+
+
+    res.json({
+        ok:true,
+        orden
+    })
 }

@@ -3,6 +3,12 @@ import cors from "cors";
 
 
 
+//MIS IMPORTACIONES
+import ventasCliente   from "../routers/ventas/cliente"
+import ventasUsuario   from "../routers/ventas/usuario"
+import ventasOrden     from "../routers/ventas/orden"
+import ventasProducto  from "../routers/ventas/producto"
+
 class ServerApp {
 
     private app: express.Application;
@@ -11,9 +17,10 @@ class ServerApp {
     private apiPaths = {
 
         //VENTAS
-        usuarios: '/api/usuarios',
-        auth:'/api/auth',
-        sala:'/api/sala',
+        usuario: '/api/usuario',
+        cliente: '/api/cliente',
+        orden:    '/api/orden',
+        producto: '/api/producto',
 
         //PRODUCCION
     };
@@ -52,7 +59,10 @@ class ServerApp {
     }
 
     router(){
-        this.app.use( this.apiPaths.usuarios,)
+        this.app.use( this.apiPaths.usuario,  ventasUsuario)
+        this.app.use( this.apiPaths.cliente,  ventasCliente)
+        this.app.use( this.apiPaths.orden,    ventasOrden)
+        this.app.use( this.apiPaths.producto, ventasProducto)
     }
  
 
