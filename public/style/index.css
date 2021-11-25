@@ -1,72 +1,80 @@
 *{
-    padding: 0;
-    margin: 0;
-}
-li{
-    list-style:none
+    padding:0;
+    margin:0;
 }
 
-
-.contenido {
-    display: grid;
-    grid-template-columns: 10% 90%;
+.login{
+    width: 100vw;
     height: 100vh;
-    background: #FBFBF2;
-
-}
-.usuario{
-    place-self: center;
-}
-.menu{
-    background: #E5E6E4;
     display: grid;
-    grid-template-rows: 10% 80% 10%;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
-    font-weight:500; 
-    color: #3d3d3d;
-}
-.ulMenu{
-    place-self: center;
-}
-.ventas{
-    padding-bottom: 20px;
-}
-
-.ventas a{
-    text-decoration: none;
-    color: #3d3d3d;
-}
-.ventas li{
-    cursor: pointer;
-    padding-left: 5px;
-
-}
-.produccion li{
-    cursor: pointer;
-    padding-left: 5px;
-}
-.centro{
-    display: grid;
-    justify-content:center;
     align-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight:300; 
+    background: #FBFBF2;
+    color: #3d3d3d;
 }
 
-.bienvenido{
+
+.form{
+    
+    width: 300px;
+    height:350px;
     display: grid;
-    align-items:center;
-    text-align: center;
- 
-    width: 500px;
-    font-size:25px;
-    height: 200px;
+    align-content: center;
+    justify-content: center;
 
     border-radius: 10px;
     background:white;
     color: #3d3d3d;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 
+    
+}
+form{
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    row-gap: 30px;;
+    width:200px;
+    height: 400px;;
+}
+.form h3{
+    text-align: center;
+    padding-bottom: 10px;;
+}
+.titulo{
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.form input{
+    font-size: 25px;;
+    height:30px;
+    width: 200px;
+    border: none;
+    border-radius: 5px;
+
+    background:white;
+    color: #3d3d3d;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
     font-family: 'Poppins', sans-serif;
-    font-weight:500; 
+    font-weight:300; 
+
+}
+
+.form button{
+    height:30px;
+    width: 100px;
+    border: none;
+    place-self: center;
+    font-size:20px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    color: #3d3d3d;
+    border-radius: 10px;
+    background: gainsboro;
 }
 
