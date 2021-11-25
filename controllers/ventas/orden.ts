@@ -141,7 +141,7 @@ export const buscarOrden = async (req: Request, res: Response) => {
     const buscarOrden = req.query;
 
     //configurar para que señale el id del usuario
-    const orden = await Orden.findAll({ where: { id_cliente:{ [Op.like]: '%' + buscarOrden + '%'} }})
+    const orden = await Orden.findAll({ where: { id:{ [Op.like]: '%' + buscarOrden + '%'} }})
 
 
     res.json({
@@ -158,7 +158,7 @@ export const buscarOrdenDNI = async (req: Request, res: Response) => {
 
     const dni = req.query;
 
-    const cliente = await Cliente.findAll({ where:{ dni_cuil :{ [Op.like]: '%' + dni + '%' }}})
+    const cliente:any = await Cliente.findAll({ where:{ dni_cuil :{ [Op.like]: '%' + dni + '%' }}})
 
     if(!cliente){
         res.json({

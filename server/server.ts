@@ -8,6 +8,7 @@ import ventasCliente   from "../routers/ventas/cliente"
 import ventasUsuario   from "../routers/ventas/usuario"
 import ventasOrden     from "../routers/ventas/orden"
 import ventasProducto  from "../routers/ventas/producto"
+import db from "../DB/conectarDB";
 
 class ServerApp {
 
@@ -42,8 +43,8 @@ class ServerApp {
 
     async dbConencion(){
         try {
-            //await db.authenticate();
-            console.log('base de datos conectada');
+            await db.authenticate();
+            console.log('Base de datos conectado');
         } catch (error) {
             throw new Error("error" + error);
         }
@@ -59,10 +60,14 @@ class ServerApp {
     }
 
     router(){
+
+        //VENTAS
         this.app.use( this.apiPaths.usuario,  ventasUsuario)
         this.app.use( this.apiPaths.cliente,  ventasCliente)
         this.app.use( this.apiPaths.orden,    ventasOrden)
         this.app.use( this.apiPaths.producto, ventasProducto)
+
+        //PRODUCCION
     }
  
 

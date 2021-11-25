@@ -3,6 +3,7 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
 
+    id:number;
     id_cliente: number;
     id_usuario: number;
     total:number;
@@ -12,7 +13,7 @@ export interface TodoAtributos {
 
 
 export class Orden extends Model <TodoAtributos>{
-
+    public id!:number;
     public id_cliente!: number;
     public id_usuario!: number;
     public total!:number;
@@ -24,7 +25,12 @@ export class Orden extends Model <TodoAtributos>{
 
 Orden.init(
     {
+        id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement: true,
 
+        },
         id_cliente:{
             type:DataTypes.NUMBER
         },
@@ -40,6 +46,7 @@ Orden.init(
         url_pdf_venta:{
             type:DataTypes.STRING
         }
+
         
     },{
         sequelize: db,
