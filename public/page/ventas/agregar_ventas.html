@@ -29,8 +29,8 @@
                     <h3><a href="../ventas/index.html">VENTAS</a> </h3>
                     <ul>
                         <li><a href="./agregar_ventas.html">Agregar</a></li>
-                        <li>Comprar</li>
-                        <li>Historial</li>
+                        <li><a href="./compra.html"> Comprar</a></li>
+                        <li><a href="./historial.html">Historial</a></li>
                     </ul>
                 </div>
     
@@ -53,8 +53,13 @@
             <div class="bienvenido">
 
                 <div class="cartel">
-
+                    <div class="titulo">
+                        <h1>PRODUCTO</h1>
+                        <hr width="100%" >
+                    </div>
                     <form action="" class="formProducto">
+
+
                         <div class="nombre">
                             <span>Nombre</span>
                             <input type="text" class="form-control">
@@ -80,18 +85,34 @@
                             <input type="text"class="form-control">
                         </div>
 
-                        
-                        <div class="box">
-                            <div class="check">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                      Default checkbox
-                                    </label>
-                                  </div>
+                        <div class="check_prueba">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Ordenar por talle </label>
+                              </div>
+                        </div>
+
+                        <div class="talle" >
+                            <span>Talle</span>
+                            <div class="opciones" >
+                                <select class="custom-select custom-select" disabled="disabled">
+                                    <option selected>Talles</option>
+                                    <option value="1">One</option>
+                                  </select>
                             </div>
                         </div>
+
+                        <div class="cantidas_talle">
+                            <span>Cantidad</span>
+                            <input type="text" class="form-control" disabled>
+                        </div>
+                        
+                        <div class="boton">
+                            <button>GUARDAR</button>
+                        </div>
                     </form>
+
                 </div>
             </div>
 

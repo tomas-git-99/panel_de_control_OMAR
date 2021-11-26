@@ -1,0 +1,24 @@
+.boton button{
+    background: #00B5EE;
+    color: #fff;
+    width:100px;
+    border: none;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.opcionesDeLocal select{
+    outline: none;
+
+    width: 200px;
+}
+
+.opcionesDeLocal{
+    display: grid;
+  
+}
+
+.carrito{
+    position: relative;
+    left: 200px;
+}
