@@ -1,0 +1,49 @@
+.bienvenido{
+    width: 700px;
+    height: 800px;
+}
+
+
+.cartel{
+    width: 670px;
+    height: 500px;
+    
+}
+
+.total{
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+.hrDiv{
+    border-top: 2px solid #3d3d3d;
+}
+
+.btns{
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
+}
+
+.salir{
+    background: #DA2121;
+    width: 80px;
+    color: white;
+}
+
+.confirmar{
+    color: white;
+    width: 130px;
+    background: #00B5EE;
+}
+
+.resumen{
+    display: grid;
+    font-size: 22px;
+    grid-template-columns: 1fr 1fr;
+
+}
