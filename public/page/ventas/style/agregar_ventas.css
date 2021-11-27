@@ -1,6 +1,7 @@
 .bienvenido{
     width: 600px;
-    height: 800px;
+    height: 700px;
+   
 }
 
 .cartel{
@@ -9,7 +10,12 @@
     align-content: center;
 
     width: 600px;
-    height: 800px;
+    height: 600px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+
 
 }
 
@@ -34,7 +40,6 @@ form{
 
 .box{
     position: absolute;
-
 
     justify-content: center;  
     font-size: 18px;
