@@ -1,5 +1,7 @@
 const form = document.querySelector("form");
 
+
+//FALTA CONFIGURAR LAS RUTAS PARA DIFERENTES ROLES
 const PERMISOS = {
     "ADMIN": () => console.log("admin"),
     "VENTAS": "was",
