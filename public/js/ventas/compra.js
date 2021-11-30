@@ -1,3 +1,10 @@
+
+
+const url = ( window.location.hostname.includes('localhost'))
+? 'http://localhost:8000/api/'
+: '';
+
+
 const eliminacion = document.querySelectorAll(".eliminar");
 const cantidad = document.querySelector(".cantidad");
 const formAgregar =document.querySelector(".formAgregar")
@@ -35,11 +42,24 @@ eliminacion.forEach((boton) => {
 
 
     //agregar a carrito para despues comprar con el metodo POST
-            
-      console.log(forData);
 
-
+    fetch(url + "carrito" ,{ 
+      method: "POST",
+      body: JSON.stringify( forData ),
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(res => {
+        
       cantidad.style.opacity = 0;
+    })
+    .catch(err => {
+        alert("Error: " + err)
+    });
+            
+    
+
+
 
 
   })
@@ -49,6 +69,27 @@ eliminacion.forEach((boton) => {
 
   carrito.addEventListener("click", () => {
 
-    window.location = "/public/page/roles/admin/ventas/carrito.html"
+    window.location = "/page/roles/admin/ventas/carrito.html"
 
   })
+
+
+  const talleUnica = document.querySelector(".talleUnica");
+
+  const checkAgregar = document.getElementById("checkAgregar");
+
+checkAgregar.addEventListener("change", (e) => {
+  e.preventDefault();
+
+  if(checkAgregar.checked){
+
+    talleUnica.style.display = "grid";
+    talleUnica.style.visibility = "visible";
+
+  }else{
+    talleUnica.style.display = "none";
+    talleUnica.style.visibility = "hidden";
+  }
+})
+
+

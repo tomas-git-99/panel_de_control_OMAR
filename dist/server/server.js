@@ -19,6 +19,7 @@ const cliente_1 = __importDefault(require("../routers/ventas/cliente"));
 const usuario_1 = __importDefault(require("../routers/ventas/usuario"));
 const orden_1 = __importDefault(require("../routers/ventas/orden"));
 const producto_1 = __importDefault(require("../routers/ventas/producto"));
+const carrito_1 = __importDefault(require("../routers/ventas/carrito"));
 const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
@@ -28,9 +29,9 @@ class ServerApp {
             cliente: '/api/cliente',
             orden: '/api/orden',
             producto: '/api/producto',
-            //PRODUCCION
+            carrito: '/api/carrito',
         };
-        this.app = (0, express_1.default)();
+        this.app = express_1.default();
         this.port = process.env.PORT || '8000';
         /* middleware */
         this.middlewares();
@@ -51,7 +52,7 @@ class ServerApp {
         });
     }
     middlewares() {
-        this.app.use((0, cors_1.default)());
+        this.app.use(cors_1.default());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.static('public'));
     }
@@ -61,6 +62,7 @@ class ServerApp {
         this.app.use(this.apiPaths.cliente, cliente_1.default);
         this.app.use(this.apiPaths.orden, orden_1.default);
         this.app.use(this.apiPaths.producto, producto_1.default);
+        this.app.use(this.apiPaths.carrito, carrito_1.default);
         //PRODUCCION
     }
     listen() {
