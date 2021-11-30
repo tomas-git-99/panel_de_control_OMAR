@@ -79,14 +79,14 @@
                             <td>$5678</td>
                             <td></td>
                             <td>
-                                <div class="boton rueda">
-
+                                <div class="boton rueda" id="1">
                                     <img src="/public/img/rueda.svg" alt="" width="23px">
                                 </div>
                             </td>
+
                             <td>
-                                <div class="boton cruz">
-                                    <img src="/public/img/cruz.svg" alt="" width="23px" class="cruz">
+                                <div class="boton cruz" id="2">
+                                    <img src="/public/img/cruz.svg" alt="" width="23px" >
                                 </div>
                             </td>
                           </tr>
@@ -112,8 +112,8 @@
             <div class="cliente">
 
                 <div class="panel">
-                    <button>Cliente Nuevo</button>
-                    <button>Cliente Existete</button>
+                    <button class="nuevo">Cliente Nuevo</button>
+                    <button class="existe">Cliente Existete</button>
                 </div>
             </div>
 
@@ -121,9 +121,13 @@
             <div class="cliente buscador">
                 <div class="buscadorCli">
 
+                    <div class="retrocederBuscar">
+                        <img src="/public/img/flecha.svg" alt="" width="25px" >
+                    </div>
+
                     <h5>Buscar Cliente</h5>
                     <input type="text" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-
+                    
                     <div class="nombreCliente">
                         
                         <table class="table">
@@ -143,7 +147,7 @@
                                 <td>123456789</td>
                                 
                                 <td>
-                                    <div class="boton preview">
+                                    <div class="preview">
                                         <button>
                                             Agregar
                                         </button>
@@ -162,8 +166,11 @@
 
           
                 <div class="cartelCliente">
+                    <div class="retroceder">
+                        <img src="/public/img/flecha.svg" alt="" width="25px" >
+                    </div>
                     <div class="titulo">
-                        <h1>PRODUCTO</h1>
+                        <h1>CLIENTE</h1>
                         <hr width="100%" >
                     </div>
                     <form action="" class="formProducto">
@@ -171,47 +178,47 @@
 
                         <div class="nombre">
                             <span>Nombre</span>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="nombre" placeholder="Nombre">
                         </div>
                         <div class="local">
-                            <span>Local</span>
-                            <input type="text"class="form-control">
+                            <span>Apellido</span>
+                            <input type="text"class="form-control" name="apellido" placeholder="Apellido">
                         </div>
                         <div class="cantidad">
-                            <span>Cantidad</span>
-                            <input type="text"class="form-control">
+                            <span>DNI O CUIL</span>
+                            <input type="text"class="form-control" name="DNI O CUIL" placeholder="DNI O CUIL">
                         </div>
                         <div class="talles">
-                            <span>Talles</span>
-                            <input type="text"class="form-control">
+                            <span>Telefono o Celular</span>
+                            <input type="text"class="form-control" name="Telefono o Celular" placeholder=" Telefono o Celular">
                         </div>
                         <div class="tela">
-                            <span>Tela</span>
-                            <input type="text"class="form-control">
+                            <span>Provincia</span>
+                            <input type="text"class="form-control" name="provincia" placeholder="Provincia">
                         </div>
                         <div class="precio">
-                            <span>Precio</span>
-                            <input type="text"class="form-control">
+                            <span>Localidad</span>
+                            <input type="text"class="form-control" name="localidad" placeholder="Localidad">
                         </div>
                         <div class="cantidad">
-                            <span>Cantidad</span>
-                            <input type="text"class="form-control">
+                            <span>Direccion</span>
+                            <input type="text"class="form-control" name="direccion" placeholder="Direccion">
                         </div>
                         <div class="talles">
-                            <span>Talles</span>
-                            <input type="text"class="form-control">
+                            <span>Codigo Postal</span>
+                            <input type="text"class="form-control" name="cp" placeholder="Codigo Postal">
                         </div>
                         <div class="tela">
-                            <span>Tela</span>
-                            <input type="text"class="form-control">
+                            <span>Transporte</span>
+                            <input type="text"class="form-control" name="transporte" placeholder="Transporte">
                         </div>
                         <div class="precio">
-                            <span>Precio</span>
-                            <input type="text"class="form-control">
+                            <span>Fecha</span>
+                            <input type="date"class="form-control" name="fecha" placeholder="Fecha">
                         </div>
 
                         <div class="boton">
-                            <button>GUARDAR</button>
+                            <button class="btnCliente">GUARDAR</button>
                         </div>
                     </form>
 

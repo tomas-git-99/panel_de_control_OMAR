@@ -13,7 +13,8 @@ eliminacion.forEach((boton) => {
 
     cantidad.style.opacity = 1;
 
-    localStorage.setItem("id", boton.id)
+    localStorage.setItem("id", boton.id);
+    
     //   alert("id:" + boton.id)
     })
   })
@@ -46,8 +47,8 @@ eliminacion.forEach((boton) => {
 
   const carrito = document.querySelector(".carrito");
 
-
-
   carrito.addEventListener("click", () => {
+
     window.location = "/public/page/roles/admin/ventas/carrito.html"
+
   })
