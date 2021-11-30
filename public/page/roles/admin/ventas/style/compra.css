@@ -83,3 +83,8 @@ form{
     place-self: center;
     text-align: center;
 }
+
+
+.carrito{
+    cursor: pointer;
+}

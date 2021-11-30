@@ -49,6 +49,7 @@
 }
 
 .cliente{
+    opacity: 0;
     position: fixed;
     display: grid;
     justify-content: center;
@@ -93,6 +94,7 @@
 }
 
 .buscadorCli{
+    opacity: 0;
     display: flex;
     flex-direction: column;
     justify-items: center;
@@ -141,4 +143,49 @@
 
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     background: #00B5EE;
+}
+
+
+.cartelCliente{
+    background: white;
+    position: fixed;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    width: 600px;
+    height: 650px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    left: 35%;
+    top: 12%;
+
+    border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+}
+.titulo{
+    text-align: center;
+}
+.formProducto{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    place-content: center;
+
+    
+    justify-content: center;
+
+    row-gap: 30px;
+    column-gap: 10px;
+
+
+    grid-template-columns: 1fr 1fr;
+
+  
+}
+.cartel input{
+    width:190px;
 }
