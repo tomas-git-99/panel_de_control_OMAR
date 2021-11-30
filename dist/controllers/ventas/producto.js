@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
+exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -108,4 +108,13 @@ const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 exports.quitarStock = quitarStock;
+const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("hola");
+    const productos = yield producto_1.Producto.findAll();
+    res.json({
+        ok: true,
+        productos
+    });
+});
+exports.hitorialProductos = hitorialProductos;
 //# sourceMappingURL=producto.js.map

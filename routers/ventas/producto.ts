@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarMasStock, buscarProducto, crearProducto, editarProducto, eliminarProducto, quitarStock } from "../../controllers/ventas/producto";
+import { agregarMasStock, buscarProducto, crearProducto, editarProducto, eliminarProducto, hitorialProductos, quitarStock } from "../../controllers/ventas/producto";
 
 
 const router = Router();
@@ -28,6 +28,8 @@ router.get('/search', buscarProducto)
 
 router.delete('/:id', eliminarProducto)
 
+
+router.get('/', hitorialProductos)
 
 
 

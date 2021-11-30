@@ -1,6 +1,6 @@
 .bienvenido{
     width: 800px;
-    height: 900px;
+    height: 800px;
    
 }
 .tituloImprimir{
@@ -20,17 +20,18 @@
     grid-template-columns: 1fr 1fr 1fr;
     padding-left: 20px;
     text-align: start;
+    
 }
 .infoCliente span{
     font-family: 'Poppins', sans-serif;
     font-weight:300;
-    font-size: 18px;
+    font-size: 16px;
 
 }
 .infoCliente label{
     font-family: 'Poppins', sans-serif;
     font-weight:500;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .comprasHechas{

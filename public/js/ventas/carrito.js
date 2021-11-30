@@ -1,8 +1,5 @@
+
 const btnConfirmar = document.querySelector(".confirmar");
-
-
-
-
 
 
 const carritoActualizar = () => {
@@ -259,6 +256,8 @@ formCliente.addEventListener("submit", (e) =>{
         forDataConfirmar["idCliente"] = res.id;
 
         generarOrden(forDataConfirmar);
+
+
 
     })
     .catch(err => {

@@ -157,3 +157,14 @@ export const quitarStock = async (req: Request, res: Response) => {
         producto
     })
 }
+
+
+export const hitorialProductos = async (req: Request, res: Response) => {
+    console.log("hola")
+    const productos = await Producto.findAll();
+
+    res.json({
+        ok: true,
+        productos
+    })
+}

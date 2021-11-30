@@ -1,19 +1,20 @@
 
-const url = "url"
+
+const url = ( window.location.hostname.includes('localhost'))
+      ? 'http://localhost:8000/api/'
+      : '';
 
 
 const historialGet = () => {
 
-    fetch(url, "historial",{ 
-        method: "GET",
-        headers: {'Content-Type': 'application/json'},
-    })
+    fetch(url, "producto")
     .then(response => response.json())
     .then(res => {
         leerHistorial(res)
     })
     .catch(err => {
-        alert("Error: " + err.message)
+        console.error(err)
+  
     })
 }
 
@@ -26,14 +27,14 @@ const leerHistorial = (res) => {
         historial = `
         <tbody>
         <tr>
-          <th scope="row">134</th>
+          <th scope="row">${e.id}</th>
 
           <td>${e.nombre}</td>
-          <td>689</td>
+          <td>${e.cantidad}</td>
           <td>1,2,3,4,5</td>
-          <td>la mejor</td>
-          <td>bogota 5090</td>
-          <td>$567</td>
+          <td>${e.tela}</td>
+          <td>${e.local}</td>
+          <td>$${e.precio}</td>
         </tr>
 
       </tbody>
