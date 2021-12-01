@@ -3,7 +3,33 @@ const url = ( window.location.hostname.includes('localhost'))
       : '';
 
 
+ ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
+      
+const comprobarCarritoStorage = () => {
 
+    const carrito = localStorage.getItem('carrito');
+
+    if(carrito == 1){
+        return true;
+    
+    }else if(carrito == null || undefined){
+    
+        localStorage.setItem("carrito", 1);
+        return false;
+    }else if(carrito == 0){
+        const idOrden = localStorage.getItem('idOrden');
+        if(!idOrden == null){
+            return true;
+        }else{
+        localStorage.setItem("carrito", 1);
+        return false;
+        }
+    }
+}
+ /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
+
+
+comprobarCarritoStorage();
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 const carritoActualizar = () => {
@@ -55,7 +81,7 @@ const leerCarrito = (res) => {
     })
 }
 
- ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
+ ////////////////FIN ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 
 
  ////////////////CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
@@ -88,9 +114,13 @@ ruedaEliminar.forEach( (boton) => {
 
     })
 });
- ////////////////CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
+ ////////////////FIN CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
 
 
+ ////////////////FIN CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
+
+
+ ////////////////BOTON DE CONFIRMAR PARA EL CARRITO////////////////////////////////
 
 const bienvenido = document.querySelector(".bienvenido");
 const cliente = document.querySelector(".cliente");
@@ -99,15 +129,17 @@ const btnConfirmar = document.querySelector(".confirmar");
 
 btnConfirmar.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("forData");
-    
+
     const confirmarCompra = localStorage.getItem("carrito");
 
-
-    if(confirmarCompra == 1){
+    if(confirmarCompra == 1 ){
 
         volverAtras(bienvenido, cliente)
         
+    }else if( confirmarCompra == null){
+
+        console.log("gatos todos")
+
     }else{
         const id = localStorage.getItem("id");
 
@@ -130,10 +162,10 @@ btnConfirmar.addEventListener("click", (e) => {
     
 });
 
+
 const confirmar = (data) => {
 
     const idCliente = localStorage.getItem("idCliente");
-
 
     fetch(url, "confirmar/" + idCliente,{ 
         method: "PUT",
@@ -256,11 +288,9 @@ formCliente.addEventListener("submit", (e) =>{
     })
     .then(response => response.json())
     .then(res => {
+
         forDataConfirmar["idCliente"] = res.id;
-
         generarOrden(forDataConfirmar);
-
-
 
     })
     .catch(err => {
