@@ -5,6 +5,7 @@ export interface TodoAtributos {
 
     id_usuario: number;
     id_producto: number;
+    talles: number;
     cantidad:number;
 
 }
@@ -14,6 +15,8 @@ export class Carrito extends Model <TodoAtributos>{
 
     public id_usuario!: number;
     public id_producto!: number;
+    public talles!: number;
+
     public cantidad!:number;
 
 
@@ -27,6 +30,9 @@ Carrito.init(
             type:DataTypes.NUMBER
         },
         id_producto: {
+            type:DataTypes.NUMBER
+        },
+        talles: {
             type:DataTypes.NUMBER
         },
         cantidad:{

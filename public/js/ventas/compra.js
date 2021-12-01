@@ -1,46 +1,87 @@
 
 
+
 const url = ( window.location.hostname.includes('localhost'))
 ? 'http://localhost:8000/api/'
 : '';
 
 
-const eliminacion = document.querySelectorAll(".eliminar");
-const cantidad = document.querySelector(".cantidad");
-const formAgregar =document.querySelector(".formAgregar")
+const cantidad    = document.querySelector(".cantidad");
+const formAgregar = document.querySelector(".formAgregar")
 
 
 
 
 
-eliminacion.forEach((boton) => {
-    boton.addEventListener("click", (event) => {
-      event.preventDefault()
-    //   document.querySelector("span").innerText = ` id: ${boton.id}`
+const historialGet = () => {
 
-    cantidad.style.opacity = 1;
-
-    localStorage.setItem("id", boton.id);
-    
-    //   alert("id:" + boton.id)
-    })
+  fetch(url + "producto",{
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
   })
+  .then(response => response.json())
+  .then(res => {
+      leerHistorial(res.productos)
+  })
+  .catch(err => {
+      console.error(err)
+
+  })
+}
+historialGet();
+const prueba = (event) => {
+  cantidad.style.opacity = 1;
+
+  localStorage.setItem("id_producto", event);
+}
+const tablaCompra = document.querySelector(".tablaCompra")
+
+const leerHistorial = (res) => {
+
+  let historial = ""
+  res.map( e => {
+      historial += `
+      <tr>
+        <th scope="row">${e.id}</th>
+
+        <td>${e.nombre}</td>
+        <td>${e.cantidad}</td>
+        <td>1,2,3,4,5</td>
+        <td>${e.tela}</td>
+        <td>${e.local}</td>
+        <td>$${e.precio}</td>
+        <td>
+        <div class="boton preview">
+            <button class="eliminar" id="${e.id}" onclick="prueba(this.id)" >
+                Agregar
+            </button>
+        </div>
+        </td>
+        </tr>
+      `;
+      
+
+    })
+    tablaCompra.innerHTML = historial;
+
+}
+
+
 
 
   formAgregar.addEventListener("submit", (event) => {
 
       event.preventDefault();
 
-      const idProducto = localStorage.getItem("id");
+      const id_producto = localStorage.getItem("id_producto");
+      const id_usuario = localStorage.getItem("id");
 
-      const forData = {idProducto};
+      const forData = {id_producto, id_usuario};
 
       for(let el of formAgregar.elements){
           if(el.name.length > 0)
               forData[el.name] = el.value;    
           } 
-
-
     //agregar a carrito para despues comprar con el metodo POST
 
     fetch(url + "carrito" ,{ 
@@ -50,8 +91,18 @@ eliminacion.forEach((boton) => {
     })
     .then(response => response.json())
     .then(res => {
-        
-      cantidad.style.opacity = 0;
+      // alert("salio todo bien")
+      if(res.ok){
+        cantidad.style.opacity = 0;
+        localStorage.removeItem("id_producto")
+      }else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+        })
+      }
+  
     })
     .catch(err => {
         alert("Error: " + err)
@@ -75,8 +126,8 @@ eliminacion.forEach((boton) => {
 
 
   const talleUnica = document.querySelector(".talleUnica");
-
   const checkAgregar = document.getElementById("checkAgregar");
+
 
 checkAgregar.addEventListener("change", (e) => {
   e.preventDefault();
@@ -90,6 +141,7 @@ checkAgregar.addEventListener("change", (e) => {
     talleUnica.style.display = "none";
     talleUnica.style.visibility = "hidden";
   }
+
 })
 
 

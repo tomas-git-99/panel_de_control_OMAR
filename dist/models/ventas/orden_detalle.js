@@ -19,9 +19,9 @@ OrdenDetalle.init({
     cantidad: {
         type: sequelize_1.DataTypes.NUMBER
     },
-    // talle:{
-    //     type:DataTypes.STRING
-    // },
+    talle: {
+        type: sequelize_1.DataTypes.NUMBER
+    },
     precio: {
         type: sequelize_1.DataTypes.NUMBER
     }

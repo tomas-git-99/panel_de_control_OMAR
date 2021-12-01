@@ -16,6 +16,9 @@ Carrito.init({
     id_producto: {
         type: sequelize_1.DataTypes.NUMBER
     },
+    talles: {
+        type: sequelize_1.DataTypes.NUMBER
+    },
     cantidad: {
         type: sequelize_1.DataTypes.NUMBER
     }

@@ -12,7 +12,7 @@ export const agregarCarrito = async (req: Request, res: Response) => {
             const {id_usuario, id_producto, cantidad } = req.body;
         
         
-            const dato = {
+            const dato:any = {
                 id_usuario,
                 id_producto,
                 cantidad

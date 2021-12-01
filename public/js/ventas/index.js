@@ -7,8 +7,8 @@ const url = ( window.location.hostname.includes('localhost'))
 
 const historialGet = () => {
 
-    fetch(url + "producto",{
-        method: 'GET',
+    fetch(url + "producto",{ 
+        method: "GET",
         headers: {'Content-Type': 'application/json'},
     })
     .then(response => response.json())
@@ -21,16 +21,15 @@ const historialGet = () => {
     })
 }
 
-
 const prueba = document.querySelector(".prueba")
-
 
 const leerHistorial = (res) => {
 
     let historial = ""
-    res.forEach( e => {
+    res.map( e => {
         historial += `
-        <tr class="prueba">
+   
+        <tr>
           <th scope="row">${e.id}</th>
 
           <td>${e.nombre}</td>
@@ -39,14 +38,15 @@ const leerHistorial = (res) => {
           <td>${e.tela}</td>
           <td>${e.local}</td>
           <td>$${e.precio}</td>
-          </tr>
+        </tr>
+
+   
         `;
         
-
     })
 
     prueba.innerHTML = historial;
 }
 
 
-historialGet();
+historialGet()

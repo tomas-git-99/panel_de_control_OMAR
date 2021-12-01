@@ -66,6 +66,7 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const buscarProducto = req.query;
     const producto = yield producto_1.Producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     res.json({
         ok: true,
