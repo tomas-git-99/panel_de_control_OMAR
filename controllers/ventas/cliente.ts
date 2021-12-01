@@ -29,9 +29,6 @@ export const crearCliente = async (req: Request, res: Response) => {
         }
 
 
-        console.log(datos);
-
-
 
         const cliente = new Cliente(datos);
         await cliente.save();

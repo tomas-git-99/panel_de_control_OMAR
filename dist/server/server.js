@@ -20,6 +20,7 @@ const usuario_1 = __importDefault(require("../routers/ventas/usuario"));
 const orden_1 = __importDefault(require("../routers/ventas/orden"));
 const producto_1 = __importDefault(require("../routers/ventas/producto"));
 const carrito_1 = __importDefault(require("../routers/ventas/carrito"));
+const direccion_1 = __importDefault(require("../routers/ventas/direccion"));
 const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
@@ -30,6 +31,7 @@ class ServerApp {
             orden: '/api/orden',
             producto: '/api/producto',
             carrito: '/api/carrito',
+            direccion: '/api/direccion',
         };
         this.app = express_1.default();
         this.port = process.env.PORT || '8000';
@@ -63,6 +65,7 @@ class ServerApp {
         this.app.use(this.apiPaths.orden, orden_1.default);
         this.app.use(this.apiPaths.producto, producto_1.default);
         this.app.use(this.apiPaths.carrito, carrito_1.default);
+        this.app.use(this.apiPaths.direccion, direccion_1.default);
         //PRODUCCION
     }
     listen() {

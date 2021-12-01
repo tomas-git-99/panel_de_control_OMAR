@@ -165,58 +165,84 @@
 
           
                 <div class="cartelCliente">
-                    <div class="retroceder">
-                        <img src="/img/flecha.svg" alt="" width="25px" >
+                    <div class="retrosederTitulo">
+
+                        <div class="retroceder">
+                            <img src="/img/flecha.svg" alt="" width="25px" >
+                        </div>
+    
+                        <div class="tituloCliente">
+                            <h1>CLIENTE</h1>
+                        </div>
                     </div>
-                    <div class="titulo">
-                        <h1>CLIENTE</h1>
-                        <hr width="100%" >
-                    </div>
+                    <hr width="100%" >
+                    
+
                     <form action="" class="formProducto">
 
+                        <div class="clientInformacionSOLO">
+                            
+                            <div class="nombre">
+                                <span>Nombre</span>
+                                <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                            </div>
+                            <div class="local">
+                                <span>Apellido</span>
+                                <input type="text"class="form-control" name="apellido" placeholder="Apellido">
+                            </div>
+                            <div class="cantidad">
+                                <span>DNI O CUIL</span>
+                                <input type="text"class="form-control" name="DNI O CUIL" placeholder="DNI O CUIL">
+                            </div>
+                            <div class="talles">
+                                <span>Telefono o Celular</span>
+                                <input type="text"class="form-control" name="Telefono o Celular" placeholder=" Telefono o Celular">
+                            </div>
 
-                        <div class="nombre">
-                            <span>Nombre</span>
-                            <input type="text" class="form-control" name="nombre" placeholder="Nombre">
-                        </div>
-                        <div class="local">
-                            <span>Apellido</span>
-                            <input type="text"class="form-control" name="apellido" placeholder="Apellido">
-                        </div>
-                        <div class="cantidad">
-                            <span>DNI O CUIL</span>
-                            <input type="text"class="form-control" name="DNI O CUIL" placeholder="DNI O CUIL">
-                        </div>
-                        <div class="talles">
-                            <span>Telefono o Celular</span>
-                            <input type="text"class="form-control" name="Telefono o Celular" placeholder=" Telefono o Celular">
-                        </div>
-                        <div class="tela">
-                            <span>Provincia</span>
-                            <input type="text"class="form-control" name="provincia" placeholder="Provincia">
-                        </div>
-                        <div class="precio">
-                            <span>Localidad</span>
-                            <input type="text"class="form-control" name="localidad" placeholder="Localidad">
-                        </div>
-                        <div class="cantidad">
-                            <span>Direccion</span>
-                            <input type="text"class="form-control" name="direccion" placeholder="Direccion">
-                        </div>
-                        <div class="talles">
-                            <span>Codigo Postal</span>
-                            <input type="text"class="form-control" name="cp" placeholder="Codigo Postal">
-                        </div>
-                        <div class="tela">
-                            <span>Transporte</span>
-                            <input type="text"class="form-control" name="transporte" placeholder="Transporte">
-                        </div>
-                        <div class="precio">
-                            <span>Fecha</span>
-                            <input type="date"class="form-control" name="fecha" placeholder="Fecha">
                         </div>
 
-                        <div class="boton">
+                        <div class="seleccionDireccion">
+                            <select class="custom-select" id="seleccionDirec" onchange="selecciconCambio(this)">
+                                <option value="0">Nueva direccion</option>
+                              </select>
+                        </div>
+
+                        <div class="direccionDeCliente">
+
+                            <div class="tela">
+                                <span>Provincia</span>
+                                <input type="text"class="form-control" name="provincia" placeholder="Provincia">
+                            </div>
+
+                            <div class="precio">
+                                <span>Localidad</span>
+                                <input type="text"class="form-control" name="localidad" placeholder="Localidad">
+                            </div>
+
+                            <div class="cantidad">
+                                <span>Direccion</span>
+                                <input type="text"class="form-control" name="direccion" placeholder="Direccion">
+                            </div>
+
+                            <div class="talles">
+                                <span>Codigo Postal</span>
+                                <input type="text"class="form-control" name="cp" placeholder="Codigo Postal">
+                            </div>
+                            
+                        </div>
+                        <div class="tranporteYfecha">
+                            <div class="tela">
+                                <span>Transporte</span>
+                                <input type="text"class="form-control" name="transporte" placeholder="Transporte">
+                            </div>
+                            <div class="precio">
+                                <span>Fecha</span>
+                                <input type="date"class="form-control" name="fecha" placeholder="Fecha">
+                            </div>
+
+                        </div>
+
+                        <div class="botonFormularioCompra">
                             <button class="btnCliente">GUARDAR</button>
                         </div>
                     </form>

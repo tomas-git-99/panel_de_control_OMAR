@@ -9,6 +9,7 @@ import ventasUsuario   from "../routers/ventas/usuario"
 import ventasOrden     from "../routers/ventas/orden"
 import ventasProducto  from "../routers/ventas/producto"
 import ventasCarrito from "../routers/ventas/carrito"
+import ventasDireccion from  "../routers/ventas/direccion"
 import db from "../DB/conectarDB";
 
 class ServerApp {
@@ -24,6 +25,7 @@ class ServerApp {
         orden:    '/api/orden',
         producto: '/api/producto',
         carrito:    '/api/carrito',
+        direccion:    '/api/direccion',
 
         //PRODUCCION
     };
@@ -72,6 +74,7 @@ class ServerApp {
         this.app.use( this.apiPaths.orden,    ventasOrden)
         this.app.use( this.apiPaths.producto, ventasProducto)
         this.app.use( this.apiPaths.carrito,  ventasCarrito)
+        this.app.use( this.apiPaths.direccion,ventasDireccion)
 
         //PRODUCCION
     }

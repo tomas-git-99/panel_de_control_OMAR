@@ -101,7 +101,7 @@ CREATE TABLE carrito(
 );
 
 
-ALTER TABLE carrito
+ALTER TABLE direccion
 ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
@@ -123,5 +123,5 @@ CREATE TABLE direccion(
     cp VARCHAR(10),
 
     FOREIGN KEY fk_id_cliente (id_cliente)
-    REFERENCES cliente (id),
+    REFERENCES cliente (id)
 );

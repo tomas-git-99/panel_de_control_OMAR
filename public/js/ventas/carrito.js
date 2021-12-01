@@ -206,7 +206,7 @@ clienteNuevo.addEventListener("click", (e) =>{
 
 retroceder.addEventListener("click", (e) =>{
     e.preventDefault();
-
+    localStorage.removeItem("dataDireccion");
     volverAtras(cartelCliente, cliente)
 
 })
@@ -272,6 +272,7 @@ const getSearch = (valor) => {
   
     })
 }
+
 //ACOMODAR PARA QUE APARESCA EN EL HISTORIAL 
 
 const historialCliente = document.querySelector(".historialCliente");
@@ -302,31 +303,157 @@ const leerHistorial = (res) => {
     historialCliente.innerHTML = historial;
 }
 
-const mandarID = (e) =>{
+const mandarID = async(e) =>{
 
-    cantidad.style.opacity = 1;
-    localStorage.setItem("id_producto", e);
+    volverAtras(buscadorCli, cartelCliente);
+    
+    
+    direccionCliente(e);
+    agregarAlFormulario();
+
+    const direccionesCliente = JSON.parse(localStorage.getItem("dataDireccion"));
+
+    console.log(direccionesCliente);
+
+    agregarDireccionFormulario(direccionesCliente); 
+
 }
 
+//AGREGAR A LA BASE DE DATOS DE OREDEN, ID_DIRECCION
 
 //BUSCAR CON EL ID EL CLIENTE LA DIRECCIONES QUE TIENE 
 
 const direccionCliente = (idCliente) =>{
 
-    fetch(url, "direccion/" + idCliente,{ 
-        method: "POST",
-        body: JSON.stringify( data ),
+    fetch(url + "direccion/" + idCliente,{ 
+        method: "GET",
         headers: {'Content-Type': 'application/json'},
     })
     .then(response => response.json())
     .then(res => {
+
+        localStorage.setItem("dataDireccion", JSON.stringify(res.direccion));
+
     })
     .catch(err => {
         alert("Error: " + err)
     });
+
 }
 
 //COLOCAR TODOS LOS DATOS EN EL FORMULARIO
+
+const clientInformacionSOLO = document.querySelector(".clientInformacionSOLO");
+const agregarAlFormulario = () => {
+
+    const data = JSON.parse(localStorage.getItem("dataCliente"));
+
+    let historial = ""
+
+    data.map( e => {
+        historial += ` 
+
+        <div class="nombre">
+        <span>Nombre</span>
+        <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="${e.nombre}" disabled>
+    </div>
+    <div class="local">
+        <span>Apellido</span>
+        <input type="text"class="form-control" name="apellido" placeholder="Apellido" value="${e.apellido}" disabled>
+    </div>
+    <div class="cantidad">
+        <span>DNI O CUIL</span>
+        <input type="text"class="form-control" name="DNI O CUIL" placeholder="DNI O CUIL" value="${e.dni_cuil}" disabled>
+    </div>
+    <div class="talles">
+        <span>Telefono o Celular</span>
+             <input type="text"class="form-control" name="Telefono o Celular" placeholder=" Telefono o Celular" value="${e.tel_cel}" disabled>
+         </div>
+
+        `
+    })
+
+    clientInformacionSOLO.innerHTML = historial
+
+}
+const seleccionDirec = document.querySelector("#seleccionDirec");
+
+const agregarDireccionFormulario = (dataDireccion) => {
+
+    let historial = ""
+
+    dataDireccion.map( e => {
+
+        historial = `
+        <option value="${e.id}">${e.direccion}</option>
+        `
+        seleccionDirec.innerHTML += historial;
+    });
+
+
+}
+
+
+const direccionDeCliente = document.querySelector(".direccionDeCliente");
+const selecciconCambio = (s) => {
+
+    let historial = ""
+    console.log(s.value)
+    if(s.value == 0){
+        
+    historial = `
+    
+    <div class="provincia">
+    <span>Provincia</span>
+         <input type="text"class="form-control" name="provincia" placeholder="Provincia" value="">
+     </div>
+
+     <div class="localidad">
+         <span>Localidad</span
+         <input type="text"> 
+         <input type="text"class="form-control" name="localidad" placeholder="Localidad" value="">
+     </div>
+
+     <div class="direccion">
+         <span>Direccion</span>
+         <input type="text"class="form-control" name="direccion" placeholder="Direccion" value="">
+     </div>
+
+     <div class="talles">
+         <span>Codigo Postal</span>
+         <input type="text"class="form-control" name="cp" placeholder="Codigo Postal" value="">
+     </div>
+    `
+    return direccionDeCliente.innerHTML = historial;
+    }
+    const direcciones =  JSON.parse(localStorage.getItem("dataDireccion"));
+    console.log(dataDireccion)
+    const direcc = direcciones.find( e => { if (e.id == s.value){return e}});
+
+
+    historial = `
+    
+    <div class="tela">
+    <span>Provincia</span>
+         <input type="text"class="form-control" name="provincia" placeholder="Provincia" value="${direcc.provincia}" disabled>
+     </div>
+     <div class="precio">
+         <span>Localidad</span>
+         <input type="text"class="form-control" name="localidad" placeholder="Localidad" value="${direcc.localidad}" disabled>
+     </div>
+     <div class="cantidad">
+         <span>Direccion</span>
+         <input type="text"class="form-control" name="direccion" placeholder="Direccion" value="${direcc.direccion}" disabled>
+     </div>
+     <div class="talles">
+         <span>Codigo Postal</span>
+         <input type="text"class="form-control" name="cp" placeholder="Codigo Postal" value="${direcc.cp}" disabled>
+     </div>
+    `
+
+
+    direccionDeCliente.innerHTML = historial;
+}
 
 
 ///////////////// FIN CLIENTE EXISTENTE //////////////////

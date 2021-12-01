@@ -24,7 +24,6 @@ const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             provincia,
             localidad,
         };
-        console.log(datos);
         const cliente = new cliente_1.Cliente(datos);
         yield cliente.save();
         res.json({
@@ -42,7 +41,6 @@ const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.crearCliente = crearCliente;
 const buscarCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const buscarCliente = req.query;
-    console.log(buscarCliente);
     //const cliente = await Cliente.findAll({ where:{ dni_cuil:{ [Op.like]: '%' + buscarCliente + '%'} }});
     const cliente = yield cliente_1.Cliente.findAll({ where: { dni_cuil: buscarCliente.dni_cuil } });
     res.json({
