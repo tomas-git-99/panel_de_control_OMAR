@@ -86,12 +86,16 @@ export const buscarProducto = async (req: Request, res: Response) => {
 
     const buscarProducto = req.query;
 
+
+    
     const producto = await Producto.findAll({ where:{ 
+
         nombre:{ [Op.like]: '%'+ buscarProducto.nombre +'%'},
         // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
-     }} );
+    }} );
 
-
+    /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
+    
     res.json({
         ok:true,
         producto

@@ -1,7 +1,11 @@
+const url = ( window.location.hostname.includes('localhost'))
+      ? 'http://localhost:8000/api/'
+      : '';
 
-const btnConfirmar = document.querySelector(".confirmar");
 
 
+
+ ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 const carritoActualizar = () => {
 
     fetch(url, "carrito",{ 
@@ -16,8 +20,6 @@ const carritoActualizar = () => {
     .catch(err => {
         alert("Error: " + err.message)
     });
-
-
 
 }
 
@@ -53,8 +55,10 @@ const leerCarrito = (res) => {
     })
 }
 
-//
+ ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 
+
+ ////////////////CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
 
 const ruedaConfigurar = document.querySelectorAll(".rueda");
 const ruedaEliminar   = document.querySelectorAll(".cruz");
@@ -70,7 +74,7 @@ ruedaConfigurar.forEach( (boton) => {
         //GET FECHT PARA OBTENER LOS DATOS DEL CARRITO Y CAMBIAR LA CANTIDAD
 
     })
-})
+});
 
 
 
@@ -79,19 +83,18 @@ ruedaEliminar.forEach( (boton) => {
     boton.addEventListener("click", (e) => {
 
         e.preventDefault();
-
-     
         console.log(boton.id);
-
         //ELIMINAR DE CARRITO Y CON EL DI DEL USUARIO QUE ESTA USANDO ESTA CUENTA
 
     })
-})
+});
+ ////////////////CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
 
 
 
 const bienvenido = document.querySelector(".bienvenido");
 const cliente = document.querySelector(".cliente");
+const btnConfirmar = document.querySelector(".confirmar");
 
 
 btnConfirmar.addEventListener("click", (e) => {
@@ -100,7 +103,7 @@ btnConfirmar.addEventListener("click", (e) => {
     
     const confirmarCompra = localStorage.getItem("carrito");
 
-    
+
     if(confirmarCompra == 1){
 
         volverAtras(bienvenido, cliente)

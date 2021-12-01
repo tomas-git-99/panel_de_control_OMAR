@@ -27,6 +27,7 @@
 
     /* con opacidad cambia la vista para agregar los productos en stock */
     opacity: 0;
+    transition: .3s all;
 
     position: fixed;
     top: 40%;
@@ -71,9 +72,31 @@ form{
     visibility: visible;   */  
 }
 .nombreDeProducto{
-    text-align: center;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    justify-content: center;
     margin-top: 15px;
     margin-bottom: 25px;
+}
+
+.nombreDeProducto h4{
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight:600; 
+    padding-right: 20px;
+}
+
+
+
+
+.nombreDeProducto img{
+    width: 100%;
+    position: relative;
+    width: 35px;
+    left: 10px;
+    bottom: 5px;
+    cursor: pointer;
 }
 .boton2{
     display: grid;

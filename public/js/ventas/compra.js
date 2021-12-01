@@ -142,6 +142,54 @@ checkAgregar.addEventListener("change", (e) => {
     talleUnica.style.visibility = "hidden";
   }
 
+});
+
+
+/////BUSCADOR//////
+
+const search = document.querySelector("#search");
+
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+    search.value = "";
+});
+
+
+const getSearch = (valor) => {
+
+    
+
+    fetch(url + "producto/search?" + `nombre=${valor}`,{ 
+        method: "GET",
+        headers: {'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(res => {
+        leerHistorial(res.producto);
+    })
+    .catch(err => {
+        console.error(err)
+  
+    })
+}
+
+////BUSCADOR FIN/////
+
+
+
+////SALIR DE LA VENTANA DE AGREGAR///////
+
+const titleX = document.querySelector(".titleX");
+
+titleX.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  cantidad.style.opacity = 0;
+
 })
 
-
+//// FIN SALIR DE LA VENTANA DE AGREGAR///////
