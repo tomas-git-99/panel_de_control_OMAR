@@ -26,10 +26,10 @@ const comprobarCarritoStorage = () => {
         }
     }
 }
+comprobarCarritoStorage();
  /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
 
 
-comprobarCarritoStorage();
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 const carritoActualizar = () => {
@@ -97,7 +97,7 @@ ruedaConfigurar.forEach( (boton) => {
 
         console.log(boton.id);
 
-        //GET FECHT PARA OBTENER LOS DATOS DEL CARRITO Y CAMBIAR LA CANTIDAD
+       //GET FECHT PARA OBTENER LOS DATOS DEL CARRITO Y CAMBIAR LA CANTIDAD 
 
     })
 });
@@ -116,8 +116,6 @@ ruedaEliminar.forEach( (boton) => {
 });
  ////////////////FIN CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
 
-
- ////////////////FIN CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
 
 
  ////////////////BOTON DE CONFIRMAR PARA EL CARRITO////////////////////////////////
@@ -217,8 +215,6 @@ retroceder.addEventListener("click", (e) =>{
 //CLIENTE EXISTENTE
 clienteExistente.addEventListener("click", (e) =>{
     e.preventDefault();
-
-
     volverAtras(cliente, buscadorCli);
 
 })
@@ -246,6 +242,73 @@ const volverAtras = (cerrar, abrir) => {
 
 
 
+///////////////// CLIENTE EXISTENTE //////////////////
+//BUSCADOR
+const search = document.querySelector("#search");
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+    search.value = "";
+});
+
+//GET BUSCA EN BASE DE DATOS
+const getSearch = (valor) => {
+
+    
+
+    fetch(url + "cliente?" + `dni_cuil=${valor}`,{ 
+        method: "GET",
+        headers: {'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(res => {
+        leerHistorial(res.cliente);
+    })
+    .catch(err => {
+        console.error(err)
+  
+    })
+}
+//ACOMODAR PARA QUE APARESCA EN EL HISTORIAL 
+
+const historialCliente = document.querySelector(".historialCliente");
+
+const leerHistorial = (res) => {
+    console.log(res)
+    let historial = ""
+    res.map( e => {
+        historial += `
+   
+        <tr>
+          <td>${e.nombre}</td>
+          <td>${e.apellido}</td>
+          <td>${e.dni_cuil}</td>
+          <td>
+          <div class="preview">
+              <button id="${e.id}">
+                  Agregar
+              </button>
+          </div>
+      </td>
+        </tr>
+
+   
+        `;
+        
+    })
+
+    historialCliente.innerHTML = historial;
+}
+
+
+
+///////////////// FIN CLIENTE EXISTENTE //////////////////
+
+
+/////// RELLENAR DATOS PARA CONFIRMAR COMPRA //////////////////
 const botonCliente = document.querySelector(".btnCliente");
 const formCliente = document.querySelector(".formProducto")
 
@@ -260,8 +323,8 @@ formCliente.addEventListener("submit", (e) =>{
 
     e.preventDefault();
 
-    const forData = {};
-    const forDataConfirmar = {}
+    const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+    const forDataConfirmar = {} // 2 DATOS PARA GENERAR NUEVA ORDEN
     
     for(let el of formCliente.elements){
         if(el.name.length > 0){
@@ -279,7 +342,7 @@ formCliente.addEventListener("submit", (e) =>{
     
     console.log(forData);
     console.log(forDataConfirmar);
-    
+
 
     fetch(url, "cliente",{ 
         method: "POST",
@@ -299,6 +362,7 @@ formCliente.addEventListener("submit", (e) =>{
 
 })
 
+/////// FIN RELLENAR DATOS PARA CONFIRMAR COMPRA //////////////////
 
 
 

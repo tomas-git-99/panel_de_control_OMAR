@@ -57,7 +57,6 @@ export const buscarCliente = async (req: Request, res: Response) => {
 
     const buscarCliente:any = req.query;
 
-    console.log(buscarCliente)
 
     
     //const cliente = await Cliente.findAll({ where:{ dni_cuil:{ [Op.like]: '%' + buscarCliente + '%'} }});

@@ -112,3 +112,16 @@ ADD talle INT;
 
 ALTER TABLE orden_detalle
 ADD talle INT;
+
+
+CREATE TABLE direccion(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    direccion VARCHAR(50),
+    provincia VARCHAR(50),
+    localidad VARCHAR(50),
+    cp VARCHAR(10),
+
+    FOREIGN KEY fk_id_cliente (id_cliente)
+    REFERENCES cliente (id),
+);
