@@ -275,9 +275,10 @@ const getSearch = (valor) => {
 //ACOMODAR PARA QUE APARESCA EN EL HISTORIAL 
 
 const historialCliente = document.querySelector(".historialCliente");
-
 const leerHistorial = (res) => {
-    console.log(res)
+    console.log(res);
+
+    localStorage.setItem("dataCliente", JSON.stringify(res));
     let historial = ""
     res.map( e => {
         historial += `
@@ -288,14 +289,12 @@ const leerHistorial = (res) => {
           <td>${e.dni_cuil}</td>
           <td>
           <div class="preview">
-              <button id="${e.id}">
+              <button id="${e.id}" onclick="mandarID(this.id)" >
                   Agregar
               </button>
           </div>
       </td>
         </tr>
-
-   
         `;
         
     })
@@ -303,6 +302,31 @@ const leerHistorial = (res) => {
     historialCliente.innerHTML = historial;
 }
 
+const mandarID = (e) =>{
+
+    cantidad.style.opacity = 1;
+    localStorage.setItem("id_producto", e);
+}
+
+
+//BUSCAR CON EL ID EL CLIENTE LA DIRECCIONES QUE TIENE 
+
+const direccionCliente = (idCliente) =>{
+
+    fetch(url, "direccion/" + idCliente,{ 
+        method: "POST",
+        body: JSON.stringify( data ),
+        headers: {'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(res => {
+    })
+    .catch(err => {
+        alert("Error: " + err)
+    });
+}
+
+//COLOCAR TODOS LOS DATOS EN EL FORMULARIO
 
 
 ///////////////// FIN CLIENTE EXISTENTE //////////////////
