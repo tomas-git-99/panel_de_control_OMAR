@@ -1,6 +1,9 @@
+
+
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : '';
+
 
 
  ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
@@ -206,7 +209,9 @@ clienteNuevo.addEventListener("click", (e) =>{
 
 retroceder.addEventListener("click", (e) =>{
     e.preventDefault();
+    
     localStorage.removeItem("dataDireccion");
+
     volverAtras(cartelCliente, cliente)
 
 })
@@ -277,7 +282,7 @@ const getSearch = (valor) => {
 
 const historialCliente = document.querySelector(".historialCliente");
 const leerHistorial = (res) => {
-    console.log(res);
+
 
     localStorage.setItem("dataCliente", JSON.stringify(res));
     let historial = ""
@@ -303,19 +308,11 @@ const leerHistorial = (res) => {
     historialCliente.innerHTML = historial;
 }
 
-const mandarID = async(e) =>{
+window.mandarID = async(e) => {
 
     volverAtras(buscadorCli, cartelCliente);
-    
-    
     direccionCliente(e);
     agregarAlFormulario();
-
-    const direccionesCliente = JSON.parse(localStorage.getItem("dataDireccion"));
-
-    console.log(direccionesCliente);
-
-    agregarDireccionFormulario(direccionesCliente); 
 
 }
 
@@ -330,10 +327,11 @@ const direccionCliente = (idCliente) =>{
         headers: {'Content-Type': 'application/json'},
     })
     .then(response => response.json())
-    .then(res => {
-
+    .then(async(res) => {
         localStorage.setItem("dataDireccion", JSON.stringify(res.direccion));
 
+        const dato = JSON.parse(localStorage.getItem("dataDireccion"));
+        agregarDireccionFormulario(dato); 
     })
     .catch(err => {
         alert("Error: " + err)
@@ -346,7 +344,7 @@ const direccionCliente = (idCliente) =>{
 const clientInformacionSOLO = document.querySelector(".clientInformacionSOLO");
 const agregarAlFormulario = () => {
 
-    const data = JSON.parse(localStorage.getItem("dataCliente"));
+    let data = JSON.parse(localStorage.getItem("dataCliente"));
 
     let historial = ""
 
@@ -378,27 +376,35 @@ const agregarAlFormulario = () => {
 }
 const seleccionDirec = document.querySelector("#seleccionDirec");
 
-const agregarDireccionFormulario = (dataDireccion) => {
 
-    let historial = ""
+const agregarDireccionFormulario = async(dataDireccion) => {
+    
+    let historialDireccion = "";
+
+    seleccionDirec.innerHTML =` <option value="0">Nueva direccion</option>`;
+
 
     dataDireccion.map( e => {
 
-        historial = `
+        historialDireccion = `
         <option value="${e.id}">${e.direccion}</option>
         `
-        seleccionDirec.innerHTML += historial;
+        seleccionDirec.innerHTML += historialDireccion;
     });
-
+    
 
 }
 
+const limpiarFormulario = () =>{
+
+}
 
 const direccionDeCliente = document.querySelector(".direccionDeCliente");
-const selecciconCambio = (s) => {
+
+window.selecciconCambio = (s) => {
 
     let historial = ""
-    console.log(s.value)
+
     if(s.value == 0){
         
     historial = `
@@ -426,8 +432,8 @@ const selecciconCambio = (s) => {
     `
     return direccionDeCliente.innerHTML = historial;
     }
+
     const direcciones =  JSON.parse(localStorage.getItem("dataDireccion"));
-    console.log(dataDireccion)
     const direcc = direcciones.find( e => { if (e.id == s.value){return e}});
 
 
