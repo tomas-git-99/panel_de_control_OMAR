@@ -102,7 +102,7 @@
 .buscadorCli{
     display: none;
     visibility: hidden;
-/*      display: block;
+/*     display: grid;
     visibility: visible;   */  
     display: flex;
     flex-direction: column;

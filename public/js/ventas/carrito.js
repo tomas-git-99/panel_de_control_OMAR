@@ -1,3 +1,7 @@
+import { comprobarCarritoStorage } from "../helpers/ventas/comprobarCarritoStorage.js";
+import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormularioCliente.js";
+import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
+import { volverAtras } from "../helpers/ventas/volver_atras.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -7,28 +11,6 @@ const url = ( window.location.hostname.includes('localhost'))
 
 
  ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
-      
-const comprobarCarritoStorage = () => {
-
-    const carrito = localStorage.getItem('carrito');
-
-    if(carrito == 1){
-        return true;
-    
-    }else if(carrito == null || undefined){
-    
-        localStorage.setItem("carrito", 1);
-        return false;
-    }else if(carrito == 0){
-        const idOrden = localStorage.getItem('idOrden');
-        if(!idOrden == null){
-            return true;
-        }else{
-        localStorage.setItem("carrito", 1);
-        return false;
-        }
-    }
-}
 comprobarCarritoStorage();
  /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
 
@@ -233,17 +215,6 @@ retrocederBuscar.addEventListener("click", (e) =>{
 
 
 
-const volverAtras = (cerrar, abrir) => {
-
-        //abrir ventana anterior
-        abrir.style.display = "grid";
-        abrir.style.visibility = "visible";
-    
-    
-        //cerrar ventana
-        cerrar.style.display = "none";
-        cerrar.style.visibility = "hidden";
-}
 
 
 
@@ -262,8 +233,6 @@ search.addEventListener("keyup", ({keyCode}) => {
 //GET BUSCA EN BASE DE DATOS
 const getSearch = (valor) => {
 
-    
-
     fetch(url + "cliente?" + `dni_cuil=${valor}`,{ 
         method: "GET",
         headers: {'Content-Type': 'application/json'},
@@ -276,11 +245,13 @@ const getSearch = (valor) => {
         console.error(err)
   
     })
+
 }
 
 //ACOMODAR PARA QUE APARESCA EN EL HISTORIAL 
 
 const historialCliente = document.querySelector(".historialCliente");
+
 const leerHistorial = (res) => {
 
 
@@ -308,11 +279,13 @@ const leerHistorial = (res) => {
     historialCliente.innerHTML = historial;
 }
 
+const clientInformacionSOLO = document.querySelector(".clientInformacionSOLO");
+
 window.mandarID = async(e) => {
 
     volverAtras(buscadorCli, cartelCliente);
     direccionCliente(e);
-    agregarAlFormulario();
+    agregarAlFormularioCliente(clientInformacionSOLO);
 
 }
 
@@ -341,39 +314,6 @@ const direccionCliente = (idCliente) =>{
 
 //COLOCAR TODOS LOS DATOS EN EL FORMULARIO
 
-const clientInformacionSOLO = document.querySelector(".clientInformacionSOLO");
-const agregarAlFormulario = () => {
-
-    let data = JSON.parse(localStorage.getItem("dataCliente"));
-
-    let historial = ""
-
-    data.map( e => {
-        historial += ` 
-
-        <div class="nombre">
-        <span>Nombre</span>
-        <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="${e.nombre}" disabled>
-    </div>
-    <div class="local">
-        <span>Apellido</span>
-        <input type="text"class="form-control" name="apellido" placeholder="Apellido" value="${e.apellido}" disabled>
-    </div>
-    <div class="cantidad">
-        <span>DNI O CUIL</span>
-        <input type="text"class="form-control" name="DNI O CUIL" placeholder="DNI O CUIL" value="${e.dni_cuil}" disabled>
-    </div>
-    <div class="talles">
-        <span>Telefono o Celular</span>
-             <input type="text"class="form-control" name="Telefono o Celular" placeholder=" Telefono o Celular" value="${e.tel_cel}" disabled>
-         </div>
-
-        `
-    })
-
-    clientInformacionSOLO.innerHTML = historial
-
-}
 const seleccionDirec = document.querySelector("#seleccionDirec");
 
 
@@ -383,7 +323,6 @@ const agregarDireccionFormulario = async(dataDireccion) => {
 
     seleccionDirec.innerHTML =` <option value="0">Nueva direccion</option>`;
 
-
     dataDireccion.map( e => {
 
         historialDireccion = `
@@ -392,73 +331,15 @@ const agregarDireccionFormulario = async(dataDireccion) => {
         seleccionDirec.innerHTML += historialDireccion;
     });
     
-
 }
 
-const limpiarFormulario = () =>{
-
-}
 
 const direccionDeCliente = document.querySelector(".direccionDeCliente");
 
-window.selecciconCambio = (s) => {
+window.selecciconCambios = (s) => {
 
-    let historial = ""
+    selecciconCambios_direccion(s, direccionDeCliente)
 
-    if(s.value == 0){
-        
-    historial = `
-    
-    <div class="provincia">
-    <span>Provincia</span>
-         <input type="text"class="form-control" name="provincia" placeholder="Provincia" value="">
-     </div>
-
-     <div class="localidad">
-         <span>Localidad</span
-         <input type="text"> 
-         <input type="text"class="form-control" name="localidad" placeholder="Localidad" value="">
-     </div>
-
-     <div class="direccion">
-         <span>Direccion</span>
-         <input type="text"class="form-control" name="direccion" placeholder="Direccion" value="">
-     </div>
-
-     <div class="talles">
-         <span>Codigo Postal</span>
-         <input type="text"class="form-control" name="cp" placeholder="Codigo Postal" value="">
-     </div>
-    `
-    return direccionDeCliente.innerHTML = historial;
-    }
-
-    const direcciones =  JSON.parse(localStorage.getItem("dataDireccion"));
-    const direcc = direcciones.find( e => { if (e.id == s.value){return e}});
-
-
-    historial = `
-    
-    <div class="tela">
-    <span>Provincia</span>
-         <input type="text"class="form-control" name="provincia" placeholder="Provincia" value="${direcc.provincia}" disabled>
-     </div>
-     <div class="precio">
-         <span>Localidad</span>
-         <input type="text"class="form-control" name="localidad" placeholder="Localidad" value="${direcc.localidad}" disabled>
-     </div>
-     <div class="cantidad">
-         <span>Direccion</span>
-         <input type="text"class="form-control" name="direccion" placeholder="Direccion" value="${direcc.direccion}" disabled>
-     </div>
-     <div class="talles">
-         <span>Codigo Postal</span>
-         <input type="text"class="form-control" name="cp" placeholder="Codigo Postal" value="${direcc.cp}" disabled>
-     </div>
-    `
-
-
-    direccionDeCliente.innerHTML = historial;
 }
 
 
