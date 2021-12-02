@@ -1,3 +1,4 @@
+import { fecthNormalGET } from "../helpers/ventas/fetch.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -33,7 +34,14 @@ const leerHistorial = (res) => {
 
           <td>${e.nombre}</td>
           <td>${e.cantidad}</td>
-          <td>1,2,3,4,5</td>
+          <td>
+          <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+          <option selected>1,2,3,4,5,6</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+          </select>
+          </td>
           <td>${e.tela}</td>
           <td>${e.local}</td>
           <td>$${e.precio}</td>
@@ -89,3 +97,26 @@ const getSearch = (valor) => {
 
 //CARGAR EL HISTORIAL CADA VEZ QUE ENTREN A ESTE HTML
 historialGet();
+
+
+
+
+//COLOGAR TALLES NUEVOS
+
+
+const talle_por_ID = (res) => {
+
+    let talles = "";
+
+    res.map( e => {
+        talles += `
+        <option value="${e.id}"></option>
+        `
+    })
+
+}
+
+/* fecthNormalGET("GET", `talle/${id_producto}`)
+   .then(res => {
+       
+   }) */

@@ -13,7 +13,7 @@ export const crearProducto = async (req: Request, res: Response) => {
 
 
 
-        const datos = {
+        const datos:any = {
 
             nombre,
             cantidad,

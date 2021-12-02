@@ -25,7 +25,7 @@ const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             email,
             password: newPassword,
             dni_cuil,
-            rol
+            rol,
         };
         const usuario = new usuario_1.Usuario(datos);
         yield usuario.save();

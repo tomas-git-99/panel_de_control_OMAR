@@ -10,7 +10,7 @@ class Talle extends sequelize_1.Model {
 }
 exports.Talle = Talle;
 Talle.init({
-    id_prducto: {
+    id_producto: {
         type: sequelize_1.DataTypes.NUMBER
     },
     talle: {

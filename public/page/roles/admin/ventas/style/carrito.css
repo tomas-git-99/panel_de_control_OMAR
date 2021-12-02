@@ -278,3 +278,95 @@
     cursor: pointer;
     place-self: center;
 }
+
+
+.modificarCarrito{
+    display: none;
+    visibility: hidden;
+/*      display: grid;
+    visibility: visible;   */
+    display:grid;
+    position: fixed;
+    justify-content: center;
+    align-content: center;
+    width: 100vw;
+    height: 100vh;
+    padding-right: 200px;
+
+}
+
+.modificador{
+ 
+    width: 400px;
+    height: 300px;
+
+    display: grid;
+
+    flex-direction: column;
+
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    align-content: center;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+}
+.titulo_modificador{
+    place-self: center;
+}
+
+
+.titulo_modificador img{
+    cursor: pointer;
+    width: 30px;
+    position: absolute;
+    right: 350px;
+}
+
+.cantidad_anterior {
+    width: 100%;
+    text-align: start;
+    text-indent: 37px;
+    
+}
+.cantidad_anterior label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+
+}
+
+.cantidad_anterior span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+}
+
+
+.modificador_cantidad label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+
+}
+
+.modificador_cantidad span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+}
+
+
+.modificador input{
+    width: 100px;
+}
+.boton_modificar button{
+    border:none;
+    font-size: 20px;
+    border-radius:25px;
+    color: white;
+    width: 130px;
+    background: #00B5EE;
+}

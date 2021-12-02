@@ -3,7 +3,7 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
 
-    id_prducto: number;
+    id_producto: number;
     talle: number;
     cantidad:number;
 }
@@ -12,7 +12,7 @@ export interface TodoAtributos {
 export class Talle extends Model <TodoAtributos>{
 
 
-    public id_prducto!: number;
+    public id_producto!: number;
     public talle!: number;
     public cantidad!:number;
 
@@ -22,7 +22,7 @@ export class Talle extends Model <TodoAtributos>{
 Talle.init(
     {
 
-        id_prducto:{
+        id_producto:{
             type:DataTypes.NUMBER
         },
         talle: {

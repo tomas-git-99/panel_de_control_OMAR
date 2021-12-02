@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/inicio.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./style/agregar_ventas.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -53,12 +54,13 @@
             <div class="bienvenido">
 
                 <div class="cartel">
+
                     <div class="titulo">
                         <h1>PRODUCTO</h1>
                         <hr width="100%" >
                     </div>
 
-                    <form action="" class="formProducto">
+                    <form action="" class="formProducto" id="agregar_producto_db">
 
                         <div class="nombre">
                             <span>Nombre</span>
@@ -117,11 +119,51 @@
                     </form>
 
                 </div>
+
+
+
+                
             </div>
+            
+            <div class="pregunta_ordenar_por_talle">
+                <div class="div">
+                    ¿Quiere ordenar este producto por talle?
+                </div>
+                <div class="botones_preguntas">
+                    <button type="button" class="btn btn-danger"  id="botonNO" onclick="salir(this)">NO</button>
+                    <button type="button" class="btn btn-primary" id="botonSI" onclick="entrar(this)">SI</button>
+                </div>
+            </div>
+
+            <div class="ordenar_por_talle">
+
+                <div class="titulo_de_ordenar">
+                    <h4> REMERA PERRONA</h4>
+                    <hr>
+                </div>
+                <form class="formulario">
+                        <div class="cantidad">
+                            <label for="">Cantidad : </label>
+                            <input type="text" name="cantidad" >
+                        </div>
+                        <div class="talle">
+                            <label for="">Talle : </label>
+                            <input type="text" name="talle">
+                        </div>
+
+                        <div class="boton_ordenar_talle">
+<!--                             <button  type="button" class="btn btn-danger" onclick="salir(this)"">Terminar</button>
+ -->                            <button  type="submit" class="btn btn-success" >Agregar</button>
+                        </div>
+                      </form>
+                </div>
+
+           
 
         </div>
     </div>
 
-    <script src="/js/ventas/agregar.js"></script>
+    <script src="/js/ventas/agregar.js" type="module"></script>
+    <script src="/js/helpers/fetch.js" nomodule></script>
 </body>
 </html>

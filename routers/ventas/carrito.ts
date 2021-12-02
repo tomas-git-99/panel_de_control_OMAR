@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarCarrito, mostrarCarrito } from "../../controllers/ventas/carrito";
+import { agregarCarrito, eliminarCarrito, mostrarCarrito } from "../../controllers/ventas/carrito";
 
 
 const router = Router();
@@ -10,7 +10,7 @@ router.post("/", agregarCarrito);
 
 
 //REMOVER DE CARRITO
-
+router.delete("/:id", eliminarCarrito);
 
 //MOSTRAR EL CARRITO
 

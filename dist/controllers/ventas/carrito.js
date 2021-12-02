@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mostrarCarrito = exports.agregarCarrito = void 0;
+exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const carrito_1 = require("../../models/ventas/carrito");
 const producto_1 = require("../../models/ventas/producto");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,4 +65,14 @@ const mostrarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.mostrarCarrito = mostrarCarrito;
+const eliminarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const carrito = yield carrito_1.Carrito.findByPk(id);
+    yield (carrito === null || carrito === void 0 ? void 0 : carrito.destroy());
+    res.status(200).json({
+        ok: true,
+        msg: "se elimino con exito"
+    });
+});
+exports.eliminarCarrito = eliminarCarrito;
 //# sourceMappingURL=carrito.js.map

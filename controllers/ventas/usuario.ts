@@ -10,30 +10,32 @@ import bcryptjs from 'bcryptjs';
 
 export const crearUsuario = async( req: Request, res: Response) => {
 
-
     try {
 
         const { nombre, email, password, dni_cuil, rol} = req.body;
 
+
+        
         const salt = await bcryptjs.genSaltSync(10);
-
+        
         const newPassword = await bcryptjs.hashSync( password, salt );
-
-
+        
+        
         const datos:any = {
-
+      
             nombre,
             email,
             password:newPassword,
             dni_cuil,
-            rol
+            rol,
 
+            
         }
-
-
-
+        
+        
+        
         const usuario = new Usuario(datos);
-
+    
         await usuario.save();
 
 

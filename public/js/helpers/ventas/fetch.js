@@ -11,7 +11,6 @@ export const fecthNormalGET = (metodo, url_determinado) => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         return data;
     })
     .catch(err => {

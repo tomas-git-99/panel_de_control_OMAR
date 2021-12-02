@@ -4,6 +4,8 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
 
+    id:number;
+
     nombre: string;
     email: string;
     password: string;
@@ -14,6 +16,8 @@ export interface TodoAtributos {
 
 
 export class Usuario extends Model <TodoAtributos>{
+
+    public id!:number;
 
     public nombre!: string;
     public email!: string;
@@ -27,6 +31,12 @@ export class Usuario extends Model <TodoAtributos>{
 
 Usuario.init(
     {
+        id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement: true,
+
+        },
         nombre:{
             type:DataTypes.STRING
         },

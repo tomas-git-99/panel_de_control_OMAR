@@ -74,3 +74,20 @@ export const mostrarCarrito = async(req: Request, res: Response) => {
         })
     }
 }
+
+
+export const eliminarCarrito =  async(req: Request, res: Response) => {
+
+    const {id} = req.params;
+
+    const carrito = await Carrito.findByPk(id);
+
+
+    await carrito?.destroy();
+
+
+    res.status(200).json({
+        ok: true,
+        msg:"se elimino con exito"
+    })
+}

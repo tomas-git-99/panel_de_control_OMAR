@@ -39,10 +39,14 @@ const carritoActualizar = () => {
     });
 
 }
+
 const carrito_datos = document.querySelector(".carrito_datos")
+const final_precio = document.querySelector(".final_precio")
 const leerCarrito = (res) => {
 
     let historial = ""
+    let final = 0;
+
     res.map( e => {
         historial += `
     
@@ -52,22 +56,56 @@ const leerCarrito = (res) => {
           <td>$${e.productos.precio}</td>
           <td>$${e.carritos.cantidad * e.productos.precio}</td>
           <td>
-          <div class="boton rueda" id="${"e.id"}">
+          <div class="boton rueda" id="${e.carritos.id}" onclick="configurar(this.id)">
           <img src="/img/rueda.svg" alt="" width="23px">
           </div>
           </td>
           <td>
-          <div class="boton rueda" id="${"e.id"}">
-          <img src="/img/rueda.svg" alt="" width="23px">
+          <div class="boton rueda" id="${e.carritos.id}" onclick="eliminar_producto(this)">
+          <img src="/img/cruz.svg" alt="" width="23px">
            </div>
           </td>
         </tr>
 
    
         `;
+        final += e.carritos.cantidad * e.productos.precio;
+
         carrito_datos.innerHTML = historial;
+
+        
     })
+
+    let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(final)
+    final_precio.innerHTML = cambio_de_moneda;
+
 }
+const modificarCarrito = document.querySelector(".modificarCarrito")
+const salir_modificador = document.querySelector(".salir_modificador")
+
+window.eliminar_producto = (id) => {
+    
+    fecthNormalGET("DELETE", `carrito/${id.id}`)
+    .then( (res) => {
+        // cell element
+        const cell = id.parentNode;
+        // row element
+        const row = cell.parentNode;
+        document.getElementById("tableContact").deleteRow(row.rowIndex);
+    })
+    .catch(err => console.log(err))
+    
+}
+window.configurar = (id) => {
+
+    modificarCarrito.style.display = "grid";
+    modificarCarrito.style.visibility = "visible";
+}
+salir_modificador.addEventListener("click", () => {
+    modificarCarrito.style.display = "none";
+    modificarCarrito.style.visibility = "hidden";
+})
+
 
  ////////////////FIN ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 
