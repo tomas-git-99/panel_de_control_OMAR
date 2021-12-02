@@ -4,7 +4,6 @@ const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : '';
 
-
 const historialGet = () => {
 
     fetch(url + "producto",{ 

@@ -2,6 +2,9 @@ import {DataTypes, Model} from 'sequelize';
 import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
+
+    
+    id: number;
     nombre: string;
     cantidad: number;
     local:string;
@@ -14,6 +17,7 @@ export interface TodoAtributos {
 
 export class Producto extends Model <TodoAtributos>{
 
+    public id!: number;
     public nombre!: string;
     public cantidad!: number;
     public local!:string;
@@ -27,6 +31,12 @@ export class Producto extends Model <TodoAtributos>{
 
 Producto.init(
     {
+        id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement: true,
+
+        },
         nombre:{
             type:DataTypes.STRING
         },

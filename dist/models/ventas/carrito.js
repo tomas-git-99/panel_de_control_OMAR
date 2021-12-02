@@ -10,13 +10,18 @@ class Carrito extends sequelize_1.Model {
 }
 exports.Carrito = Carrito;
 Carrito.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     id_usuario: {
         type: sequelize_1.DataTypes.NUMBER
     },
     id_producto: {
         type: sequelize_1.DataTypes.NUMBER
     },
-    talles: {
+    talle: {
         type: sequelize_1.DataTypes.NUMBER
     },
     cantidad: {

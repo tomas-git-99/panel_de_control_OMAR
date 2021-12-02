@@ -4,7 +4,7 @@ CREATE TABLE cliente(
     apellido VARCHAR(50),
     dni_cuil INT NOT NULL,
     tel_cel INT NOT NULL,
-    direction VARCHAR(50),
+    direcCion VARCHAR(50),
     provincia VARCHAR(50),
     localidad VARCHAR(50),
     cp VARCHAR(10),
@@ -125,3 +125,9 @@ CREATE TABLE direccion(
     FOREIGN KEY fk_id_cliente (id_cliente)
     REFERENCES cliente (id)
 );
+
+ALTER TABLE cliente 
+    DROP COLUMN direccion ,
+    DROP COLUMN provincia ,
+    DROP COLUMN localidad ,
+    DROP COLUMN cp;

@@ -32,8 +32,9 @@ class ServerApp {
             producto: '/api/producto',
             carrito: '/api/carrito',
             direccion: '/api/direccion',
+            //PRODUCCION
         };
-        this.app = express_1.default();
+        this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
         /* middleware */
         this.middlewares();
@@ -54,7 +55,7 @@ class ServerApp {
         });
     }
     middlewares() {
-        this.app.use(cors_1.default());
+        this.app.use((0, cors_1.default)());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.static('public'));
     }

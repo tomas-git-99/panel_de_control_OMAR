@@ -10,6 +10,11 @@ class Producto extends sequelize_1.Model {
 }
 exports.Producto = Producto;
 Producto.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     nombre: {
         type: sequelize_1.DataTypes.STRING
     },

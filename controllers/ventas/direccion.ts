@@ -30,13 +30,21 @@ export const agregarDirecciones = async (req: Request, res: Response) => {
 
 export const obtenerDireccion = async (req: Request, res: Response) => {
 
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const direccion = await Direccion.findAll({where: { id_cliente:id}});
+        const direccion = await Direccion.findAll({where: { id_cliente:id}});
+    
+    
+        res.json({
+            ok: true,
+            direccion
+        })
+    } catch (error) {
+        res.status(505).json({ 
+            ok: false,
+            msg:error
+        })
+    }
 
-
-    res.json({
-        ok: true,
-        direccion
-    })
 }

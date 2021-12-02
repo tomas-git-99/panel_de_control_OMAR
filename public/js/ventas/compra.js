@@ -1,39 +1,25 @@
+import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../helpers/ventas/fetch.js";
 
-
-
-const url = ( window.location.hostname.includes('localhost'))
-? 'http://localhost:8000/api/'
-: '';
 
 
 const cantidad    = document.querySelector(".cantidad");
 const formAgregar = document.querySelector(".formAgregar")
 
 
+//CARGAR HISTORIAL DE LA DB
+fecthNormalGET("GET", "producto")
+      .then(res => {
+        leerHistorial(res.productos)
+      });
 
+//FIN ARGAR HISTORIAL DE LA DB
 
-
-const historialGet = () => {
-
-  fetch(url + "producto",{
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'},
-  })
-  .then(response => response.json())
-  .then(res => {
-      leerHistorial(res.productos)
-  })
-  .catch(err => {
-      console.error(err)
-
-  })
-}
-historialGet();
-const prueba = (event) => {
+window.boton_agregar = (event) => {
   cantidad.style.opacity = 1;
 
   localStorage.setItem("id_producto", event);
 }
+
 const tablaCompra = document.querySelector(".tablaCompra")
 
 const leerHistorial = (res) => {
@@ -52,7 +38,7 @@ const leerHistorial = (res) => {
         <td>$${e.precio}</td>
         <td>
         <div class="boton preview">
-            <button class="eliminar" id="${e.id}" onclick="prueba(this.id)" >
+            <button class="eliminar" id="${e.id}" onclick="boton_agregar(this.id)" >
                 Agregar
             </button>
         </div>
@@ -66,10 +52,7 @@ const leerHistorial = (res) => {
 
 }
 
-
-
-
-  formAgregar.addEventListener("submit", (event) => {
+formAgregar.addEventListener("submit", (event) => {
 
       event.preventDefault();
 
@@ -83,50 +66,42 @@ const leerHistorial = (res) => {
               forData[el.name] = el.value;    
           } 
     //agregar a carrito para despues comprar con el metodo POST
-
-    fetch(url + "carrito" ,{ 
-      method: "POST",
-      body: JSON.stringify( forData ),
-      headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-      // alert("salio todo bien")
-      if(res.ok){
-        cantidad.style.opacity = 0;
-        localStorage.removeItem("id_producto")
-      }else{
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+    fecthNormalPOST_PUT("POST", "carrito", forData)
+        .then( res => {
+          if(res.ok){
+            cantidad.style.opacity = 0;
+            localStorage.removeItem("id_producto")
+          }else{
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+            })
+          }
         })
-      }
-  
-    })
-    .catch(err => {
-        alert("Error: " + err)
-    });
+        .catch(err => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+          })
+        })
             
-    
-
-
-
 
   })
 
 
-  const carrito = document.querySelector(".carrito");
+const carrito = document.querySelector(".carrito");
 
-  carrito.addEventListener("click", () => {
+carrito.addEventListener("click", () => {
 
     window.location = "/page/roles/admin/ventas/carrito.html"
 
-  })
+})
 
 
-  const talleUnica = document.querySelector(".talleUnica");
-  const checkAgregar = document.getElementById("checkAgregar");
+const checkAgregar = document.getElementById("checkAgregar");
+const talleUnica = document.querySelector(".talleUnica");
 
 
 checkAgregar.addEventListener("change", (e) => {
@@ -154,28 +129,13 @@ search.addEventListener("keyup", ({keyCode}) => {
     if( keyCode !== 13){return;}
     if(search.length === 0){return;}
 
-    getSearch(search.value);
+    fecthNormalGET_QUERY("GET", `producto/search`, "?nombre=", search.value)
+            .then(res => {
+              leerHistorial(res.producto)
+            })
     search.value = "";
 });
 
-
-const getSearch = (valor) => {
-
-    
-
-    fetch(url + "producto/search?" + `nombre=${valor}`,{ 
-        method: "GET",
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-        leerHistorial(res.producto);
-    })
-    .catch(err => {
-        console.error(err)
-  
-    })
-}
 
 ////BUSCADOR FIN/////
 

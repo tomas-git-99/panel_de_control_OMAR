@@ -2,6 +2,7 @@ import { comprobarCarritoStorage } from "../helpers/ventas/comprobarCarritoStora
 import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormularioCliente.js";
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
+import { fecthNormalGET } from "../helpers/ventas/fetch.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -15,6 +16,11 @@ comprobarCarritoStorage();
  /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
 
 
+fecthNormalGET("GET", `carrito/${1}`)
+    .then( res => {
+
+        leerCarrito(res.carrito_full);
+        })
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 const carritoActualizar = () => {
@@ -33,36 +39,33 @@ const carritoActualizar = () => {
     });
 
 }
-
-
+const carrito_datos = document.querySelector(".carrito_datos")
 const leerCarrito = (res) => {
 
     let historial = ""
     res.map( e => {
-        historial = `
-        <tbody>
+        historial += `
+    
         <tr>
-          <th scope="row">134</th>
-
-          <td>${e.nombre}</td>
-          <td>689</td>
-          <td>1,2,3,4,5</td>
-          <td>la mejor</td>
+          <td>${e.productos.nombre}</td>
+          <td> ${e.carritos.cantidad}</td>
+          <td>$${e.productos.precio}</td>
+          <td>$${e.carritos.cantidad * e.productos.precio}</td>
           <td>
-          <div class="boton rueda" id="${e.id}">
-          <img src="/public/img/rueda.svg" alt="" width="23px">
+          <div class="boton rueda" id="${"e.id"}">
+          <img src="/img/rueda.svg" alt="" width="23px">
           </div>
           </td>
           <td>
-          <div class="boton rueda" id="${e.id}">
-          <img src="/public/img/rueda.svg" alt="" width="23px">
+          <div class="boton rueda" id="${"e.id"}">
+          <img src="/img/rueda.svg" alt="" width="23px">
            </div>
           </td>
         </tr>
 
-      </tbody>
+   
         `;
-        
+        carrito_datos.innerHTML = historial;
     })
 }
 
