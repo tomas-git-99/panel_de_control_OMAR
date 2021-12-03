@@ -137,9 +137,9 @@ input[type=checkbox] {
 .ordenar_por_talle{
 
     display: none;
-    visibility: hidden;
-/*     display: block;
-    visibility: visible;    */ 
+    visibility: hidden; 
+     /* display: block;
+    visibility: visible;     */
 
     position: fixed;
     left: 47%;

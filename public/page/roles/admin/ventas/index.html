@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/style/inicio.css">
     <link rel="stylesheet" type="text/css" href="./style/index.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -85,9 +87,9 @@
                 <div class="previsualizar">
                     <div class="contenido_producto">
                         <div class="titulo_producto">
-                            <h3>Producto</h3>
+                            <h2>Producto</h2>
+                            <hr>
                         </div>
-                        <hr>
                         <div class="datos_producto">
 
 
@@ -146,9 +148,9 @@
                         </div>
 
                         <div class="titulo_talle">
-                            <h3>Talles</h3>
+                            <h2s>Talles</h2s>
+                            <hr>
                         </div>
-                        <hr>
                         <div class="talles_datos">
 
                             <div class="datos_talle">
@@ -220,12 +222,39 @@
 
                         </div>
                     </div>
-
+                    <hr>
                     <div class="boton_salir">
-                        <button type="button" class="btn btn-outline-danger"> SALIR</button>
+                        <button type="button" class="btn btn-danger"  onclick="actualizar_salir(this)"> SALIR</button>
+                        <button type="button" class="btn btn-success" id="producto_id" onclick="abrirVentana(this.id)">AGREGAR TALLE</button>
+
                     </div>
                 </div>
+                
+                
             </div>
+                
+               <div class="ordenar_por_talle">
+                   <div class="titulo_de_ordenar">
+                       <h4> REMERA PERRONA</h4>
+                       <hr>
+                   </div>
+                   <form class="formulario">
+                       <div class="talle">
+                           <label for="">Talle : </label>
+                           <input type="text" name="talle" id="id_talle">
+                       </div>
+                           <div class="cantidad">
+                               <label for="">Cantidad : </label>
+                               <input type="text" name="cantidad" id="id_cantidad">
+                           </div>
+
+
+                           <div class="boton_ordenar_talle">
+                               <button  type="button" class="btn btn-danger" id="aca_el_id_salir" onclick="salir(this.id)"">Terminar</button>
+                               <button  type="submit" class="btn btn-success" id="aca_el_id" onclick="enviar_talle(this.id)">Agregar</button>
+                           </div>
+                       </form>
+                   </div>
 
         </div>
     </div>

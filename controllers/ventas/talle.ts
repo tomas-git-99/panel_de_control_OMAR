@@ -23,6 +23,17 @@ export const agregarTalle = async (req: Request, res: Response) => {
                 msg:"ese producto no existe"
             })
         }
+
+        const talles_unidad = await Talle.findAll({where: {id_producto:id}});
+
+        talles_unidad.map((t) => {
+            if (t.talle == talle){
+                return res.json({
+                    ok: true,
+                    error: 2
+                })
+            }
+        })
     
         const dato:any = {
             id_producto: id,

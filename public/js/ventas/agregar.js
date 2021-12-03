@@ -2,6 +2,7 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { salio_todo_bien, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 
 
 
@@ -60,44 +61,25 @@ const talle = document.querySelector(".talle")
 
 
 
-/* window.enviar = () => {
-    console.log(cantidad)
-} */
 
 formulario_por_talle.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    
+    
     const id_producto = localStorage.getItem("id_producto");
-
+    
     const forData = {};
     
     for(let el of formulario_por_talle.elements){
-        if(el.name.length > 0){
+        if(el.name.length > 0)
             forData[el.name] = el.value;
-
-        }
-        
         
     } 
-    console.log(forData)
-        
 
-
-
-    fecthNormalPOST_PUT("POST", `talle/${id_producto}`, forData)
-        .then( (res) => {
-            if(res.ok == true){
-                salio_todo_bien("Agregado con exito")
-            }else if (res.ok == false){
- 
-                algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
-            }
-        })
-        .catch(err => {
-            algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
-
-       
-            }) 
+   agregarPorTalle(id_producto, forData);
+   for(let el of formulario_por_talle.elements){
+       el.value = "";
+   }
 
 })
 

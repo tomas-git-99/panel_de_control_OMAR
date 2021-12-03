@@ -1,5 +1,7 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { salio_todo_bien, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
+import { volverAtras } from "../helpers/ventas/volver_atras.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -24,6 +26,71 @@ const historialGet = () => {
 
 const prueba = document.querySelector(".prueba")
 const previsualizar = document.querySelector(".previsualizar");
+const producto_id = document.getElementById("producto_id")
+const ordenar_por_talle = document.querySelector(".ordenar_por_talle")
+const formulario_por_talle = document.querySelector(".formulario");
+const boton_ordenar_talle = document.querySelector(".boton_ordenar_talle");
+
+window.abrirVentana = (id) => {
+
+    previsualizar.style.opacity = 0;
+    ordenar_por_talle.style.opacity = 1;
+
+    let nuevoButtonID = `
+    <button  type="button" class="btn btn-danger" id="${id}" onclick="salir(this.id)"">Terminar</button>
+    <button  type="submit" class="btn btn-success" id="${id}" onclick="enviar_talle(this.id)">Agregar</button>
+    `
+    boton_ordenar_talle.innerHTML = nuevoButtonID;
+
+}
+
+window.enviar_talle = (id) => {
+
+    const id_talle = document.getElementById("id_talle");
+    const id_cantidad = document.getElementById("id_cantidad");
+
+    let dato = {
+        talle: id_talle.value,
+        cantidad: id_cantidad.value
+    };
+
+    agregarPorTalle(id, dato);
+    id_talle.value = "";
+    id_cantidad.value = "";
+
+}
+
+window.actualizar_salir = () => {
+    previsualizar.style.opacity = 0;
+    historialGet();
+}
+window.salir = (id) => {
+
+    previsualizar_producto(id);
+    previsualizar.style.opacity = 1;
+    ordenar_por_talle.style.opacity = 0;
+
+}
+
+
+formulario_por_talle.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    const id_producto = localStorage.getItem("id_producto");
+    const forData = {};
+    
+    for(let el of formulario_por_talle.elements){
+        if(el.name.length > 0)
+            forData[el.name] = el.value;
+        
+    } 
+
+   agregarPorTalle(id_producto, forData);
+   for(let el of formulario_por_talle.elements){
+       el.value = "";
+   }
+
+})
 
 window.previsualizar_producto = (id) => {
 
@@ -33,6 +100,7 @@ window.previsualizar_producto = (id) => {
             if(res.ok){
                 ordenarPorTalle(res.talles);
                 ordenarProductoTable(res.producto);
+                producto_id.id = id;
 
             }
         }) 
@@ -191,7 +259,8 @@ const ordenarProductoTable = (res) => {
 }
 
 
-const talles_datos = document.querySelector(".talles_datos")
+const talles_datos = document.querySelector(".talles_datos");
+
 const ordenarPorTalle = (res) => {
     let result = ""
     res.map( e => {
@@ -296,10 +365,4 @@ window.eliminar_talle = (id) => {
 }
 
 
-{/* <tr>
-<td>Tela: (${e.Tela}) : </td>
-<td><input type="text" id="producto_${e.id}" name="tela" ></td>
-<td> 
-    <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
-</td>
-</tr> */}
+
