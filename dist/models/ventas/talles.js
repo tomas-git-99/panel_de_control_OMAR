@@ -10,6 +10,11 @@ class Talle extends sequelize_1.Model {
 }
 exports.Talle = Talle;
 Talle.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     id_producto: {
         type: sequelize_1.DataTypes.NUMBER
     },

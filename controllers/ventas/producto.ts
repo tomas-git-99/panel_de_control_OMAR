@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Producto } from "../../models/ventas/producto";
+import { Talle } from "../../models/ventas/talles";
 
 
 
@@ -64,6 +65,7 @@ export const editarProducto = async (req: Request, res: Response) => {
             );
         }
 
+        console.log(body);
 
         await producto.update(body);
 
@@ -164,11 +166,26 @@ export const quitarStock = async (req: Request, res: Response) => {
 
 
 export const hitorialProductos = async (req: Request, res: Response) => {
-    console.log("hola")
     const productos = await Producto.findAll();
 
     res.json({
         ok: true,
         productos
+    })
+}
+
+export const obtenerUnoProducto = async (req: Request, res: Response) => {
+
+
+    const {id} = req.params;
+    console.log(id);
+    const producto = await Producto.findByPk(id);
+
+    const talles = await Talle.findAll({where:{ id_producto:id }});
+
+    res.json({
+        ok: true,
+        producto,
+        talles
     })
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarTalle } from "../../controllers/ventas/talle";
+import { agregarTalle, restarTalle, sumarTalle } from "../../controllers/ventas/talle";
 
 
 const router = Router();
@@ -11,4 +11,8 @@ router.post('/:id', agregarTalle)
 
 
 
+router.put('/suma/:id', sumarTalle)
+router.put('/restar/:id', restarTalle)
+
+router.delete('/:id')
 export default router;

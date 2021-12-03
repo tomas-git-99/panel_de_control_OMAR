@@ -45,3 +45,75 @@ export const agregarTalle = async (req: Request, res: Response) => {
     }
 
 }
+
+export const sumarTalle = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const { cantidad } = req.body;
+
+    const talle = await Talle.findByPk(id);
+
+    if(talle!.cantidad < cantidad){
+        return res.json({ 
+            ok: false, 
+            msg:"La cantidad puesa no se puede restar porque es mayor a stock actual"
+        })
+    }
+
+    let nuevaCantida = talle?.cantidad + cantidad;
+
+    await talle?.update({cantidad:nuevaCantida});
+
+
+    res.json({
+        ok: true,
+        talle
+    })
+
+
+}
+
+export const restarTalle = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const { cantidad } = req.body;
+
+    const talle = await Talle.findByPk(id);
+
+    if(talle!.cantidad < cantidad){
+        return res.json({ 
+            ok: false, 
+            msg:"La cantidad insertada no se puede restar porque es mayor a stock actual"
+        })
+    }
+
+    let nuevaCantida = talle!.cantidad - cantidad;
+
+
+    await talle?.update({cantidad:nuevaCantida});
+
+    res.json({
+        ok: true,
+        talle
+    })
+
+
+}
+
+export const eliminarTalle = async (req: Request, res: Response)  => {
+
+    const { id } = req.params;
+
+    const talle = await Talle.findByPk(id);
+
+    talle?.destroy();
+
+
+    res.json({ 
+        ok: true,
+        msg: 'Talle fue eliminado con exito'
+    });
+
+}

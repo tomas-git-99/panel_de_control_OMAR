@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
+exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
+const talles_1 = require("../../models/ventas/talles");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { nombre, cantidad, local, tela, precio } = req.body;
@@ -48,6 +49,7 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 msg: `El usuario con el id ${id} no existe`
             });
         }
+        console.log(body);
         yield producto.update(body);
         res.json({
             ok: true,
@@ -66,6 +68,7 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const buscarProducto = req.query;
     const producto = yield producto_1.Producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     res.json({
@@ -109,7 +112,6 @@ const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.quitarStock = quitarStock;
 const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("hola");
     const productos = yield producto_1.Producto.findAll();
     res.json({
         ok: true,
@@ -117,4 +119,16 @@ const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.hitorialProductos = hitorialProductos;
+const obtenerUnoProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const producto = yield producto_1.Producto.findByPk(id);
+    const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
+    res.json({
+        ok: true,
+        producto,
+        talles
+    });
+});
+exports.obtenerUnoProducto = obtenerUnoProducto;
 //# sourceMappingURL=producto.js.map

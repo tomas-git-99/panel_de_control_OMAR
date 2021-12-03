@@ -23,6 +23,23 @@ const historialGet = () => {
 }
 
 const prueba = document.querySelector(".prueba")
+const previsualizar = document.querySelector(".previsualizar");
+
+window.previsualizar_producto = (id) => {
+
+    fecthNormalGET("GET",`producto/full/prueba/${id}`)
+        .then((res) => {
+            console.log(res)
+            if(res.ok){
+                ordenarPorTalle(res.talles);
+                ordenarProductoTable(res.producto);
+
+            }
+        }) 
+        .catch(err => console.log(err));
+    previsualizar.style.opacity = 1;
+
+}
 
 const leerHistorial = (res) => {
     console.log(res)
@@ -40,7 +57,7 @@ const leerHistorial = (res) => {
           <td>${e.local}</td>
           <td>$${e.precio}</td>
           <td>
-            <img id="${e.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="p(this.id)"/>
+            <img id="${e.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="previsualizar_producto(this.id)"/>
           </td>
         </tr>
 
@@ -52,19 +69,7 @@ const leerHistorial = (res) => {
     prueba.innerHTML = historial;
 }
 
-const previsualizar = document.querySelector(".previsualizar");
 
-window.p =(id) => {
-
- /*    fecthNormalGET("GET",`producto/full/${id}`)
-        .then((res) => {
-            if(res.ok){
-
-            }
-        }) */
-    previsualizar.style.opacity = 1;
-
-}
 
 //BUSCADOR
 
@@ -137,58 +142,56 @@ const datos_producto_table = document.querySelector(".datos_producto_table");
 const ordenarProductoTable = (res) => {
 
     let result = ""
-    res.map( e => {
+
+    
 
         result += `
             <tr>
-            <td>${e.nombre} : </td>
-            <td><input type="text" id="producto_${e.id}"></td>
+            <td>${res.nombre} : </td>
+            <td><input type="text" id="producto_nombre" name="nombre"></td>
             <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+                <button  id="nombre_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
             <tr>
-            <td>Cantidad Total: (${e.cantidad}) : </td>
-            <td><input type="text" id="producto_${e.id}" name="cantidad"></td>
+            <td>Cantidad Total: (${res.cantidad}) : </td>
+            <td><input type="text" id="producto_cantidad" name="cantidad"></td>
             <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+                <button  id="cantidad_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
             <tr>
-            <td>Talles: (${e.talle}) : </td>
-            <td><input type="text" id="producto_${e.id}" name="talle"></td>
+            <td>Talles: (${res.talle}) : </td>
+            <td><input type="text" id="producto_talle" name="talle"></td>
             <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+                <button  id="talle_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+            </td>
+            </tr>
+           
+            <tr>
+            <td> Precio:$ ${res.precio} : </td>
+            <td><input type="text" id="producto_precio" name="precio" ></td>
+            <td> 
+                <button  id="precio_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
             <tr>
-            <td>Tela: (${e.Tela}) : </td>
-            <td><input type="text" id="producto_${e.id}" name="tela" ></td>
+            <td>Local: (${res.local}) : </td>
+            <td><input type="text" id="producto_local" name="local" ></td>
             <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+                <button  id="local_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
-            <tr>
-            <td> Precio:$ ${e.precio} : </td>
-            <td><input type="text" id="producto_${e.id}" name="precio" ></td>
-            <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
-            </td>
-            </tr>
-            <tr>
-            <td>Local: (${e.local}) : </td>
-            <td><input type="text" id="producto_${e.id}" name="local" ></td>
-            <td> 
-                <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
-            </td>
-            </tr>
-
+    
         `
-    })
+   
+   
 
     datos_producto_table.innerHTML = result;
 }
 
+
+const talles_datos = document.querySelector(".talles_datos")
 const ordenarPorTalle = (res) => {
     let result = ""
     res.map( e => {
@@ -197,26 +200,61 @@ const ordenarPorTalle = (res) => {
         <label for="">Talle : <span class="label_talle">${e.talle}</span> <span class="label_stock">(${e.cantidad})</span></label>
 
         <input type="text" name="talle_${e.id}">
-        <button  type="button"  class="btn btn-outline-primary  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">CAMBIAR</button>
+        <button  type="button"  class="btn btn-outline-primary  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">AGREGAR</button>
+        <button  type="button"  class="btn btn-outline-warning  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">RESTAR </button>
         <button  type="button" class="btn btn-outline-danger  btn-sm"   id="${e.id}" onclick="eliminar_talle(this.id)">ELIMINAR</button>
         </div>
 
         `
     })
+
+    talles_datos.innerHTML = result;
 }
 
 window.cambiar_dato = (id) => {
 
-    let input = document.getElementById(`producto_${id}`);
+    const botonLoad = document.querySelector(`#${id}`);
+
+    const palabras = id.split('_');
+
+
+    let input = document.getElementById(`producto_${palabras[0]}`);
     const nombre = input.name;
     const valor = input.value;
 
-    let dato ={
-        nombre:valor
-    }
-    console.log(dato)
-/* 
- */
+    
+    let dato = {name:valor}
+
+    dato[`${nombre}`] = dato.name;
+    delete dato.name;
+
+
+    botonLoad.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="sr-only"></span>`
+    
+    fecthNormalPOST_PUT("PUT",`producto/${palabras[1]}`, dato )
+    .then(res => {
+        
+        if(res.ok) {
+            botonLoad.className = "btn btn-outline-success"
+            botonLoad.innerHTML = `OK`
+            input.value = "";
+
+            setTimeout(function(){
+            botonLoad.className = "btn btn-outline-primary  btn-sm"
+            botonLoad.innerHTML = `CAMBIAR`
+                
+            }, 1000);
+            
+        }else {
+            // algo_salio_mal(`Algo salio mal`)
+        }
+
+    })
+    .catch(err => {
+        // algo_salio_mal(`Algo salio mal: ${ err.message }`)
+    })
+ 
 }
 
 window.agregar_talle = (id) => {
@@ -231,7 +269,7 @@ window.agregar_talle = (id) => {
             if(res.ok) {
                 salio_todo_bien(`Se agrego correctamente la cantidad de: ${ input.value }`)
             }else {
-                algo_salio_mal(`Algo salio mal: ${ err.message }`)
+                algo_salio_mal(`Algo salio mal`)
             }
 
         })
@@ -239,3 +277,29 @@ window.agregar_talle = (id) => {
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
 }
+
+window.eliminar_talle = (id) => {
+
+
+    fecthNormalGET("DELETE",`talle/${id}`)
+       .then(res => {
+           if (res.ok){
+               salio_todo_bien(`Se elimino correctamente`)
+           }else{
+
+           }
+       })
+       .catch(err => {
+        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+
+       })
+}
+
+
+{/* <tr>
+<td>Tela: (${e.Tela}) : </td>
+<td><input type="text" id="producto_${e.id}" name="tela" ></td>
+<td> 
+    <button  id="${e.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+</td>
+</tr> */}
