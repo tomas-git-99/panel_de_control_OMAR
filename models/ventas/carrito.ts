@@ -2,8 +2,8 @@ import {DataTypes, Model} from 'sequelize';
 import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
+    
     id: number;
-
     id_usuario: number;
     id_producto: number;
     talle: number;
