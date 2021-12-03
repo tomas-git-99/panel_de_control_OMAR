@@ -24,3 +24,99 @@
 #basic-addon2{
     border-radius: 0px 20px 20px 0px;
 }
+
+.previsualizar{
+
+    opacity: 0;
+
+    transition: 0.5 all;
+    position: fixed;
+    place-self: center;
+
+
+    width: auto;
+    height: auto;
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.datos_producto{
+    font-family: 'Poppins', sans-serif;
+    font-weight:200; 
+    display: grid;
+ /*    grid-template-columns: 1fr 1fr; */
+ /*    justify-items: center;
+    align-items: center; */
+
+}
+.table_datos_producto tr{
+    border: 10px solid transparent;
+
+    font-size: 18px;
+    text-align: start;
+}
+
+/* .table_datos_producto tr button{
+    margin-left:10px;
+} */
+
+.datos_producto input{
+
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+    font-size: 18px;
+    width: 200px;
+    height: 25px;
+}
+.talles_datos{
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+.label_talle{
+    color: #262626;
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+}
+.label_stock{
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:300; 
+    font-size: 18px;
+    color: #898989;
+    margin-left: 20px;
+}
+.talles_datos input{
+    width: 50px;
+    height: 33px;
+
+}
+
+.datos_talle{
+    margin: 5px;
+    width: auto;
+
+}
+
+.datos_talle label{
+    font-size: 18px;
+}
+
+.boton_salir{
+    margin: 10px;
+}
+.titulo_producto{
+    margin: 10px;
+}
+
+.img_previsualizar{
+    cursor: pointer;
+}
