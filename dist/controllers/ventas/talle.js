@@ -15,20 +15,24 @@ const talles_1 = require("../../models/ventas/talles");
 const agregarTalle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
+        /*         ok: false,
+                error: 2,
+                msg:"El talle que intento agregar, ya esta registrado con este producto "
+             */
         const { cantidad, talle } = req.body;
         const talles_unidad = yield talles_1.Talle.findAll({ where: { id_producto: id } });
-        yield talles_unidad.map((t) => {
-            if (t.talle == talle) {
-                return res.status(505).json({
-                    ok: false,
-                    error: 2,
-                    msg: "El talle que intento agregar, ya esta registrado con este producto "
-                });
-            }
-        });
+        let talle_repetido = talles_unidad.find(e => e.talle == talle ? true : false);
+        if ((talle_repetido === null || talle_repetido === void 0 ? void 0 : talle_repetido.talle) == talle) {
+            return res
+                .json({
+                ok: false,
+                error: 2,
+                msg: "El talle que intento agregar, ya esta registrado con este producto "
+            });
+        }
         const producto = yield producto_1.Producto.findByPk(id);
         if (!producto) {
-            return res.status(505).json({
+            res.status(505).json({
                 ok: false,
                 msg: "ese producto no existe"
             });
@@ -40,13 +44,13 @@ const agregarTalle = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         };
         const talles = new talles_1.Talle(dato);
         yield talles.save();
-        return res.json({
+        res.json({
             ok: true,
             talles
         });
     }
     catch (error) {
-        return res.status(505).json({ ok: false, msg: error });
+        res.status(505).json({ ok: false, msg: error });
     }
 });
 exports.agregarTalle = agregarTalle;

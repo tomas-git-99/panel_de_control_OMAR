@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const producto_1 = require("../../controllers/ventas/producto");
-const router = (0, express_1.Router)();
+const router = express_1.Router();
 //CREAR PRODUCTO
 router.post('/', producto_1.crearProducto);
 //AGREGAR STOCK DE buscarProducto

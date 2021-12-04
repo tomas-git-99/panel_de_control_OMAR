@@ -1,6 +1,7 @@
 import { NextFunction, Request, response, Response } from "express";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
+import talle from "../../routers/ventas/talle";
 
 
 
@@ -9,29 +10,32 @@ export const agregarTalle = async (req: Request, res: Response, next: NextFuncti
 
     try {
         const { id } = req.params;
-        
-    
+/*         ok: false,
+        error: 2,
+        msg:"El talle que intento agregar, ya esta registrado con este producto "
+     */
         const { cantidad, talle} = req.body;
-    
-    
+
+
         const talles_unidad = await Talle.findAll({where:{id_producto:id}});
 
-        await talles_unidad.map((t) => {
-            if (t.talle == talle){
-            return res.status(505).json({
+        let talle_repetido = talles_unidad.find( e => e.talle == talle ? true : false );
+
+        if (talle_repetido?.talle == talle) {
+            return res
+            .json({
                 ok: false,
                 error: 2,
                 msg:"El talle que intento agregar, ya esta registrado con este producto "
-            })
+            });
 
         }
-        })
-        
-        
+
+    
         const producto = await Producto.findByPk(id);
 
         if(!producto){
-            return res.status(505).json({
+            res.status(505).json({
                 ok: false,
                 msg:"ese producto no existe"
             })
@@ -50,14 +54,14 @@ export const agregarTalle = async (req: Request, res: Response, next: NextFuncti
         await talles.save();
 
     
-        return res.json({
+        res.json({
             ok: true,
             talles
         });
 
         
     } catch (error) {
-        return res.status(505).json({ok: false, msg: error})
+        res.status(505).json({ok: false, msg: error}) 
     }
 
 }
@@ -77,8 +81,8 @@ export const sumarTalle = async (req: Request, res: Response) => {
         })
     }
 
-    let nuevaCantida = talle?.cantidad + cantidad;
 
+    let nuevaCantida = talle?.cantidad + cantidad;
     await talle?.update({cantidad:nuevaCantida});
 
 
