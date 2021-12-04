@@ -57,14 +57,15 @@ exports.agregarTalle = agregarTalle;
 const sumarTalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { cantidad } = req.body;
+    let cantidadNumber = parseInt(cantidad);
     const talle = yield talles_1.Talle.findByPk(id);
-    if (talle.cantidad < cantidad) {
-        return res.json({
-            ok: false,
-            msg: "La cantidad puesa no se puede restar porque es mayor a stock actual"
-        });
-    }
-    let nuevaCantida = (talle === null || talle === void 0 ? void 0 : talle.cantidad) + cantidad;
+    /*     if(talle!.cantidad < cantidad){
+            return res.json({
+                ok: false,
+                msg:"La cantidad puesa no se puede restar porque es mayor a stock actual"
+            })
+        } */
+    let nuevaCantida = talle.cantidad + cantidadNumber;
     yield (talle === null || talle === void 0 ? void 0 : talle.update({ cantidad: nuevaCantida }));
     res.json({
         ok: true,
@@ -75,6 +76,7 @@ exports.sumarTalle = sumarTalle;
 const restarTalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { cantidad } = req.body;
+    let cantidadNumber = parseInt(cantidad);
     const talle = yield talles_1.Talle.findByPk(id);
     if (talle.cantidad < cantidad) {
         return res.json({
@@ -82,7 +84,7 @@ const restarTalle = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             msg: "La cantidad insertada no se puede restar porque es mayor a stock actual"
         });
     }
-    let nuevaCantida = talle.cantidad - cantidad;
+    let nuevaCantida = talle.cantidad - cantidadNumber;
     yield (talle === null || talle === void 0 ? void 0 : talle.update({ cantidad: nuevaCantida }));
     res.json({
         ok: true,

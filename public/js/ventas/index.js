@@ -64,25 +64,20 @@ window.actualizar_salir = () => {
     previsualizar.style.opacity = 0;
     historialGet();
 }
-window.salir = async(id) => {
-    previsualizar.style.opacity = 1;
+
+window.salir = (id) => {
+
     ordenar_por_talle.style.opacity = 0;
-    await funcPrevisualizar(id);
+    previsualizar_producto(id);
 
 }
 
 
 formulario_por_talle.addEventListener("submit", (e) => {
     e.preventDefault();
-    
-
 });
 
 window.previsualizar_producto = (id) => {
-    funcPrevisualizar(id);
-}
-
-const funcPrevisualizar = (id) => {
     fecthNormalGET("GET",`producto/${id}`)
     .then((res) => {
         if(res.ok){
@@ -94,8 +89,9 @@ const funcPrevisualizar = (id) => {
         }
     }) 
     .catch(err => console.log(err));
-previsualizar.style.opacity = 1;
+    previsualizar.style.opacity = 1;
 }
+
 
 const leerHistorial = (res) => {
     console.log(res)
@@ -253,12 +249,12 @@ const ordenarPorTalle = (res) => {
     let result = ""
     res.map( e => {
         result += ` 
-        <div class="datos_talle">
-        <label for="">Talle : <span class="label_talle">${e.talle}</span> <span class="label_stock">(${e.cantidad})</span></label>
+        <div class="datos_talle" id="datos_talle_${e.id}">
+        <label for="">Talle : <span class="label_talle">${e.talle}</span> <span class="label_stock_${e.id}">(${e.cantidad})</span></label>
 
-        <input type="text" name="talle_${e.id}">
+        <input type="number" name="talle_${e.id}" id="talle_${e.id}" >
         <button  type="button"  class="btn btn-outline-primary  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">AGREGAR</button>
-        <button  type="button"  class="btn btn-outline-warning  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">RESTAR </button>
+        <button  type="button"  class="btn btn-outline-warning  btn-sm" id="${e.id}" onclick="restar_talle(this.id)">RESTAR </button>
         <button  type="button" class="btn btn-outline-danger  btn-sm"   id="${e.id}" onclick="eliminar_talle(this.id)">ELIMINAR</button>
         </div>
 
@@ -314,36 +310,26 @@ window.cambiar_dato = (id) => {
  
 }
 
+
+//agregar mas stock de un talle
 window.agregar_talle = (id) => {
-
-    let input = document.getElementById(`talle_${id}`);
-
-    const forData = {
-        agregar: input.value
-    }
-    fecthNormalPOST_PUT("PUT", `talle/${id}`, forData)
-        .then(res => {
-            if(res.ok) {
-                salio_todo_bien(`Se agrego correctamente la cantidad de: ${ input.value }`)
-            }else {
-                algo_salio_mal(`Algo salio mal`)
-            }
-
-        })
-        .catch(err => {
-            algo_salio_mal(`Algo salio mal: ${ err.message }`)
-        })
+    cambiar_stock_talle(id, "suma");
+}
+window.restar_talle = (id) => {
+    cambiar_stock_talle(id, "restar");
 }
 
+
+//eliminar talle por completo
 window.eliminar_talle = (id) => {
 
+    let datos_talle_id = document.getElementById(`datos_talle_${id}`);
 
     fecthNormalGET("DELETE",`talle/${id}`)
        .then(res => {
            if (res.ok){
-               salio_todo_bien(`Se elimino correctamente`)
-           }else{
-
+            datos_talle_id.style.display= "none";
+            salio_todo_bien(res.msg);
            }
        })
        .catch(err => {
@@ -353,4 +339,27 @@ window.eliminar_talle = (id) => {
 }
 
 
+const cambiar_stock_talle = (id, suma_resta) => {
 
+    let input = document.getElementById(`talle_${id}`);
+
+    let cambiarStock = document.querySelector(`.label_stock_${id}`);
+
+    const forData = {
+        cantidad: input.value
+    }
+    fecthNormalPOST_PUT("PUT", `talle/${suma_resta}/${id}`, forData)
+        .then(res => {
+            if(res.ok) {
+                cambiarStock.innerHTML = `(${res.talle.cantidad})`;
+                salio_todo_bien(`Se agrego correctamente la cantidad de: ${ input.value }`);
+                input.value = "";
+            }else {
+                algo_salio_mal(`Algo salio mal`)
+            }
+
+        })
+        .catch(err => {
+            algo_salio_mal(`Algo salio mal: ${ err.message }`)
+        })
+}

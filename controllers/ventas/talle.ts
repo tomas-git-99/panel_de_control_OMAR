@@ -72,17 +72,20 @@ export const sumarTalle = async (req: Request, res: Response) => {
 
     const { cantidad } = req.body;
 
+    let cantidadNumber = parseInt(cantidad);
+
     const talle = await Talle.findByPk(id);
 
-    if(talle!.cantidad < cantidad){
+/*     if(talle!.cantidad < cantidad){
         return res.json({ 
             ok: false, 
             msg:"La cantidad puesa no se puede restar porque es mayor a stock actual"
         })
-    }
+    } */
 
 
-    let nuevaCantida = talle?.cantidad + cantidad;
+    let nuevaCantida = talle!.cantidad + cantidadNumber;
+
     await talle?.update({cantidad:nuevaCantida});
 
 
@@ -99,6 +102,7 @@ export const restarTalle = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const { cantidad } = req.body;
+    let cantidadNumber = parseInt(cantidad);
 
     const talle = await Talle.findByPk(id);
 
@@ -109,7 +113,7 @@ export const restarTalle = async (req: Request, res: Response) => {
         })
     }
 
-    let nuevaCantida = talle!.cantidad - cantidad;
+    let nuevaCantida = talle!.cantidad - cantidadNumber;
 
 
     await talle?.update({cantidad:nuevaCantida});

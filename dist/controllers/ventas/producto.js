@@ -122,7 +122,7 @@ const obtenerUnoProducto = (req, res, next) => __awaiter(void 0, void 0, void 0,
     try {
         const { id } = req.params;
         const producto = yield producto_1.Producto.findByPk(id);
-        const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: id }, order: [['talle', 'ASC']] });
         if (!talles) {
             return res.json({
                 ok: false,

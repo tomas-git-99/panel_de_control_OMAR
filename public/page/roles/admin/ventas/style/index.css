@@ -103,6 +103,15 @@
     width: auto;
 
 }
+.datos_talle input{
+    padding-left: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-weight:300; 
+    font-size: 18px;
+}
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
 
 .datos_talle label{
     font-size: 18px;
@@ -127,7 +136,7 @@
 
 
 .ordenar_por_talle{
-   /*  opacity: 0; */
+    opacity: 0;
     position: fixed;
 
     place-self: center;

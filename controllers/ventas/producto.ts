@@ -166,6 +166,7 @@ export const quitarStock = async (req: Request, res: Response) => {
 
 
 export const hitorialProductos = async (req: Request, res: Response) => {
+
     const productos = await Producto.findAll();
 
     res.json({
@@ -181,7 +182,7 @@ export const obtenerUnoProducto = async (req: Request, res: Response, next: Next
         
         const producto = await Producto.findByPk(id);
 
-        const talles =   await Talle.findAll({where:{ id_producto:id }});
+        const talles =   await Talle.findAll({where:{ id_producto:id }, order:[ ['talle','ASC'] ]});
 
         if(!talles){
             return res.json({

@@ -7,6 +7,6 @@ const router = express_1.Router();
 router.post('/:id', talle_1.agregarTalle);
 router.put('/suma/:id', talle_1.sumarTalle);
 router.put('/restar/:id', talle_1.restarTalle);
-router.delete('/:id');
+router.delete('/:id', talle_1.eliminarTalle);
 exports.default = router;
 //# sourceMappingURL=talle.js.map
