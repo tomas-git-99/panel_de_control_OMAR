@@ -16,6 +16,6 @@ router.get('/search', producto_1.buscarProducto);
 //ELIMINAR PRODUCTO 
 router.delete('/:id', producto_1.eliminarProducto);
 router.get('/', producto_1.hitorialProductos);
-router.get('/full/prueba/:id', producto_1.obtenerUnoProducto);
+router.get('/:id', producto_1.obtenerUnoProducto);
 exports.default = router;
 //# sourceMappingURL=producto.js.map

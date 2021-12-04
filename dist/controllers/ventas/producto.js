@@ -119,16 +119,29 @@ const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.hitorialProductos = hitorialProductos;
-const obtenerUnoProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    console.log(id);
-    const producto = yield producto_1.Producto.findByPk(id);
-    const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
-    res.json({
-        ok: true,
-        producto,
-        talles
-    });
+const obtenerUnoProducto = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const producto = yield producto_1.Producto.findByPk(id);
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
+        if (!talles) {
+            return res.json({
+                ok: false,
+                msg: "Estas talles con existen"
+            });
+        }
+        return res.json({
+            ok: true,
+            producto,
+            talles
+        });
+    }
+    catch (error) {
+        return res.status(505).json({
+            ok: false,
+            msg: error
+        });
+    }
 });
 exports.obtenerUnoProducto = obtenerUnoProducto;
 //# sourceMappingURL=producto.js.map

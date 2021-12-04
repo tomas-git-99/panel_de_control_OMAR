@@ -58,6 +58,11 @@ class ServerApp {
     }
     middlewares() {
         this.app.use((0, cors_1.default)());
+        this.app.use((req, res, next) => {
+            // Dominio que tengan acceso (ej. 'http://example.com')
+            res.header('Access-Control-Allow-Origin', '*');
+            next();
+        });
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.static('public'));
     }

@@ -8,6 +8,7 @@ export const fecthNormalGET = (metodo, url_determinado) => {
     return fetch(url + url_determinado,{ 
         method: metodo,
         headers: {'Content-Type': 'application/json'},
+
     })
     .then(response => response.json())
     .then(data => {

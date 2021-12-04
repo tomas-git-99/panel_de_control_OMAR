@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
@@ -174,18 +174,36 @@ export const hitorialProductos = async (req: Request, res: Response) => {
     })
 }
 
-export const obtenerUnoProducto = async (req: Request, res: Response) => {
+export const obtenerUnoProducto = async (req: Request, res: Response, next: NextFunction) => {
 
+    try {
+        const {id} = req.params;
+        
+        const producto = await Producto.findByPk(id);
 
-    const {id} = req.params;
-    console.log(id);
-    const producto = await Producto.findByPk(id);
+        const talles =   await Talle.findAll({where:{ id_producto:id }});
 
-    const talles = await Talle.findAll({where:{ id_producto:id }});
+        if(!talles){
+            return res.json({
+                ok: false,
+                msg:"Estas talles con existen"
+            })
+       
 
-    res.json({
-        ok: true,
-        producto,
-        talles
-    })
+        }
+    
+        return res.json({
+            ok: true,
+            producto,
+            talles
+        });
+       
+        
+    } catch (error) {
+        return res.status(505).json({
+            ok: false,
+            msg: error
+        })
+    }
+
 }

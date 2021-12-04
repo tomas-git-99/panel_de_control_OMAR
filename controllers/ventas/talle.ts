@@ -1,22 +1,35 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, response, Response } from "express";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
 
 
 
 
-export const agregarTalle = async (req: Request, res: Response) => {
+export const agregarTalle = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
-        
         const { id } = req.params;
+        
     
         const { cantidad, talle} = req.body;
     
     
-    
+        const talles_unidad = await Talle.findAll({where:{id_producto:id}});
+
+        await talles_unidad.map((t) => {
+            if (t.talle == talle){
+            return res.status(505).json({
+                ok: false,
+                error: 2,
+                msg:"El talle que intento agregar, ya esta registrado con este producto "
+            })
+
+        }
+        })
+        
+        
         const producto = await Producto.findByPk(id);
-    
+
         if(!producto){
             return res.status(505).json({
                 ok: false,
@@ -24,33 +37,25 @@ export const agregarTalle = async (req: Request, res: Response) => {
             })
         }
 
-        const talles_unidad = await Talle.findAll({where: {id_producto:id}});
-
-        talles_unidad.map((t) => {
-            if (t.talle == talle){
-                return res.json({
-                    ok: true,
-                    error: 2
-                })
-            }
-        })
-    
         const dato:any = {
             id_producto: id,
             cantidad,
             talle
         }
-    
-        console.log(dato)
+        
+
+        
         const talles = new Talle(dato);
-    
+        
         await talles.save();
 
     
-        res.json({
+        return res.json({
             ok: true,
             talles
         });
+
+        
     } catch (error) {
         return res.status(505).json({ok: false, msg: error})
     }

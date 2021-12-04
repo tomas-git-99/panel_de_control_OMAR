@@ -12,10 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarTalle = exports.restarTalle = exports.sumarTalle = exports.agregarTalle = void 0;
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
-const agregarTalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const agregarTalle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const { cantidad, talle } = req.body;
+        const talles_unidad = yield talles_1.Talle.findAll({ where: { id_producto: id } });
+        yield talles_unidad.map((t) => {
+            if (t.talle == talle) {
+                return res.status(505).json({
+                    ok: false,
+                    error: 2,
+                    msg: "El talle que intento agregar, ya esta registrado con este producto "
+                });
+            }
+        });
         const producto = yield producto_1.Producto.findByPk(id);
         if (!producto) {
             return res.status(505).json({
@@ -28,10 +38,9 @@ const agregarTalle = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             cantidad,
             talle
         };
-        console.log(dato);
         const talles = new talles_1.Talle(dato);
         yield talles.save();
-        res.json({
+        return res.json({
             ok: true,
             talles
         });

@@ -31,7 +31,7 @@ router.delete('/:id', eliminarProducto)
 
 router.get('/', hitorialProductos)
 
-router.get('/full/prueba/:id', obtenerUnoProducto)
+router.get('/:id', obtenerUnoProducto)
 
 
 export default router;

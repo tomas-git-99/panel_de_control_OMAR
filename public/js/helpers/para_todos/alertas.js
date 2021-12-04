@@ -19,3 +19,13 @@ export const algo_salio_mal = (mensaje) => {
 
       })
 }
+
+
+export const advertencia = (mesanje) => {
+   
+        Swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text: mesanje,
+        })
+}

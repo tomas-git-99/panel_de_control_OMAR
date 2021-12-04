@@ -64,11 +64,10 @@ window.actualizar_salir = () => {
     previsualizar.style.opacity = 0;
     historialGet();
 }
-window.salir = (id) => {
-
-    previsualizar_producto(id);
+window.salir = async(id) => {
     previsualizar.style.opacity = 1;
     ordenar_por_talle.style.opacity = 0;
+    await funcPrevisualizar(id);
 
 }
 
@@ -76,37 +75,26 @@ window.salir = (id) => {
 formulario_por_talle.addEventListener("submit", (e) => {
     e.preventDefault();
     
-    const id_producto = localStorage.getItem("id_producto");
-    const forData = {};
-    
-    for(let el of formulario_por_talle.elements){
-        if(el.name.length > 0)
-            forData[el.name] = el.value;
-        
-    } 
 
-   agregarPorTalle(id_producto, forData);
-   for(let el of formulario_por_talle.elements){
-       el.value = "";
-   }
-
-})
+});
 
 window.previsualizar_producto = (id) => {
+    funcPrevisualizar(id);
+}
 
-    fecthNormalGET("GET",`producto/full/prueba/${id}`)
-        .then((res) => {
+const funcPrevisualizar = (id) => {
+    fecthNormalGET("GET",`producto/${id}`)
+    .then((res) => {
+        if(res.ok){
             console.log(res)
-            if(res.ok){
-                ordenarPorTalle(res.talles);
-                ordenarProductoTable(res.producto);
-                producto_id.id = id;
+            ordenarPorTalle(res.talles);
+            ordenarProductoTable(res.producto);
+            producto_id.id = id;
 
-            }
-        }) 
-        .catch(err => console.log(err));
-    previsualizar.style.opacity = 1;
-
+        }
+    }) 
+    .catch(err => console.log(err));
+previsualizar.style.opacity = 1;
 }
 
 const leerHistorial = (res) => {
