@@ -133,3 +133,46 @@ ALTER TABLE cliente
     DROP COLUMN provincia ,
     DROP COLUMN localidad ,
     DROP COLUMN cp;
+
+
+ALTER TABLE orden
+   ADD id_direccion INT NOT NULL ,
+   ADD fecha DATE,
+   ADD transporte VARCHAR(100)
+
+ALTER TABLE orden
+    ADD FOREIGN KEY fk_id_direccion(id_direccion) REFERENCES direccion (id);
+
+
+ALTER TABLE orden ADD constraint fk_id_direccion FOREIGN KEY (id_direccion) REFERENCES direccion(id)
+
+
+CREATE TABLE orden(
+
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    id_usuario INT NOT NULL,
+    id_direccion INT NOT NULL ,
+    total INT NOT NULL,
+    url_pdf_cliente VARCHAR(800),
+    url_pdf_venta  VARCHAR(800),
+    fecha DATE,
+    transporte VARCHAR(100)
+
+
+    FOREIGN KEY fk_id_cliente (id_cliente)
+    REFERENCES cliente (id),
+
+    FOREIGN KEY fk_id_usuario (id_usuario)
+    REFERENCES usuario (id),
+
+    FOREIGN KEY fk_id_direccion(id_direccion) 
+    REFERENCES direccion (id)
+
+    );
+
+
+ALTER TABLE orden
+    ADD id_direccion INT NOT NULL ,
+    ADD CONSTRAINT fk_id_direccion FOREIGN KEY (id_direccion)
+        REFERENCES direccion(id);

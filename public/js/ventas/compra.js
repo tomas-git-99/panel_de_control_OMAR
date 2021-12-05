@@ -153,3 +153,37 @@ titleX.addEventListener("click", (e) => {
 })
 
 //// FIN SALIR DE LA VENTANA DE AGREGAR///////
+const seleccion_locales = document.querySelector("#seleccion_locales");
+
+
+const opcionesDeLocales = () => {
+  fecthNormalGET("GET", "producto/locales/todos")
+      .then( res => {
+        let datos = res.result;
+        let result = ""
+        datos.map( e => {
+
+          result = `
+          <option value="${e}">${e}</option>
+          `
+          seleccion_locales.innerHTML += result;
+        })
+      })
+}
+
+opcionesDeLocales();
+
+window.cambioDeLocal = (dato) => {
+
+  if (dato.value == 0){
+    return fecthNormalGET("GET", "producto")
+      .then(res => {
+        leerHistorial(res.productos)
+      });
+  }
+
+  fecthNormalGET_QUERY("GET", "producto/locales/seleccionado/local?", "local=", dato.value)
+      .then((response) => {
+        leerHistorial(response.locales);
+      })
+}

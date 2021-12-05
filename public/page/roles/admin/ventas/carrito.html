@@ -78,7 +78,11 @@
   
                         </tbody>
                       </table>
+
+
+
                 </div>
+
                 <div class="hrDiv"></div>
                 <div class="total">
                     <div class="botones">
@@ -192,7 +196,7 @@
                               </select>
                         </div>
 
-                        <div class="direccionDeCliente">
+                        <div class="direccionDeCliente" id="0">
 
                             <div class="tela">
                                 <span>Provincia</span>
@@ -228,7 +232,7 @@
                         </div>
 
                         <div class="botonFormularioCompra">
-                            <button class="btnCliente">GUARDAR</button>
+                            <button class="btnCliente" id="id_del_cliente">CONFIRMAR</button>
                         </div>
                     </form>
 
@@ -240,30 +244,45 @@
                 <div class="modificador">
 
                     <div class="titulo_modificador">
-                        <img src="/img/close.svg" alt="" class="salir_modificador">
+                        <img src="/img/close.svg" alt="" class="salir_modificador" id="salir_modificador_ID" onclick="salir_actualizar_carrito(this.id)">
 
                         <h3>Modificar</h3>
                         <hr width="100%">
                     </div>
 
                     <div class="modificador_cantidad">
-                        <label>Stock actual del producto : <span> 809</span> </label>
+                        <label>Stock actual del producto : <span class="span_cantidad_actual"> 809</span> </label>
                     </div>
                     <hr>
                     <div class="cantidad_anterior">
-                        <label>Cantidad de tu carrito : <span> 80</span> </label>
+                        <label>Cantidad de tu carrito : <span class="span_cantidad_carrito"> 80</span> </label>
                     </div>
 
                     <hr>
                     <div class="nueva_cantidad">
-                        <span>Cantidad Nueva : <input type="text" ></span>
+                        <span>Cantidad Nueva : <input type="number" id="valor_de_cantidad_nueva"></span>
                     </div>
                     <hr>
-                    <div class="boton_modificar">
+                    <div class="boton_modificar" id="boton_id_producto" onclick="enviar_cambio(this.id)">
                         <button>Modificar</button>
                     </div>
                 </div>
             </div>
+
+            <div class="quitar_total_o_individual">
+
+                <div class="titulo_para_descontar">
+                <h3>¿Descontar del TOTAL o por TALLE?</h3>
+                </div>
+
+                <div class="butones_confimacion_descontar">
+                    <button type="button" class="btn btn-outline-dark" id="descontar_total_id" onclick="descontar_total(this.id)">TOTAL</button>
+                    <button type="button" class="btn btn-outline-dark" id="descontar_talle_id" onclick="descontar_talle(this.id)">TALLE</button>
+                </div>
+
+            </div>
+            
+
 
         </div>
     </div>

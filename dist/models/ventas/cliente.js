@@ -26,18 +26,6 @@ Cliente.init({
     },
     tel_cel: {
         type: sequelize_1.DataTypes.NUMBER
-    },
-    direccion: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    cp: {
-        type: sequelize_1.DataTypes.NUMBER
-    },
-    provincia: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    localidad: {
-        type: sequelize_1.DataTypes.STRING
     }
 }, {
     sequelize: conectarDB_1.default,

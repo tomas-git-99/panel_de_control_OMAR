@@ -11,14 +11,19 @@ export const generarOrden = async(req: Request, res: Response) => {
 
 
     try {
-        const { idCliente, idUsuario } = req.params;
-
+        const { idCliente, idUsuario, idDireccion} = req.params;
+        const query = req.query;
+        const { fecha, transporte} = req.body;
 
         const datos:any = {
             id_cliente:idCliente,
             id_usuario:idUsuario,
+            id_direccion:idDireccion,
+            fecha,
+            transporte
         }
 
+        console.log(datos);
         const orden = new Orden (datos);
 
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarMasStock, buscarProducto, crearProducto, editarProducto, eliminarProducto, hitorialProductos, obtenerUnoProducto, quitarStock } from "../../controllers/ventas/producto";
+import { agregarMasStock, buscarLocal, buscarProducto, crearProducto, editarProducto, eliminarProducto, hitorialProductos, obtenerUnoProducto, quitarStock, soloLocales } from "../../controllers/ventas/producto";
 
 
 const router = Router();
@@ -32,6 +32,11 @@ router.delete('/:id', eliminarProducto)
 router.get('/', hitorialProductos)
 
 router.get('/:id', obtenerUnoProducto)
+
+router.get('/locales/todos', soloLocales)
+
+
+router.get('/locales/seleccionado/local', buscarLocal)
 
 
 export default router;

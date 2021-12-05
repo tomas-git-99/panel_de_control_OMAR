@@ -2,7 +2,7 @@ import { comprobarCarritoStorage } from "../helpers/ventas/comprobarCarritoStora
 import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormularioCliente.js";
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
-import { fecthNormalGET } from "../helpers/ventas/fetch.js";
+import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -11,37 +11,26 @@ const url = ( window.location.hostname.includes('localhost'))
 
 
 
- ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
+ ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE/////////////////////////////// 
 comprobarCarritoStorage();
  /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
 
 
-fecthNormalGET("GET", `carrito/${1}`)
+ ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
+const carritoActualizar = (id=0) => {
+
+    fecthNormalGET("GET", `carrito/${1}`)
     .then( res => {
 
         leerCarrito(res.carrito_full);
         })
 
- ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
-const carritoActualizar = () => {
-
-    fetch(url, "carrito",{ 
-        method: "GET",
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-        leerCarrito(res)
-        localStorage.setItem("carrito", 1);
-    })
-    .catch(err => {
-        alert("Error: " + err.message)
-    });
-
 }
+carritoActualizar();
 
-const carrito_datos = document.querySelector(".carrito_datos")
-const final_precio = document.querySelector(".final_precio")
+const carrito_datos = document.querySelector(".carrito_datos");
+const final_precio = document.querySelector(".final_precio");
+
 const leerCarrito = (res) => {
 
     let historial = ""
@@ -80,68 +69,8 @@ const leerCarrito = (res) => {
     final_precio.innerHTML = cambio_de_moneda;
 
 }
-const modificarCarrito = document.querySelector(".modificarCarrito")
-const salir_modificador = document.querySelector(".salir_modificador")
 
-window.eliminar_producto = (id) => {
-    
-    fecthNormalGET("DELETE", `carrito/${id.id}`)
-    .then( (res) => {
-        // cell element
-        const cell = id.parentNode;
-        // row element
-        const row = cell.parentNode;
-        document.getElementById("tableContact").deleteRow(row.rowIndex);
-    })
-    .catch(err => console.log(err))
-    
-}
-window.configurar = (id) => {
-
-    modificarCarrito.style.display = "grid";
-    modificarCarrito.style.visibility = "visible";
-}
-salir_modificador.addEventListener("click", () => {
-    modificarCarrito.style.display = "none";
-    modificarCarrito.style.visibility = "hidden";
-})
-
-
- ////////////////FIN ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
-
-
- ////////////////CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
-
-const ruedaConfigurar = document.querySelectorAll(".rueda");
-const ruedaEliminar   = document.querySelectorAll(".cruz");
-
-//MODIFICAR CARRITO
-ruedaConfigurar.forEach( (boton) => {
-    boton.addEventListener("click", (e) => {
-
-        e.preventDefault();
-
-        console.log(boton.id);
-
-       //GET FECHT PARA OBTENER LOS DATOS DEL CARRITO Y CAMBIAR LA CANTIDAD 
-
-    })
-});
-
-
-
-//ELIMINAR PRODUCTO DEL CARRITO
-ruedaEliminar.forEach( (boton) => {
-    boton.addEventListener("click", (e) => {
-
-        e.preventDefault();
-        console.log(boton.id);
-        //ELIMINAR DE CARRITO Y CON EL DI DEL USUARIO QUE ESTA USANDO ESTA CUENTA
-
-    })
-});
- ////////////////FIN CONFIGURAR O ELIMINAR PRODUCTO DEL CARRITO////////////////////////////////
-
+ ////////////////FIN ACTUALIZAR CARRITO APENAS ENTRA////////////////////////////////
 
 
  ////////////////BOTON DE CONFIRMAR PARA EL CARRITO////////////////////////////////
@@ -179,9 +108,6 @@ btnConfirmar.addEventListener("click", (e) => {
             alert("Error: " + err.message)
         });
     }
-
-
-    
     //CUANDO APRETE EL BOTON PREGUNTAR SI ESTOS PRODUCTOS YA TIENEN CLIENTES
     
 });
@@ -260,7 +186,8 @@ retrocederBuscar.addEventListener("click", (e) =>{
 
 
 ///////////////// CLIENTE EXISTENTE //////////////////
-//BUSCADOR
+
+///////////////// BUSCADOR DE CLIENTE 🔍🔍🔍 //////////////////
 const search = document.querySelector("#search");
 search.addEventListener("keyup", ({keyCode}) => {
 
@@ -280,6 +207,7 @@ const getSearch = (valor) => {
     })
     .then(response => response.json())
     .then(res => {
+        console.log(res)
         leerHistorial(res.cliente);
     })
     .catch(err => {
@@ -319,15 +247,17 @@ const leerHistorial = (res) => {
 
     historialCliente.innerHTML = historial;
 }
+///////////////// FIN BUSCADOR DE CLIENTE 🔍🔍🔍 //////////////////
 
 const clientInformacionSOLO = document.querySelector(".clientInformacionSOLO");
+const id_del_cliente = document.getElementById("id_del_cliente")
 
-window.mandarID = async(e) => {
+window.mandarID = (e) => {
 
     volverAtras(buscadorCli, cartelCliente);
     direccionCliente(e);
     agregarAlFormularioCliente(clientInformacionSOLO);
-
+    id_del_cliente.id = e;
 }
 
 //AGREGAR A LA BASE DE DATOS DE OREDEN, ID_DIRECCION
@@ -343,7 +273,6 @@ const direccionCliente = (idCliente) =>{
     .then(response => response.json())
     .then(async(res) => {
         localStorage.setItem("dataDireccion", JSON.stringify(res.direccion));
-
         const dato = JSON.parse(localStorage.getItem("dataDireccion"));
         agregarDireccionFormulario(dato); 
     })
@@ -376,9 +305,10 @@ const agregarDireccionFormulario = async(dataDireccion) => {
 
 
 const direccionDeCliente = document.querySelector(".direccionDeCliente");
+const aca_id_direccion = document.getElementById("0")
 
 window.selecciconCambios = (s) => {
-
+    aca_id_direccion.id = s.value;
     selecciconCambios_direccion(s, direccionDeCliente)
 
 }
@@ -390,28 +320,32 @@ window.selecciconCambios = (s) => {
 /////// RELLENAR DATOS PARA CONFIRMAR COMPRA //////////////////
 const botonCliente = document.querySelector(".btnCliente");
 const formCliente = document.querySelector(".formProducto")
+const descontar_total_id = document.getElementById("descontar_total_id")
+const descontar_talle_id = document.getElementById("descontar_talle_id")
 
 
 
-botonCliente.addEventListener("click", (e) => {
-    console.log(e.target)
-})
+// botonCliente.addEventListener("click", (e) => {
+//     console.log(e.target)
+// })
 
 
 formCliente.addEventListener("submit", (e) =>{
 
     e.preventDefault();
 
-    const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
-    const forDataConfirmar = {} // 2 DATOS PARA GENERAR NUEVA ORDEN
+    const forData = {};          // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+    const forDataDireccion = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+    const forDataConfirmar = {}  // 2 DATOS PARA GENERAR NUEVA ORDEN
     
     for(let el of formCliente.elements){
         if(el.name.length > 0){
 
             if(el.name === "fecha"  || el.name === "transporte"){
                 forDataConfirmar[el.name] = el.value;
+            }else if(el.name == "provincia" || el.name == "localidad" || el.name == "cp" || el.name == "direccion"){
+                forDataDireccion[el.name] = el.value;
             }else{
-
                 forData[el.name] = el.value;
             }
 
@@ -419,47 +353,150 @@ formCliente.addEventListener("submit", (e) =>{
 
     }
     
+
+    //const id_cliente = localStorage.getItem("id_cliente");
+    const id_cliente = botonCliente.id;
+    const id_direccion = aca_id_direccion.id;
+    const id_usuario = localStorage.getItem("id");
+
+    //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
+    if(id_direccion == 0 || id_direccion == "0" || id_direccion == ""){
+
+        fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
+            .then( res => {
+                generarOrden(id_cliente, id_cliente, res.newDireccion.id, forDataConfirmar);
+            })
+
+    }else{
+        generarOrden(id_cliente, id_usuario, id_direccion, forDataConfirmar);
+    }
+    
     console.log(forData);
     console.log(forDataConfirmar);
+    console.log(forDataDireccion);
 
-
-    fetch(url, "cliente",{ 
-        method: "POST",
-        body: JSON.stringify( forData ),
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-
-        forDataConfirmar["idCliente"] = res.id;
-        generarOrden(forDataConfirmar);
-
-    })
-    .catch(err => {
-        alert("Error: " + err.message)
-    });
 
 })
 
 /////// FIN RELLENAR DATOS PARA CONFIRMAR COMPRA //////////////////
 
+const quitar_total_o_individual = document.querySelector(".quitar_total_o_individual");
 
+const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
 
+    console.log(id_cliente, id_usuario, id_direccion, data)
+    fecthNormalPOST_PUT("POST", `orden/${id_cliente}/${id_usuario}/${id_direccion}`, data)
+        .then( res => {
+            if(res.ok){
 
-const generarOrden = (data) => {
-
-    fetch(url, "cliente",{ 
-        method: "POST",
-        body: JSON.stringify( data ),
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-        localStorage.setItem("idOrden", res.id);
-        localStorage.removeItem("carrito");
-        localStorage.getItem("carrito", 0);
-    })
-    .catch(err => {
-        alert("Error: " + err.message)
-    });
+                console.log(res);
+                // ACA COLOCAMOS QUE SE ABRA LA SIGUENTE VENTANA PARA DESCONTAR DEL TOTAL O POR TALLE
+                volverAtras(cartelCliente, quitar_total_o_individual)
+                descontar_total_id.id = res.orden.id;
+                descontar_talle_id.id = res.orden.id;
+            }
+        })
+        .catch( err => {
+            console.log("gato");
+            console.log(err);
+     
+        })
+                  
 }
+
+////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS
+
+window.descontar_total = (id) => {
+    const id_usuario = localStorage.getItem("id");
+    descontarEltotal(id_usuario, id);
+}
+
+const descontarEltotal = (id_usuario, id_orden) => {
+
+    fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
+        .then( res => {
+            if(res.ok){
+                //mandar a la ventana para imprimir en pdf los tickets
+            }else{
+                //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage
+                localStorage.removeItem("carrito");
+                localStorage.getItem("carrito", 0);
+                localStorage.setItem('id_orden', id_orden);
+            }
+        })
+        .catch(err =>{
+            alert("Error: " + err)
+        })
+}
+
+
+////////////////////////////////MOFIGICAR CARRITO 🛒🛒🛒//////////////////////////////// 🔴🔴🔴🔴🔴
+const modificarCarrito = document.querySelector(".modificarCarrito")
+const boton_id_producto = document.getElementById("boton_id_producto")
+const salir_modificador_ID = document.getElementById("salir_modificador_ID")
+
+const span_cantidad_actual = document.querySelector(".span_cantidad_actual");
+const span_cantidad_carrito = document.querySelector(".span_cantidad_carrito");
+const valor_de_cantidad_nueva = document.querySelector("#valor_de_cantidad_nueva");
+
+
+// BOTON PARA ELIMINAR PRODUCTO DE CARRITO
+window.eliminar_producto = (id) => {
+    
+    fecthNormalGET("DELETE", `carrito/${id.id}`)
+    .then( (res) => {
+        // cell element
+        const cell = id.parentNode;
+        // row element
+        const row = cell.parentNode;
+        document.getElementById("tableContact").deleteRow(row.rowIndex);
+    })
+    .catch(err => console.log(err))
+    
+}
+
+
+//RUEDA DE CONFIGURACION
+window.configurar = (id) => {
+
+    configuracion_view(id);
+    boton_id_producto.id = id;
+    salir_modificador_ID.id = id;
+    modificarCarrito.style.display = "grid";
+    modificarCarrito.style.visibility = "visible";
+
+}
+
+//BOTON PARA SALIR DE LA VENTA DE MODIFICACION DE CARRITO Y ACTUALIZAR CARRITO
+window.salir_actualizar_carrito = (id) => {
+    carritoActualizar(id);
+    modificarCarrito.style.display = "none";
+    modificarCarrito.style.visibility = "hidden";
+}
+
+
+// ENVIAR CAMBIOS DEL CARRITO EN LA VENTANA DE CONFIGURACION
+window.enviar_cambio = (id) => {
+
+    const dato = {
+        cantidad: valor_de_cantidad_nueva.value
+    }
+    fecthNormalPOST_PUT("PUT", `carrito/${id}`, dato)
+        .then(res => {
+            span_cantidad_carrito.innerHTML = res.cantidad;
+            valor_de_cantidad_nueva.value = "";
+        })
+}
+
+const configuracion_view = (id) => {
+    fecthNormalGET("GET", `carrito/mostrar/${id}`)
+         .then( res => {
+            span_cantidad_actual.innerHTML = res.cantidadActual;
+            span_cantidad_carrito.innerHTML = res.cantidadCarrito;
+         })
+         .catch(err => {
+             alert(err.message);
+         })
+}
+
+////////////////////////////////MOFIGICAR CARRITO 🛒🛒🛒////////////////////////////////  🔴🔴🔴🔴🔴

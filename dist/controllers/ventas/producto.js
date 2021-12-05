@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
+exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
@@ -68,6 +68,7 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const buscarProducto = req.query;
     const producto = yield producto_1.Producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     res.json({
@@ -111,7 +112,7 @@ const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.quitarStock = quitarStock;
 const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const productos = yield producto_1.Producto.findAll();
+    const productos = yield producto_1.Producto.findAll({ order: [['updatedAt', 'DESC']] });
     res.json({
         ok: true,
         productos
@@ -143,4 +144,31 @@ const obtenerUnoProducto = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.obtenerUnoProducto = obtenerUnoProducto;
+const soloLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const locales = yield producto_1.Producto.findAll({ attributes: ['local'] });
+    const result = [];
+    locales.forEach((item) => {
+        //pushes only unique element
+        if (!result.includes(item.local)) {
+            result.push(item.local);
+        }
+    });
+    res.json({
+        ok: true,
+        result
+    });
+});
+exports.soloLocales = soloLocales;
+const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const locales = yield producto_1.Producto.findAll({ where: {
+            local: { [dist_1.Op.like]: '%' + query.local + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        } });
+    res.json({
+        ok: true,
+        locales
+    });
+});
+exports.buscarLocal = buscarLocal;
 //# sourceMappingURL=producto.js.map

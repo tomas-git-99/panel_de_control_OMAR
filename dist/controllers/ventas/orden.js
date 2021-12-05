@@ -17,11 +17,17 @@ const orden_detalle_1 = require("../../models/ventas/orden_detalle");
 const producto_1 = require("../../models/ventas/producto");
 const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { idCliente, idUsuario } = req.params;
+        const { idCliente, idUsuario, idDireccion } = req.params;
+        const query = req.query;
+        const { fecha, transporte } = req.body;
         const datos = {
             id_cliente: idCliente,
             id_usuario: idUsuario,
+            id_direccion: idDireccion,
+            fecha,
+            transporte
         };
+        console.log(datos);
         const orden = new orden_1.Orden(datos);
         yield orden.save();
         res.json({

@@ -226,7 +226,7 @@ export const descontarElTotal= async(req: Request, res: Response) => {
                         precio: e.precio
                     }
 
-                    let nuevoStock = p.cantidad - e.cantidad;
+                    let nuevoStock = e.cantidad - p.cantidad ;
 
                     await productos[i].update({cantidad: nuevoStock})
                         .catch(err => {
@@ -266,5 +266,45 @@ export const descontarElTotal= async(req: Request, res: Response) => {
 
 
 const eliminarCarritoYagregarAorden = async(id_usuario:number) => {
+
+}
+
+
+
+export const modificarCarrito = async(req: Request, res: Response) => {
+
+    const { id } = req.params
+
+    const carrito = await Carrito.findByPk(id);
+
+
+    await carrito?.update(req.body);
+
+    const cantidad = carrito?.cantidad;
+
+    res.json({
+        ok: true,
+        cantidad
+    })
+}
+export const mostrarCantidad_Actual_Carrito = async(req: Request, res: Response) => {
+
+    const { id } = req.params
+
+    const carrito = await Carrito.findByPk(id);
+
+    const producto = await Producto.findByPk(carrito?.id_producto);
+
+    const cantidadActual = producto?.cantidad;
+
+    const cantidadCarrito = carrito?.cantidad;
+
+
+    res.json({ 
+        ok: true,
+        cantidadActual,
+        cantidadCarrito
+    })
+
 
 }

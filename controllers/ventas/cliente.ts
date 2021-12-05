@@ -59,6 +59,7 @@ export const buscarCliente = async (req: Request, res: Response) => {
     //const cliente = await Cliente.findAll({ where:{ dni_cuil:{ [Op.like]: '%' + buscarCliente + '%'} }});
     const cliente = await Cliente.findAll({ where:{ dni_cuil:buscarCliente.dni_cuil} });
 
+    
 
     res.json({
         ok:true,

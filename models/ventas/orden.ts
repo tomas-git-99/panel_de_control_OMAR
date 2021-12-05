@@ -6,6 +6,9 @@ export interface TodoAtributos {
     id:number;
     id_cliente: number;
     id_usuario: number;
+    id_direccion: number;
+    fecha: number;
+    transporte: string;
     total:number;
     url_pdf_cliente:string;
     url_pdf_venta:string;
@@ -16,6 +19,9 @@ export class Orden extends Model <TodoAtributos>{
     public id!:number;
     public id_cliente!: number;
     public id_usuario!: number;
+    public id_direccion!: number;
+    public fecha!: number;
+    public transporte!: string;
     public total!:number;
     public url_pdf_cliente!:string;
     public url_pdf_venta!:string;
@@ -36,6 +42,15 @@ Orden.init(
         },
         id_usuario: {
             type:DataTypes.NUMBER
+        },
+        id_direccion:{
+            type:DataTypes.NUMBER
+        },
+        fecha:{
+            type:DataTypes.NUMBER
+        },
+        transporte:{
+            type:DataTypes.STRING
         },
         total:{
             type:DataTypes.NUMBER

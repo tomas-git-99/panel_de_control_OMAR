@@ -21,6 +21,15 @@ Orden.init({
     id_usuario: {
         type: sequelize_1.DataTypes.NUMBER
     },
+    id_direccion: {
+        type: sequelize_1.DataTypes.NUMBER
+    },
+    fecha: {
+        type: sequelize_1.DataTypes.NUMBER
+    },
+    transporte: {
+        type: sequelize_1.DataTypes.STRING
+    },
     total: {
         type: sequelize_1.DataTypes.NUMBER
     },

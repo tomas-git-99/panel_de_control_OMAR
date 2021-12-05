@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarCarrito, descontarElTotal, descontarPorUnidad, eliminarCarrito, mostrarCarrito } from "../../controllers/ventas/carrito";
+import { agregarCarrito, descontarElTotal, descontarPorUnidad, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito } from "../../controllers/ventas/carrito";
 
 
 const router = Router();
@@ -16,6 +16,12 @@ router.delete("/:id", eliminarCarrito);
 //MOSTRAR EL CARRITO
 router.get("/:id", mostrarCarrito)
 
+//cambiar carrito
+router.put("/:id", modificarCarrito)
+
+router.get("/mostrar/:id", mostrarCantidad_Actual_Carrito)
+
+
 
 
 ///PASAR DE CARRITO A ORDEN_DETALLE, Y COMPLETAR ORDEN////
@@ -26,7 +32,7 @@ router.put("/:id/:id_orden", descontarPorUnidad)
 
 /////////////// QUITAR STOCK EN EL TOTAL DEL PRODUCTO ////////////////////
 
-router.put("total/:id/:id_orden", descontarElTotal)
+router.put("/total/:id/:id_orden", descontarElTotal)
 
 
 export default router;

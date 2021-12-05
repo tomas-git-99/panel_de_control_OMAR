@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
+exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const carrito_1 = require("../../models/ventas/carrito");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
 const producto_1 = require("../../models/ventas/producto");
@@ -160,7 +160,7 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                         cantidad: p.cantidad,
                         precio: e.precio
                     };
-                    let nuevoStock = p.cantidad - e.cantidad;
+                    let nuevoStock = e.cantidad - p.cantidad;
                     yield productos[i].update({ cantidad: nuevoStock })
                         .catch(err => {
                         return res.json({ ok: false, msg: err });
@@ -189,4 +189,28 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.descontarElTotal = descontarElTotal;
 const eliminarCarritoYagregarAorden = (id_usuario) => __awaiter(void 0, void 0, void 0, function* () {
 });
+const modificarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const carrito = yield carrito_1.Carrito.findByPk(id);
+    yield (carrito === null || carrito === void 0 ? void 0 : carrito.update(req.body));
+    const cantidad = carrito === null || carrito === void 0 ? void 0 : carrito.cantidad;
+    res.json({
+        ok: true,
+        cantidad
+    });
+});
+exports.modificarCarrito = modificarCarrito;
+const mostrarCantidad_Actual_Carrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const carrito = yield carrito_1.Carrito.findByPk(id);
+    const producto = yield producto_1.Producto.findByPk(carrito === null || carrito === void 0 ? void 0 : carrito.id_producto);
+    const cantidadActual = producto === null || producto === void 0 ? void 0 : producto.cantidad;
+    const cantidadCarrito = carrito === null || carrito === void 0 ? void 0 : carrito.cantidad;
+    res.json({
+        ok: true,
+        cantidadActual,
+        cantidadCarrito
+    });
+});
+exports.mostrarCantidad_Actual_Carrito = mostrarCantidad_Actual_Carrito;
 //# sourceMappingURL=carrito.js.map

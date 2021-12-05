@@ -9,6 +9,7 @@ dotenv_1.default.config();
 const db = new sequelize_1.Sequelize(process.env.NOMBRE_DB || "", process.env.NOMBRE_USER_DB || "", process.env.PASSWORD_DB || "", {
     host: 'localhost',
     dialect: 'mysql',
+    //logging: false,
 });
 exports.default = db;
 //# sourceMappingURL=conectarDB.js.map

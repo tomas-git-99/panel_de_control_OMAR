@@ -9,10 +9,7 @@ export interface TodoAtributos {
     apellido: string;
     dni_cuil: number;
     tel_cel: number;
-    direccion: string;
-    cp: number;
-    provincia: string;
-    localidad: string;
+ 
 }
 
 
@@ -23,10 +20,7 @@ export class Cliente extends Model <TodoAtributos>{
     public apellido!: string;
     public dni_cuil!: number;
     public tel_cel!: number;
-    public direccion!: string;
-    public cp!: number;
-    public provincia!: string;
-    public localidad!: string;
+
 
 }
 
@@ -51,18 +45,6 @@ Cliente.init(
         tel_cel:{
             type:DataTypes.NUMBER
 
-        },
-        direccion:{
-            type:DataTypes.STRING
-        },
-        cp:{
-            type:DataTypes.NUMBER
-        },
-        provincia:{
-            type:DataTypes.STRING
-        },
-        localidad:{
-            type:DataTypes.STRING
         }
         
     },{

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Op } from "sequelize/dist";
+import { Op, where } from "sequelize/dist";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
 
@@ -167,7 +167,7 @@ export const quitarStock = async (req: Request, res: Response) => {
 
 export const hitorialProductos = async (req: Request, res: Response) => {
 
-    const productos = await Producto.findAll();
+    const productos = await Producto.findAll({order: [['updatedAt', 'DESC']]});
 
     res.json({
         ok: true,
@@ -207,4 +207,42 @@ export const obtenerUnoProducto = async (req: Request, res: Response, next: Next
         })
     }
 
+}
+
+
+export const soloLocales = async (req: Request, res: Response) => {
+
+    const locales = await Producto.findAll({attributes:['local']});
+
+
+    const result:any = [];
+
+
+    locales.forEach((item)=>{
+    	//pushes only unique element
+        if(!result.includes(item.local)){
+    		result.push(item.local);
+    	}
+    })
+    
+      res.json({
+          ok: true,
+          result
+       })
+}
+
+export const buscarLocal = async (req: Request, res: Response) => {
+    const query:any = req.query;
+
+    const locales = await Producto.findAll({ where:{ 
+
+        local:{ [Op.like]: '%'+ query.local +'%'},
+        // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+    }} );
+
+
+    res.json({
+        ok: true,
+        locales
+    })
 }

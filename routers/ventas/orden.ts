@@ -6,7 +6,7 @@ const router = Router();
 
 
 //GENERAR ORDEN 
-router.post('/:idCliente/:idUsuario', generarOrden)
+router.post('/:idCliente/:idUsuario/:idDireccion', generarOrden)
 
 // GENERAR DETALLES DE COMPRA
 router.post('/detalles/:idOrden/:idProducto', ordenDetalles)
