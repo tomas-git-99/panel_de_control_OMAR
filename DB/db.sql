@@ -101,7 +101,7 @@ CREATE TABLE carrito(
 );
 
 
-ALTER TABLE talles
+ALTER TABLE orden
 ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
@@ -136,9 +136,8 @@ ALTER TABLE cliente
 
 
 ALTER TABLE orden
-   ADD id_direccion INT NOT NULL ,
    ADD fecha DATE,
-   ADD transporte VARCHAR(100)
+   ADD transporte VARCHAR(100);
 
 ALTER TABLE orden
     ADD FOREIGN KEY fk_id_direccion(id_direccion) REFERENCES direccion (id);

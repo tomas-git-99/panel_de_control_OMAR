@@ -383,8 +383,7 @@ formCliente.addEventListener("submit", (e) =>{
 const quitar_total_o_individual = document.querySelector(".quitar_total_o_individual");
 
 const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
-
-    console.log(id_cliente, id_usuario, id_direccion, data)
+    
     fecthNormalPOST_PUT("POST", `orden/${id_cliente}/${id_usuario}/${id_direccion}`, data)
         .then( res => {
             if(res.ok){
@@ -397,14 +396,13 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
             }
         })
         .catch( err => {
-            console.log("gato");
-            console.log(err);
-     
+
         })
                   
 }
 
 ////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS
+const comprobante = document.querySelector(".comprobante");
 
 window.descontar_total = (id) => {
     const id_usuario = localStorage.getItem("id");
@@ -416,6 +414,14 @@ const descontarEltotal = (id_usuario, id_orden) => {
     fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
         .then( res => {
             if(res.ok){
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
                 //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage

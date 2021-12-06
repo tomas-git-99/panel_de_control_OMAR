@@ -12,7 +12,7 @@ export const generarOrden = async(req: Request, res: Response) => {
 
     try {
         const { idCliente, idUsuario, idDireccion} = req.params;
-        const query = req.query;
+
         const { fecha, transporte} = req.body;
 
         const datos:any = {
@@ -24,7 +24,8 @@ export const generarOrden = async(req: Request, res: Response) => {
         }
 
         console.log(datos);
-        const orden = new Orden (datos);
+
+        const orden = new Orden(datos);
 
 
         await orden.save();
@@ -35,9 +36,11 @@ export const generarOrden = async(req: Request, res: Response) => {
         });
         
     } catch (error) {
+
             res.status(500).json({
             ok: false,
-            msg: "Hablar con el administrador"
+            msg: "Hablar con el administrador",
+
         });
     }
 }

@@ -197,58 +197,80 @@ export const descontarElTotal= async(req: Request, res: Response) => {
     
         carrito.map( e => {
             idProductos.push(e.id_producto);
-
             datos = [...datos, {id_producto:e.id_producto, cantidad:e.cantidad}]
-        })
-
+        });
 
         const productos = await Producto.findAll({where:{id:idProductos}});
 
 
-        productos.map( (e, i) => {
+        //PRIMERO VERIFICAR SI AHI STOCK EN CADA PRODUCTO
 
-            carrito.map( async(p, c) => {
+        let productos_sin_stock:any = []
 
+        let stock_disponible = productos.map( e => {
+            carrito.map( p => {
                 if(e.id == p.id_producto){
-
                     if(e.cantidad < p.cantidad || e.cantidad == 0){
-                        return res.json({
-                            ok: false,
-                            msg: ` el producto ${e.nombre} no tiene stock suficiente`
-                        });
+                        productos_sin_stock.push(`el producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito${p.cantidad}` );
                     }
-
-                    let orden:any = {
-
-                        id_orden,
-                        id_producto:p.id_producto,
-                        cantidad:p.cantidad,
-                        precio: e.precio
-                    }
-
-                    let nuevoStock = e.cantidad - p.cantidad ;
-
-                    await productos[i].update({cantidad: nuevoStock})
-                        .catch(err => {
-                            return res.json({ok: false, msg: err})
-                        });
-
-                    let orden_detalle = new OrdenDetalle(orden);
-                    await orden_detalle.save()
-                        .catch(err => {
-                            return res.json({ok: false, msg: err})
-                        });
-
-                    await carrito[c].destroy();
-
                 }
             })
         });
 
 
+        if(productos_sin_stock.length > 0){
+            return res.json({
+                ok: false,
+                msg: "No ahi stock suficiente con los productos",
+                productos_sin_stock
+            })
+        }
+
+        //FIN PRIMERO VERIFICAR SI AHI STOCK EN CADA PRODUCTO
+
+
+
+    //DESCONTANDO PRODUCTO DE STOCK TOTAL
+    productos.map( (e, i) => {
+
+        carrito.map( async(p, c) => {
+
+            if(e.id == p.id_producto){
+
+                let orden:any = {
+
+                    id_orden,
+                    id_producto:p.id_producto,
+                    cantidad:p.cantidad,
+                    precio: e.precio
+                }
+
+                let nuevoStock = e.cantidad - p.cantidad ;
+
+                await productos[i].update({cantidad: nuevoStock})
+                    .catch(err => {
+                        return res.json({ok: false, msg: err})
+                    });
+
+                let orden_detalle = new OrdenDetalle(orden);
+                await orden_detalle.save()
+                    .catch(err => {
+                        return res.json({ok: false, msg: err})
+                    });
+
+                await carrito[c].destroy();
+
+            }
+        })
+    });
+
+     // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
+
+
+
     res.json({
         ok: true,
-        msg: "Todo salio exelente"
+        msg: "Su compra fue exitosa"
     })
 
 

@@ -18,7 +18,6 @@ const producto_1 = require("../../models/ventas/producto");
 const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idCliente, idUsuario, idDireccion } = req.params;
-        const query = req.query;
         const { fecha, transporte } = req.body;
         const datos = {
             id_cliente: idCliente,
@@ -38,7 +37,7 @@ const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (error) {
         res.status(500).json({
             ok: false,
-            msg: "Hablar con el administrador"
+            msg: "Hablar con el administrador",
         });
     }
 });

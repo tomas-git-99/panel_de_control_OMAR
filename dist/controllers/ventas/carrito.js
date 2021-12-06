@@ -145,15 +145,29 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
             datos = [...datos, { id_producto: e.id_producto, cantidad: e.cantidad }];
         });
         const productos = yield producto_1.Producto.findAll({ where: { id: idProductos } });
+        //PRIMERO VERIFICAR SI AHI STOCK EN CADA PRODUCTO
+        let productos_sin_stock = [];
+        let stock_disponible = productos.map(e => {
+            carrito.map(p => {
+                if (e.id == p.id_producto) {
+                    if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                        productos_sin_stock.push(`el producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito${p.cantidad}`);
+                    }
+                }
+            });
+        });
+        if (productos_sin_stock.length > 0) {
+            return res.json({
+                ok: false,
+                msg: "No ahi stock suficiente con los productos",
+                productos_sin_stock
+            });
+        }
+        //FIN PRIMERO VERIFICAR SI AHI STOCK EN CADA PRODUCTO
+        //DESCONTANDO PRODUCTO DE STOCK TOTAL
         productos.map((e, i) => {
             carrito.map((p, c) => __awaiter(void 0, void 0, void 0, function* () {
                 if (e.id == p.id_producto) {
-                    if (e.cantidad < p.cantidad || e.cantidad == 0) {
-                        return res.json({
-                            ok: false,
-                            msg: ` el producto ${e.nombre} no tiene stock suficiente`
-                        });
-                    }
                     let orden = {
                         id_orden,
                         id_producto: p.id_producto,
@@ -174,9 +188,10 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 }
             }));
         });
+        // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
         res.json({
             ok: true,
-            msg: "Todo salio exelente"
+            msg: "Su compra fue exitosa"
         });
     }
     catch (error) {
