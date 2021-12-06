@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet" href="./style/historial.css">
     <link rel="stylesheet" href="./style/carrito.css">
+    <script src="/js/helpers/para_todos/html2pdf.bundle.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -289,7 +291,7 @@
                 </div>
 
                 <div class="botones_de_comprobante">
-                    <button type="button" class="btn btn-primary">Para cliente</button>
+                    <button type="button" class="btn btn-primary" onclick="imprimirComprobante(this.id)" id="aca_id_orden">Para cliente</button>
                     <button type="button" class="btn btn-primary">Para mi</button>
                 </div>
             </div>
@@ -300,6 +302,7 @@
     </div>
 
     <script src="/js/ventas/carrito.js" type="module"></script>
+    
     <!-- <script  src="/js/helpers/ventas/comprobarCarritoStorage.js"  nomodule ></script> -->
 </body>
 </html>

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarOrden, buscarOrdenDNI, confirmarCompra, confirmarPedido, generarOrden, ordenDetalles } from "../../controllers/ventas/orden";
+import { buscarOrden, buscarOrdenDNI, confirmarCompra, confirmarPedido, generarOrden, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
 
 
 const router = Router();
@@ -26,7 +26,7 @@ router.get('/',buscarOrden)
 //dni_cuil
 router.get('/dni',buscarOrdenDNI)
 
-
+router.get('/full/:id', ordenParaImprimir);
 
 // CARRITO
 

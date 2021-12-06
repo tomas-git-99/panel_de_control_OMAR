@@ -15,6 +15,7 @@ router.get('/', orden_1.buscarOrden);
 // VA SER OPCIONAL BUSCAR POR DNI O CUIL TOVIA VA ESTAR EB DUDA
 //dni_cuil
 router.get('/dni', orden_1.buscarOrdenDNI);
+router.get('/full/:id', orden_1.ordenParaImprimir);
 // CARRITO
 exports.default = router;
 //# sourceMappingURL=orden.js.map

@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
+const direccion_1 = require("../../models/ventas/direccion");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
 const producto_1 = require("../../models/ventas/producto");
@@ -166,4 +167,18 @@ const confirmarPedido = (req, res) => __awaiter(void 0, void 0, void 0, function
     });
 });
 exports.confirmarPedido = confirmarPedido;
+const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const orden = yield orden_1.Orden.findByPk(id);
+    const productos = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+    const direccion = yield direccion_1.Direccion.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_direccion);
+    const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
+    res.json({
+        ok: true,
+        cliente,
+        direccion,
+        productos
+    });
+});
+exports.ordenParaImprimir = ordenParaImprimir;
 //# sourceMappingURL=orden.js.map

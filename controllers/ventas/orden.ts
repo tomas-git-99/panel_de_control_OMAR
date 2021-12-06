@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Cliente } from "../../models/ventas/cliente";
+import { Direccion } from "../../models/ventas/direccion";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
@@ -248,3 +249,24 @@ export const confirmarPedido = async (req: Request, res: Response) => {
 }
 
 
+export const ordenParaImprimir = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const orden = await Orden.findByPk(id);
+
+    const productos = await OrdenDetalle.findAll({where:{id_orden:id}});
+
+    const direccion = await Direccion.findByPk(orden?.id_direccion);
+
+    const cliente = await Cliente.findByPk(orden?.id_cliente);
+
+
+
+    res.json({
+        ok: true,
+        cliente,
+        direccion,
+        productos
+    })
+
+}

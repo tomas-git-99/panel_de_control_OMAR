@@ -388,7 +388,6 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
         .then( res => {
             if(res.ok){
 
-                console.log(res);
                 // ACA COLOCAMOS QUE SE ABRA LA SIGUENTE VENTANA PARA DESCONTAR DEL TOTAL O POR TALLE
                 volverAtras(cartelCliente, quitar_total_o_individual)
                 descontar_total_id.id = res.orden.id;
@@ -403,6 +402,8 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
 
 ////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS
 const comprobante = document.querySelector(".comprobante");
+const aca_id_orden = document.getElementById("aca_id_orden")
+
 
 window.descontar_total = (id) => {
     const id_usuario = localStorage.getItem("id");
@@ -414,13 +415,15 @@ const descontarEltotal = (id_usuario, id_orden) => {
     fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
         .then( res => {
             if(res.ok){
-                Swal.fire({
+/*                 Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: res.msg,
                     showConfirmButton: false,
                     timer: 1500
-                  })
+                  }) */
+
+                aca_id_orden.id= id_orden;
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
@@ -506,3 +509,12 @@ const configuracion_view = (id) => {
 }
 
 ////////////////////////////////MOFIGICAR CARRITO 🛒🛒🛒////////////////////////////////  🔴🔴🔴🔴🔴
+
+
+
+
+/// IMPRIMIR COMPROBANTE 
+
+window.imprimirComprobante = (id)=>{
+    window.location.href = "/page/roles/admin/ventas/imprimir.html"
+}
