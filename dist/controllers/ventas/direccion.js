@@ -21,11 +21,11 @@ const agregarDirecciones = (req, res) => __awaiter(void 0, void 0, void 0, funct
         provincia,
         localidad
     };
-    const newDireccion = new direccion_1.Direccion(data);
-    yield newDireccion.save();
+    const direcciones = new direccion_1.Direccion(data);
+    yield direcciones.save();
     res.json({
         ok: true,
-        newDireccion
+        direcciones
     });
 });
 exports.agregarDirecciones = agregarDirecciones;

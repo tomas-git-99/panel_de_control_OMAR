@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const direccion_1 = require("../../models/ventas/direccion");
@@ -182,4 +182,32 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.ordenParaImprimir = ordenParaImprimir;
+const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const orden = yield orden_1.Orden.findAll({ order: [['updatedAt', 'DESC']] });
+    let id_cliente = [];
+    let id_direccion = [];
+    orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
+        id_cliente.push(e.id_cliente);
+        id_direccion.push(e.id_direccion);
+    }));
+    const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
+    const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
+    let datos = [];
+    cliente.map((e, i) => {
+        orden.map((p, m) => {
+            let direcciones = direccion.find(h => {
+                if (h.id == p.id_direccion) {
+                    return h;
+                }
+            });
+            if (p.id_cliente == e.id) {
+                datos = [...datos, { orden: orden[m], cliente: cliente[i], direccion: direcciones }];
+            }
+        });
+    });
+    res.json({
+        datos
+    });
+});
+exports.historialOrden = historialOrden;
 //# sourceMappingURL=orden.js.map

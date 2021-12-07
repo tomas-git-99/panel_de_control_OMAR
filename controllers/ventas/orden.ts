@@ -271,3 +271,41 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
     })
 
 }
+
+export const historialOrden = async (req: Request, res: Response) => {
+
+    const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+
+    let id_cliente:any = []
+    let id_direccion:any = []
+    
+    orden.map(async(e, i)=> {
+        id_cliente.push(e.id_cliente);
+        id_direccion.push(e.id_direccion);
+    });
+
+
+    const cliente = await Cliente.findAll({where:{id:id_cliente}});
+    const direccion = await Direccion.findAll({where:{id:id_direccion}});
+
+    let datos:any = [];
+    cliente.map( (e,i) => {
+        orden.map( (p, m) => {
+
+            let direcciones = direccion.find( h => {
+                if (h.id == p.id_direccion){
+                    return h;
+                }
+            });
+            
+            if( p.id_cliente == e.id){
+                datos = [...datos,{orden:orden[m], cliente:cliente[i], direccion:direcciones}];
+            }
+        })
+    })
+
+
+    res.json({
+        datos
+    })
+}

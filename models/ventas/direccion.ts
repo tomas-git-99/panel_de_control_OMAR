@@ -3,6 +3,7 @@ import db from '../../DB/conectarDB';
 
 
 export interface TodoAtributos {
+    id:number;
 
     id_cliente:number;
     direccion: string;
@@ -13,6 +14,7 @@ export interface TodoAtributos {
 
 
 export class Direccion extends Model <TodoAtributos>{
+    public id!:number;
     
     public id_cliente!:number;
     public direccion!: string;
@@ -25,6 +27,12 @@ export class Direccion extends Model <TodoAtributos>{
 
 Direccion.init(
     {
+        id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement: true,
+
+        },
         id_cliente:{
             type:DataTypes.NUMBER,
 

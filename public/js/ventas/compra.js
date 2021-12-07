@@ -70,7 +70,11 @@ formAgregar.addEventListener("submit", (event) => {
         .then( res => {
           if(res.ok){
             cantidad.style.opacity = 0;
-            localStorage.removeItem("id_producto")
+            localStorage.removeItem("id_producto");
+            for(let el of formAgregar.elements){
+              el.value = "";
+            }
+
           }else{
             Swal.fire({
               icon: 'error',

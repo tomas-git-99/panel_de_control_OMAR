@@ -10,6 +10,11 @@ class Direccion extends sequelize_1.Model {
 }
 exports.Direccion = Direccion;
 Direccion.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     id_cliente: {
         type: sequelize_1.DataTypes.NUMBER,
     },

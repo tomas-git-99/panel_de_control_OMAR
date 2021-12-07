@@ -1,23 +1,19 @@
-import { comprobarCarritoStorage } from "../helpers/ventas/comprobarCarritoStorage.js";
+import { comprobarCarritoStorage, preguntarSiConCliente } from "../helpers/ventas/comprobarCarritoStorage.js";
 import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormularioCliente.js";
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
-import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
+import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 
 
-const url = ( window.location.hostname.includes('localhost'))
-      ? 'http://localhost:8000/api/'
-      : '';
 
-
-window.addEventListener("unload", () =>{
-    alert("perin")
-} ); 
 
  ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE/////////////////////////////// 
 comprobarCarritoStorage();
  /////////////// FIN CONFIRMAR CARRITO EN LOCALSTORAGE///////////////////////////////
+
+
+ 
 
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
@@ -25,9 +21,11 @@ const carritoActualizar = (id=0) => {
 
     fecthNormalGET("GET", `carrito/${1}`)
     .then( res => {
-
         leerCarrito(res.carrito_full);
         })
+    .catch( err => {
+        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+    })
 
 }
 carritoActualizar();
@@ -90,9 +88,8 @@ btnConfirmar.addEventListener("click", (e) => {
     const confirmarCompra = localStorage.getItem("carrito");
 
     if(confirmarCompra == 1 ){
-
         volverAtras(bienvenido, cliente)
-        
+
     }else{
         volverAtras(bienvenido, quitar_total_o_individual);
         descontar_total_id.id = btnConfirmar.id;
@@ -171,11 +168,7 @@ search.addEventListener("keyup", ({keyCode}) => {
 //GET BUSCA EN BASE DE DATOS
 const getSearch = (valor) => {
 
-    fetch(url + "cliente?" + `dni_cuil=${valor}`,{ 
-        method: "GET",
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
+    fecthNormalGET_QUERY("GET", "cliente", "?dni_cuil=", valor)
     .then(res => {
         console.log(res)
         leerHistorial(res.cliente);
@@ -236,11 +229,7 @@ window.mandarID = (e) => {
 
 const direccionCliente = (idCliente) =>{
 
-    fetch(url + "direccion/" + idCliente,{ 
-        method: "GET",
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
+    fecthNormalGET("GET",`direccion/${idCliente}`)
     .then(async(res) => {
         localStorage.setItem("dataDireccion", JSON.stringify(res.direccion));
         const dato = JSON.parse(localStorage.getItem("dataDireccion"));
@@ -249,6 +238,7 @@ const direccionCliente = (idCliente) =>{
     .catch(err => {
         alert("Error: " + err)
     });
+
 
 }
 
@@ -329,7 +319,7 @@ formCliente.addEventListener("submit", (e) =>{
 
         fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
             .then( res => {
-                generarOrden(id_cliente, id_cliente, res.newDireccion.id, forDataConfirmar);
+                generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
             })
             .catch(err =>{
                 algo_salio_mal(`Algo salio mal: ${ err.message }`)

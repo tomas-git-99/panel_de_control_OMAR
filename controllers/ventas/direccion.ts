@@ -17,13 +17,13 @@ export const agregarDirecciones = async (req: Request, res: Response) => {
         localidad
     }
 
-    const newDireccion = new Direccion(data);
+    const direcciones = new Direccion(data);
 
-    await newDireccion.save();
+    await direcciones.save();
 
     res.json({
         ok: true,
-        newDireccion
+        direcciones
     })
 }
 

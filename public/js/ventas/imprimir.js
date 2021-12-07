@@ -21,8 +21,9 @@ const imprimirComprobante = (id) => {
                 if(res.ok){
                     escribirEnHTML(res);
                     imprimirProducto(res.productos)
-                    precio_final.innerHTML = res.orden.total;
-                    funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`)
+                    let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
+                    precio_final.innerHTML = `$ ${cambio_de_moneda}`;
+                    funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`);
                 }else{
     
                 }
