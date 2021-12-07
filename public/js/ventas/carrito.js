@@ -3,6 +3,7 @@ import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormulari
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
+import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -10,6 +11,9 @@ const url = ( window.location.hostname.includes('localhost'))
       : '';
 
 
+window.addEventListener("unload", () =>{
+    alert("perin")
+} ); 
 
  ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE/////////////////////////////// 
 comprobarCarritoStorage();
@@ -89,49 +93,15 @@ btnConfirmar.addEventListener("click", (e) => {
 
         volverAtras(bienvenido, cliente)
         
-    }else if( confirmarCompra == null){
-
-        console.log("gatos todos")
-
     }else{
-        const id = localStorage.getItem("id");
-
-        fetch(url, "carrito/" + id,{ 
-            method: "GET",
-            headers: {'Content-Type': 'application/json'},
-        })
-        .then(response => response.json())
-        .then(res => {
-            
-        })
-        .catch(err => {
-            alert("Error: " + err.message)
-        });
+        volverAtras(bienvenido, quitar_total_o_individual);
+        descontar_total_id.id = btnConfirmar.id;
     }
+
+        
     //CUANDO APRETE EL BOTON PREGUNTAR SI ESTOS PRODUCTOS YA TIENEN CLIENTES
     
 });
-
-
-const confirmar = (data) => {
-
-    const idCliente = localStorage.getItem("idCliente");
-
-    fetch(url, "confirmar/" + idCliente,{ 
-        method: "PUT",
-        body: JSON.stringify( data ),
-        headers: {'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(res => {
-        //ACA CONFIRMAR EL PEDIDO Y MANDAR A HTML DEL COMPROBANTE PARA QUE LO PUEDA IMPRIMIR
-    })
-    .catch(err => {
-        alert("Error: " + err)
-    });
-}
-
-
 
 
 
@@ -325,11 +295,6 @@ const descontar_talle_id = document.getElementById("descontar_talle_id")
 
 
 
-// botonCliente.addEventListener("click", (e) => {
-//     console.log(e.target)
-// })
-
-
 formCliente.addEventListener("submit", (e) =>{
 
     e.preventDefault();
@@ -366,14 +331,13 @@ formCliente.addEventListener("submit", (e) =>{
             .then( res => {
                 generarOrden(id_cliente, id_cliente, res.newDireccion.id, forDataConfirmar);
             })
+            .catch(err =>{
+                algo_salio_mal(`Algo salio mal: ${ err.message }`)
+            })
 
     }else{
         generarOrden(id_cliente, id_usuario, id_direccion, forDataConfirmar);
     }
-    
-    console.log(forData);
-    console.log(forDataConfirmar);
-    console.log(forDataDireccion);
 
 
 })
@@ -392,10 +356,13 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
                 volverAtras(cartelCliente, quitar_total_o_individual)
                 descontar_total_id.id = res.orden.id;
                 descontar_talle_id.id = res.orden.id;
+            }else{
+            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ res.msg}`)
+
             }
         })
         .catch( err => {
-
+            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err.message }`)
         })
                   
 }
@@ -403,11 +370,14 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
 ////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS
 const comprobante = document.querySelector(".comprobante");
 const aca_id_orden = document.getElementById("aca_id_orden")
+const btn_confirmar = document.getElementById("btn_confirmar")
 
 
 window.descontar_total = (id) => {
+
     const id_usuario = localStorage.getItem("id");
     descontarEltotal(id_usuario, id);
+
 }
 
 const descontarEltotal = (id_usuario, id_orden) => {
@@ -415,26 +385,30 @@ const descontarEltotal = (id_usuario, id_orden) => {
     fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
         .then( res => {
             if(res.ok){
-/*                 Swal.fire({
+                Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: res.msg,
                     showConfirmButton: false,
                     timer: 1500
-                  }) */
+                  }) 
 
                 aca_id_orden.id= id_orden;
+                localStorage.setItem('id_orden', id_orden);
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
+                advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
                 //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage
                 localStorage.removeItem("carrito");
                 localStorage.getItem("carrito", 0);
+                btn_confirmar.id = id_orden;
                 localStorage.setItem('id_orden', id_orden);
             }
         })
         .catch(err =>{
-            alert("Error: " + err)
+            algo_salio_mal(`Algo salio mal : ${ err.message }`)
+
         })
 }
 
@@ -460,7 +434,7 @@ window.eliminar_producto = (id) => {
         const row = cell.parentNode;
         document.getElementById("tableContact").deleteRow(row.rowIndex);
     })
-    .catch(err => console.log(err))
+    .catch(err => algo_salio_mal(`Algo salio mal : ${ err.message }`));
     
 }
 
@@ -495,6 +469,9 @@ window.enviar_cambio = (id) => {
             span_cantidad_carrito.innerHTML = res.cantidad;
             valor_de_cantidad_nueva.value = "";
         })
+        .catch(err => {
+            console.log(err);
+        })
 }
 
 const configuracion_view = (id) => {
@@ -511,10 +488,9 @@ const configuracion_view = (id) => {
 ////////////////////////////////MOFIGICAR CARRITO 🛒🛒🛒////////////////////////////////  🔴🔴🔴🔴🔴
 
 
-
-
 /// IMPRIMIR COMPROBANTE 
 
 window.imprimirComprobante = (id)=>{
-    window.location.href = "/page/roles/admin/ventas/imprimir.html"
+
+    window.location.href = `/page/roles/admin/ventas/imprimir.html`
 }

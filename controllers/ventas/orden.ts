@@ -264,6 +264,7 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
 
     res.json({
         ok: true,
+        orden,
         cliente,
         direccion,
         productos

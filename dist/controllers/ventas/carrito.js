@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const carrito_1 = require("../../models/ventas/carrito");
+const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
@@ -174,6 +175,8 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                         cantidad: p.cantidad,
                         precio: e.precio
                     };
+                    let nuevaSuma = p.cantidad * e.precio;
+                    sumaTotal += sumaTotal + nuevaSuma;
                     let nuevoStock = e.cantidad - p.cantidad;
                     yield productos[i].update({ cantidad: nuevoStock })
                         .catch(err => {
@@ -189,6 +192,8 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
             }));
         });
         // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
+        const orden = yield orden_1.Orden.findByPk(id_orden);
+        yield orden.update({ total: sumaTotal });
         res.json({
             ok: true,
             msg: "Su compra fue exitosa"

@@ -175,6 +175,7 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
     res.json({
         ok: true,
+        orden,
         cliente,
         direccion,
         productos

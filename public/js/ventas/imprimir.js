@@ -5,31 +5,38 @@ const imprimir_productos = document.querySelector(".imprimir_productos");
 const infoCliente = document.querySelector(".infoCliente");
 const precio_final = document.querySelector(".precio_final");
 
-window.imprimirComprobante = (id) => {
 
-    console.log("sadsadsad")
 
-    funcionParaImprimir("tomas")
-/*     fecthNormalGET("GET", `orden/full/${id}`)
-        .then( res => {
-            if(res.ok){
-                escribirEnHTML(res);
-                imprimirProducto(res.productos)
-                precio_final.innerHTML = res.total;
-                funcionParaImprimir(`${res.cliente[0].nombre, res.cliente[0].apellido}`)
-            }else{
+let id_orden = localStorage.getItem("id_orden")
 
-            }
-        })
- */
+const imprimirComprobante = (id) => {
+    console.log(id)
+    if(id_orden == null || id_orden == undefined){
+        alert ("Algo salio mal vuelva intentarlo mas tarde")
+        return window.location.href = "/page/roles/admin/ventas/index.html"
+    }else{
+
+        fecthNormalGET("GET", `orden/full/${id}`)
+            .then( res => {
+                if(res.ok){
+                    escribirEnHTML(res);
+                    imprimirProducto(res.productos)
+                    precio_final.innerHTML = res.orden.total;
+                    funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`)
+                }else{
+    
+                }
+            })
+    }
 
 }
 
+imprimirComprobante(id_orden);
 
 
 
 
-/* const escribirEnHTML = (e) => {
+const escribirEnHTML = (e) => {
 
     let escribir = "";
 
@@ -59,36 +66,36 @@ window.imprimirComprobante = (id) => {
   
     infoCliente.innerHTML = escribir;
 }
- */
+ 
 
 
-/* const imprimirProducto = (res) => {
-
+const imprimirProducto = (res) => {
+    console.log(res);
     let escribir = "";
 
     res.map(e => {
 
-        escribir += `
-        <tr>
+         escribir += `
+         <tr>
 
-          <td>${e.nombre}</td>
-          <td>${e.cantidad}</td>
-          <td>${e.precio}</td>
-          <td>${e.precio * e.cantidad}</td>
+           <td>${e.nombre}</td>
+           <td>${e.cantidad}</td>
+           <td>$ ${e.precio}</td>
+           <td>$ ${e.precio * e.cantidad}</td>
 
 
 
-        </tr>
-        `
-    })
+     </tr>
+         `
+     })
 
-    imprimir_productos.innerHTML = escribir;
+     imprimir_productos.innerHTML = escribir;
 }
 
- */
+ 
 const funcionParaImprimir = (nombre_cliente) => {
 
-    const elementoAimprimir =  document.querySelector(".imprimirCliente");
+    const elementoAimprimir =  document.querySelector(".bienvenido");
 
     html2pdf()
         .set({
@@ -101,10 +108,11 @@ const funcionParaImprimir = (nombre_cliente) => {
         html2canvas: {
             scale: 3, // A mayor escala, mejores gráficos, pero más peso
             letterRendering: true,
+            useCORS: true
         },
         jsPDF: {
-            unit: "in",
-            format: "a3",
+            unit: "mm",
+            format: "a4",
             orientation: 'portrait' // landscape o portrait
         }
     })
@@ -114,4 +122,3 @@ const funcionParaImprimir = (nombre_cliente) => {
 
 }
 
-funcionParaImprimir("lucas");

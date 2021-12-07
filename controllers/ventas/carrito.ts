@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Carrito } from "../../models/ventas/carrito";
+import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
@@ -245,6 +246,9 @@ export const descontarElTotal= async(req: Request, res: Response) => {
                     precio: e.precio
                 }
 
+                let nuevaSuma = p.cantidad * e.precio;
+                sumaTotal += sumaTotal + nuevaSuma;
+                
                 let nuevoStock = e.cantidad - p.cantidad ;
 
                 await productos[i].update({cantidad: nuevoStock})
@@ -266,7 +270,9 @@ export const descontarElTotal= async(req: Request, res: Response) => {
 
      // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
 
+     const orden = await Orden.findByPk(id_orden)
 
+     await orden!.update({total:sumaTotal});
 
     res.json({
         ok: true,
