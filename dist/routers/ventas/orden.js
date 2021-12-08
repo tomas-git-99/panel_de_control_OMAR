@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orden_1 = require("../../controllers/ventas/orden");
-const router = (0, express_1.Router)();
+const router = express_1.Router();
 //GENERAR ORDEN 
 router.post('/:idCliente/:idUsuario/:idDireccion', orden_1.generarOrden);
 // GENERAR DETALLES DE COMPRA
@@ -17,6 +17,7 @@ router.get('/', orden_1.buscarOrden);
 router.get('/dni', orden_1.buscarOrdenDNI);
 router.get('/full/:id', orden_1.ordenParaImprimir);
 router.get('/historial/full', orden_1.historialOrden);
+router.get('/imprimir/parami/:id', orden_1.imptimirSoloVentas);
 // CARRITO
 exports.default = router;
 //# sourceMappingURL=orden.js.map

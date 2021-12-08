@@ -172,6 +172,8 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                     let orden = {
                         id_orden,
                         id_producto: p.id_producto,
+                        nombre_producto: e.nombre,
+                        talle: p.talle,
                         cantidad: p.cantidad,
                         precio: e.precio
                     };

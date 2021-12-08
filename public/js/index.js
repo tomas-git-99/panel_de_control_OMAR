@@ -22,7 +22,6 @@ form.addEventListener('submit', (e) => {
            forData[el.name] = el.value;    
        } 
          
-   console.log(forData) ;
 
    fetch(url + 'usuario', {
        method: 'POST',

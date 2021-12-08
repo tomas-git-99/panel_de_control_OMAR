@@ -78,7 +78,7 @@
                                 
                           </tr>
                         </thead>
-                        <tbody class="imprimir_historial">
+                        <tbody class="imprimir_historial" id="imprimir_historial">  
                           <tr>
                             <th scope="row">134</th>
 
@@ -113,34 +113,111 @@
             </div>
 
             <div class="imprimir_para_mi">
-                <div class="id_comprobante">
-                    <h2>ID:</h2>
+                <div class="div_para_imprimir_para_mi">
+
+                    <div class="id_comprobante">
+                        <h2>ID:</h2>
+                    </div>
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">TELA</th>
+                                <th scope="col">TALLE</th>
+                                <th scope="col">CANTIDAD</th>
+    
+                                    
+                              </tr>
+                            </thead>
+                            <tbody class="imprimir_para_mi_table">
+                              <tr>
+                                <th scope="row">134</th>
+                                <td>TOMAS LOPEZ</td>
+                                <td>68123439</td>
+                                <td>156808989782</td>
+    
+    
+                              </tr>
+    
+                            </tbody>
+                          </table>
+                    
                 </div>
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">NOMBRE</th>
-                            <th scope="col">TELA</th>
-                            <th scope="col">TALLE</th>
-                            <th scope="col">CANTIDAD</th>
-
-                                
-                          </tr>
-                        </thead>
-                        <tbody class="imprimir_para_mi_table">
-                          <tr>
-                            <th scope="row">134</th>
-                            <td>TOMAS LOPEZ</td>
-                            <td>68123439</td>
-                            <td>156808989782</td>
+                </div>
 
 
-                          </tr>
+                <div class="bienvenido_imprimir">
 
-                        </tbody>
-                      </table>
-                
-            </div>
+                    <div class="imprimirCliente" id="imprimirCliente">
+    
+                        <div class="tituloImprimir">
+                            <h2>Comprobante</h2>
+                            <hr>
+                        </div>
+    
+                        
+    
+                        <div class="infoCliente">
+    
+                            <div class="nombre">
+                               <label for="">NOMBRE: <span>tomas</span> </label>
+                            </div>
+                            <div class="DNI O CUIL">
+                                <label for="">DNI O CUIL: <span>tomas</span> </label>
+                             </div>
+                             <div class="Telefono">
+                                <label for="">Telefono: <span>tomas</span> </label>
+                             </div>
+                             <div class="Provincia">
+                                <label for="">Provincia: <span>tomas</span> </label>
+                             </div>
+                             <div class="Localida">
+                                 <label for="">Localida: <span>tomas</span> </label>
+                              </div>
+                              <div class="Direccion">
+                                 <label for="">Direccion: <span>tomas</span> </label>
+                              </div>
+                              <div class="Codigo">
+                                <label for="">Codigo: <span>tomas</span> </label>
+                             </div>
+             
+    
+                        </div>
+
+                        <div class="comprasHechas">
+
+                         
+
+                                <table class="table" id="tablaImprimir">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">NOMBRE</th>
+                                            <th scope="col">CANTIDAD</th>
+                                            <th scope="col">PRECIO UD</th>
+                                            <th scope="col">TOTAL</th>
+                                  
+                                                
+                                          </tr>
+                                        </thead>
+                                        <tbody class="imprimir_productos">
+        
+                                        </tbody>
+                                      </table>
+                        
+                        </div>
+             
+
+                   
+
+                        <div class="totalImprimir">
+                            <div class="totaLinia"></div>
+                            <label for="">TOTAL: <span class="precio_final"> $9012</span> </label>
+                        </div>
+    
+    
+    
+                    </div>
+                </div>
 
         </div>
     </div>

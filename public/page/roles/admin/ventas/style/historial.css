@@ -1,3 +1,7 @@
+/* .bienvenido{
+    display: none;
+    visibility: hidden;
+} */
 .boton{
     cursor: pointer;
 }
@@ -55,4 +59,94 @@
     width: 100%;
     text-align: start;
     padding-left: 20px;
+}
+
+
+
+.bienvenido_imprimir{
+    display: none;
+    visibility: hidden;
+/*      display: block;
+    visibility: visible; */ 
+   
+    position: fixed;
+    place-self: center;
+    width: 800px;
+    height:auto;
+    background:white;
+
+}
+.tituloImprimir{
+    text-align: center;
+    padding-top:10px;
+}
+.imprimirCliente{
+    display: grid;
+
+    width: 100%;
+    height: auto;
+   /*  grid-template-rows: 10% 20%  60%  10%; */
+    
+}
+
+.infoCliente{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-left: 20px;
+    text-align: start;
+    
+}
+.infoCliente span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:300;
+    font-size: 16px;
+
+}
+.infoCliente label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:500;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.comprasHechas{
+    display: flex;
+    width: 800px;
+    
+    
+}
+
+.tablas{
+    width: 100vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight:200;
+    font-size: 16px;
+    height:auto;
+
+}
+
+
+.totalImprimir{
+    display: grid;
+    justify-content: end;
+    padding-right: 30px;
+    width: 100%;
+    height: auto;  
+}
+
+.comprasHechas table {
+    min-height: 600px;
+    max-height: auto;
+}
+
+
+
+
+.cartel{
+    overflow-y: scroll;
+}
+
+.cartel::-webkit-scrollbar { 
+    /* solo oculta su visualizacion */
+    display: none;
 }

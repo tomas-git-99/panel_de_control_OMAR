@@ -21,9 +21,9 @@ window.salir = () => {
     window.location = "/page/roles/admin/ventas/index.html"
 
 }
-/* window.agregar_db = () => {
-    fe
-} */
+
+
+
 formProducto.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -34,8 +34,6 @@ formProducto.addEventListener("submit", (e) => {
             forData[el.name] = el.value;    
         } 
 
-
-    console.log(forData)
 
 
     fecthNormalPOST_PUT("POST", "producto" ,forData)

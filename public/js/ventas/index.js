@@ -81,20 +81,21 @@ window.previsualizar_producto = (id) => {
     fecthNormalGET("GET",`producto/${id}`)
     .then((res) => {
         if(res.ok){
-            console.log(res)
+
             ordenarPorTalle(res.talles);
             ordenarProductoTable(res.producto);
             producto_id.id = id;
 
         }
     }) 
-    .catch(err => console.log(err));
+    .catch(err => {
+        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+    });
     previsualizar.style.opacity = 1;
 }
 
 
 const leerHistorial = (res) => {
-    console.log(res)
     let historial = ""
     res.map( e => {
         historial += `

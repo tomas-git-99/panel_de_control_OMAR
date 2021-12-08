@@ -4,6 +4,7 @@ import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambio
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 
 
 
@@ -100,8 +101,10 @@ btnConfirmar.addEventListener("click", (e) => {
     
 });
 
-
-
+window.volver_atras = () => {
+    location.href = "/page/roles/admin/ventas/compra.html"
+}
+ 
 //CLIENTE NUEVO O EXISTENTE
 const clienteNuevo = document.querySelector(".nuevo");
 const clienteExistente = document.querySelector(".existe");
@@ -170,11 +173,10 @@ const getSearch = (valor) => {
 
     fecthNormalGET_QUERY("GET", "cliente", "?dni_cuil=", valor)
     .then(res => {
-        console.log(res)
         leerHistorial(res.cliente);
     })
     .catch(err => {
-        console.error(err)
+        algo_salio_mal(`Algo salio mal: ${err.message}`)
   
     })
 
@@ -360,6 +362,7 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
 ////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS
 const comprobante = document.querySelector(".comprobante");
 const aca_id_orden = document.getElementById("aca_id_orden")
+const aca_id_orden_para_mi = document.getElementById("aca_id_orden_para_mi")
 const btn_confirmar = document.getElementById("btn_confirmar")
 
 
@@ -384,6 +387,7 @@ const descontarEltotal = (id_usuario, id_orden) => {
                   }) 
 
                 aca_id_orden.id= id_orden;
+                aca_id_orden_para_mi.id = id_orden;
                 localStorage.setItem('id_orden', id_orden);
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
@@ -460,7 +464,7 @@ window.enviar_cambio = (id) => {
             valor_de_cantidad_nueva.value = "";
         })
         .catch(err => {
-            console.log(err);
+            algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
 }
 
@@ -480,7 +484,10 @@ const configuracion_view = (id) => {
 
 /// IMPRIMIR COMPROBANTE 
 
-window.imprimirComprobante = (id)=>{
+window.imprimirComprobante = (id)=> {
 
-    window.location.href = `/page/roles/admin/ventas/imprimir.html`
+    imprimirComprobante_cliente(id)
+}
+window.imprimirComprobante_para_mi = (id)=> {
+    imprimir_parami(id);
 }

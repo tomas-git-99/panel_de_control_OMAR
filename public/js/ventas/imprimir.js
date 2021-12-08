@@ -1,4 +1,4 @@
-import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
+/* import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { funcionParaImprimir } from "../helpers/ventas/imprimir_ticket.js";
 
 
@@ -79,7 +79,7 @@ const imprimirProducto = (res) => {
          escribir += `
          <tr>
 
-           <td>${e.nombre}</td>
+           <td>${e.nombre_producto}</td>
            <td>${e.cantidad}</td>
            <td>$ ${e.precio}</td>
            <td>$ ${e.precio * e.cantidad}</td>
@@ -94,3 +94,4 @@ const imprimirProducto = (res) => {
 }
 
  
+ */

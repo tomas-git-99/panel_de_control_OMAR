@@ -77,4 +77,13 @@ li{
 
     font-family: 'Poppins', sans-serif;
     font-weight:500; 
+    overflow-y: scroll;
 }
+
+
+.bienvenido::-webkit-scrollbar { 
+    /* solo oculta su visualizacion */
+    display: none;
+}
+
+

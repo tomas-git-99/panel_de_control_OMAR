@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.imptimirSoloVentas = exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const direccion_1 = require("../../models/ventas/direccion");
@@ -210,4 +210,13 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.historialOrden = historialOrden;
+const imptimirSoloVentas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const orden_detalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+    res.json({
+        ok: true,
+        orden_detalle
+    });
+});
+exports.imptimirSoloVentas = imptimirSoloVentas;
 //# sourceMappingURL=orden.js.map

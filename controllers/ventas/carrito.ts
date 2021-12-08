@@ -242,6 +242,8 @@ export const descontarElTotal= async(req: Request, res: Response) => {
 
                     id_orden,
                     id_producto:p.id_producto,
+                    nombre_producto:e.nombre,
+                    talle:p.talle,
                     cantidad:p.cantidad,
                     precio: e.precio
                 }

@@ -309,3 +309,16 @@ export const historialOrden = async (req: Request, res: Response) => {
         datos
     })
 }
+
+
+
+export const imptimirSoloVentas = async (req: Request, res: Response) => {
+    const {id} = req.params;
+
+    const orden_detalle = await OrdenDetalle.findAll({ where:{ id_orden:id } });
+
+    res.json({
+        ok: true,
+        orden_detalle
+    })
+}

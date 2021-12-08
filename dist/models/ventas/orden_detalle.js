@@ -16,6 +16,9 @@ OrdenDetalle.init({
     id_producto: {
         type: sequelize_1.DataTypes.NUMBER
     },
+    nombre_producto: {
+        type: sequelize_1.DataTypes.STRING
+    },
     cantidad: {
         type: sequelize_1.DataTypes.NUMBER
     },

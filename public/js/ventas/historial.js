@@ -1,6 +1,6 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
-import { funcionParaImprimir, funcionParaImprimir_sin_nombre } from "../helpers/ventas/imprimir_ticket.js";
+import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 
 
 
@@ -55,40 +55,16 @@ window.imprimir_html = (id) => {
 }
 
 window.imprimirComprobante = (id) => {
-    localStorage.setItem("id_orden", id);
-    window.location.href = `/page/roles/admin/ventas/imprimir.html`
+    imprimirComprobante_cliente(id);
+    //imprimirComprobante(id);
+    comprobante.style.display = "none";
+    comprobante.style.visibility = "hidden";
 }
 
     
 window.imprimirComprobante_parami = (id) => {
-    volverAtras(bienvenido, imprimir_para_mi)
     imprimir_parami(id);
-}
-
-const imprimir_para_mi_table = document.querySelector(".imprimir_para_mi_table");
-
-
-const imprimir_parami = (id) => {
-    fecthNormalGET("GET",`orden/${id}`)
-        .then(res => {
-            ticket_parami(res.producto);
-            funcionParaImprimir_sin_nombre("imprimir_para_mi")
-        })
-}
-const ticket_parami = (res) => {
-
-    let resultado = "";
-
-    res.map( e => {
-        
-        resultado += `
-        <tr>
-        <th>${e.producto.nombre}</th>
-        <td>${e.producto.tela}</td>
-        <td>${e.producto.talle}</td>
-        <td>${e.cantidad}</td>
-        </tr>
-        `
-    })
-    imprimir_para_mi_table.innerHTML  = resultado;
+    
+    comprobante.style.display = "none";
+    imprimir_para_mi.style.visibility = "hidden";
 }

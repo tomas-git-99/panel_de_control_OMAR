@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarOrden, buscarOrdenDNI, confirmarCompra, confirmarPedido, generarOrden, historialOrden, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
+import { buscarOrden, buscarOrdenDNI, confirmarCompra, confirmarPedido, generarOrden, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
 
 
 const router = Router();
@@ -29,6 +29,9 @@ router.get('/dni',buscarOrdenDNI)
 router.get('/full/:id', ordenParaImprimir);
 
 router.get('/historial/full', historialOrden)
+
+
+router.get('/imprimir/parami/:id', imptimirSoloVentas)
 
 // CARRITO
 
