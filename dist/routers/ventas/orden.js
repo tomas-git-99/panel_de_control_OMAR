@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orden_1 = require("../../controllers/ventas/orden");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //GENERAR ORDEN 
 router.post('/:idCliente/:idUsuario/:idDireccion', orden_1.generarOrden);
 // GENERAR DETALLES DE COMPRA

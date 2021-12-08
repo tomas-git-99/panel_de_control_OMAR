@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/style/inicio.css">
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet" href="./style/historial.css">
+    <script src="/js/helpers/para_todos/html2pdf.bundle.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -86,12 +88,7 @@
                             <td>16-09-30</td>
                             <td>bogota 5090</td>
                             <td>$567</td>
-                            <td>
-                                <div class="boton preview">
 
-                                    <img src="/img/ver.svg" alt="" width="35px">
-                                </div>
-                            </td>
                             <td>
                                 <div class="boton imprimir">
                                     <img src="/img/imprimir.svg" alt="" width="35px">
@@ -102,6 +99,47 @@
                         </tbody>
                       </table>
                 </div>
+            </div>
+
+            <div class="comprobante">
+                <div class="titulo_de_comprobante">
+                    <h3>Imprimir comprobante</h3>
+                </div>
+
+                <div class="botones_de_comprobante">
+                    <button type="button" class="btn btn-primary" onclick="imprimirComprobante(this.id)" id="aca_id_orden">Para cliente</button>
+                    <button type="button" class="btn btn-primary" onclick="imprimirComprobante_parami(this.id)" id="aca_id_orden_parami">Para mi</button>
+                </div>
+            </div>
+
+            <div class="imprimir_para_mi">
+                <div class="id_comprobante">
+                    <h2>ID:</h2>
+                </div>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">TELA</th>
+                            <th scope="col">TALLE</th>
+                            <th scope="col">CANTIDAD</th>
+
+                                
+                          </tr>
+                        </thead>
+                        <tbody class="imprimir_para_mi_table">
+                          <tr>
+                            <th scope="row">134</th>
+                            <td>TOMAS LOPEZ</td>
+                            <td>68123439</td>
+                            <td>156808989782</td>
+
+
+                          </tr>
+
+                        </tbody>
+                      </table>
+                
             </div>
 
         </div>

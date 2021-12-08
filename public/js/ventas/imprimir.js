@@ -1,4 +1,5 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
+import { funcionParaImprimir } from "../helpers/ventas/imprimir_ticket.js";
 
 
 const imprimir_productos = document.querySelector(".imprimir_productos");
@@ -7,10 +8,9 @@ const precio_final = document.querySelector(".precio_final");
 
 
 
-let id_orden = localStorage.getItem("id_orden")
+let id_orden = localStorage.getItem("id_orden");
 
-const imprimirComprobante = (id) => {
-    console.log(id)
+export const imprimirComprobante = (id) => {
     if(id_orden == null || id_orden == undefined){
         alert ("Algo salio mal vuelva intentarlo mas tarde")
         return window.location.href = "/page/roles/admin/ventas/index.html"
@@ -23,7 +23,7 @@ const imprimirComprobante = (id) => {
                     imprimirProducto(res.productos)
                     let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
                     precio_final.innerHTML = `$ ${cambio_de_moneda}`;
-                    funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`);
+                    funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "bienvenido" );
                 }else{
     
                 }
@@ -94,32 +94,3 @@ const imprimirProducto = (res) => {
 }
 
  
-const funcionParaImprimir = (nombre_cliente) => {
-
-    const elementoAimprimir =  document.querySelector(".bienvenido");
-
-    html2pdf()
-        .set({
-        margin: 1,
-        filename: `${nombre_cliente}.pdf`,
-        image: {
-            type: 'jpeg',
-            quality: 0.98
-        },
-        html2canvas: {
-            scale: 3, // A mayor escala, mejores gráficos, pero más peso
-            letterRendering: true,
-            useCORS: true
-        },
-        jsPDF: {
-            unit: "mm",
-            format: "a4",
-            orientation: 'portrait' // landscape o portrait
-        }
-    })
-      .from(elementoAimprimir)
-      .save()
-      .catch( err => { console.log(err)})
-
-}
-
