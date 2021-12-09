@@ -183,7 +183,7 @@ PRODUCCION
 
 CREATE TABLE producto_produccion (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_corte INT NOT NULL,
+    id_corte VARCHAR(30),
     fecha_de_corte DATE,
     nombre VARCHAR(100),
     edad VARCHAR(100),
@@ -192,11 +192,13 @@ CREATE TABLE producto_produccion (
     total_por_talle INT,
     talles VARCHAR(100),
     total INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    id_taller INT NOT NULL,
+    id_taller INT,
     fecha_de_salida DATE,
     fecha_de_entrada DATE,
-    estado BOOLEAN default false,
+    estado BOOLEAN default false
 
 );
 
@@ -205,13 +207,17 @@ CREATE TABLE taller (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre_completo VARCHAR(100),
     telefono INT,
-    direccion VARCHAR(100)
-)
+    direccion VARCHAR(100),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE historial_taller(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_producto INT NOT NULL,
     id_taller INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
 
     FOREIGN KEY fk_id_producto (id_producto)

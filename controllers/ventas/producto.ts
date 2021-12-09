@@ -65,7 +65,6 @@ export const editarProducto = async (req: Request, res: Response) => {
             );
         }
 
-        console.log(body);
 
         await producto.update(body);
 

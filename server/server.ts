@@ -11,6 +11,13 @@ import ventasProducto  from "../routers/ventas/producto"
 import ventasCarrito from "../routers/ventas/carrito"
 import ventasDireccion from  "../routers/ventas/direccion"
 import ventasTalle from  "../routers/ventas/talle"
+
+//PRODUCION
+
+import produccionProducto from  "../routers/produccion/producto_produccion"
+import produccionHistorial from  "../routers/produccion/historial"
+import produccionTaller from  "../routers/produccion/taller"
+
 import db from "../DB/conectarDB";
 
 class ServerApp {
@@ -30,6 +37,10 @@ class ServerApp {
         talle:    '/api/talle',
 
         //PRODUCCION
+
+        producto_producto: '/api/producto_produccion',
+        taller:  '/api/taller',
+        hisorial: '/api/hisorial',
     };
 
     constructor(){
@@ -87,6 +98,10 @@ class ServerApp {
         this.app.use( this.apiPaths.talle,    ventasTalle)
 
         //PRODUCCION
+        this.app.use( this.apiPaths.producto_producto, produccionProducto)
+        this.app.use( this.apiPaths.taller,            produccionTaller)
+        this.app.use( this.apiPaths.hisorial,          produccionHistorial)
+
     }
  
 
