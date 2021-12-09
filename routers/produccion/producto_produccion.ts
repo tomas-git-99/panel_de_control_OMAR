@@ -1,18 +1,18 @@
 
 import { Router } from "express";
-import { actualizarProducto, crearProducto } from "../../controllers/produccion/producto";
+import { actualizarProducto, crearProducto, obtenerProduccion } from "../../controllers/produccion/producto";
 
 
 const router = Router();
 
-
+//OBTENER PRODUCCION
+router.get('/', obtenerProduccion);
 
 //AGREGAR PRODUCTO
-
-router.post('/', crearProducto)
+router.post('/', crearProducto);
 
 //ACTUALIZAR PRODUCTO
-router.put('/:id', actualizarProducto)
+router.put('/:id', actualizarProducto);
 
 
 

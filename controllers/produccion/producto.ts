@@ -7,10 +7,33 @@ import { Produccion_producto } from "../../models/produccion/productos_produccio
 
 
 export const crearProducto = async (req: Request, res: Response) => {
-
+    try {
     const producto = new Produccion_producto(req.body);
+    
+    await producto.save();
+    
+    res.json({
+        ok: true,
+        producto
+    })
+        
+    } catch (error) {
+        res.status(505).json({
+            ok: false,
+            msg: error
+        })
+    }
+        
+}
 
-    producto.save();
+
+export const actualizarProducto = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const producto = await Produccion_producto.findByPk(id);
+
+    await producto?.update(req.body);
 
     res.json({
         ok: true,
@@ -18,16 +41,13 @@ export const crearProducto = async (req: Request, res: Response) => {
     })
 }
 
+export const obtenerProduccion = async (req: Request, res: Response) => {
 
-export const actualizarProducto = async (req: Request, res: Response) => {
+    const produccion = await Produccion_producto.findAll();
 
-    const { id } = req.params;
-    const producto = await Produccion_producto.findByPk(id);
-
-    producto?.update(req.body);
 
     res.json({
         ok: true,
-        producto
+        produccion
     })
 }

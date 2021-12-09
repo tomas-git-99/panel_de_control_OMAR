@@ -49,7 +49,6 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 msg: `El usuario con el id ${id} no existe`
             });
         }
-        console.log(body);
         yield producto.update(body);
         res.json({
             ok: true,
@@ -68,6 +67,7 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const buscarProducto = req.query;
     const producto = yield producto_1.Producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     res.json({
@@ -162,6 +162,7 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const query = req.query;
     const locales = yield producto_1.Producto.findAll({ where: {
             local: { [dist_1.Op.like]: '%' + query.local + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     res.json({
         ok: true,

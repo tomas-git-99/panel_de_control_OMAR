@@ -2,9 +2,8 @@
 .bienvenido_form{
     display: none;
     visibility: hidden;
-    /* display: block;
+    /* display: grid;
     visibility: visible; */
-    display: grid;
     align-items:center;
     text-align: center;
  
@@ -38,7 +37,14 @@
 
 
 }
-
+.taller{
+    display:grid;
+    justify-content: center;
+    align-items: end;
+}
+.taller select {
+    width: 170px;
+}
 .cartel_form form{
     display: grid;
     justify-content: center;

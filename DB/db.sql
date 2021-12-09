@@ -225,4 +225,4 @@ CREATE TABLE historial_taller(
 
     FOREIGN KEY fk_id_taller (id_taller)
     REFERENCES taller (id)
-)
+);

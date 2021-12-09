@@ -38,9 +38,9 @@ class ServerApp {
 
         //PRODUCCION
 
-        producto_producto: '/api/producto_produccion',
-        taller:  '/api/taller',
-        hisorial: '/api/hisorial',
+        producto_producto: '/api/produccion/producto_produccion',
+        taller:            '/api/produccion/taller',
+        hisorial:          '/api/produccion/hisorial',
     };
 
     constructor(){

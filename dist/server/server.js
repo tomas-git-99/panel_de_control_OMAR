@@ -22,6 +22,10 @@ const producto_1 = __importDefault(require("../routers/ventas/producto"));
 const carrito_1 = __importDefault(require("../routers/ventas/carrito"));
 const direccion_1 = __importDefault(require("../routers/ventas/direccion"));
 const talle_1 = __importDefault(require("../routers/ventas/talle"));
+//PRODUCION
+const producto_produccion_1 = __importDefault(require("../routers/produccion/producto_produccion"));
+const historial_1 = __importDefault(require("../routers/produccion/historial"));
+const taller_1 = __importDefault(require("../routers/produccion/taller"));
 const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
@@ -34,8 +38,12 @@ class ServerApp {
             carrito: '/api/carrito',
             direccion: '/api/direccion',
             talle: '/api/talle',
+            //PRODUCCION
+            producto_producto: '/api/produccion/producto_produccion',
+            taller: '/api/produccion/taller',
+            hisorial: '/api/produccion/hisorial',
         };
-        this.app = express_1.default();
+        this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
         /* middleware */
         this.middlewares();
@@ -56,7 +64,7 @@ class ServerApp {
         });
     }
     middlewares() {
-        this.app.use(cors_1.default());
+        this.app.use((0, cors_1.default)());
         this.app.use((req, res, next) => {
             // Dominio que tengan acceso (ej. 'http://example.com')
             res.header('Access-Control-Allow-Origin', '*');
@@ -75,6 +83,9 @@ class ServerApp {
         this.app.use(this.apiPaths.direccion, direccion_1.default);
         this.app.use(this.apiPaths.talle, talle_1.default);
         //PRODUCCION
+        this.app.use(this.apiPaths.producto_producto, producto_produccion_1.default);
+        this.app.use(this.apiPaths.taller, taller_1.default);
+        this.app.use(this.apiPaths.hisorial, historial_1.default);
     }
     listen() {
         this.app.listen(this.port, () => console.log(`En el port ${this.port}`));

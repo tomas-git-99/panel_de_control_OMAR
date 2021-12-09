@@ -3,16 +3,17 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
     
-    id:number,
+    // id:number,
     id_corte: number,
-    fecha_de_corte: number,
     nombre:string,
+    fecha_de_corte: number,
     edad: string,
     rollos: number,
     tela: string,
     total_por_talle: number,
     talles: string,
     total: number,
+    peso_promedio: number,
     id_taller: number,
     fecha_de_salida: number,
     fecha_de_entrada: number,
@@ -23,7 +24,7 @@ export interface TodoAtributos {
 
 export class Produccion_producto extends Model <TodoAtributos>{
 
-    public id!:number;
+    // public id!:number;
     public id_corte!: number;
     public fecha_de_corte!: number;
     public nombre!:string;
@@ -33,6 +34,8 @@ export class Produccion_producto extends Model <TodoAtributos>{
     public total_por_talle!: number;
     public talles!: string;
     public total!: number;
+    public peso_promedio!: number;
+
     public id_taller!: number;
     public fecha_de_salida!: number;
     public fecha_de_entrada!: number;
@@ -44,12 +47,12 @@ export class Produccion_producto extends Model <TodoAtributos>{
 
 Produccion_producto.init(
     {
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement: true,
+        // id:{
+        //     type:DataTypes.INTEGER,
+        //     primaryKey:true,
+        //     autoIncrement: true,
 
-        },
+        // },
         id_corte:{
             type:DataTypes.NUMBER
         },
@@ -75,6 +78,9 @@ Produccion_producto.init(
             type:DataTypes.STRING
         },
         total:{
+            type:DataTypes.NUMBER
+        },
+        peso_promedio:{
             type:DataTypes.NUMBER
         },
         id_taller:{
