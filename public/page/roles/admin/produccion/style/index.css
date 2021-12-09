@@ -22,5 +22,9 @@
 #basic-addon2{
     border-radius: 0px 20px 20px 0px;
 }
+.ulMenu a{
+    text-decoration: none;
+    color: #3d3d3d;
+}
 
 /* todo el codigo de arriba sirve para montar un inicio rapido */

@@ -175,3 +175,48 @@ ALTER TABLE orden
     ADD id_direccion INT NOT NULL ,
     ADD CONSTRAINT fk_id_direccion FOREIGN KEY (id_direccion)
         REFERENCES direccion(id);
+
+
+PRODUCCION 
+
+
+
+CREATE TABLE producto_produccion (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_corte INT NOT NULL,
+    fecha_de_corte DATE,
+    nombre VARCHAR(100),
+    edad VARCHAR(100),
+    rollos INT,
+    tela VARCHAR(100),
+    total_por_talle INT,
+    talles VARCHAR(100),
+    total INT,
+
+    id_taller INT NOT NULL,
+    fecha_de_salida DATE,
+    fecha_de_entrada DATE,
+    estado BOOLEAN default false,
+
+);
+
+
+CREATE TABLE taller (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre_completo VARCHAR(100),
+    telefono INT,
+    direccion VARCHAR(100)
+)
+
+CREATE TABLE historial_taller(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT NOT NULL,
+    id_taller INT NOT NULL,
+
+
+    FOREIGN KEY fk_id_producto (id_producto)
+    REFERENCES producto_produccion (id),
+
+    FOREIGN KEY fk_id_taller (id_taller)
+    REFERENCES taller (id)
+)
