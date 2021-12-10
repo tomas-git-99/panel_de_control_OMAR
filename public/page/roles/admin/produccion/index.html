@@ -55,7 +55,7 @@
     <div class="centro">
 
         <div class="bienvenido">
-
+     
             <div class="search">
                 
                 <div class="input-group mb-3">
@@ -65,8 +65,35 @@
                     </div>
                   </div>
             </div>
+            <div class="cartel">
+                    <div class="ordenar_por">
 
-                <div class="cartel">
+                        <select class="custom-select" onchange="ordenar(this)">
+                            <option selected>Ordenar por ...</option>
+                            <option value="fecha_de_entrada">Fecha de entrada</option>
+                            <option value="fecha_de_salida">Fecha de salida</option>
+                            <option value="fecha_de_pago">Fecha de pago</option>
+                          </select>
+
+                          
+                          <div class="opciones_input">
+                              <!-- <div class="p">
+                                  <select class="custom-select">
+                                      <option selected>Filtrar ...</option>
+                                      <option value="1">Rango de fecha</option>
+                                      <option value="2">Fecha exacta</option>
+                                    </select>
+                              </div>
+                              <div class="input_fecha">
+
+                                  <input type="date">
+                                  <input type="date">
+                                  <button>Buscar</button>
+                              </div> -->
+                          </div>
+                          
+                    </div>
+                    
                     <table class="table">
                         <thead>
                           <tr>
@@ -103,59 +130,13 @@
 
         <div class="previsualizar">
             <div class="titulo">
+                <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir_previsualizar" onclick="img_salir_previsualizar()"/>
                 <h3>Previsualizar corte</h3>
             </div>
 
-<!--             <ul class="list-group list-group-horizontal-lg">
-                <li class="list-group-item"><span>ID :</span> 1</li>
-                <li class="list-group-item"><span>NOMBRE :</span></li>
-                <li class="list-group-item"><span>FECHA DE CORTE :</span>  </li>
-                <li class="list-group-item"><span>EDAD :</span>  </li>
-                <li class="list-group-item"><span>TELA :</span>   </li>
-              </ul>
-              <ul class="list-group list-group-horizontal-lg">
-                <li class="list-group-item"><span>ROLLOS :</span> </li>
-                <li class="list-group-item"><span>PESO PROMEDIO :</span>  </li>
-                <li class="list-group-item"><span>TOTAL POR TALLE :</span>  </li>
-                <li class="list-group-item"><span>TALLES :</span>  </li>
-                <li class="list-group-item"><span>TOTAL :</span>   </li>
-              </ul>
-              <ul class="list-group list-group-horizontal-lg">
-                <li class="list-group-item"><span>TALLER :</span> </li>
-                <li class="list-group-item"><span>FECHA DE SALIDA :</span>  </li>
-                <li class="list-group-item"><span>FECHA DE ENTRADA :</span> </li>
-                <li class="list-group-item"><span>PAGO :</span></li>
-     
-              </ul> -->
 
               <table class="table table-striped" id="tabla_previsualizar">
 
-                  <tr>
-                    <td><span>ID :</span></td>
-                    <td><span>NOMBRE :</span></td>
-                    <td><span>FECHA DE CORTE :</span>@mdo</td>
-                    <td><span>EDAD :</span></td>
-                </tr>
-                <tr>
-                    <td><span>ROLLOS :</span>acob</td>
-                    <td><span>PESO PROMEDIO :</span>Thornton</td>
-                    <td><span>TOTAL POR TALLE :</span>@fat</td>
-                    <td><span>TALLES :</span>@fat</td>
-                </tr>
-                <tr>
-        
-                    <td><span>TOTAL :</span>@fat</td>
-                  </tr>
-                <tr>
-                    <td><span>TALLER :</span>@fat</td>
-                    <td><span>FECHA DE SALIDA :</span>@fat</td>
-                    <td><span>FECHA DE ENTRADA :</span>@fat</td>
-                    <td><span>PAGO :</span>@asjdljksahdlkjashljksa</td>
-
-                  </tr>
-                  <tr>
-                    <td><span>PAGO :</span>@fat</td>
-                  </tr>
               </table>
         </div>
     </div>

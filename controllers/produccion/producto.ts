@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Op } from "sequelize/dist";
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
 import { Taller } from "../../models/produccion/talller";
 
@@ -36,6 +37,20 @@ export const actualizarProducto = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const producto = await Produccion_producto.findByPk(id);
+
+
+    let dato = req.body;
+    let nombre = Object.keys(dato);
+
+    if(nombre[0] == "total_por_talle"){
+
+        let newTotal:number = producto!.talles * dato.total_por_talle;
+        await producto?.update({total: newTotal});
+    }
+    if( nombre[0] == "talles" ){
+        let newTotal:number = dato.talles * producto!.total_por_talle;
+        await producto?.update({total: newTotal});
+    }
 
     await producto?.update(req.body);
 
@@ -90,10 +105,172 @@ export const obetenerUnProducto = async (req: Request, res: Response) => {
     }
 
     producto = [...producto, {producto:productos, taller:taller}]
+
     res.json({
         ok: true,
         producto,
         taller
     })
 
+};
+
+
+//["2021-12-12", "2021-12-11"]
+
+export const ordenarPorRango = async (req: Request, res: Response) => {
+
+    const { fecha } = req.body;
+    const { query } = req.params;
+
+
+    console.log(fecha);
+
+    if( query == "fecha_de_entrada") {
+
+        const produccion_productos = await Produccion_producto.findAll({
+            where: {
+                fecha_de_entrada:{[Op.between]:[fecha[0], fecha[1]]}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        });
+        
+        const taller = await Taller.findAll()
+
+        let produccion:any = []
+        
+        produccion_productos.map ( (e, i) =>{
+            taller.map ( (p,m) => {
+                if(e.id_taller == p.id){
+                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                }
+    
+            })
+            if(e.id_taller === null){
+    
+                produccion = [...produccion, {produccion:produccion_productos[i]}];
+            }
+        })
+
+        return res.json({
+            ok: true,
+            produccion
+        })
+
+     
+    }else if ( query == "fecha_de_salida"){
+        Produccion_producto.findAll({
+            where: {
+                fecha_de_salida:{[Op.between]:[fecha[0], fecha[1]]}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        })
+        .then(productos => {
+            res.json({
+                ok: true,
+                productos
+            })
+        })
+        .catch(err => {
+            res.json({
+                ok: false,
+                msg: err
+            })
+        })
+    }else if ( query == "fecha_de_pago"){
+        Produccion_producto.findAll({
+            where: {
+                fecha_de_salida:{[Op.between]:[fecha[0], fecha[1]]}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        })
+        .then(productos => {
+            res.json({
+                ok: true,
+                productos
+            })
+        })
+        .catch(err => {
+            res.json({
+                ok: false,
+                msg: err
+            })
+        })
+    }
+
+
+}
+
+export const ordenarPorFechaExacta = async (req: Request, res: Response) => {
+
+    const { fecha } = req.body;
+
+    const { query } = req.params;
+
+    if( query == "fecha_de_entrada") {
+
+        Produccion_producto.findAll({
+            where: {
+                fecha_de_entrada:{fecha}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        })
+        .then(productos => {
+            res.json({
+                ok: true,
+                productos
+            })
+        })
+        .catch(err => {
+            res.json({
+                ok: false,
+                msg: err
+            })
+        })
+    }else if ( query == "fecha_de_salida"){
+        Produccion_producto.findAll({
+            where: {
+                fecha_de_salida:{fecha}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        })
+        .then(productos => {
+            res.json({
+                ok: true,
+                productos
+            })
+        })
+        .catch(err => {
+            res.json({
+                ok: false,
+                msg: err
+            })
+        })
+    }else if ( query == "fecha_de_pago"){
+        Produccion_producto.findAll({
+            where: {
+                fecha_de_salida:{fecha}
+                    
+            },order: [['updatedAt', 'ASC']]
+        
+        })
+        .then(productos => {
+            res.json({
+                ok: true,
+                productos
+            })
+        })
+        .catch(err => {
+            res.json({
+                ok: false,
+                msg: err
+            })
+        })
+    }
+
+ 
 }

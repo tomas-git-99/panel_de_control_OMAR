@@ -11,7 +11,7 @@ export interface TodoAtributos {
     rollos: number,
     tela: string,
     total_por_talle: number,
-    talles: string,
+    talles: number,
     total: number,
     peso_promedio: number,
     id_taller: number,
@@ -32,7 +32,7 @@ export class Produccion_producto extends Model <TodoAtributos>{
     public rollos!: number;
     public tela!: string;
     public total_por_talle!: number;
-    public talles!: string;
+    public talles!: number;
     public total!: number;
     public peso_promedio!: number;
 
@@ -75,7 +75,7 @@ Produccion_producto.init(
             type:DataTypes.NUMBER
         },
         talles:{
-            type:DataTypes.STRING
+            type:DataTypes.NUMBER
         },
         total:{
             type:DataTypes.NUMBER

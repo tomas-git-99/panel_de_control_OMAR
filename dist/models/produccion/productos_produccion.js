@@ -37,7 +37,7 @@ Produccion_producto.init({
         type: sequelize_1.DataTypes.NUMBER
     },
     talles: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.NUMBER
     },
     total: {
         type: sequelize_1.DataTypes.NUMBER

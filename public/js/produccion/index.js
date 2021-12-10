@@ -1,4 +1,4 @@
-import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
+import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
 
@@ -65,7 +65,8 @@ const seleccion_cambio = document.querySelector("#seleccion_cambio");
 
 
 window.enviar_id = (id) => {
-    opciones_cambio.style.opacity = 1;
+    opciones_cambio.style.display = "grid";
+    opciones_cambio.style.visibility = "visible";
     seleccion_cambio.innerHTML = `
         <option selected>Seleccione que cambiar</option>
         <option id="${id}" value="id_corte">ID</option>
@@ -86,8 +87,11 @@ window.enviar_id = (id) => {
 const previsualizar = document.querySelector(".previsualizar");
 
 window.previsualizar_id = (id) => {
+    previsualizar.style.display = "grid";
+    previsualizar.style.visibility = "visible";
     imprimir_previsualizar(id);
-    previsualizar.style.opacity = 1;
+
+
 
 }
 const tabla_previsualizar = document.querySelector("#tabla_previsualizar");
@@ -97,47 +101,51 @@ const imprimir_previsualizar = (id) => {
 
     fecthNormalGET("GET",`produccion/producto_produccion/${id}`)
         .then( res => {
-  
             imprimir_html_datos(res.producto)
+        })
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
 
 const imprimir_html_datos = (res) => {
     console.log(res)
-
     res.map ( e => {
 
         tabla_previsualizar.innerHTML = `
             <tr>
-            <td><span>ID :${e.producto.id_corte}</span></td>
-            <td><span>NOMBRE :</span></td>
-            <td><span>FECHA DE CORTE :</span>@mdo</td>
-            <td><span>EDAD :</span></td>
+            <td><span>ID : </span>${e.producto.id_corte}</td>
+            <td><span>NOMBRE : </span>${e.producto.nombre}</td>
+            <td><span>FECHA DE CORTE : </span>${e.producto.fecha_de_corte == null || e.producto.fecha_de_corte == undefined ? "- -" : e.producto.fecha_de_corte}</td>
+            <td><span>EDAD : </span>${e.producto.edad}</td>
         </tr>
         <tr>
-            <td><span>ROLLOS :</span>acob</td>
-            <td><span>PESO PROMEDIO :</span>Thornton</td>
-            <td><span>TOTAL POR TALLE :</span>@fat</td>
-            <td><span>TALLES :</span>@fat</td>
+            <td><span>ROLLOS : </span>${e.producto.rollos}</td>
+            <td><span>PESO PROMEDIO : </span>${e.producto.peso_promedio}</td>
+            <td><span>TOTAL POR TALLE : </span>${e.producto.total_por_talle}</td>
+            <td><span>TALLES : </span>${e.producto.talles}</td>
         </tr>
         <tr>
         
-            <td><span>TOTAL :</span>@fat</td>
+            <td><span>TOTAL : </span>${e.producto.total}</td>
           </tr>
         <tr>
-            <td><span>TALLER :</span>@fat</td>
-            <td><span>FECHA DE SALIDA :</span>@fat</td>
-            <td><span>FECHA DE ENTRADA :</span>@fat</td>
-            <td><span>PAGO :</span>@asjdljksahdlkjashljksa</td>
+            <td><span>TALLER : </span>${e.taller == null || e.taller == undefined ? "- -" : e.taller.nombre_completo}</td>
+            <td><span>FECHA DE SALIDA : </span>${e.producto.fecha_de_salida == null || e.producto.fecha_de_salida == undefined ? "- -" : e.producto.fecha_de_salida}</td>
+            <td><span>FECHA DE ENTRADA : </span>${e.producto.fecha_de_entrada == null || e.producto.fecha_de_entrada == undefined ? "- -" : e.producto.fecha_de_entrada}</td>
+            <td><span>PAGO : </span>${e.producto.estado == true ? "PAGADO" : "NO PAGADO"}</td>
         
           </tr>
-          <tr>
-            <td><span>PAGO :</span>@fat</td>
-          </tr>
+
         `
     })
 }
 
+window.img_salir_previsualizar = () => {
+
+    previsualizar.style.display = "none";
+    previsualizar.style.visibility = "hidden";
+}
 
 
 const input_con_el_valor = document.querySelector(".input_con_el_valor");
@@ -263,6 +271,85 @@ const opcines_taller = (id) => {
 }
 
 window.salir_cambios = () => {
-    opciones_cambio.style.opacity = 0;
+    opciones_cambio.style.display = "none";
+    opciones_cambio.style.visibility = "hidden";
+}
+
+
+
+
+//buscador
+
+
+window.ordenar = (e) => {
+    const opciones_input = document.querySelector(".opciones_input");
+    opciones_input.innerHTML = `
+    <div class="p">
+    <select class="custom-select" id="${e.value}" onchange="cambiar_filtro(this)">
+        <option selected>Filtrar ...</option>
+        <option value="1">Rango de fecha</option>
+        <option value="2">Fecha exacta</option>
+      </select>
+       </div>
+       <div class="input_fecha">
+
+   </div>
+
+    `
+
+}
+
+window.cambiar_filtro = (e) => {
+
+    const input_fecha = document.querySelector(".input_fecha")
+    if(e.value == 1){
+        input_fecha.innerHTML = `
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <button id="${e.id}" class="btn btn-primary btn-sm" onclick="rango_buscar(this.id)">Buscar</button>
+        `
+
+    }else if(e.value == 2){
+        input_fecha.innerHTML = `
+        <input type="date" id="fecha_exacta">
+        <button d="${e.id}" class="btn btn-primary btn-sm" onclick="exacto_buscar(this.id)">Buscar</button>
+        `
+    }
+}
+
+
+window.rango_buscar = (id) =>{
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+
+    let dato ={fecha:[startDate.value, endDate.value]}
+
+   
+    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${id}`, dato)
+        .then( res =>{
+            if(res.ok){
+                colorearTable(res.produccion)
+            }else{
+                console.log(res)
+            }
+        })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+    
+
+}
+
+window.exacto_buscar = (id) => {
+
+    const fecha_exacta = document.getElementById("fecha_exacta");
+    const dato = {
+        fecha:fecha_exacta
+    }
+    fecthNormalPOST_PUT("GET", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
+        .then( res =>{
+            colorearTable(res.productos)
+        })
+    
 
 }

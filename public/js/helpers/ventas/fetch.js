@@ -46,7 +46,6 @@ export const fecthNormalPOST_PUT = (metodo, url_determinado, valor) => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         return data;
     })
     .catch(err => {
