@@ -30,10 +30,20 @@
 /* todo el codigo de arriba sirve para montar un inicio rapido */
 
 
-
+.boton_seleccion{
+    cursor: pointer;
+}
+.img_salir{
+    width:25px;
+    position: absolute;
+    right: 260px;
+    top: 10px;
+    cursor: pointer;
+}
 
 .opciones_cambio{
     opacity: 0;
+    transition: .0s all;
     font-family: 'Poppins', sans-serif;
     font-weight:300; 
     position: fixed;
@@ -49,4 +59,12 @@
     background: white;
     row-gap: 15px;
     box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.input_con_el_valor{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    
 }

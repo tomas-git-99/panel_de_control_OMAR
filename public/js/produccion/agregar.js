@@ -61,7 +61,7 @@ const seleccion_taller = document.querySelector("#seleccion_taller");
 
 
 const opcines_taller = () => {
-    fecthNormalGET("GET","tallers")
+    fecthNormalGET("GET","produccion/taller")
         .then(res =>{
             imprimir_opciones(res.taller)
         })
@@ -74,14 +74,14 @@ const opcines_taller = () => {
 const imprimir_opciones = (res) => {
     let talleres = "";
 
-    seleccionDirec.innerHTML =` <option value="0">TALLER</option>`;
+    seleccion_taller.innerHTML =` <option value="0">TALLER</option>`;
 
     res.map( e => {
 
         talleres = `
         <option value="${e.id}">${e.nombre_completo}</option>
         `
-        seleccion_taller.innerHTML += historialDireccion;
+        seleccion_taller.innerHTML += talleres;
     });
 }
 

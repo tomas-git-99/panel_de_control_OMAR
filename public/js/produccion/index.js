@@ -1,4 +1,5 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
+import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
 
 let table_produccion = document.querySelector('.table_produccion');
@@ -7,6 +8,7 @@ let table_produccion = document.querySelector('.table_produccion');
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
         if(res.ok){
+
             colorearTable(res.produccion);
         }
     })
@@ -14,16 +16,17 @@ fecthNormalGET("GET", "produccion/producto_produccion")
 const colorearTable = (res) => {
 
     let resultado = ""
-
+    console.log(res)
     res.map ( e => {
-        if(e.taller == undefined){
+        if(e.produccion.id_taller == undefined || e.produccion.id_taller == null){
             resultado += imprimirTable(e, "table-active")
-        }else if(e.fecha_de_salida == undefined){
+        }else if(e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null){
             resultado += imprimirTable(e, "table-danger")
-        }else if(e.fecha_de_entrada == true){
-            resultado += imprimirTable(e, "table-warning")
-        }else if(e.estado == true){
+        }else if(e.produccion.estado == true){
             resultado += imprimirTable(e, "table-success")    
+        }else{
+            resultado += imprimirTable(e, "table-warning")    
+
         }
 
         ///innerHTML a table
@@ -33,29 +36,30 @@ const colorearTable = (res) => {
 
 
 const imprimirTable = (e, color) => {
+   
     return `
     <tr class="${color}">
-    <th scope="row">${e.id_corte}</th>
-    <td>${e.nombre}</td>
-    <td>${e.tela}</td>
-    <td>${e.taller == undefined ? "-" : e.taller}</td>
-    <td>${e.fecha_de_salida == undefined || e.fecha_de_salida == null ? "-" : e.fecha_de_salida}</td>
-    <td>${e.fecha_de_entrada == undefined || e.fecha_de_entrada == null ? "-" : e.fecha_de_entrada}</td>
-    <td>${e.estado == false? "NO PAGADO" : "PAGADO"}</td>
+    <th scope="row">${e.produccion.id_corte}</th>
+    <td>${e.produccion.nombre}</td>
+    <td>${e.produccion.tela}</td>
+    <td>${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
+    <td>${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
+    <td>${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
+    <td>${e.produccion.estado == false? "NO PAGADO" : "PAGADO"}</td>
     <td>
-    <div id="${e.id}" onclick="enviar_id(this.id)">
-    hola 
+    <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
+    <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
     </div>
     </td>
   </tr>
     `
 }
 const opciones_cambio = document.querySelector(".opciones_cambio");
-const seleccion_cambio = document.querySelector(".seleccion_cambio");
+const seleccion_cambio = document.querySelector("#seleccion_cambio");
 
 
 window.enviar_id = (id) => {
-    console.log("HJOLA")
+    opciones_cambio.style.opacity = 1;
     seleccion_cambio.innerHTML = `
         <option selected>Seleccione que cambiar</option>
         <option id="${id}" value="id_corte">ID</option>
@@ -75,45 +79,92 @@ window.enviar_id = (id) => {
 }
 
 const input_con_el_valor = document.querySelector(".input_con_el_valor");
-const seleccion_cambio_taller = document.querySelector(".seleccion_cambio_taller");
-const input_cambio = document.getElementById("input_cambio");
-const aca_id_taller = document.getElementById("aca_id_taller");
 
 window.selecciconCambios = (e) => {
     if(e.value === "taller"){
         input_con_el_valor.innerHTML = `
         <select class="custom-select" id="seleccion_cambio_taller" onchange="cambiar_taller(this)">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+
         </select>
-        <button type="button" class="btn btn-outline-primary" id="aca_id_taller" onclick="enviar_taller_nuevo(this.id)">Cambiar</button>
+        <div class="boton_para_cambiar">
+        <button type="button" class="btn btn-outline-primary btn-sm" id="0" onclick="enviar_taller_nuevo(this.id)">Cambiar</button>
+        </div>
+
         `
-        return opcines_taller();
+        return  opcines_taller(e[e.selectedIndex].id);
+        
+    }else if(e.value == "fecha_de_corte" || e.value == "fecha_de_salida" || e.value == "fecha_de_entrada"){
+        input_con_el_valor.innerHTML = `
+        <div class="input-group mb-3">
+        <input type="date" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
+        <div class="input-group-append">
+        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
+        </div>
+        </div>
+        
+        `
+    }else if (e.value = "estado") {
+        input_con_el_valor.innerHTML = `
+        <select class="custom-select" id="seleccion_cambio_taller" onchange="cambiar_pagar(this)">
+        <option selected value="0">Eligir...</option>
+        <option value="${false}" id="${e[e.selectedIndex].id}">NO PAGADO</option>
+        <option value="${true}" id="${e[e.selectedIndex].id}">PAGADO</option>
+        </select>
+
+        `
     }else{
 
         input_con_el_valor.innerHTML = `
         <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
-      <div class="input-group-append">
-        <button class="btn btn-outline-success" id="${e.id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
-      </div>
-      </div>
-    
+        <input type="text" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
+        <div class="input-group-append">
+        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
+        </div>
+        </div>
+        
         `
     }
 }
-window.cambiar_taller = (valor) => {
-    aca_id_taller.id = valor.value;
+
+window.cambiar_pagar = (e) => {
+    if(!0 || !"0"){
+    fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${e[e.selectedIndex].id}`, {estado:e.value})
+    .then( res => {
+        salio_todo_bien("Todo salio exlente")
+    })
+    }
 }
-window.enviar_taller_nuevo = () => {
-    //fecthNormalPOST_PUT()
+
+window.cambiar_taller = (e) => {
+    const boton_para_cambiar = document.querySelector(".boton_para_cambiar");
+
+    boton_para_cambiar.innerHTML =  ` 
+    <button type="button" class="btn btn-outline-primary btn-sm" id="${e.value}_${e[e.selectedIndex].id}" onclick="enviar_taller_nuevo(this.id)">Cambiar</button>
+    `
+}
+window.enviar_taller_nuevo = (id) => {
+
+    const palabras = id.split('_');
+
+    fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${palabras[1]}`, {id_taller:palabras[0]})
+        .then( res => {
+            salio_todo_bien("Todo salio exlente")
+        })
+
 }
 window.enviar_cambio = (id) => {
-    
-    fecthNormalPOST_PUT("PUT", `producto/${id}`,input_cambio.value)
+    const input_cambio = document.getElementById("input_cambio");
+
+    let dato = {
+        name: input_cambio.value
+    }
+
+    dato[`${input_cambio.name}`] = dato.name;
+    delete dato.name;
+
+    fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id}`, dato)
         .then( res => {
+            salio_todo_bien("Todo salio exelente")
             input_cambio = "";
         })
         .catch(err => {
@@ -121,27 +172,35 @@ window.enviar_cambio = (id) => {
         })
 }
 
-const imprimir_opciones = (res) => {
+const imprimir_opciones = (res , id) => {
+const seleccion_cambio_taller = document.getElementById("seleccion_cambio_taller");
+
 
     let talleres = "";
 
-    //seleccionDirec.innerHTML =` <option value="0">TALLER</option>`;
-
+    seleccion_cambio_taller.innerHTML =` <option selected value="0">Eligir...</option>`;
     res.map( e => {
 
         talleres = `
-        <option value="${e.id}">${e.nombre_completo}</option>
+        <option value="${e.id}" id="${id}">${e.nombre_completo}</option>
         `
         seleccion_cambio_taller.innerHTML += talleres;
     });
 }
  
-const opcines_taller = () => {
-    fecthNormalGET("GET","tallers")
+const opcines_taller = (id) => {
+
+    fecthNormalGET("GET","produccion/taller")
         .then(res =>{
-            imprimir_opciones(res.taller)
+            
+            imprimir_opciones(res.taller, id)
         })
         .catch (err => {
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
+}
+
+window.salir_cambios = () => {
+    opciones_cambio.style.opacity = 0;
+
 }

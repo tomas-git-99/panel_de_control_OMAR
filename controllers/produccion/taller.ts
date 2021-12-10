@@ -6,7 +6,7 @@ export const crearTaller = async (req: Request, res: Response) => {
 
     const taller = new Taller(req.body);
 
-    taller.save();
+    await taller.save();
 
     res.json({
         ok: true,
@@ -21,7 +21,7 @@ export const actualizarTaller = async (req: Request, res: Response) => {
     const { id } = req.params;
     const taller = await Taller.findByPk(id);
 
-    taller?.update(req.body);
+    await taller?.update(req.body);
 
     res.json({
         ok: true,
@@ -43,3 +43,13 @@ export const eliminarTaller = async (req: Request, res: Response) => {
         msg:"el taller fue eliminado con exito"
     })
 } 
+
+export const obtenerTaller = async (req: Request, res: Response) => {
+
+     const taller = await Taller.findAll();
+
+     res.json({
+         ok: true,
+         taller
+     })
+}

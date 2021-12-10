@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
+exports.obtenerTaller = exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
 const talller_1 = require("../../models/produccion/talller");
 const crearTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const taller = new talller_1.Taller(req.body);
-    taller.save();
+    yield taller.save();
     res.json({
         ok: true,
         taller
@@ -23,7 +23,7 @@ exports.crearTaller = crearTaller;
 const actualizarTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const taller = yield talller_1.Taller.findByPk(id);
-    taller === null || taller === void 0 ? void 0 : taller.update(req.body);
+    yield (taller === null || taller === void 0 ? void 0 : taller.update(req.body));
     res.json({
         ok: true,
         taller
@@ -40,4 +40,12 @@ const eliminarTaller = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.eliminarTaller = eliminarTaller;
+const obtenerTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const taller = yield talller_1.Taller.findAll();
+    res.json({
+        ok: true,
+        taller
+    });
+});
+exports.obtenerTaller = obtenerTaller;
 //# sourceMappingURL=taller.js.map

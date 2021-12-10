@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
+const talller_1 = require("../../models/produccion/talller");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const producto = new productos_produccion_1.Produccion_producto(req.body);
@@ -39,7 +40,19 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.actualizarProducto = actualizarProducto;
 const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const produccion = yield productos_produccion_1.Produccion_producto.findAll();
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll();
+    const taller = yield talller_1.Taller.findAll();
+    let produccion = [];
+    produccion_productos.map((e, i) => {
+        taller.map((p, m) => {
+            if (e.id_taller == p.id) {
+                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+            }
+        });
+        if (e.id_taller === null) {
+            produccion = [...produccion, { produccion: produccion_productos[i] }];
+        }
+    });
     res.json({
         ok: true,
         produccion
