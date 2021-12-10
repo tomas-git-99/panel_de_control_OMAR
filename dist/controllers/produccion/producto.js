@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const talller_1 = require("../../models/produccion/talller");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,4 +59,20 @@ const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.obtenerProduccion = obtenerProduccion;
+const obetenerUnProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const productos = yield productos_produccion_1.Produccion_producto.findByPk(id);
+    let taller;
+    let producto = [];
+    if (!(productos === null || productos === void 0 ? void 0 : productos.id_taller) == null || !(productos === null || productos === void 0 ? void 0 : productos.id_taller) == undefined) {
+        taller = yield talller_1.Taller.findByPk(productos === null || productos === void 0 ? void 0 : productos.id_taller);
+    }
+    producto = [...producto, { producto: productos, taller: taller }];
+    res.json({
+        ok: true,
+        producto,
+        taller
+    });
+});
+exports.obetenerUnProducto = obetenerUnProducto;
 //# sourceMappingURL=producto.js.map

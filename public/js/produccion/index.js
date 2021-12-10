@@ -47,13 +47,19 @@ const imprimirTable = (e, color) => {
     <td>${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
     <td>${e.produccion.estado == false? "NO PAGADO" : "PAGADO"}</td>
     <td>
-    <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
+    <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+    </div>
+    </td>
+    <td>
+    <div id="${e.produccion.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
+    <img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
     </div>
     </td>
   </tr>
     `
 }
+
 const opciones_cambio = document.querySelector(".opciones_cambio");
 const seleccion_cambio = document.querySelector("#seleccion_cambio");
 
@@ -77,6 +83,62 @@ window.enviar_id = (id) => {
         
     `
 }
+const previsualizar = document.querySelector(".previsualizar");
+
+window.previsualizar_id = (id) => {
+    imprimir_previsualizar(id);
+    previsualizar.style.opacity = 1;
+
+}
+const tabla_previsualizar = document.querySelector("#tabla_previsualizar");
+
+
+const imprimir_previsualizar = (id) => {
+
+    fecthNormalGET("GET",`produccion/producto_produccion/${id}`)
+        .then( res => {
+  
+            imprimir_html_datos(res.producto)
+        })
+}
+
+const imprimir_html_datos = (res) => {
+    console.log(res)
+
+    res.map ( e => {
+
+        tabla_previsualizar.innerHTML = `
+            <tr>
+            <td><span>ID :${e.producto.id_corte}</span></td>
+            <td><span>NOMBRE :</span></td>
+            <td><span>FECHA DE CORTE :</span>@mdo</td>
+            <td><span>EDAD :</span></td>
+        </tr>
+        <tr>
+            <td><span>ROLLOS :</span>acob</td>
+            <td><span>PESO PROMEDIO :</span>Thornton</td>
+            <td><span>TOTAL POR TALLE :</span>@fat</td>
+            <td><span>TALLES :</span>@fat</td>
+        </tr>
+        <tr>
+        
+            <td><span>TOTAL :</span>@fat</td>
+          </tr>
+        <tr>
+            <td><span>TALLER :</span>@fat</td>
+            <td><span>FECHA DE SALIDA :</span>@fat</td>
+            <td><span>FECHA DE ENTRADA :</span>@fat</td>
+            <td><span>PAGO :</span>@asjdljksahdlkjashljksa</td>
+        
+          </tr>
+          <tr>
+            <td><span>PAGO :</span>@fat</td>
+          </tr>
+        `
+    })
+}
+
+
 
 const input_con_el_valor = document.querySelector(".input_con_el_valor");
 
@@ -103,9 +165,9 @@ window.selecciconCambios = (e) => {
         </div>
         
         `
-    }else if (e.value = "estado") {
+    }else if (e.value == "estado") {
         input_con_el_valor.innerHTML = `
-        <select class="custom-select" id="seleccion_cambio_taller" onchange="cambiar_pagar(this)">
+        <select class="custom-select" style="width:auto;" id="seleccion_cambio_taller" onchange="cambiar_pagar(this)">
         <option selected value="0">Eligir...</option>
         <option value="${false}" id="${e[e.selectedIndex].id}">NO PAGADO</option>
         <option value="${true}" id="${e[e.selectedIndex].id}">PAGADO</option>
