@@ -18,6 +18,7 @@ export interface TodoAtributos {
     fecha_de_salida: number,
     fecha_de_entrada: number,
     estado: boolean,
+    fecha_de_pago: number;
 
 }
 
@@ -40,6 +41,7 @@ export class Produccion_producto extends Model <TodoAtributos>{
     public fecha_de_salida!: number;
     public fecha_de_entrada!: number;
     public estado!: boolean;
+    public fecha_de_pago!: number;
 
 
 }
@@ -94,6 +96,9 @@ Produccion_producto.init(
         },
         estado:{
             type:DataTypes.BOOLEAN
+        },
+        fecha_de_pago:{
+            type:DataTypes.NUMBER
         }
         
     },{

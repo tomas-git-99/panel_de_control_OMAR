@@ -2,13 +2,14 @@ import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../he
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
 
+
+
 let table_produccion = document.querySelector('.table_produccion');
 
 
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
         if(res.ok){
-
             colorearTable(res.produccion);
         }
     })
@@ -74,9 +75,9 @@ window.enviar_id = (id) => {
         <option id="${id}" value="fecha_de_corte">Fecha de corte</option>
         <option id="${id}" value="edad">Edad</option>
         <option id="${id}" value="rollos">Rollos</option>
+        <option id="${id}" value="tela">Tela</option>
         <option id="${id}" value="total_por_talle">Total por talles</option>
         <option id="${id}" value="talles">Talles</option>
-        <option id="${id}" value="total">Total</option>
         <option id="${id}" value="taller">Taller</option>
         <option id="${id}" value="fecha_de_salida">Fecha de salida</option>
         <option id="${id}" value="fecha_de_entrada">Fecha de entrada</option>
@@ -180,7 +181,7 @@ window.selecciconCambios = (e) => {
         <option value="${false}" id="${e[e.selectedIndex].id}">NO PAGADO</option>
         <option value="${true}" id="${e[e.selectedIndex].id}">PAGADO</option>
         </select>
-
+        <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="pagar(this.id)">Cambiar</button>
         `
     }else{
 
@@ -196,14 +197,41 @@ window.selecciconCambios = (e) => {
     }
 }
 
+
+let id_para_pagar
 window.cambiar_pagar = (e) => {
-    if(!0 || !"0"){
-    fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${e[e.selectedIndex].id}`, {estado:e.value})
-    .then( res => {
-        salio_todo_bien("Todo salio exlente")
-    })
+    let estado = document.querySelector(".pagar_taller");
+    
+    estado.id = e.value;
+    
+    id_para_pagar = e[e.selectedIndex].id;
+    /*     if(!0 || !"0"){
+        fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${e[e.selectedIndex].id}`, {estado:e.value})
+        .then( (res) => {
+            salio_todo_bien("Todo salio exelente")
+        })
+    } */
+}
+
+window.pagar = (e) => {
+    let todayDate = new Date().toISOString().slice(0, 10);
+    
+    if(e.id == true || e.id == "true") {
+        fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:true, fecha_de_pago:todayDate})
+        .then( (res) => {
+            salio_todo_bien("Todo salio exelente")
+        })
+        
+    }else if ( e.id == false || e.id == "false"){
+
+        fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:false})
+        .then( (res) => {
+            salio_todo_bien("Todo salio exelente")
+        })
     }
 }
+
+
 
 window.cambiar_taller = (e) => {
     const boton_para_cambiar = document.querySelector(".boton_para_cambiar");
@@ -283,19 +311,43 @@ window.salir_cambios = () => {
 
 window.ordenar = (e) => {
     const opciones_input = document.querySelector(".opciones_input");
-    opciones_input.innerHTML = `
-    <div class="p">
-    <select class="custom-select" id="${e.value}" onchange="cambiar_filtro(this)">
-        <option selected>Filtrar ...</option>
-        <option value="1">Rango de fecha</option>
-        <option value="2">Fecha exacta</option>
-      </select>
+
+    if(e.value === "0" || e.value == 0){
+
+        fecthNormalGET("GET", "produccion/producto_produccion")
+        .then( res => {
+            if(res.ok){
+                colorearTable(res.produccion);
+            }
+        })
+    
+    }else if( fecha_de_entrada == e.value || fecha_de_salida == e.value || fecha_de_pago == e.value){
+        
+        opciones_input.innerHTML = `
+        <div class="p">
+        <select class="custom-select" id="${e.value}" onchange="cambiar_filtro(this)">
+            <option selected>Filtrar ...</option>
+            <option value="1">Rango de fecha</option>
+            <option value="2">Fecha exacta</option>
+          </select>
+           </div>
+           <div class="input_fecha">
+    
        </div>
-       <div class="input_fecha">
+    
+        `
+    }else if ( e[e.selectedIndex].id == "taller" || e[e.selectedIndex].id == "fecha_de_entrada" || e[e.selectedIndex].id == "fecha_de_pago"){
 
-   </div>
-
-    `
+        fecthNormalGET("GET", `produccion/producto_produccion/${e[e.selectedIndex].id }`)
+            .then( res =>{
+                colorearTable(res.produccion)
+            })
+            .catch( err =>{
+                algo_salio_mal(`Algo salio mal: ${ err }`)
+            })
+    
+    
+    }
 
 }
 
@@ -346,10 +398,14 @@ window.exacto_buscar = (id) => {
     const dato = {
         fecha:fecha_exacta
     }
-    fecthNormalPOST_PUT("GET", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
+    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
         .then( res =>{
-            colorearTable(res.productos)
+            colorearTable(res.produccion)
         })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+    
     
 
 }

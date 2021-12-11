@@ -56,6 +56,9 @@ Produccion_producto.init({
     },
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
+    },
+    fecha_de_pago: {
+        type: sequelize_1.DataTypes.NUMBER
     }
 }, {
     sequelize: conectarDB_1.default,

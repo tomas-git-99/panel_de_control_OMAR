@@ -23,6 +23,6 @@ router.put('/:id', actualizarProducto);
 
 router.post('/busqueda/todos/:query', ordenarPorRango)
 
-router.get('/busqueda/unico/dato/:query', ordenarPorFechaExacta)
+router.post('/busqueda/unico/dato/:query', ordenarPorFechaExacta)
 
 export default router;
