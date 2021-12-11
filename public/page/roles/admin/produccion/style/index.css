@@ -97,12 +97,12 @@
     font-weight:700; 
     font-size: 20px;
 }
-.titulo {
+.titulo_previsualizar {
     display: grid;
     justify-content: center;
     grid-template-columns: 5% 95%;
 }
-.titulo h3{
+.titulo_previsualizar h3{
     text-align: center;
     padding-right: 40px;
 }
