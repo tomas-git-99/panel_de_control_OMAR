@@ -95,223 +95,88 @@ exports.obetenerUnProducto = obetenerUnProducto;
 const ordenarPorRango = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { fecha } = req.body;
     const { query } = req.params;
-    console.log(fecha);
-    if (query == "fecha_de_entrada") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada: { [dist_1.Op.between]: [fecha[0], fecha[1]] }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
+    let valor = { [dist_1.Op.between]: [fecha[0], fecha[1]] };
+    searchFunc(query, valor)
+        .then(produccion => {
         return res.json({
             ok: true,
             produccion
         });
-    }
-    else if (query == "fecha_de_salida") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_salida: { [dist_1.Op.between]: [fecha[0], fecha[1]] }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
+    })
+        .catch(error => {
         return res.json({
-            ok: true,
-            produccion
+            ok: false,
+            msg: error
         });
-    }
-    else if (query == "fecha_de_pago") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_pago: { [dist_1.Op.between]: [fecha[0], fecha[1]] }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
-        return res.json({
-            ok: true,
-            produccion
-        });
-    }
+    });
 });
 exports.ordenarPorRango = ordenarPorRango;
 const ordenarPorFechaExacta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { fecha } = req.body;
     const { query } = req.params;
-    if (query == "fecha_de_entrada") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada: { fecha }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
+    console.log(query);
+    searchFunc(query, fecha)
+        .then(produccion => {
         return res.json({
             ok: true,
             produccion
         });
-    }
-    else if (query == "fecha_de_salida") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_salida: { fecha }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
+    })
+        .catch(error => {
         return res.json({
-            ok: true,
-            produccion
+            ok: false,
+            msg: error
         });
-    }
-    else if (query == "fecha_de_pago") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_pago: { fecha }
-            }, order: [['updatedAt', 'ASC']]
-        });
-        const taller = yield talller_1.Taller.findAll();
-        let produccion = [];
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
-        return res.json({
-            ok: true,
-            produccion
-        });
-    }
+    });
 });
 exports.ordenarPorFechaExacta = ordenarPorFechaExacta;
 const unicoDatoQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { query } = req.params;
-    if (query == "fecha_de_entrada") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada: null
-            }
-        });
-        let produccion = [];
-        const taller = yield talller_1.Taller.findAll();
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
+    try {
+        const { query } = req.params;
+        let valor = null;
+        if (query == "estado") {
+            valor = false;
+        }
+        searchFunc(query, valor)
+            .then(produccion => {
+            return res.json({
+                ok: true,
+                produccion
             });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
-        return res.json({
-            ok: true,
-            produccion
+        })
+            .catch(error => {
+            return res.json({
+                ok: false,
+                msg: error
+            });
         });
     }
-    if (query == "taller") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                id_taller: null
-            }
-        });
-        let produccion = [];
-        const taller = yield talller_1.Taller.findAll();
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
-        return res.json({
-            ok: true,
-            produccion
-        });
-    }
-    if (query == "fecha_de_pago") {
-        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
-            where: {
-                estado: false
-            }
-        });
-        let produccion = [];
-        const taller = yield talller_1.Taller.findAll();
-        produccion_productos.map((e, i) => {
-            taller.map((p, m) => {
-                if (e.id_taller == p.id) {
-                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
-                }
-            });
-            if (e.id_taller === null) {
-                produccion = [...produccion, { produccion: produccion_productos[i] }];
-            }
-        });
-        return res.json({
-            ok: true,
-            produccion
+    catch (error) {
+        res.status(505).json({
+            ok: false,
+            msg: error
         });
     }
 });
 exports.unicoDatoQuery = unicoDatoQuery;
+const searchFunc = (palabra, valor) => __awaiter(void 0, void 0, void 0, function* () {
+    let buscar = {
+        where: {}, order: [['updatedAt', 'DESC']]
+    };
+    buscar.where[`${palabra}`] = valor;
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll(buscar);
+    const taller = yield talller_1.Taller.findAll();
+    let produccion = [];
+    produccion_productos.map((e, i) => {
+        taller.map((p, m) => {
+            if (e.id_taller == p.id) {
+                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+            }
+        });
+        if (e.id_taller === null) {
+            produccion = [...produccion, { produccion: produccion_productos[i] }];
+        }
+    });
+    return produccion;
+});
 //# sourceMappingURL=producto.js.map

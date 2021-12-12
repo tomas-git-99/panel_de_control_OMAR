@@ -10,6 +10,7 @@ let table_produccion = document.querySelector('.table_produccion');
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
         if(res.ok){
+        
             colorearTable(res.produccion);
         }
     })
@@ -37,12 +38,15 @@ const colorearTable = (res) => {
 
 
 const imprimirTable = (e, color) => {
-   
+
+
+  
     return `
     <tr class="${color}">
     <th scope="row">${e.produccion.id_corte}</th>
     <td>${e.produccion.nombre}</td>
     <td>${e.produccion.tela}</td>
+    <td>${e.produccion.peso_promedio} Kg</td>
     <td>${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
     <td>${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
     <td>${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
@@ -371,7 +375,7 @@ window.cambiar_filtro = (e) => {
     }else if(e.value == 2){
         input_fecha.innerHTML = `
         <input type="date" id="fecha_exacta">
-        <button d="${e.id}" class="btn btn-primary btn-sm" onclick="exacto_buscar(this.id)">Buscar</button>
+        <button id="${e.id}" class="btn btn-primary btn-sm" onclick="exacto_buscar(this.id)">Buscar</button>
         `
     }
 }
@@ -389,7 +393,7 @@ window.rango_buscar = (id) =>{
             if(res.ok){
                 colorearTable(res.produccion)
             }else{
-                console.log(res)
+                algo_salio_mal(`Algo salio mal`)
             }
         })
         .catch( err =>{
@@ -403,10 +407,12 @@ window.exacto_buscar = (id) => {
 
     const fecha_exacta = document.getElementById("fecha_exacta");
     const dato = {
-        fecha:fecha_exacta
+        fecha:fecha_exacta.value
     }
+
     fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
         .then( res =>{
+            console.log(res)
             colorearTable(res.produccion)
         })
         .catch( err =>{

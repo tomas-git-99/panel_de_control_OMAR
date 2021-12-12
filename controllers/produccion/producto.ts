@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
 import { Taller } from "../../models/produccion/talller";
@@ -126,106 +126,22 @@ export const ordenarPorRango = async (req: Request, res: Response) => {
     const { query } = req.params;
 
 
-    console.log(fecha);
-
-    if( query == "fecha_de_entrada") {
-
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada:{[Op.between]:[fecha[0], fecha[1]]}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
+    let valor:any = {[Op.between]:[fecha[0], fecha[1]]};    
+ 
+    searchFunc(query, valor)
+    .then( produccion => {
         return res.json({
             ok: true,
             produccion
         })
-
-     
-    }else if ( query == "fecha_de_salida"){
-
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_salida:{[Op.between]:[fecha[0], fecha[1]]}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
+    })
+    .catch( error => {
         return res.json({
-            ok: true,
-            produccion
+            ok: false,
+            msg: error
         })
-
-    }else if ( query == "fecha_de_pago"){
-        
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_pago:{[Op.between]:[fecha[0], fecha[1]]}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
-        return res.json({
-            ok: true,
-            produccion
-        })
-    }
-
+    })
+ 
 
 }
 
@@ -235,193 +151,86 @@ export const ordenarPorFechaExacta = async (req: Request, res: Response) => {
 
     const { query } = req.params;
 
-    if( query == "fecha_de_entrada") {
-
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada:{fecha}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
+    console.log(query)
+    searchFunc(query, fecha)
+    .then( produccion => {
         return res.json({
             ok: true,
             produccion
         })
-
-     
-    }else if ( query == "fecha_de_salida"){
-
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_salida:{fecha}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
+    })
+    .catch( error => {
         return res.json({
-            ok: true,
-            produccion
+            ok: false,
+            msg: error
         })
-
-    }else if ( query == "fecha_de_pago"){
-        
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_pago:{fecha}
-                    
-            },order: [['updatedAt', 'ASC']]
-        
-        });
-        
-        const taller = await Taller.findAll()
-
-        let produccion:any = []
-        
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
-    
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-
-        return res.json({
-            ok: true,
-            produccion
-        })
-    }
-
+    })
  
 }
 
 export const unicoDatoQuery = async (req: Request, res: Response) =>{
 
-    const { query } = req.params;
-
-    if(query == "fecha_de_entrada"){
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                fecha_de_entrada:null
-            }
-        });
-
-        let produccion:any = []
-        const taller = await Taller.findAll()
-
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
+    try {
+        const { query } = req.params;
     
+        let valor:null | false = null
+    
+        if(query == "estado"){
+            valor = false
+        }
+    
+    
+        searchFunc(query, valor)
+            .then( produccion => {
+                return res.json({
+                    ok: true,
+                    produccion
+                })
             })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-        return res.json({
-            ok: true,
-            produccion
+            .catch( error => {
+                return res.json({
+                    ok: false,
+                    msg: error
+                })
+            })
+        
+    } catch (error) {
+        res.status(505).json({
+            ok: false,
+            msg: error
         })
     }
-    if(query == "taller"){
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                id_taller:null
-            }
-        });
-
-        let produccion:any = []
-        const taller = await Taller.findAll()
-
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
     
-            })
-            if(e.id_taller === null){
-    
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
+}
 
-        return res.json({
-            ok: true,
-            produccion
-        })
+const searchFunc = async(palabra:any, valor: false | null | number) =>{
+
+    let buscar:any = {
+        where: {
+
+        },order: [['updatedAt', 'DESC']]
     }
-    if(query == "fecha_de_pago"){
-        const produccion_productos = await Produccion_producto.findAll({
-            where: {
-                estado:false
-            }
-        });
 
-        let produccion:any = []
-        const taller = await Taller.findAll()
+    buscar.where[`${palabra}`] = valor;
 
-        produccion_productos.map ( (e, i) =>{
-            taller.map ( (p,m) => {
-                if(e.id_taller == p.id){
-                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
-                }
+    const produccion_productos = await Produccion_producto.findAll(buscar);
+    const taller = await Taller.findAll()
+        
+    let produccion:any = []
+
+         produccion_productos.map ( (e, i) =>{
+             taller.map ( (p,m) => {
+                 if(e.id_taller == p.id){
+                     produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                 }
     
-            })
-            if(e.id_taller === null){
+             })
+             if(e.id_taller === null){
     
-                produccion = [...produccion, {produccion:produccion_productos[i]}];
-            }
-        })
-        return res.json({
-            ok: true,
-            produccion
-        })
-    }
- 
+                 produccion = [...produccion, {produccion:produccion_productos[i]}];
+             }
+         })
+
+    return produccion;
 
 }
