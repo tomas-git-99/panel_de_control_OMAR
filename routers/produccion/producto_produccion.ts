@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { actualizarProducto, crearProducto, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango } from "../../controllers/produccion/producto";
+import { actualizarProducto, crearProducto, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango, unicoDatoQuery } from "../../controllers/produccion/producto";
 
 
 const router = Router();
@@ -24,5 +24,7 @@ router.put('/:id', actualizarProducto);
 router.post('/busqueda/todos/:query', ordenarPorRango)
 
 router.post('/busqueda/unico/dato/:query', ordenarPorFechaExacta)
+
+router.get('/busqueda/unicos/completo/p/:query', unicoDatoQuery)
 
 export default router;

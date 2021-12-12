@@ -46,7 +46,7 @@ const imprimirTable = (e, color) => {
     <td>${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
     <td>${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
     <td>${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
-    <td>${e.produccion.estado == false? "NO PAGADO" : "PAGADO"}</td>
+    <td style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
     <td>
     <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
@@ -134,7 +134,7 @@ const imprimir_html_datos = (res) => {
             <td><span>TALLER : </span>${e.taller == null || e.taller == undefined ? "- -" : e.taller.nombre_completo}</td>
             <td><span>FECHA DE SALIDA : </span>${e.producto.fecha_de_salida == null || e.producto.fecha_de_salida == undefined ? "- -" : e.producto.fecha_de_salida}</td>
             <td><span>FECHA DE ENTRADA : </span>${e.producto.fecha_de_entrada == null || e.producto.fecha_de_entrada == undefined ? "- -" : e.producto.fecha_de_entrada}</td>
-            <td><span>PAGO : </span>${e.producto.estado == true ? "PAGADO" : "NO PAGADO"}</td>
+            <td><span>PAGO : </span>${e.producto.estado == false ? "NO PAGADO" : "PAGADO"} </td>
         
           </tr>
 
@@ -181,7 +181,7 @@ window.selecciconCambios = (e) => {
         <option value="${false}" id="${e[e.selectedIndex].id}">NO PAGADO</option>
         <option value="${true}" id="${e[e.selectedIndex].id}">PAGADO</option>
         </select>
-        <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="pagar(this.id)">Cambiar</button>
+        <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="fecha_De_pago(this.id)">Cambiar</button>
         `
     }else{
 
@@ -205,28 +205,34 @@ window.cambiar_pagar = (e) => {
     estado.id = e.value;
     
     id_para_pagar = e[e.selectedIndex].id;
-    /*     if(!0 || !"0"){
-        fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${e[e.selectedIndex].id}`, {estado:e.value})
-        .then( (res) => {
-            salio_todo_bien("Todo salio exelente")
-        })
-    } */
+
 }
 
-window.pagar = (e) => {
-    let todayDate = new Date().toISOString().slice(0, 10);
-    
-    if(e.id == true || e.id == "true") {
+window.fecha_De_pago = (e) => {
+ 
+    let date = new Date()
+    let day = `${(date.getDate())}`.padStart(2,'0');
+    let month = `${(date.getMonth()+1)}`.padStart(2,'0');
+    let year = date.getFullYear();
+    let todayDate = `${year}-${month}-${day}`;
+
+    if(e == true || e == "true") {
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:true, fecha_de_pago:todayDate})
         .then( (res) => {
             salio_todo_bien("Todo salio exelente")
         })
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err}`)
+        })
         
-    }else if ( e.id == false || e.id == "false"){
+    }else if ( e == false || e == "false"){
 
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:false})
         .then( (res) => {
             salio_todo_bien("Todo salio exelente")
+        })
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err}`)
         })
     }
 }
@@ -321,7 +327,7 @@ window.ordenar = (e) => {
             }
         })
     
-    }else if( fecha_de_entrada == e.value || fecha_de_salida == e.value || fecha_de_pago == e.value){
+    }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
         
         opciones_input.innerHTML = `
         <div class="p">
@@ -338,8 +344,9 @@ window.ordenar = (e) => {
         `
     }else if ( e[e.selectedIndex].id == "taller" || e[e.selectedIndex].id == "fecha_de_entrada" || e[e.selectedIndex].id == "fecha_de_pago"){
 
-        fecthNormalGET("GET", `produccion/producto_produccion/${e[e.selectedIndex].id }`)
+        fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${e[e.selectedIndex].id }`)
             .then( res =>{
+                console.log(res)
                 colorearTable(res.produccion)
             })
             .catch( err =>{

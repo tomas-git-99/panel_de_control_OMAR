@@ -98,7 +98,8 @@ Produccion_producto.init(
             type:DataTypes.BOOLEAN
         },
         fecha_de_pago:{
-            type:DataTypes.NUMBER
+            type:DataTypes.NUMBER,
+            allowNull: true 
         }
         
     },{

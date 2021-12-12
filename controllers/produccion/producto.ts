@@ -51,7 +51,8 @@ export const actualizarProducto = async (req: Request, res: Response) => {
     }
 
     if( estado == false){
-        await producto?.update({fecha_de_pago:0})
+        let dato_verdad:any = null
+        await producto?.update({fecha_de_pago:dato_verdad})
     }
 
     await producto?.update(req.body);
@@ -333,4 +334,94 @@ export const ordenarPorFechaExacta = async (req: Request, res: Response) => {
     }
 
  
+}
+
+export const unicoDatoQuery = async (req: Request, res: Response) =>{
+
+    const { query } = req.params;
+
+    if(query == "fecha_de_entrada"){
+        const produccion_productos = await Produccion_producto.findAll({
+            where: {
+                fecha_de_entrada:null
+            }
+        });
+
+        let produccion:any = []
+        const taller = await Taller.findAll()
+
+        produccion_productos.map ( (e, i) =>{
+            taller.map ( (p,m) => {
+                if(e.id_taller == p.id){
+                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                }
+    
+            })
+            if(e.id_taller === null){
+    
+                produccion = [...produccion, {produccion:produccion_productos[i]}];
+            }
+        })
+        return res.json({
+            ok: true,
+            produccion
+        })
+    }
+    if(query == "taller"){
+        const produccion_productos = await Produccion_producto.findAll({
+            where: {
+                id_taller:null
+            }
+        });
+
+        let produccion:any = []
+        const taller = await Taller.findAll()
+
+        produccion_productos.map ( (e, i) =>{
+            taller.map ( (p,m) => {
+                if(e.id_taller == p.id){
+                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                }
+    
+            })
+            if(e.id_taller === null){
+    
+                produccion = [...produccion, {produccion:produccion_productos[i]}];
+            }
+        })
+
+        return res.json({
+            ok: true,
+            produccion
+        })
+    }
+    if(query == "fecha_de_pago"){
+        const produccion_productos = await Produccion_producto.findAll({
+            where: {
+                estado:false
+            }
+        });
+
+        let produccion:any = []
+        const taller = await Taller.findAll()
+
+        produccion_productos.map ( (e, i) =>{
+            taller.map ( (p,m) => {
+                if(e.id_taller == p.id){
+                    produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                }
+    
+            })
+            if(e.id_taller === null){
+    
+                produccion = [...produccion, {produccion:produccion_productos[i]}];
+            }
+        })
+        return res.json({
+            ok: true,
+            produccion
+        })
+    }
+ 
+
 }

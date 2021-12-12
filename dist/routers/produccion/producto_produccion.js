@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const producto_1 = require("../../controllers/produccion/producto");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //OBTENER PRODUCCION
 router.get('/', producto_1.obtenerProduccion);
 router.get('/:id', producto_1.obetenerUnProducto);
@@ -13,5 +13,6 @@ router.put('/:id', producto_1.actualizarProducto);
 //search 
 router.post('/busqueda/todos/:query', producto_1.ordenarPorRango);
 router.post('/busqueda/unico/dato/:query', producto_1.ordenarPorFechaExacta);
+router.get('/busqueda/unicos/completo/p/:query', producto_1.unicoDatoQuery);
 exports.default = router;
 //# sourceMappingURL=producto_produccion.js.map

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const talller_1 = require("../../models/produccion/talller");
@@ -45,7 +45,8 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
         yield (producto === null || producto === void 0 ? void 0 : producto.update({ total: newTotal }));
     }
     if (estado == false) {
-        yield (producto === null || producto === void 0 ? void 0 : producto.update({ fecha_de_pago: 0 }));
+        let dato_verdad = null;
+        yield (producto === null || producto === void 0 ? void 0 : producto.update({ fecha_de_pago: dato_verdad }));
     }
     yield (producto === null || producto === void 0 ? void 0 : producto.update(req.body));
     res.json({
@@ -240,4 +241,77 @@ const ordenarPorFechaExacta = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.ordenarPorFechaExacta = ordenarPorFechaExacta;
+const unicoDatoQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { query } = req.params;
+    if (query == "fecha_de_entrada") {
+        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
+            where: {
+                fecha_de_entrada: null
+            }
+        });
+        let produccion = [];
+        const taller = yield talller_1.Taller.findAll();
+        produccion_productos.map((e, i) => {
+            taller.map((p, m) => {
+                if (e.id_taller == p.id) {
+                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                }
+            });
+            if (e.id_taller === null) {
+                produccion = [...produccion, { produccion: produccion_productos[i] }];
+            }
+        });
+        return res.json({
+            ok: true,
+            produccion
+        });
+    }
+    if (query == "taller") {
+        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
+            where: {
+                id_taller: null
+            }
+        });
+        let produccion = [];
+        const taller = yield talller_1.Taller.findAll();
+        produccion_productos.map((e, i) => {
+            taller.map((p, m) => {
+                if (e.id_taller == p.id) {
+                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                }
+            });
+            if (e.id_taller === null) {
+                produccion = [...produccion, { produccion: produccion_productos[i] }];
+            }
+        });
+        return res.json({
+            ok: true,
+            produccion
+        });
+    }
+    if (query == "fecha_de_pago") {
+        const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({
+            where: {
+                estado: false
+            }
+        });
+        let produccion = [];
+        const taller = yield talller_1.Taller.findAll();
+        produccion_productos.map((e, i) => {
+            taller.map((p, m) => {
+                if (e.id_taller == p.id) {
+                    produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                }
+            });
+            if (e.id_taller === null) {
+                produccion = [...produccion, { produccion: produccion_productos[i] }];
+            }
+        });
+        return res.json({
+            ok: true,
+            produccion
+        });
+    }
+});
+exports.unicoDatoQuery = unicoDatoQuery;
 //# sourceMappingURL=producto.js.map
