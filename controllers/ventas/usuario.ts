@@ -5,13 +5,14 @@ import { generarJWT } from "../../helpers/generar-JWT";
 
 
 export const login = async( req: Request, res: Response) => {
+
      try {
         const { dni_cuil, password } = req.body;
 
         const usuario = await Usuario.findAll({where:{ dni_cuil:dni_cuil }});
 
         if(!usuario){
-            return res.status(400).json ({
+            return res.json ({
                 ok: false,
                 fallo: 1,
                 msg:'Usuario / Password no son correctos'
@@ -22,7 +23,7 @@ export const login = async( req: Request, res: Response) => {
 
 
         if (!validPassword) {
-            return res.status(400).json ( {
+            return res.json ( {
                 ok: false,
                 fallo: 3,
                 msg:'Usuario / Password no son correctos'
@@ -165,4 +166,20 @@ export const eliminarUsuario = async (req: Request, res: Response) => {
         ok: true,
         msg: `El usuario ${usuario?.nombre} fue eliminado con exito`
     })
+}
+
+export const verificarToken = async(req:Request, res:Response) => {
+
+    try {
+    const usuario = req.params;
+        res.json({
+            ok:true,
+            usuario
+        })
+    } catch (error) {
+     res.status(400).json({
+         ok: false,
+         msg:error
+     })   
+    }
 }

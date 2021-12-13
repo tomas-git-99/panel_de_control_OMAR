@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { crearUsuario, editarUsuario, eliminarUsuario, login } from "../../controllers/ventas/usuario";
+import { crearUsuario, editarUsuario, eliminarUsuario, login, verificarToken } from "../../controllers/ventas/usuario";
+import { validarJWT, validarJWT_Parmans_ID } from "../../middlewares/validar-JWT";
 
 
 const router = Router();
@@ -22,5 +23,9 @@ router.delete('/:id', eliminarUsuario)
 
 router.post('/login', login)
 
+
+router.get('/token/verificar',[
+    validarJWT_Parmans_ID
+],verificarToken)
 
 export default router;
