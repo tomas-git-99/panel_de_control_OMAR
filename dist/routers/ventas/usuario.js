@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const usuario_1 = require("../../controllers/ventas/usuario");
 const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //CREAR USUARIO NUEVO
 router.post('/', usuario_1.crearUsuario);
 //EDITAR USUARIO NUEVO

@@ -14,10 +14,10 @@ export const PERMISOS = {
     "PRODUCCION": () =>  window.location = "/page/roles/usuario_produccion/index.html"
 }
 
-verificarToken("holaperrin")
-.then(res =>{
-    console.log(res)
-})
+// verificarToken("holaperrin")
+// .then(res =>{
+//     console.log(res)
+// })
 
 form.addEventListener('submit', (e) => {
 
@@ -33,12 +33,13 @@ form.addEventListener('submit', (e) => {
 
     fecthNormalPOST_PUT("POST", "usuario/login", forData)
         .then((res) => {
-            if(!res.ok){
-                advertencia(res.msg);
+            console.log(res)
+            if(res.ok == true){
+            PERMISOS[res.usuario[0].rol]
+                ? PERMISOS[res.usuario[0].rol]()
+                : advertencia("Este usuario no tiene ROL especifico")
             }else{
-                const permiso = PERMISOS[res.usuario.rol]
-                    ? PERMISOS[res.usuario.rol]()
-                    : advertencia("Este usuario no tiene ROL especifico")
+                advertencia(res.msg);
             }
         })
         .catch((err) => {

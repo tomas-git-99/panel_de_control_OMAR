@@ -1,0 +1,183 @@
+.bienvenido{
+ 
+    width: 500px;
+    height: 500px;
+   
+}
+
+.cartel{
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    width: 500px;
+    height: 450px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    font-size: 20px;
+
+}
+
+
+
+form{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    grid-template-columns:1fr 1fr;
+    row-gap: 30px;
+    column-gap: 20px;
+}
+
+.formProducto input{
+
+    width: 200px;
+    height: 30px;
+
+}
+
+.box{
+    position: absolute;
+
+    justify-content: center;  
+    font-size: 18px;
+    grid-column: 1/ 3;
+    place-self: center;
+    width: 400px;
+    top:780px;
+}
+
+input[type=checkbox] {
+    transform: scale(.6);
+}
+
+
+.check_prueba{
+    grid-column: 1/ 3;
+}
+
+.check_prueba label{
+    position: relative;
+    font-size: 18px;
+    left: -115px;
+    top: -13px
+}
+
+.opciones select{
+    width: 100%;
+    text-align: center;
+}
+
+.talle span{
+    padding-right: 15px;
+}
+
+
+
+.boton{
+    padding-top: 20px;
+    grid-column: 1/ 3;
+}
+
+.boton button{
+    background: #00B5EE;
+    color: #fff;
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 25px;
+}
+
+.titulo{
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+.pregunta_ordenar_por_talle{
+
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible;   */   
+    
+    position: fixed;
+    left: 46%;
+    top: 40%;
+
+
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+    width: 350px;
+    height: 150px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    row-gap: 10px;
+
+}
+
+.botones_preguntas{
+    place-self: center;
+}
+
+.ordenar_por_talle{
+
+    display: none;
+    visibility: hidden; 
+     /* display: block;
+    visibility: visible;     */
+
+    position: fixed;
+    left: 47%;
+    top: 40%;
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    width: 300px;
+    height: 250px;
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+  
+}
+
+.ordenar_por_talle form {
+
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr;
+}
+
+.ordenar_por_talle input{
+    width: 100px;
+    outline:none;
+
+}
+
+.prueba{
+    display: grid;
+    justify-self: center;
+    align-content: center;
+    border: 1px solid red;
+}

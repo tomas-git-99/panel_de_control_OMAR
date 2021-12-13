@@ -1,0 +1,489 @@
+.bienvenido{
+    
+    width: 700px;
+    height: 800px;
+}
+
+
+.cartel{
+    
+    width: 670px;
+    height: 500px;
+    
+}
+
+.total{
+    
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+.hrDiv{
+    border-top: 2px solid #3d3d3d;
+}
+
+.btns{
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+
+}
+
+.salir{
+    background: #DA2121;
+    width: 80px;
+    color: white;
+}
+
+.confirmar{
+    color: white;
+    width: 130px;
+    background: #00B5EE;
+}
+
+.resumen{
+    display: grid;
+    font-size: 22px;
+    grid-template-columns: 1fr 1fr;
+
+}
+
+.cliente{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible;   */  
+
+    position: fixed;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height:100%;
+   
+    left: 80px;
+}
+
+.panel{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    border: 1px solid;
+    width: 400px;
+    height: 150px;
+
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.panel button{
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: #757575;
+
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+
+
+.buscadorCli{
+    display: none;
+    visibility: hidden;
+/*     display: grid;
+    visibility: visible;   */  
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+
+    width: 500px;
+    height: 300px;
+    background: #00B5EE;
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+}
+
+.retrocederBuscar{
+    position: absolute;
+    left: 18px;
+    top: 15px;
+    cursor: pointer;
+}
+.buscadorCli input{
+    margin-top: 10px;
+    width: 300px;
+    height: 45px;
+}
+
+
+
+.buscadorCli h5{
+    margin-top: 20px;
+}
+
+.nombreCliente{
+    margin-top: 15px;
+
+    width: 90%;
+    display: grid;
+
+    justify-items: center;
+}
+
+.nombreCliente button{
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background: #00B5EE;
+}
+
+
+.cartelCliente{
+    display: none;
+    visibility: hidden;
+/*      display: grid;
+    visibility: visible;   */
+    background: white;
+    position: fixed;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    width: 500px;
+    height: auto;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    left: 40%;
+    top: 12%;
+
+    border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+}
+
+.seleccionDireccion{
+/*     display: none;
+    visibility: hidden; */
+    place-self: center;
+    grid-column: 1/ 3;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.titulo{
+
+    text-align: center;
+}
+
+.cartelCliente input{
+    width:180px;
+}
+.botonFormularioCompra{
+    display: grid;
+    justify-content: center;
+    grid-column: 1/ 3;    
+    font-size: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.botonFormularioCompra button{
+    background: #00B5EE;
+    color: #fff;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 25px;
+}
+
+
+.retroceder{
+    margin-top: 20px;
+}
+
+.direccionDeCliente{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    width: 500px;
+    justify-items: center;
+
+    row-gap: 20px;
+    padding-top: 10px;
+
+}
+
+.clientInformacionSOLO{
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr;
+    width: 500px;
+    row-gap: 20px;
+    padding-bottom: 10px;
+
+}
+
+.tranporteYfecha{
+
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    width: 500px;
+    padding-top: 10px;
+
+    justify-items: center;
+}
+.formProducto{
+    display: flex;
+    justify-items: center;
+    flex-flow: column;
+}
+
+.retrosederTitulo{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 10% 90%;
+
+}
+.tituloCliente{
+    text-align: center;
+    padding-top: 10px;
+    padding-right: 40px;
+}
+.retroceder{
+    cursor: pointer;
+    place-self: center;
+}
+
+
+.modificarCarrito{
+    display: none;
+    visibility: hidden;
+/*      display: grid;
+    visibility: visible;   */
+    display:grid;
+    position: fixed;
+    justify-content: center;
+    align-content: center;
+    width: 100vw;
+    height: 100vh;
+    padding-right: 200px;
+
+}
+
+.modificador{
+ 
+    width: 400px;
+    height: 300px;
+
+    display: grid;
+
+    flex-direction: column;
+
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    align-content: center;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+}
+.titulo_modificador{
+    place-self: center;
+}
+
+
+.titulo_modificador img{
+    cursor: pointer;
+    width: 30px;
+    position: absolute;
+    right: 350px;
+}
+
+.cantidad_anterior {
+    width: 100%;
+    text-align: start;
+    text-indent: 37px;
+    
+}
+.cantidad_anterior label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+
+}
+
+.cantidad_anterior span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+}
+
+
+.modificador_cantidad label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+
+}
+
+.modificador_cantidad span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+}
+
+
+.modificador input{
+    width: 100px;
+}
+.boton_modificar button{
+    border:none;
+    font-size: 20px;
+    border-radius:25px;
+    color: white;
+    width: 130px;
+    background: #00B5EE;
+}
+
+.quitar_total_o_individual{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible; */
+    position: fixed;
+    place-self: center;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 500px;
+    height: 150px;
+    column-gap: 20px;
+    background: white;
+    border-radius: 20px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+
+
+.comprobante{
+
+    display: none;
+    visibility: hidden;
+    /* display: block;
+    visibility: visible; */
+    position: fixed;
+    place-self: center;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 400px;
+    height: 150px;
+    column-gap: 20px;
+    background: white;
+    border-radius: 20px;
+    
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+
+
+
+
+
+
+.bienvenido_imprimir{
+    display: none;
+    visibility: hidden;
+    /* display: block;
+    visibility: visible; */
+   
+    position: fixed;
+    place-self: center;
+    width: 800px;
+    height:auto;
+    background:white;
+
+}
+.tituloImprimir{
+    text-align: center;
+    padding-top:10px;
+}
+.imprimirCliente{
+    display: grid;
+
+    width: 100%;
+    height: auto;
+   /*  grid-template-rows: 10% 20%  60%  10%; */
+    
+}
+
+.infoCliente{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-left: 20px;
+    text-align: start;
+    
+}
+.infoCliente span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:300;
+    font-size: 16px;
+
+}
+.infoCliente label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:500;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.comprasHechas{
+    display: flex;
+    width: 800px;
+    
+    
+}
+
+.tablas{
+    width: 100vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight:200;
+    font-size: 16px;
+    height:auto;
+
+}
+
+
+.totalImprimir{
+    display: grid;
+    justify-content: end;
+    padding-right: 30px;
+    width: 100%;
+    height: auto;  
+}
