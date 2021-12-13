@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Op } from "sequelize/dist";
+import { Op, where } from "sequelize/dist";
 import { Cliente } from "../../models/ventas/cliente";
 import { Direccion } from "../../models/ventas/direccion";
 import { Orden } from "../../models/ventas/orden";
@@ -274,7 +274,8 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
 
 export const historialOrden = async (req: Request, res: Response) => {
 
-    const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+    //const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+    const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
 
     let id_cliente:any = []
     let id_direccion:any = []
@@ -315,7 +316,25 @@ export const historialOrden = async (req: Request, res: Response) => {
 export const imptimirSoloVentas = async (req: Request, res: Response) => {
     const {id} = req.params;
 
-    const orden_detalle = await OrdenDetalle.findAll({ where:{ id_orden:id } });
+    const orden_detalle_2 = await OrdenDetalle.findAll({ where:{ id_orden:id } });
+
+    let id_productos:any = []
+
+    orden_detalle_2.map((e) => {
+        id_productos.push(e.id_producto)
+    })
+    const productos = await Producto.findAll({where:{ id:id_productos}, attributes:['id','tela']});
+
+    let orden_detalle:any = []
+    productos.map( (e, i) => {
+
+        orden_detalle_2.map( (p,m) => {
+            if(e.id == p.id_producto){
+                orden_detalle = [...orden_detalle, { orden_detalle: orden_detalle_2[m], productos:productos[i]}]
+            }
+        })
+
+    })
 
     res.json({
         ok: true,

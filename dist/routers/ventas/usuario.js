@@ -9,5 +9,7 @@ router.post('/', usuario_1.crearUsuario);
 router.put('/:id', usuario_1.editarUsuario);
 //ELIMINAR USUARIO
 router.delete('/:id', usuario_1.eliminarUsuario);
+//LOGIN USUARIO
+router.post('/login', usuario_1.login);
 exports.default = router;
 //# sourceMappingURL=usuario.js.map

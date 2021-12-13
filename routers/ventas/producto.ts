@@ -1,13 +1,26 @@
 import { Router } from "express";
-import { agregarMasStock, buscarLocal, buscarProducto, crearProducto, editarProducto, eliminarProducto, hitorialProductos, obtenerUnoProducto, quitarStock, soloLocales } from "../../controllers/ventas/producto";
+import { agregarMasStock, buscarLocal,
+         buscarProducto, crearProducto, 
+         editarProducto, eliminarProducto, 
+         hitorialProductos, obtenerUnoProducto, 
+         quitarStock, soloLocales } from "../../controllers/ventas/producto";
 
+import { check } from "express-validator";
+import { validarCampos } from "../../middlewares/validar-campo";
+import { validarJWT } from "../../middlewares/validar-JWT";
 
 const router = Router();
 
 
 
 //CREAR PRODUCTO
-router.post('/', crearProducto)
+router.post('/',[
+    validarJWT,
+    check('nombre', 'El nombre es obligatorio' ).not().isEmpty(),
+    check('cantidad', 'Coloque la cantidad' ).not().isEmpty(),
+    check('precio', 'Es obligatorio el precio' ).not().isEmpty(),
+    validarCampos,
+] ,crearProducto)
 
 
 //AGREGAR STOCK DE buscarProducto

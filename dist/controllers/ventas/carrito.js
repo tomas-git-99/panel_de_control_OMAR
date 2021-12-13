@@ -17,13 +17,14 @@ const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id_usuario, id_producto, cantidad } = req.body;
-        const dato = {
-            id_usuario,
-            id_producto,
-            cantidad
-        };
-        const carrito = new carrito_1.Carrito(dato);
+        // const {id_usuario, id_producto, cantidad, talle } = req.body;
+        // const dato:any = {
+        //     id_usuario,
+        //     id_producto,
+        //     cantidad, 
+        //     talle
+        // }
+        const carrito = new carrito_1.Carrito(req.body);
         yield carrito.save();
         res.json({
             ok: true,
@@ -152,15 +153,16 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
             carrito.map(p => {
                 if (e.id == p.id_producto) {
                     if (e.cantidad < p.cantidad || e.cantidad == 0) {
-                        productos_sin_stock.push(`el producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito${p.cantidad}`);
+                        productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
                     }
                 }
             });
         });
+        console.log(productos_sin_stock);
         if (productos_sin_stock.length > 0) {
             return res.json({
                 ok: false,
-                msg: "No ahi stock suficiente con los productos",
+                msg: "No ahi stock suficiente con los productos ...",
                 productos_sin_stock
             });
         }

@@ -183,7 +183,8 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.ordenParaImprimir = ordenParaImprimir;
 const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const orden = yield orden_1.Orden.findAll({ order: [['updatedAt', 'DESC']] });
+    //const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+    const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
     let id_cliente = [];
     let id_direccion = [];
     orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
@@ -212,7 +213,20 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.historialOrden = historialOrden;
 const imptimirSoloVentas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const orden_detalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+    const orden_detalle_2 = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+    let id_productos = [];
+    orden_detalle_2.map((e) => {
+        id_productos.push(e.id_producto);
+    });
+    const productos = yield producto_1.Producto.findAll({ where: { id: id_productos }, attributes: ['id', 'tela'] });
+    let orden_detalle = [];
+    productos.map((e, i) => {
+        orden_detalle_2.map((p, m) => {
+            if (e.id == p.id_producto) {
+                orden_detalle = [...orden_detalle, { orden_detalle: orden_detalle_2[m], productos: productos[i] }];
+            }
+        });
+    });
     res.json({
         ok: true,
         orden_detalle

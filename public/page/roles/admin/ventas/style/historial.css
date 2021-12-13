@@ -134,12 +134,14 @@
     height: auto;  
 }
 
-.comprasHechas table {
+/* .comprasHechas table {
     min-height: 600px;
     max-height: auto;
+} */
+
+.comprasHechas table {
+    text-align: center;
 }
-
-
 
 
 .cartel{

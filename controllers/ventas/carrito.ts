@@ -15,15 +15,16 @@ export const agregarCarrito = async (req: Request, res: Response) => {
 
     try {
         
-            const {id_usuario, id_producto, cantidad } = req.body;
+            // const {id_usuario, id_producto, cantidad, talle } = req.body;
         
         
-            const dato:any = {
-                id_usuario,
-                id_producto,
-                cantidad
-            }
-            const carrito = new Carrito(dato);
+            // const dato:any = {
+            //     id_usuario,
+            //     id_producto,
+            //     cantidad, 
+            //     talle
+            // }
+            const carrito = new Carrito(req.body);
         
             await carrito.save();
         
@@ -212,17 +213,19 @@ export const descontarElTotal= async(req: Request, res: Response) => {
             carrito.map( p => {
                 if(e.id == p.id_producto){
                     if(e.cantidad < p.cantidad || e.cantidad == 0){
-                        productos_sin_stock.push(`el producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito${p.cantidad}` );
+                        productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
                     }
                 }
             })
         });
 
+        console.log(productos_sin_stock);
+
 
         if(productos_sin_stock.length > 0){
             return res.json({
                 ok: false,
-                msg: "No ahi stock suficiente con los productos",
+                msg: "No ahi stock suficiente con los productos ...",
                 productos_sin_stock
             })
         }

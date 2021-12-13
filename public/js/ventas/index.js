@@ -33,8 +33,7 @@ const boton_ordenar_talle = document.querySelector(".boton_ordenar_talle");
 
 window.abrirVentana = (id) => {
 
-    previsualizar.style.opacity = 0;
-    ordenar_por_talle.style.opacity = 1;
+    volverAtras(previsualizar, ordenar_por_talle);
 
     let nuevoButtonID = `
     <button  type="button" class="btn btn-danger" id="${id}" onclick="salir(this.id)"">Terminar</button>
@@ -61,13 +60,17 @@ window.enviar_talle = (id) => {
 }
 
 window.actualizar_salir = () => {
-    previsualizar.style.opacity = 0;
+    previsualizar.style.display = "none";
+    previsualizar.style.visibility = "hidden";
+  
     historialGet();
 }
 
 window.salir = (id) => {
 
-    ordenar_por_talle.style.opacity = 0;
+    ordenar_por_talle.style.display = "none";
+    ordenar_por_talle.style.visibility = "hidden";
+
     previsualizar_producto(id);
 
 }
@@ -91,7 +94,9 @@ window.previsualizar_producto = (id) => {
     .catch(err => {
         algo_salio_mal(`Algo salio mal: ${ err.message }`)
     });
-    previsualizar.style.opacity = 1;
+    previsualizar.style.display = "grid";
+    previsualizar.style.visibility = "visible";
+ 
 }
 
 

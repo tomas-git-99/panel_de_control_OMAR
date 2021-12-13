@@ -1,9 +1,49 @@
 import { Request, Response } from "express";
 import { Usuario } from "../../models/ventas/usuario";
 import bcryptjs from 'bcryptjs';
+import { generarJWT } from "../../helpers/generar-JWT";
 
 
+export const login = async( req: Request, res: Response) => {
+     try {
+        const { dni_cuil, password } = req.body;
 
+        const usuario = await Usuario.findAll({where:{ dni_cuil:dni_cuil }});
+
+        if(!usuario){
+            return res.status(400).json ({
+                ok: false,
+                fallo: 1,
+                msg:'Usuario / Password no son correctos'
+            })
+        }
+
+        const validPassword =  bcryptjs.compareSync( password , usuario[0].password);
+
+
+        if (!validPassword) {
+            return res.status(400).json ( {
+                ok: false,
+                fallo: 3,
+                msg:'Usuario / Password no son correctos'
+            });
+        }
+
+        const token =  await generarJWT(usuario[0].id);
+
+        res.json({
+            ok:true,
+            usuario,
+            token
+        })
+
+     } catch (error) {
+        res.status(400).json({
+            ok:false,
+            msg:'hable con el administrador'
+        });
+     }
+}
 
 
 

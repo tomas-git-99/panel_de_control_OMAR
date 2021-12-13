@@ -63,9 +63,10 @@ export const actualizarProducto = async (req: Request, res: Response) => {
     })
 }
 
+
 export const obtenerProduccion = async (req: Request, res: Response) => {
 
-    const produccion_productos = await Produccion_producto.findAll();
+    const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']]});
 
     const taller = await Taller.findAll()
 

@@ -15,10 +15,11 @@ const ordenar_por_talle = document.querySelector(".ordenar_por_talle");
 
 
 window.entrar = () => {
-    volverAtras(pregunta_ordenar_por_talle, ordenar_por_talle)
+    volverAtras(pregunta_ordenar_por_talle, ordenar_por_talle);
 }
 window.salir = () => {
-    window.location = "/page/roles/admin/ventas/index.html"
+    localStorage.removeItem("id_producto");
+    window.location = "/page/roles/admin/ventas/index.html";
 
 }
 

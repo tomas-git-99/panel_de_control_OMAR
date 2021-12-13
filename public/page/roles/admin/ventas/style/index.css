@@ -27,7 +27,9 @@
 
 .previsualizar{
 
-    opacity: 0;
+    /* opacity: 0; */
+    display: none;
+    visibility: hidden;
 
     transition: 0.5 all;
     position: fixed;
@@ -136,7 +138,9 @@ input[type=number]::-webkit-inner-spin-button {
 
 
 .ordenar_por_talle{
-    opacity: 0;
+    
+    display: none;
+    visibility: hidden;
     position: fixed;
 
     place-self: center;

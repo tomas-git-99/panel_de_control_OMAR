@@ -112,10 +112,9 @@ export const imprimirDirecto = () => {
     <th scope="col">CANTIDAD</th>
     <th scope="col">PRECIO UD</th>
     <th scope="col">TOTAL</th>
-    
-    
     </tr>
     </thead>
+    
     <tbody class="imprimir_productos">
     
     </tbody>
@@ -224,6 +223,7 @@ const imprimirProducto = (res) => {
 export const imprimir_parami = (id) => {
     fecthNormalGET("GET",`orden/imprimir/parami/${id}`)
     .then(res => {
+        console.log(res);
             ticket_parami(res.orden_detalle);
             funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi");
         })
@@ -231,18 +231,18 @@ export const imprimir_parami = (id) => {
 
     
 const ticket_parami = (res) => {
-        
-        const imprimir_para_mi_table = document.querySelector(".imprimir_para_mi_table");
+    console.log(res)
+    const imprimir_para_mi_table = document.querySelector(".imprimir_para_mi_table");
     let resultado = "";
 
     res.map( e => {
         
         resultado += `
         <tr>
-        <th>${e.nombre_producto}</th>
-        <td>${e.tela}</td>
-        <td>${e.talle}</td>
-        <td>${e.cantidad}</td>
+        <th>${e.orden_detalle.nombre_producto}</th>
+        <td>${e.productos.tela == null || e.productos.tela == undefined ? "- -": e.productos.tela}</td>
+        <td>${e.orden_detalle.talle == null || e.orden_detalle.talle == undefined ? "- -" : e.orden_detalle.talle}</td>
+        <td>${e.orden_detalle.cantidad}</td>
         </tr>
         `
     })

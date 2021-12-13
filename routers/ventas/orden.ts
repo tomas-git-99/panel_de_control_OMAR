@@ -1,15 +1,23 @@
 import { Router } from "express";
 import { buscarOrden, buscarOrdenDNI, confirmarCompra, confirmarPedido, generarOrden, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
+import { validarCampos } from "../../middlewares/validar-campo";
+import { validarJWT } from "../../middlewares/validar-JWT";
 
 
 const router = Router();
 
 
 //GENERAR ORDEN 
-router.post('/:idCliente/:idUsuario/:idDireccion', generarOrden)
+router.post('/:idCliente/:idUsuario/:idDireccion',[
+    validarJWT,
+    validarCampos,
+], generarOrden)
 
 // GENERAR DETALLES DE COMPRA
-router.post('/detalles/:idOrden/:idProducto', ordenDetalles)
+router.post('/detalles/:idOrden/:idProducto',[
+    validarJWT,
+    validarCampos,
+], ordenDetalles)
 
 
 // GENERAR ORDEN SUBIENDO EL PDF A NUBE

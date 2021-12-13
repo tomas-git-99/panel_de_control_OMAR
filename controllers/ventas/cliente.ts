@@ -10,22 +10,16 @@ import { Producto } from "../../models/ventas/producto";
 export const crearCliente = async (req: Request, res: Response) => {
     try {
 
-        const { nombre, apellido, dni_cuil, tel_cel, direccion, cp, provincia, localidad} = req.body;
+        const { nombre, apellido, dni_cuil, tel_cel} = req.body;
 
 
 
 
         const datos:any = {
-
             nombre,
             apellido,
             dni_cuil,
             tel_cel,
-            direccion,
-            cp,
-            provincia,
-            localidad,
-
         }
 
 

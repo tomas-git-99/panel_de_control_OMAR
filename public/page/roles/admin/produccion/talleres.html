@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" type="text/css" href="/style/inicio.css">
     <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/index.css">
+    <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/taller.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -81,7 +84,20 @@
 
                        
         </div>
+
+        <div class="opciones_cambio_2" id="aca_va_el_ID">
+            <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir" onclick="salir_cambios()"/>
+            <h3>Cambiar ...</h3>
+            <select class="custom-select" id="seleccion_cambio" onchange="selecciconCambios(this)">
+ 
+              </select>
+              <div class="input_con_el_valor_2">
+
+              </div>
+        </div>
+
     </div>
 
+    <script src="/js/produccion/taller.js" type="module"></script>
 </body>
 </html>

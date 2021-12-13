@@ -13,16 +13,12 @@ exports.editarCliente = exports.buscarCliente = exports.crearCliente = void 0;
 const cliente_1 = require("../../models/ventas/cliente");
 const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, apellido, dni_cuil, tel_cel, direccion, cp, provincia, localidad } = req.body;
+        const { nombre, apellido, dni_cuil, tel_cel } = req.body;
         const datos = {
             nombre,
             apellido,
             dni_cuil,
             tel_cel,
-            direccion,
-            cp,
-            provincia,
-            localidad,
         };
         const cliente = new cliente_1.Cliente(datos);
         yield cliente.save();

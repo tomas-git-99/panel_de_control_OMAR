@@ -56,7 +56,7 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.actualizarProducto = actualizarProducto;
 const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll();
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ order: [['updatedAt', 'DESC']] });
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];
     produccion_productos.map((e, i) => {

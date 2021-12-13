@@ -62,9 +62,15 @@ formAgregar.addEventListener("submit", (event) => {
       const forData = {id_producto, id_usuario};
 
       for(let el of formAgregar.elements){
-          if(el.name.length > 0)
+          if(el.name.length > 0){
+            if(el.value.length > 0){
+
               forData[el.name] = el.value;    
-          } 
+            }
+          }
+             
+          }
+          
     //agregar a carrito para despues comprar con el metodo POST
     fecthNormalPOST_PUT("POST", "carrito", forData)
         .then( res => {
@@ -105,6 +111,7 @@ carrito.addEventListener("click", () => {
 
 
 const checkAgregar = document.getElementById("checkAgregar");
+const talle_unico = document.getElementById("talle_unico");
 const talleUnica = document.querySelector(".talleUnica");
 
 
@@ -119,6 +126,7 @@ checkAgregar.addEventListener("change", (e) => {
   }else{
     talleUnica.style.display = "none";
     talleUnica.style.visibility = "hidden";
+    talle_unico.value = "";
   }
 
 });

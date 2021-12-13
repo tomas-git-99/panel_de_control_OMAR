@@ -2,9 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const producto_1 = require("../../controllers/ventas/producto");
+const express_validator_1 = require("express-validator");
+const validar_campo_1 = require("../../middlewares/validar-campo");
+const validar_JWT_1 = require("../../middlewares/validar-JWT");
 const router = (0, express_1.Router)();
 //CREAR PRODUCTO
-router.post('/', producto_1.crearProducto);
+router.post('/', [
+    validar_JWT_1.validarJWT,
+    (0, express_validator_1.check)('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    (0, express_validator_1.check)('cantidad', 'Coloque la cantidad').not().isEmpty(),
+    (0, express_validator_1.check)('precio', 'Es obligatorio el precio').not().isEmpty(),
+    validar_campo_1.validarCampos,
+], producto_1.crearProducto);
 //AGREGAR STOCK DE buscarProducto
 router.put('/agregar/:id', producto_1.agregarMasStock);
 //QUITAR STOCK DE PRODCUTO

@@ -45,6 +45,7 @@ const leerCarrito = (res) => {
         <tr>
           <td>${e.productos.nombre}</td>
           <td> ${e.carritos.cantidad}</td>
+          <td> ${e.carritos.talle == null || e.carritos.talle == undefined ? "- -" : e.carritos.talle}</td>
           <td>$${e.productos.precio}</td>
           <td>$${e.carritos.cantidad * e.productos.precio}</td>
           <td>
@@ -86,9 +87,9 @@ const btnConfirmar = document.querySelector(".confirmar");
 btnConfirmar.addEventListener("click", (e) => {
     e.preventDefault();
 
-    const confirmarCompra = localStorage.getItem("carrito");
+    const id_orden = localStorage.getItem("id_orden");
 
-    if(confirmarCompra == 1 ){
+    if(id_orden == null || id_orden == undefined){
         volverAtras(bienvenido, cliente)
 
     }else{
@@ -121,8 +122,9 @@ const retrocederBuscar = document.querySelector(".retrocederBuscar");
 //CLIENTE NUEVO
 clienteNuevo.addEventListener("click", (e) =>{
     e.preventDefault();
-    
-    volverAtras(cliente, cartelCliente)
+    volverAtras(cliente, cartelCliente);
+    seleccionDirec.style.grid = "none";
+    seleccionDirec.style.visibility = "hidden";
 
 })
 
@@ -287,7 +289,7 @@ const descontar_talle_id = document.getElementById("descontar_talle_id")
 
 
 
-formCliente.addEventListener("submit", (e) =>{
+formCliente.addEventListener("submit", async(e) =>{
 
     e.preventDefault();
 
@@ -307,20 +309,30 @@ formCliente.addEventListener("submit", (e) =>{
             }
 
         }
-
     }
-    
+
+
+ 
 
     //const id_cliente = localStorage.getItem("id_cliente");
-    const id_cliente = botonCliente.id;
+    let id_cliente = botonCliente.id;
     const id_direccion = aca_id_direccion.id;
     const id_usuario = localStorage.getItem("id");
+    
+    if(id_cliente == null || id_cliente == undefined || id_cliente == "id_del_cliente"){
 
+        let id = await fecthNormalPOST_PUT("POST", "cliente", forData);
+    
+        id_cliente = id.cliente.id;
+    }
+
+
+    
     //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
     if(id_direccion == 0 || id_direccion == "0" || id_direccion == ""){
-
+        
         fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
-            .then( res => {
+            .then( (res) => {
                 generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
             })
             .catch(err =>{
@@ -370,6 +382,7 @@ window.descontar_total = (id) => {
 
     const id_usuario = localStorage.getItem("id");
     descontarEltotal(id_usuario, id);
+    console.log(id)
 
 }
 
@@ -388,14 +401,16 @@ const descontarEltotal = (id_usuario, id_orden) => {
 
                 aca_id_orden.id= id_orden;
                 aca_id_orden_para_mi.id = id_orden;
-                localStorage.setItem('id_orden', id_orden);
+                localStorage.removeItem("id_orden");
+
+                //localStorage.setItem('id_orden', id_orden);
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
                 advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
                 //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage
-                localStorage.removeItem("carrito");
-                localStorage.getItem("carrito", 0);
+                //localStorage.removeItem("carrito");
+                //localStorage.getItem("carrito", 0);
                 btn_confirmar.id = id_orden;
                 localStorage.setItem('id_orden', id_orden);
             }

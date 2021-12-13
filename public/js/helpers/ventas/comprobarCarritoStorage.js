@@ -1,33 +1,36 @@
 export const comprobarCarritoStorage = () => {
 
-    const carrito = localStorage.getItem('carrito');
+    // const carrito = localStorage.getItem('carrito');
     
-    if(carrito == 1){
-        return true;
-    }else if(carrito == null || undefined){
-        localStorage.setItem("carrito", 1);
-        return false;
-    }else if(carrito == 0){
-        console.log(carrito);
+    // if(carrito == 1){
+    //     return true;
+    // }else if(carrito == null || undefined){
+    //     localStorage.setItem("carrito", 1);
+    //     return false;
+    // }else if(carrito == 0){
+      
         
-        const idOrden = localStorage.getItem('id_orden');
-        const numero = parseInt(idOrden);
-
-        if(numero > 0 ){
-            preguntarSiConCliente();
-            return true;
-        }else{
-        localStorage.setItem("carrito", 1);
-        return false;
-        }
-    }
+      const idOrden = localStorage.getItem('id_orden');
+      const numero = parseInt(idOrden);
+      if(numero > 0 ){
+          preguntarSiConCliente();
+          return true;
+      }
+      
+      // else{
+      // localStorage.setItem("carrito", 1);
+      // return false;
+      // }
+      
+  //}
 }
 
 
 export const preguntarSiConCliente = () => {
 
     const dato = JSON.parse(localStorage.getItem("dataCliente"));
-     
+    const btn_confirmar = document.getElementById("btn_confirmar")
+
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
@@ -46,6 +49,7 @@ export const preguntarSiConCliente = () => {
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
+          btn_confirmar.id = localStorage.getItem('id_orden');
           swalWithBootstrapButtons.fire(
             'Continuando!',
             `Con: ${dato[0].nombre} ${dato[0].apellido}`,
@@ -55,6 +59,7 @@ export const preguntarSiConCliente = () => {
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
+
           localStorage.removeItem("id_orden");
           localStorage.removeItem("dataCliente");
           localStorage.removeItem("dataDireccion");
