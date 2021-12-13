@@ -33,8 +33,8 @@ form.addEventListener('submit', (e) => {
 
     fecthNormalPOST_PUT("POST", "usuario/login", forData)
         .then((res) => {
-            console.log(res)
             if(res.ok == true){
+            localStorage.setItem("x-token", res.token)
             PERMISOS[res.usuario[0].rol]
                 ? PERMISOS[res.usuario[0].rol]()
                 : advertencia("Este usuario no tiene ROL especifico")

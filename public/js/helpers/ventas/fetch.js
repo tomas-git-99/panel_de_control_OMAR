@@ -36,13 +36,13 @@ export const fecthNormalGET_QUERY = (metodo, url_determinado, query, valor) => {
 
 }
 
-
+const token = localStorage.getItem('x-token')
 export const fecthNormalPOST_PUT = (metodo, url_determinado, valor) => {
 
     return fetch(url + url_determinado, { 
         method: metodo,
         body: JSON.stringify(valor),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'x-token':token},
     })
     .then(response => response.json())
     .then(data => {

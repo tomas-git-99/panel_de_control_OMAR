@@ -19,7 +19,9 @@ const generar_JWT_1 = require("../../helpers/generar-JWT");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { dni_cuil, password } = req.body;
+        console.log(req.body);
         const usuario = yield usuario_1.Usuario.findAll({ where: { dni_cuil: dni_cuil } });
+        console.log(usuario[0].password);
         if (!usuario) {
             return res.json({
                 ok: false,
@@ -35,7 +37,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: 'Usuario / Password no son correctos'
             });
         }
-        const token = yield (0, generar_JWT_1.generarJWT)(usuario[0].id);
+        const token = yield generar_JWT_1.generarJWT(usuario[0].id);
         res.json({
             ok: true,
             usuario,
@@ -43,9 +45,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
+        console.log(error);
         res.status(400).json({
             ok: false,
-            msg: 'hable con el administrador'
+            msg: 'hable con el administrador',
+            error: error
         });
     }
 });

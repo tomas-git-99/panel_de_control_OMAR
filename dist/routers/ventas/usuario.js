@@ -1,11 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const express_validator_1 = require("express-validator");
 const usuario_1 = require("../../controllers/ventas/usuario");
+const validar_campo_1 = require("../../middlewares/validar-campo");
 const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = (0, express_1.Router)();
+const router = express_1.Router();
 //CREAR USUARIO NUEVO
-router.post('/', usuario_1.crearUsuario);
+router.post('/', [
+    validar_JWT_1.validarJWT,
+    express_validator_1.check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    express_validator_1.check('dni_cuil', "El dni o cuil es obligatorio").not().isEmpty(),
+    express_validator_1.check('password', "La contraseña es obligatorio").not().isEmpty(),
+    express_validator_1.check('rol', "El rol es obligatorio").not().isEmpty(),
+    validar_campo_1.validarCampos
+], usuario_1.crearUsuario);
 //EDITAR USUARIO NUEVO
 router.put('/:id', usuario_1.editarUsuario);
 //ELIMINAR USUARIO

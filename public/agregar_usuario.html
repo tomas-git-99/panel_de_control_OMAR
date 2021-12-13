@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/inicio.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>OMAR</title>
+</head>
+<body>
+    <div class="contenido">
+
+        
+        <div class="menu">
+            
+            <div class="usuario">
+                <div class="icono">
+                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                </div>
+                <h5>NOMBRE</h5>
+            </div>
+
+            <div class="ulMenu">
+
+                <div class="ventas">
+                    <h5><a href="/page/roles/admin/ventas/index.html">VENTAS</a> </h5>
+                    <ul>
+                        <li><a href="/page/roles/admin/ventas/agregar_ventas.html">Agregar</a> </li>
+                        <li><a href="/page/roles/admin/ventas/compra.html">Comprar</a> </li>
+                        <li><a href="/page/roles/admin/ventas/historial.html">Historial</a> </li>
+                    </ul>
+                </div>
+    
+                <div class="produccion">
+                    <h5>  <a href="/page/roles/admin/produccion/index.html">PRODUCCION</a> </h5>
+                    <ul>
+                        <li>  <a href="/page/roles/admin/produccion/agregar_produccion.html">Agregar</a> </li>
+                        <li> <a href="/page/roles/admin/produccion/talleres.html">Talleres</a> </li>
+                </div>
+            </div>
+
+
+            <div class="crear_nuevo_usuario">
+                <h5> <a href="/agregar_usuario.html">Crear Usuario</a></h5>
+            </div>
+            
+        </div>
+        
+        <div class="centro">
+
+            <div class="form_usuario">
+
+                <div class="cartel_form_usuario">
+
+                    <div class="titulo_usuario">
+                        <h1>Usuario</h1>
+                        <hr width="100%" >
+                    </div>
+
+                    <form action="" class="form_usuario_agregar" id="agregar_usuario_db">
+                        <div class="nombre">
+                            <span>Nombre</span>
+                            <input type="text"class="form-control" name="nombre">
+                        </div>
+                        <div class="email">
+                            <span>Email</span>
+                            <input type="text"class="form-control" name="email">
+                        </div>
+                        <div class="dni">
+                            <span>DNI O CUIL</span>
+                            <input type="text"class="form-control" name="dni_cuil">
+                        </div>
+                        <div class="password">
+                            <span>Contraseña</span>
+                            <input type="text"class="form-control" name="password">
+                        </div>
+                        <select class="custom-select" onchange="rol(this)">
+                            <option value="0" selected>AGREGAR UN ROL</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="VENTAS">VENTAS</option>
+                            <option value="PRODUCCION">PRODUCCION</option>
+                          </select>
+
+                        <div class="boton_usuario" type="submit" >
+                            <button class="btn btn-primary">GUARDAR</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/agregar.js" type="module" ></script>
+</body>
+</html>

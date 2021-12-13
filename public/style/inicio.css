@@ -17,6 +17,7 @@ li{
 }
 .usuario{
     place-self: center;
+    text-align: center;
 }
 .menu{
     background: #E5E6E4;
@@ -106,10 +107,37 @@ li{
 .form_usuario{
     position: fixed;
     place-self: center;
+    display: grid;
+    justify-content: center;
+    align-items: center;
     background: white;
-    width: 400px;
-    height: 400px
+    width: 350px;
+    height: 500px;
+    border-radius: 15px;
+    text-align: center;
+
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-.cartel_form_taller{
-    width: 300px;
+.form_usuario_agregar{
+    
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    row-gap: 13px;
+}
+
+.titulo_usuario{
+    text-align: center;
+}
+.form_usuario_agregar input {
+ 
+    width: 190px;
+}
+.boton_usuario{
+    place-self: center;
+}
+
+.crear_nuevo_usuario a{
+    text-decoration: none;
+    color: #3d3d3d;
 }
