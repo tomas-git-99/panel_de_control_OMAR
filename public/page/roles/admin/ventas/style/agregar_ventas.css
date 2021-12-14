@@ -31,10 +31,10 @@ form{
     grid-template-columns:1fr 1fr;
     row-gap: 30px;
     column-gap: 20px;
+    
 }
 
 .formProducto input{
-
     width: 200px;
     height: 30px;
 
@@ -103,12 +103,10 @@ input[type=checkbox] {
     display: none;
     visibility: hidden;
 /*     display: block;
-    visibility: visible;   */   
-    
+    visibility: visible;  */    
+    place-self: center;
     position: fixed;
-    left: 46%;
-    top: 40%;
-
+  
 
 
     background: rgba( 255, 255, 255, 0.25 );
@@ -138,12 +136,12 @@ input[type=checkbox] {
 
     display: none;
     visibility: hidden; 
-     /* display: block;
-    visibility: visible;     */
+  /*    display: block;
+    visibility: visible;   */  
 
+    place-self: center;
     position: fixed;
-    left: 47%;
-    top: 40%;
+
 
     background: rgba( 255, 255, 255, 0.25 );
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
@@ -180,4 +178,29 @@ input[type=checkbox] {
     justify-self: center;
     align-content: center;
     border: 1px solid red;
+}
+  
+@media (max-width: 767px){
+    .bienvenido{
+        width: 100%;
+    }
+    .cartel{
+       
+        text-align: center;
+        width: 100%;
+        height: 100%;
+    }
+    .formProducto{
+
+        width: 370px;
+    }
+    .formProducto input{
+        width: 170px;
+    }
+    
+    form{
+        grid-template-columns: 1fr;
+        place-self: center;
+        column-gap: 0px;
+    }
 }

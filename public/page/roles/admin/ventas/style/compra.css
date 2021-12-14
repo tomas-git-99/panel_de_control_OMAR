@@ -26,12 +26,13 @@
 .cantidad{
 
     /* con opacidad cambia la vista para agregar los productos en stock */
-    opacity: 0;
+    display: none;
+    visibility: hidden;
     transition: .3s all;
 
     position: fixed;
-    top: 40%;
-    left: 42%;
+
+    place-self: center;
     width: 280PX;
     height: auto;
 
@@ -129,4 +130,10 @@ form{
 
 .carrito{
     cursor: pointer;
+}
+
+@media (max-width: 767px){
+    .carrito{
+        left: 10px;
+    }
 }

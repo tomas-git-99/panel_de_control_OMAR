@@ -2,6 +2,7 @@
     
     width: 700px;
     height: 800px;
+    
 }
 
 
@@ -54,8 +55,8 @@
     display: none;
     visibility: hidden;
 /*     display: block;
-    visibility: visible;   */  
-
+    visibility: visible;  */   
+    place-self: center;
     position: fixed;
     display: grid;
     justify-content: center;
@@ -63,7 +64,7 @@
     width: 100%;
     height:100%;
    
-    left: 80px;
+    
 }
 
 .panel{
@@ -100,7 +101,7 @@
     display: none;
     visibility: hidden;
 /*     display: grid;
-    visibility: visible;   */  
+    visibility: visible;    */ 
     display: flex;
     flex-direction: column;
     justify-items: center;
@@ -161,11 +162,13 @@
 .cartelCliente{
     display: none;
     visibility: hidden;
-/*      display: grid;
-    visibility: visible;   */
+
+/*     display: grid;
+    visibility: visible;  */ 
     background: white;
     position: fixed;
-    display: grid;
+
+    place-self: center;
     justify-content: center;
     align-content: center;
 
@@ -175,8 +178,7 @@
     font-family: 'Poppins', sans-serif;
     font-weight:400; 
 
-    left: 40%;
-    top: 12%;
+    
 
     border-radius: 10px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
@@ -281,14 +283,16 @@
     display: none;
     visibility: hidden;
 /*      display: grid;
-    visibility: visible;   */
-    display:grid;
+    visibility: visible;  */ 
+
+    place-self: center;
+
     position: fixed;
     justify-content: center;
     align-content: center;
     width: 100vw;
     height: 100vh;
-    padding-right: 200px;
+  
 
 }
 
@@ -486,4 +490,51 @@
     padding-right: 30px;
     width: 100%;
     height: auto;  
+}
+
+
+@media (max-width: 767px){
+
+    .bienvenido{
+        width: 360px;
+        height: 900px;
+    }
+    .cartel{
+        width: 350px;
+        height: 750px;
+       
+    }
+
+    .resumen{
+        grid-template-columns: 1fr;
+    }
+    .buscadorCli table{
+        width:350px
+    }
+    .cartelCliente{
+        width: 370px;
+        overflow-y: scroll;
+    }
+    .cartelCliente input{
+        width: 170px;
+    }
+    .clientInformacionSOLO{
+        width: 350px;
+        place-self: center;
+        row-gap: 10px;
+    }
+    .direccionDeCliente{
+        width: 350px;
+        place-self: center;
+        row-gap: 10px;
+    }
+    .tranporteYfecha{
+        width: 350px;
+        place-self: center;
+        row-gap: 10px;
+    }
+    .formProducto{
+     
+        place-self: center;
+    }
 }

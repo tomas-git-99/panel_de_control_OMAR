@@ -148,13 +148,17 @@ export const quitarStock = async (req: Request, res: Response) => {
 
 
 export const hitorialProductos = async (req: Request, res: Response) => {
+    try {
+        
+        const productos = await Producto.findAll({order: [['updatedAt', 'DESC']]});
 
-    const productos = await Producto.findAll({order: [['updatedAt', 'DESC']]});
-
-    res.json({
-        ok: true,
-        productos
-    })
+        res.json({
+            ok: true,
+            productos
+        })
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const obtenerUnoProducto = async (req: Request, res: Response, next: NextFunction) => {

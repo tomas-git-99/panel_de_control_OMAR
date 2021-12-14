@@ -22,10 +22,13 @@
 <body>
     <div class="contenido">
 
+        <div class="hamburger" onclick="style_menu()">
+            <img src="/img/menu.png" alt="">
+        </div>
         
         <div class="menu">
             <div class="usuario">
-                <div class="icono">
+                <div class="icono" onclick="style_menu_salir()">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
                 </div>
                 <h5>NOMBRE</h5>
@@ -108,44 +111,46 @@
                     </div>
                 </div>
             </div>
+            
+                    <div class="cantidad">
+            
+                        <div class="pregunta">
+            
+                            <div class="nombreDeProducto">
+                                <img src="/img/close.svg" alt=""  width="20px" class="titleX">
+                                <h4>AGREGAR ...</h4>
+                         
+                            </div>
+            
+                            <form action="" class="formAgregar">
+            
+                                <div class="agregar">
+                                    <span>Cantidad</span>
+                                    <input type="number" class="form-control" name="cantidad">
+                                </div>
+            
+                                <div class="checkAgegar">
+                                    <span><input type="checkbox" id="checkAgregar"> Agregar por talle</span>
+                                    
+                                </div>
+            
+                                <div class="agregar talleUnica">
+                                    <span>Talle</span>
+                                    <input type="text" class="form-control" name="talle" id="talle_unico">
+                                </div>
+            
+                                <div class="boton2">
+                                    <button>Agregar</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
 
         </div>
 
         
 
-
-        <div class="cantidad">
-            <div class="pregunta">
-
-                <div class="nombreDeProducto">
-                    <img src="/img/close.svg" alt=""  width="20px" class="titleX">
-                    <h4>AGREGAR ...</h4>
-             
-                </div>
-
-                <form action="" class="formAgregar">
-
-                    <div class="agregar">
-                        <span>Cantidad</span>
-                        <input type="number" class="form-control" name="cantidad">
-                    </div>
-
-                    <div class="checkAgegar">
-                        <span><input type="checkbox" id="checkAgregar"> Agregar por talle</span>
-                        
-                    </div>
-
-                    <div class="agregar talleUnica">
-                        <span>Talle</span>
-                        <input type="text" class="form-control" name="talle" id="talle_unico">
-                    </div>
-
-                    <div class="boton2">
-                        <button>Agregar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
     <script src="/js/ventas/compra.js" type="module" ></script>
 

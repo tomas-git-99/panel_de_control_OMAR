@@ -15,8 +15,9 @@ fecthNormalGET("GET", "producto")
 //FIN ARGAR HISTORIAL DE LA DB
 
 window.boton_agregar = (event) => {
-  cantidad.style.opacity = 1;
-
+ /*  cantidad.style.opacity = 1; */
+ cantidad.style.display = "grid";
+ cantidad.style.visibility = "visible";
   localStorage.setItem("id_producto", event);
 }
 
@@ -28,14 +29,13 @@ const leerHistorial = (res) => {
   res.map( e => {
       historial += `
       <tr>
-        <th scope="row">${e.id}</th>
-
-        <td>${e.nombre}</td>
-        <td>${e.cantidad}</td>
-        <td>1,2,3,4,5</td>
-        <td>${e.tela}</td>
-        <td>${e.local}</td>
-        <td>$${e.precio}</td>
+        <td data-label="ID">${e.id}</td>
+        <td data-label="NOMBRE">${e.nombre}</td>
+        <td data-label="STOCK">${e.cantidad}</td>
+        <td data-label="TALLES">1,2,3,4,5</td>
+        <td data-label="TELA">${e.tela}</td>
+        <td data-label="LOCAL">${e.local}</td>
+        <td data-label="PRECIO">$${e.precio}</td>
         <td>
         <div class="boton preview">
             <button class="eliminar" id="${e.id}" onclick="boton_agregar(this.id)" >
@@ -75,7 +75,6 @@ formAgregar.addEventListener("submit", (event) => {
     fecthNormalPOST_PUT("POST", "carrito", forData)
         .then( res => {
           if(res.ok){
-            cantidad.style.opacity = 0;
             localStorage.removeItem("id_producto");
             for(let el of formAgregar.elements){
               el.value = "";
@@ -160,7 +159,9 @@ const titleX = document.querySelector(".titleX");
 titleX.addEventListener("click", (e) => {
   e.preventDefault();
 
-  cantidad.style.opacity = 0;
+
+  cantidad.style.display = "none";
+  cantidad.style.visibility = "hidden";
 
 })
 
@@ -198,4 +199,18 @@ window.cambioDeLocal = (dato) => {
       .then((response) => {
         leerHistorial(response.locales);
       })
+}
+
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
 }

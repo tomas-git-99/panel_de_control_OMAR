@@ -10,7 +10,7 @@ const url = ( window.location.hostname.includes('localhost'))
 
 let token = localStorage.getItem('x-token');
       
-verificarToken(token);
+//verificarToken(token);
 
 const historialGet = () => {
 
@@ -22,10 +22,10 @@ const historialGet = () => {
     .then(res => {
         leerHistorial(res.productos)
     })
-    .catch(err => {
+ /*    .catch(err => {
         console.error(err)
   
-    })
+    }) */
 }
 
 const prueba = document.querySelector(".prueba")
@@ -110,14 +110,14 @@ const leerHistorial = (res) => {
         historial += `
    
         <tr>
-          <th scope="row">${e.id}</th>
+          <td data-label="ID">${e.id}</td>
 
-          <td>${e.nombre}</td>
-          <td>${e.cantidad}</td>
-          <td>${e.talles == null? "- -" : e.talles}</td>
-          <td>${e.tela}</td>
-          <td>${e.local}</td>
-          <td>$${e.precio}</td>
+          <td data-label="NOMBRE">${e.nombre}</td>
+          <td data-label="STOCK">${e.cantidad}</td>
+          <td data-label="TALLES">${e.talles == null? "- -" : e.talles}</td>
+          <td data-label="TELA">${e.tela}</td>
+          <td data-label="LOCAL">${e.local}</td>
+          <td data-label="PRECIO">$${e.precio}</td>
           <td>
             <img id="${e.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="previsualizar_producto(this.id)"/>
           </td>
@@ -372,4 +372,17 @@ const cambiar_stock_talle = (id, suma_resta) => {
         .catch(err => {
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
+}
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
 }

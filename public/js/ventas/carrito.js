@@ -43,17 +43,18 @@ const leerCarrito = (res) => {
         historial += `
     
         <tr>
-          <td>${e.productos.nombre}</td>
-          <td> ${e.carritos.cantidad}</td>
-          <td> ${e.carritos.talle == null || e.carritos.talle == undefined ? "- -" : e.carritos.talle}</td>
-          <td>$${e.productos.precio}</td>
-          <td>$${e.carritos.cantidad * e.productos.precio}</td>
-          <td>
+          <td data-label="NOMBRE" >${e.productos.nombre}</td>
+          <td data-label="CANTIDAD" > ${e.carritos.cantidad}</td>
+          <td data-label="TALLE" > ${e.carritos.talle == null || e.carritos.talle == undefined ? "- -" : e.carritos.talle}</td>
+          <td data-label="PRECIO UD" >$${e.productos.precio}</td>
+          <td data-label="TOTAL" >$${e.carritos.cantidad * e.productos.precio}</td>
+          <td data-label="Ajustes" >
           <div class="boton rueda" id="${e.carritos.id}" onclick="configurar(this.id)">
           <img src="/img/rueda.svg" alt="" width="23px">
           </div>
           </td>
-          <td>
+          
+          <td data-label="Eliminar" >
           <div class="boton rueda" id="${e.carritos.id}" onclick="eliminar_producto(this)">
           <img src="/img/cruz.svg" alt="" width="23px">
            </div>
@@ -197,10 +198,10 @@ const leerHistorial = (res) => {
         historial += `
    
         <tr>
-          <td>${e.nombre}</td>
-          <td>${e.apellido}</td>
-          <td>${e.dni_cuil}</td>
-          <td>
+          <td data-label="NOMBRE">${e.nombre}</td>
+          <td data-label="APELLIDO">${e.apellido}</td>
+          <td data-label="DNI O CUIL">${e.dni_cuil}</td>
+          <td data-label="AGREGAR">
           <div class="preview">
               <button id="${e.id}" onclick="mandarID(this.id)" >
                   Agregar

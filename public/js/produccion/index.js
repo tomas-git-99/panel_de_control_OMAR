@@ -7,7 +7,7 @@ import { verificarToken } from "../helpers/para_todos/permisos.js";
 
 let table_produccion = document.querySelector('.table_produccion');
 const token = localStorage.getItem('x-token');
-verificarToken(token);
+//verificarToken(token);
 
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
@@ -45,14 +45,14 @@ const imprimirTable = (e, color) => {
   
     return `
     <tr class="${color}">
-    <th scope="row">${e.produccion.id_corte}</th>
-    <td>${e.produccion.nombre}</td>
-    <td>${e.produccion.tela}</td>
-    <td>${e.produccion.peso_promedio} Kg</td>
-    <td>${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
-    <td>${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
-    <td>${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
-    <td style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
+    <td data-label="ID">${e.produccion.id_corte}</td>
+    <td data-label="NOMBRE">${e.produccion.nombre}</td>
+    <td data-label="TELA">${e.produccion.tela}</td>
+    <td data-label="PESO PROMEDIO">${e.produccion.peso_promedio} Kg</td>
+    <td data-label="TALLER">${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
+    <td data-label="FECHA DE SALIDA">${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
+    <td data-label="FECHA DE ENTRA">${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
+    <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
     <td>
     <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 

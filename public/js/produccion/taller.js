@@ -25,9 +25,9 @@ const imprimir = (res) => {
         resultado += `
         <tr>
     
-        <td>${e.nombre_completo}</td>
-        <td>${e.telefono}</td>
-        <td>${e.direccion}</td>
+        <td data-label="NOMBRE">${e.nombre_completo}</td>
+        <td data-label="TELEFONO">${e.telefono}</td>
+        <td data-label="DIRECCION">${e.direccion}</td>
         <td>
         <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
         <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 

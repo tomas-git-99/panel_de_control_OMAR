@@ -1,9 +1,9 @@
 
 .bienvenido_form{
-    display: none;
-    visibility: hidden;
-    /* display: grid;
-    visibility: visible; */
+ /*    display: none;
+    visibility: hidden; */
+    display: grid;
+    visibility: visible;
     align-items:center;
     text-align: center;
  
@@ -80,6 +80,8 @@
 }
 
 .opciones{
+    display: none;
+    visibility: hidden; 
     position: fixed;
     place-self: center;
     width: auto;
@@ -166,3 +168,41 @@
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
+
+
+  @media (max-width: 767px){
+    .opciones{
+        grid-template-columns: 1fr;
+    }
+
+    .bienvenido_form{
+        width: 380px;
+    }
+    .cartel_form{
+        width: 380px;
+    }
+    .cartel_form form {
+
+        column-gap: 0px;
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+                
+        width: 380px;
+    
+        justify-items: center;
+    }
+
+
+    .titulo_talleres{
+        grid-column: 1/ 3;
+    
+    }
+    .boton{
+        grid-column: 1/ 3;
+    
+    }
+    .cartel_form input{
+        width: 150px;
+        height: 25px
+    }
+}
