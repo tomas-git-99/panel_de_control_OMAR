@@ -1,0 +1,168 @@
+
+.bienvenido_form{
+    display: none;
+    visibility: hidden;
+    /* display: grid;
+    visibility: visible; */
+    align-items:center;
+    text-align: center;
+ 
+    width: 600px;
+    height: 700px;
+    font-size:25px;
+
+    border-radius: 10px;
+    background:white;
+    color: #3d3d3d;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:500; 
+   
+}
+
+.cartel_form{
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    width: 600px;
+    height: 700px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+
+    font-size: 18px;
+
+
+}
+.taller{
+    display:grid;
+    justify-content: center;
+    align-items: end;
+}
+.taller select {
+    width: 170px;
+}
+.cartel_form form{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    grid-template-columns:1fr 1fr 1fr; 
+    row-gap: 15px;
+    column-gap: 20px;
+}
+
+
+.titulo_talleres{
+    grid-column: 1/ 4;
+
+}
+
+.cartel_form input{
+    width: 170px;
+    height: 30px
+}
+.boton{
+    grid-column: 1/ 4;
+
+}
+.ulMenu a{
+    text-decoration: none;
+    color: #3d3d3d;
+}
+
+.ulMenu li{
+    list-style:none;
+    width: 100%;
+}
+
+.opciones{
+    position: fixed;
+    place-self: center;
+    width: auto;
+    display: grid;
+
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 60px;
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:500; 
+}
+
+.agregar_producto{
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    height: 200px;
+    width: 400px;
+    text-align: center;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;    border-radius: 10px;
+    cursor: pointer;
+}
+
+.agregar_taller{
+    border-radius: 10px;;
+    cursor: pointer;
+
+    background: white;
+    height: 200px;
+    text-align: center;
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;}
+
+
+
+.form_taller{
+    display: none;
+    visibility: hidden;
+    /* display: block;
+    visibility: visible; */
+    position: fixed;
+    place-self: center;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.cartel_form_taller{
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    background: white;
+    height: 400px;
+    width: 300px;
+    
+}
+
+.cartel_form_taller form{
+    display: grid;
+
+    row-gap:15px;
+
+}
+.boton_taller{
+
+    display: grid;
+    justify-content: center;
+
+}
+.boton_taller button{
+    width: 100px;
+}
+
+
+
+
+
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }

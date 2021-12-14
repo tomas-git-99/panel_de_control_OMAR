@@ -2,11 +2,15 @@ import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 import { salio_todo_bien, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
-
+import { verificarToken } from "../helpers/para_todos/permisos.js";
 
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : '';
+
+let token = localStorage.getItem('x-token');
+      
+verificarToken(token);
 
 const historialGet = () => {
 
@@ -110,7 +114,7 @@ const leerHistorial = (res) => {
 
           <td>${e.nombre}</td>
           <td>${e.cantidad}</td>
-          <td>1,2,3,4,5</td>
+          <td>${e.talles == null? "- -" : e.talles}</td>
           <td>${e.tela}</td>
           <td>${e.local}</td>
           <td>$${e.precio}</td>

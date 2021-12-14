@@ -9,24 +9,7 @@ import { Talle } from "../../models/ventas/talles";
 export const crearProducto = async (req: Request, res: Response) => {
     try {
 
-        const { nombre, cantidad, local, tela, precio} = req.body;
-
-
-
-
-        const datos:any = {
-
-            nombre,
-            cantidad,
-            local,
-            tela,
-            precio
-
-        }
-
-
-
-        const producto = new Producto(datos);
+        const producto = new Producto(req.body);
         await producto.save();
 
 

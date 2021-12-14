@@ -29,13 +29,10 @@ Producto.init({
     },
     precio: {
         type: sequelize_1.DataTypes.NUMBER
-    } /* ,
-    talles:{
-        type:DataTypes.NUMBER
     },
-    talles_unidad:{
-        type:DataTypes.NUMBER
-    } */
+    talles: {
+        type: sequelize_1.DataTypes.STRING
+    },
 }, {
     sequelize: conectarDB_1.default,
     tableName: "producto"

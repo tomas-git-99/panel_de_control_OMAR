@@ -1,11 +1,13 @@
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
+import { verificarToken } from "../helpers/para_todos/permisos.js";
 
 
 
 let table_produccion = document.querySelector('.table_produccion');
-
+const token = localStorage.getItem('x-token');
+verificarToken(token);
 
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
@@ -14,7 +16,7 @@ fecthNormalGET("GET", "produccion/producto_produccion")
             colorearTable(res.produccion);
         }
     })
-
+    
 const colorearTable = (res) => {
 
     let resultado = ""

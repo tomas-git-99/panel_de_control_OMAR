@@ -19,7 +19,7 @@ window.entrar = () => {
 }
 window.salir = () => {
     localStorage.removeItem("id_producto");
-    window.location = "/page/roles/admin/ventas/index.html";
+    window.location = "index.html";
 
 }
 

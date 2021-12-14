@@ -15,15 +15,7 @@ const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, cantidad, local, tela, precio } = req.body;
-        const datos = {
-            nombre,
-            cantidad,
-            local,
-            tela,
-            precio
-        };
-        const producto = new producto_1.Producto(datos);
+        const producto = new producto_1.Producto(req.body);
         yield producto.save();
         res.json({
             ok: true,

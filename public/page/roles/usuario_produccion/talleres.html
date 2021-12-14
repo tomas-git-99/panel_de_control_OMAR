@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="/style/inicio.css">
-    <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/index.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css" href="/style/inicio.css">
+    <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/index.css">
+    <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/taller.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -29,6 +30,8 @@
             </div>
 
             <div class="ulMenu">
+
+   
     
                 <div class="produccion">
                     <h5>  <a href="./index.html">PRODUCCION</a> </h5>
@@ -39,14 +42,15 @@
                 </div>
             </div>
 
- 
+
+            
         </div>
         
         
     <div class="centro">
 
         <div class="bienvenido">
-     
+
             <div class="search">
                 
                 <div class="input-group mb-3">
@@ -56,54 +60,17 @@
                     </div>
                   </div>
             </div>
-            <div class="cartel">
-                    <div class="ordenar_por">
 
-                        <select class="custom-select" onchange="ordenar(this)">
-                            <option value="0" selected>Ordenar por ...</option>
-                            <option value="fecha_de_entrada">Fecha de entrada</option>
-                            <option value="fecha_de_salida">Fecha de salida</option>
-                            <option value="fecha_de_pago">Fecha de pago</option>
-                            <option id= "taller" >Sin taller</option>
-                            <option id= "fecha_de_entrada" >Sin entregar</option>
-                            <option id= "fecha_de_pago" >No pagado</option>
-                          </select>
-
-                          
-                          <div class="opciones_input">
-                              <!-- <div class="p">
-                                  <select class="custom-select">
-                                      <option selected>Filtrar ...</option>
-                                      <option value="1">Rango de fecha</option>
-                                      <option value="2">Fecha exacta</option>
-                                    </select>
-                              </div>
-                              <div class="input_fecha">
-
-                                  <input type="date">
-                                  <input type="date">
-                                  <button>Buscar</button>
-                              </div> -->
-                          </div>
-                          
-                    </div>
-                    
+                <div class="cartel">
                     <table class="table">
                         <thead>
                           <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">NOMBRE</th>
-                            <th scope="col">TELA</th>
-                            <th scope="col">PESO PROMEDIO</th>
-                            <th scope="col">TALLER</th>
-                            <th scope="col">FECHA DE SALIDA</th>
-                            <th scope="col">FECHA DE ENTRADA</th>
-                            <th scope="col">ESTADO</th>
-                            <th scope="col"></th>
-                        
+                            <th scope="col">DIRECCION</th>
+                            <th scope="col">TELEFONO</th>
                           </tr>
                         </thead>
-                        <tbody class="table_produccion">
+                        <tbody class="imprimir_taller">
   
                         </tbody>
                       </table>
@@ -112,30 +79,19 @@
                        
         </div>
 
-        <div class="opciones_cambio" id="aca_va_el_ID">
+        <div class="opciones_cambio_2" id="aca_va_el_ID">
             <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir" onclick="salir_cambios()"/>
             <h3>Cambiar ...</h3>
             <select class="custom-select" id="seleccion_cambio" onchange="selecciconCambios(this)">
  
               </select>
-              <div class="input_con_el_valor">
+              <div class="input_con_el_valor_2">
 
               </div>
         </div>
 
-        <div class="previsualizar">
-            <div class="titulo_previsualizar">
-                <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir_previsualizar" onclick="img_salir_previsualizar()"/>
-                <h3>Previsualizar corte</h3>
-            </div>
-
-
-              <table class="table table-striped" id="tabla_previsualizar">
-
-              </table>
-        </div>
     </div>
 
-    <script src="/js/produccion/index.js" type="module"></script>
+    <script src="/js/produccion/taller.js" type="module"></script>
 </body>
 </html>

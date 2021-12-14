@@ -5,11 +5,13 @@ const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : '';
 
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjM5NDQxNzY5LCJleHAiOjE2Mzk0NjMzNjl9.jUrcjXAf_SjaQi4DhO_JgAo26UadbJ_aIl9gGT9NrQc
+const url_local = window.location.origin;
 
 export const verificarToken = (token) => {
-
+    
     if(!token){
-        window.location = "index.html"
+        window.location.href = `${url_local}/index.html`
     }
 
     return fetch(url + "usuario/token/verificar",{ 
@@ -19,9 +21,12 @@ export const verificarToken = (token) => {
     .then(response => response.json())
     .then(data => {
         if(data.ok == true){
-            return data
+            enviarLocal(data.usuario.rol);
+            return data;
         }else{
-            return data.ok
+            localStorage.removeItem("x-token");
+
+            return window.location.href = `${url_local}/index.html`
         }
     })
     .catch(err => {
@@ -29,3 +34,23 @@ export const verificarToken = (token) => {
     });
 }
 
+
+export const enviarLocal = (dato) => {
+
+    const params = window.location.pathname;
+
+    if(dato == "ADMIN"){
+        if(params == "/page/roles/admin/ventas/index.html"){
+            return true;
+        }
+        return window.location = "/page/roles/admin/ventas/index.html";
+
+    }else if(dato == "VENTAS"){
+        if(params == "/page/roles/usuario_ventas/index.html"){
+            return true;
+        }
+        return window.location = "/page/roles/usuario_ventas/index.html";
+    }else if(dato == "PRODUCCION"){
+
+    }
+}

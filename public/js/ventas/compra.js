@@ -105,7 +105,7 @@ const carrito = document.querySelector(".carrito");
 
 carrito.addEventListener("click", () => {
 
-    window.location = "/page/roles/admin/ventas/carrito.html"
+    window.location = "carrito.html"
 
 })
 

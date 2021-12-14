@@ -31,13 +31,13 @@ router.get('/',buscarOrden)
 
 
 // VA SER OPCIONAL BUSCAR POR DNI O CUIL TOVIA VA ESTAR EB DUDA
+
 //dni_cuil
 router.get('/dni',buscarOrdenDNI)
 
 router.get('/full/:id', ordenParaImprimir);
 
 router.get('/historial/full', historialOrden)
-
 
 router.get('/imprimir/parami/:id', imptimirSoloVentas)
 
