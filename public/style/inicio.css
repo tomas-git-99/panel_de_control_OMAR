@@ -120,6 +120,13 @@ li{
 
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
+.cerrar_seccion{
+    text-align: center;
+    cursor: pointer;
+}
+.cerrar_seccion:hover{
+    color: gray;
+}
 .form_usuario_agregar{
     
     display: grid;
@@ -185,6 +192,10 @@ li{
 
 }
 @media screen and (max-width: 1335px){
+    .bienvenido{
+        width: 100%;
+    }
+
     .hamburger{
         display:block;
         visibility: visible;
@@ -195,9 +206,12 @@ li{
         position: fixed;
         left: -200px;
         row-gap: 10px;
-        height:550px
+        height:550px;
+        grid-template-rows: 10% 70% 20%;
+
 
     }
+
     .contenido{
         grid-template-columns: 100%;
     }
@@ -221,7 +235,7 @@ li{
     .hamburger{
         top: 15px
     }
-
+   
 }
    
 

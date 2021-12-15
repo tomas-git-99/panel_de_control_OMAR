@@ -1,5 +1,6 @@
 
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 
 const imprimir_taller = document.querySelector(".imprimir_taller");
@@ -88,8 +89,8 @@ window.enviar_cambio = (id) => {
             salio_todo_bien("Todo salio exelente")
             input_cambio = "";
         })
-        .catch(err => {
-
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
 
@@ -97,4 +98,55 @@ window.salir_cambios = () => {
     opciones_cambio.style.display = "none";
     opciones_cambio.style.visibility = "hidden";
     main()
+}
+
+const search = document.getElementById("search");
+
+
+
+
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+    search.value = "";
+});
+
+
+const getSearch = (valor) => {
+
+    fecthNormalGET("GET", `produccion/taller/buscar?nombre=${valor}`)
+    .then( res => {
+        imprimir(res.taller)
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
 }

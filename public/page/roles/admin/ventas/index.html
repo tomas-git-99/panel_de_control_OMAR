@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/style/inicio.css">
     <link rel="stylesheet" type="text/css" href="./style/index.css">
+
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
@@ -27,7 +30,7 @@
                 <div class="icono" onclick="style_menu_salir()">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
                 </div>
-                <h5>NOMBRE</h5>
+                <h5 id="nombre_usario"></h5>
             </div>
 
             <div class="ulMenu">
@@ -53,6 +56,9 @@
 
             <div class="crear_nuevo_usuario">
                 <h5> <a href="/agregar_usuario.html">Crear Usuario</a></h5>
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
             </div>
             
         </div>

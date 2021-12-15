@@ -152,7 +152,7 @@ export const ordenarPorFechaExacta = async (req: Request, res: Response) => {
 
     const { query } = req.params;
 
-    console.log(query)
+
     searchFunc(query, fecha)
     .then( produccion => {
         return res.json({

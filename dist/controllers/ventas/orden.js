@@ -27,7 +27,6 @@ const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             fecha,
             transporte
         };
-        console.log(datos);
         const orden = new orden_1.Orden(datos);
         yield orden.save();
         res.json({

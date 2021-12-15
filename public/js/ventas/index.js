@@ -3,6 +3,8 @@ import { salio_todo_bien, algo_salio_mal } from "../helpers/para_todos/alertas.j
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { verificarToken } from "../helpers/para_todos/permisos.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+
 
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
@@ -10,7 +12,7 @@ const url = ( window.location.hostname.includes('localhost'))
 
 let token = localStorage.getItem('x-token');
       
-//verificarToken(token);
+verificarToken(token);
 
 const historialGet = () => {
 
@@ -22,10 +24,9 @@ const historialGet = () => {
     .then(res => {
         leerHistorial(res.productos)
     })
- /*    .catch(err => {
-        console.error(err)
-  
-    }) */
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }
 
 const prueba = document.querySelector(".prueba")
@@ -96,7 +97,7 @@ window.previsualizar_producto = (id) => {
         }
     }) 
     .catch(err => {
-        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+        algo_salio_mal(`Algo salio mal: ${ err }`)
     });
     previsualizar.style.display = "grid";
     previsualizar.style.visibility = "visible";
@@ -159,9 +160,8 @@ const getSearch = (valor) => {
     .then(res => {
         leerHistorial(res.producto);
     })
-    .catch(err => {
-        console.error(err)
-  
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 }
 
@@ -190,11 +190,6 @@ const talle_por_ID = (res) => {
     })
 
 }
-
-/* fecthNormalGET("GET", `talle/${id_producto}`)
-   .then(res => {
-       
-   }) */
 
 
 
@@ -310,14 +305,13 @@ window.cambiar_dato = (id) => {
             }, 1000);
             
         }else {
-            // algo_salio_mal(`Algo salio mal`)
+            algo_salio_mal(`Algo salio mal`)
         }
 
     })
-    .catch(err => {
-        // algo_salio_mal(`Algo salio mal: ${ err.message }`)
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
     })
- 
 }
 
 
@@ -343,7 +337,7 @@ window.eliminar_talle = (id) => {
            }
        })
        .catch(err => {
-        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+        algo_salio_mal(`Algo salio mal: ${ err }`)
 
        })
 }
@@ -370,7 +364,7 @@ const cambiar_stock_talle = (id, suma_resta) => {
 
         })
         .catch(err => {
-            algo_salio_mal(`Algo salio mal: ${ err.message }`)
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
 
@@ -386,3 +380,15 @@ window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
 }
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;

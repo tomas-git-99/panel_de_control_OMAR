@@ -5,6 +5,7 @@ import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 
 
 
@@ -338,7 +339,7 @@ formCliente.addEventListener("submit", async(e) =>{
                 generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
             })
             .catch(err =>{
-                algo_salio_mal(`Algo salio mal: ${ err.message }`)
+                algo_salio_mal(`Algo salio mal: ${ err }`)
             })
 
     }else{
@@ -362,13 +363,16 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
                 volverAtras(cartelCliente, quitar_total_o_individual)
                 descontar_total_id.id = res.orden.id;
                 descontar_talle_id.id = res.orden.id;
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
             }else{
             algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ res.msg}`)
 
             }
         })
         .catch( err => {
-            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err.message }`)
+            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err }`)
         })
                   
 }
@@ -483,7 +487,7 @@ window.eliminar_producto = (id) => {
         const row = cell.parentNode;
         document.getElementById("tableContact").deleteRow(row.rowIndex);
     })
-    .catch(err => algo_salio_mal(`Algo salio mal : ${ err.message }`));
+    .catch(err => algo_salio_mal(`Algo salio mal : ${ err }`));
     
 }
 
@@ -519,7 +523,7 @@ window.enviar_cambio = (id) => {
             valor_de_cantidad_nueva.value = "";
         })
         .catch(err => {
-            algo_salio_mal(`Algo salio mal: ${ err.message }`)
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
 
@@ -529,9 +533,9 @@ const configuracion_view = (id) => {
             span_cantidad_actual.innerHTML = res.cantidadActual;
             span_cantidad_carrito.innerHTML = res.cantidadCarrito;
          })
-         .catch(err => {
-             alert(err.message);
-         })
+         .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
 }
 
 ////////////////////////////////MOFIGICAR CARRITO 🛒🛒🛒////////////////////////////////  🔴🔴🔴🔴🔴
@@ -546,3 +550,16 @@ window.imprimirComprobante = (id)=> {
 window.imprimirComprobante_para_mi = (id)=> {
     imprimir_parami(id);
 }
+
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;

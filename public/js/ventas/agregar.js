@@ -3,6 +3,7 @@ import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { salio_todo_bien, algo_salio_mal, advertencia } from "../helpers/para_todos/alertas.js";
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 
 
 
@@ -43,6 +44,9 @@ formProducto.addEventListener("submit", (e) => {
             if(res.ok == true) {
                 botonSI.id = res.producto.id;
                 volverAtras(bienvenido, pregunta_ordenar_por_talle);
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
             }else{
                 advertencia(res.msg || res.errors[0].msg || res.errors[1].msg || res.errors[2].msg);
 
@@ -84,5 +88,28 @@ formulario_por_talle.addEventListener("submit", (e) => {
 
 })
 
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
 
 
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
+}

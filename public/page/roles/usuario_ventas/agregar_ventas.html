@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/inicio.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./style/agregar_ventas.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
@@ -24,7 +25,7 @@
                 <div class="icono">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
                 </div>
-                <h5>NOMBRE</h5>
+                <h5 id="nombre_usario"></h5>
             </div>
 
             <div class="ulMenu">
@@ -40,7 +41,9 @@
     
             </div>
 
-
+            <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                <h4>SALIR</h4>
+            </div>
             
         </div>
         

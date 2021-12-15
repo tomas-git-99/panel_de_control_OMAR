@@ -2,9 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const carrito_1 = require("../../controllers/ventas/carrito");
-const router = (0, express_1.Router)();
+const validar_JWT_1 = require("../../middlewares/validar-JWT");
+const router = express_1.Router();
 //AGREGAR A CARRITO
-router.post("/", carrito_1.agregarCarrito);
+router.post("/", [
+    validar_JWT_1.validarJWT,
+], carrito_1.agregarCarrito);
 //REMOVER DE CARRITO
 router.delete("/:id", carrito_1.eliminarCarrito);
 //MOSTRAR EL CARRITO

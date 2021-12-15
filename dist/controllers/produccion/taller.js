@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerTaller = exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
+exports.buscarUnicTaller = exports.obtenerTaller = exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
+const dist_1 = require("sequelize/dist");
 const talller_1 = require("../../models/produccion/talller");
 const crearTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const taller = new talller_1.Taller(req.body);
@@ -48,4 +49,14 @@ const obtenerTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.obtenerTaller = obtenerTaller;
+const buscarUnicTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const taller = yield talller_1.Taller.findAll({ where: { nombre_completo: { [dist_1.Op.like]: '%' + req.query.nombre + '%' } } });
+        res.json({ ok: true, taller });
+    }
+    catch (error) {
+        res.json({ ok: false, msg: error });
+    }
+});
+exports.buscarUnicTaller = buscarUnicTaller;
 //# sourceMappingURL=taller.js.map

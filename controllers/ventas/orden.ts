@@ -24,7 +24,6 @@ export const generarOrden = async(req: Request, res: Response) => {
             transporte
         }
 
-        console.log(datos);
 
         const orden = new Orden(datos);
 

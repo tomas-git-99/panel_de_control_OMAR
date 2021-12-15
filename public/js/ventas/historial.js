@@ -1,12 +1,17 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
+import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 
 
 
 fecthNormalGET("GET","orden/historial/full")
     .then( res => {
         imprimirEnPantalla(res.datos)
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 
 const imprimir_historial = document.querySelector(".imprimir_historial")
@@ -100,4 +105,19 @@ const getSearch = (valor) => {
     .then( res => {
         imprimirEnPantalla(res.datos)
     })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;

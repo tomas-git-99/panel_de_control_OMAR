@@ -1,4 +1,5 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js"
 
@@ -52,6 +53,9 @@ formProducto.addEventListener("submit", (e) => {
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
                 volverAtras(bienvenido_form, opciones);
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
             }
         })
         .catch (err => {
@@ -125,6 +129,9 @@ form_taller_agregar.addEventListener("submit", (event) => {
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
                 volverAtras(form_taller, opciones);
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
             }else{
                 algo_salio_mal(`Algo salio mal`)
             }
@@ -155,3 +162,28 @@ total_por_talle.addEventListener('keyup', (e) => {
     let total_db = total_por_talle.value * talles.value;
     total.value = total_db;
 })
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
+}

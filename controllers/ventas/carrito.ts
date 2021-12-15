@@ -25,7 +25,7 @@ export const agregarCarrito = async (req: Request, res: Response) => {
         for( let e of verificar){
 
             if(e.talle == talle){
-                console.log("talle")
+              
                 let nuevaCantidad = cantidadBody + e.cantidad;
                 await e.update({cantidad: nuevaCantidad});
              
@@ -43,7 +43,7 @@ export const agregarCarrito = async (req: Request, res: Response) => {
 
         for( let e of verificar){
             if(e.talle == null){
-                console.log("null")
+               
                 let nuevaCantidad = cantidadBody + e.cantidad;
                 await e.update({cantidad:nuevaCantidad})
                 return res.json({
@@ -65,7 +65,7 @@ export const agregarCarrito = async (req: Request, res: Response) => {
     
 
     } catch (error) {
-        console.log(error);
+       
         res.status(500).json({
             ok: false,
             msg: error

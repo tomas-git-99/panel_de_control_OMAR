@@ -9,8 +9,6 @@ const router = Router();
 //AGREGAR TALLE CON ID:
 router.post('/:id', agregarTalle)
 
-
-
 router.put('/suma/:id', sumarTalle)
 
 router.put('/restar/:id', restarTalle)

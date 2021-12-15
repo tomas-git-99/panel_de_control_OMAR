@@ -40,10 +40,10 @@ export const enviarLocal = (dato) => {
     const params = window.location.pathname;
 
     if(dato == "ADMIN"){
-        if(params == "/page/roles/admin/ventas/index.html"){
+        if(params){
             return true;
         }
-        return window.location = "/page/roles/admin/ventas/index.html";
+        //return window.location = "/page/roles/admin/ventas/index.html";
 
     }else if(dato == "VENTAS"){
         if(params == "/page/roles/usuario_ventas/index.html"){
@@ -51,6 +51,9 @@ export const enviarLocal = (dato) => {
         }
         return window.location = "/page/roles/usuario_ventas/index.html";
     }else if(dato == "PRODUCCION"){
-
+        if(params == "/page/roles/usuario_produccion/index.html"){
+            return true;
+        }
+        return window.location = "/page/roles/usuario_produccion/index.html";
     }
 }

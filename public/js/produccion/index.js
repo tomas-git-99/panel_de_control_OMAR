@@ -2,12 +2,13 @@ import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../he
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
 import { verificarToken } from "../helpers/para_todos/permisos.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 
 
 
 let table_produccion = document.querySelector('.table_produccion');
 const token = localStorage.getItem('x-token');
-//verificarToken(token);
+verificarToken(token);
 
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
@@ -15,11 +16,13 @@ fecthNormalGET("GET", "produccion/producto_produccion")
             colorearTable(res.produccion);
         }
     })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
     
 const colorearTable = (res) => {
 
     let resultado = ""
-    console.log(res)
     res.map ( e => {
         if(e.produccion.id_taller == undefined || e.produccion.id_taller == null){
             resultado += imprimirTable(e, "table-active")
@@ -115,7 +118,7 @@ const imprimir_previsualizar = (id) => {
 }
 
 const imprimir_html_datos = (res) => {
-    console.log(res)
+
     res.map ( e => {
 
         tabla_previsualizar.innerHTML = `
@@ -259,6 +262,9 @@ window.enviar_taller_nuevo = (id) => {
         .then( res => {
             salio_todo_bien("Todo salio exlente")
         })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
 
 }
 window.enviar_cambio = (id) => {
@@ -276,8 +282,8 @@ window.enviar_cambio = (id) => {
             salio_todo_bien("Todo salio exelente")
             input_cambio = "";
         })
-        .catch(err => {
-
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
 
@@ -318,6 +324,9 @@ window.salir_cambios = () => {
             colorearTable(res.produccion);
         }
     })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }
 
 
@@ -336,6 +345,9 @@ window.ordenar = (e) => {
             if(res.ok){
                 colorearTable(res.produccion);
             }
+        })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
         })
     
     }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
@@ -357,7 +369,6 @@ window.ordenar = (e) => {
 
         fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${e[e.selectedIndex].id }`)
             .then( res =>{
-                console.log(res)
                 colorearTable(res.produccion)
             })
             .catch( err =>{
@@ -419,7 +430,7 @@ window.exacto_buscar = (id) => {
 
     fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
         .then( res =>{
-            console.log(res)
+     
             colorearTable(res.produccion)
         })
         .catch( err =>{
@@ -428,4 +439,29 @@ window.exacto_buscar = (id) => {
     
     
 
+}
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
 }

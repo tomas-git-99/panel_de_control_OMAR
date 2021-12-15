@@ -14,10 +14,7 @@ export const PERMISOS = {
     "PRODUCCION": () =>  window.location = "/page/roles/usuario_produccion/index.html"
 }
 
-// verificarToken("holaperrin")
-// .then(res =>{
-//     console.log(res)
-// })
+
 
 form.addEventListener('submit', (e) => {
 
@@ -35,6 +32,8 @@ form.addEventListener('submit', (e) => {
         .then((res) => {
             if(res.ok == true){
             localStorage.setItem("x-token", res.token)
+            localStorage.setItem("nombre", res.usuario[0].nombre);
+
             PERMISOS[res.usuario[0].rol]
                 ? PERMISOS[res.usuario[0].rol]()
                 : advertencia("Este usuario no tiene ROL especifico")

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { buscarCliente, crearCliente, editarCliente } from "../../controllers/ventas/cliente";
+import { validarCampos } from "../../middlewares/validar-campo";
+import { validarJWT } from "../../middlewares/validar-JWT";
 
 
 const router = Router();

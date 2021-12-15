@@ -22,6 +22,7 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     if (!token) {
         return res.status(401).json({
             ok: false,
+            error: 10,
             msg: 'No hay token en la peticion'
         });
     }
@@ -36,6 +37,7 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         if (!usuario) {
             return res.status(401).json({
                 ok: false,
+                error: 10,
                 msg: 'token no valido - usuario no existe DB'
             });
         }
@@ -43,6 +45,7 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         if (!usuario.estado) {
             return res.status(401).json({
                 ok: false,
+                error: 10,
                 msg: 'token no valido'
             });
         }
@@ -53,6 +56,7 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         return res.status(401).json({
             ok: false,
+            error: 10,
             msg: 'el token no es el correcto'
         });
     }

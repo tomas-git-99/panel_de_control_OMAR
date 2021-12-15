@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet" href="./style/historial.css">
     <script src="/js/helpers/para_todos/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -26,7 +28,7 @@
               <div class="icono">
                 <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
             </div>
-                <h5>NOMBRE</h5>
+            <h5 id="nombre_usario"></h5>
             </div>
 
             <div class="ulMenu">
@@ -39,7 +41,9 @@
                         <li><a href="./historial.html">Historial</a> </li>
                     </ul>
                 </div>
-    
+              </div>
+              <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                <h4>SALIR</h4>
             </div>
             
         </div>
@@ -51,7 +55,7 @@
             <div class="search">
                 
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2" id="buscar_producto">
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
                     </div>

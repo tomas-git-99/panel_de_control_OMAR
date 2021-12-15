@@ -23,7 +23,6 @@ const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const talle = parseInt(req.body.talle);
         for (let e of verificar) {
             if (e.talle == talle) {
-                console.log("talle");
                 let nuevaCantidad = cantidadBody + e.cantidad;
                 yield e.update({ cantidad: nuevaCantidad });
                 return res.json({
@@ -34,7 +33,6 @@ const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (req.body.talle == null || req.body.talle === undefined) {
             for (let e of verificar) {
                 if (e.talle == null) {
-                    console.log("null");
                     let nuevaCantidad = cantidadBody + e.cantidad;
                     yield e.update({ cantidad: nuevaCantidad });
                     return res.json({
@@ -51,7 +49,6 @@ const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             msg: error

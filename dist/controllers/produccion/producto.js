@@ -114,7 +114,6 @@ exports.ordenarPorRango = ordenarPorRango;
 const ordenarPorFechaExacta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { fecha } = req.body;
     const { query } = req.params;
-    console.log(query);
     searchFunc(query, fecha)
         .then(produccion => {
         return res.json({

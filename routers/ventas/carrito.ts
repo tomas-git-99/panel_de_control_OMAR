@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { agregarCarrito, descontarElTotal, descontarPorUnidad, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito } from "../../controllers/ventas/carrito";
+import { validarCampos } from "../../middlewares/validar-campo";
+import { validarJWT } from "../../middlewares/validar-JWT";
 
 
 const router = Router();
 
 
 //AGREGAR A CARRITO
-router.post("/", agregarCarrito);
+router.post("/",[
+    validarJWT,
+], agregarCarrito);
 
 
 //REMOVER DE CARRITO

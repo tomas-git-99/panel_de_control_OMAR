@@ -1,3 +1,5 @@
+import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../helpers/ventas/fetch.js";
 
 
@@ -11,7 +13,10 @@ const checkAgregar = document.getElementById("checkAgregar");
 fecthNormalGET("GET", "producto")
       .then(res => {
         leerHistorial(res.productos)
-      });
+      })
+      .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 
 //FIN ARGAR HISTORIAL DE LA DB
 const aca_viene_id_producto = document.getElementById("aca_viene_id_producto");
@@ -31,7 +36,6 @@ window.enviar_datos_producto = (id) => {
 
   const id_usuario = localStorage.getItem("id");
 
-  console.log(id_usuario);
   let data = {
     id_usuario:id_usuario,
     id_producto: id,
@@ -48,10 +52,13 @@ window.enviar_datos_producto = (id) => {
   fecthNormalPOST_PUT("POST", "carrito", data)
   .then( res => {
     if(res.ok){
-      console.log("todo salio bien");
+
       cantidad_unica.value = "";
       talle_unico.value = "";
 
+    }else if (res.error == 10 || res.error == "10"){
+      localStorage.removeItem("x-token");
+      window.location.href = `${window.location.origin}/index.html`
     }else{
       Swal.fire({
         icon: 'error',
@@ -61,7 +68,7 @@ window.enviar_datos_producto = (id) => {
     }
   })
   .catch(err => {
-    console.log(err)
+
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
@@ -148,6 +155,9 @@ search.addEventListener("keyup", ({keyCode}) => {
             .then(res => {
               leerHistorial(res.producto)
             })
+            .catch( err =>{
+              algo_salio_mal(`Algo salio mal: ${ err }`)
+          })
     search.value = "";
 });
 
@@ -186,6 +196,9 @@ const opcionesDeLocales = () => {
           seleccion_locales.innerHTML += result;
         })
       })
+      .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }
 
 opcionesDeLocales();
@@ -196,13 +209,19 @@ window.cambioDeLocal = (dato) => {
     return fecthNormalGET("GET", "producto")
       .then(res => {
         leerHistorial(res.productos)
-      });
+      })
+      .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
   }
 
   fecthNormalGET_QUERY("GET", "producto/locales/seleccionado/local?", "local=", dato.value)
       .then((response) => {
         leerHistorial(response.locales);
       })
+      .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }
 
 
@@ -218,3 +237,15 @@ window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
 }
+
+window.cerrar_seccion = () => {
+  cerrar_login();
+}
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;

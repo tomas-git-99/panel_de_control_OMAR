@@ -1,8 +1,12 @@
 import { advertencia, algo_salio_mal} from "./helpers/para_todos/alertas.js";
+import { verificarToken } from "./helpers/para_todos/permisos.js";
 import { fecthNormalPOST_PUT } from "./helpers/ventas/fetch.js";
 
 const form = document.querySelector("form");
 let value_rol;
+let token = localStorage.getItem('x-token');
+verificarToken(token);
+
 
 form.addEventListener('submit', (e) => {
 
@@ -21,7 +25,7 @@ form.addEventListener('submit', (e) => {
     }
 
     forData["rol"] = value_rol;
-    console.log(forData);
+ 
     fecthNormalPOST_PUT("POST", "usuario", forData)
          .then((res) => {
              if(res.ok == true){

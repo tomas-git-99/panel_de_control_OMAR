@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { actualizarTaller, crearTaller, eliminarTaller, obtenerTaller } from "../../controllers/produccion/taller";
+import { actualizarTaller, buscarUnicTaller, crearTaller, eliminarTaller, obtenerTaller } from "../../controllers/produccion/taller";
 
 
 const router = Router();
 //OBTENER TALLER 
 router.get('/', obtenerTaller)
+
+
+router.get("/buscar", buscarUnicTaller)
 
 
 //AGREGAR PRODUCTO

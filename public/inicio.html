@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/inicio.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,400&display=swap"rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -16,14 +18,17 @@
 <body>
     <div class="contenido">
         
-        
+        <div class="hamburger" onclick="style_menu()">
+            <img src="/img/menu.png" alt="">
+        </div>
+
         <div class="menu">
             
             <div class="usuario">
                 <div class="icono">
-                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" onclick="style_menu_salir()" >
                 </div>
-                <h5>NOMBRE</h5>
+                <h5 id="nombre_usario"></h5>
             </div>
 
             <div class="ulMenu">
@@ -31,28 +36,34 @@
 
 
                 <div class="ventas">
-                    <h5><a href="./page/ventas/index.html">VENTAS</a> </h5>
+                    <h5><a href="./page/roles/admin/ventas/index.html">VENTAS</a> </h5>
                     <ul>
-                        <li><a href="./page/ventas/agregar_ventas.html">Agregar</a> </li>
-                        <li><a href="./page/ventas/compra.html">Comprar</a> </li>
-                        <li><a href="./page/ventas/historial.html">Historial</a> </li>
+                        <li><a href="./page/roles/admin/ventas/agregar_ventas.html">Agregar</a> </li>
+                        <li><a href="./page/roles/admin/ventas/compra.html">Comprar</a> </li>
+                        <li><a href="./page/roles/admin/ventas/historial.html">Historial</a> </li>
                     </ul>
                 </div>
     
                 <div class="produccion">
-                    <h5>PRODUCCION</h5>
+                    <h5><a href="./page/roles/admin/produccion/index.html">PRODUCCION</a></h5>
                     <ul>
-                        <li>Agregar</li>
-                        <li>Talleres</li>
+                        <li><a href="./page/roles/admin/produccion/agregar_produccion.html">Agregar</a></li>
+                        <li><a href="./page/roles/admin/produccion/talleres.html">Talleres</a></li>
                     </ul>
                 </div>
+                
             </div>
+            
 
 
             <div class="crear_nuevo_usuario">
                 <h5> <a href="agregar_usuario.html">Crear Usuario</a></h5>
+
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
             </div>
-            
+    
         </div>
         
         <div class="centro">
@@ -67,5 +78,6 @@
 
         </div>
     </div>
+    <script src="/js/inicio.js" type="module"></script>
 </body>
 </html>

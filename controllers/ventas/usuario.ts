@@ -9,10 +9,9 @@ export const login = async( req: Request, res: Response) => {
      try {
         const { dni_cuil, password } = req.body;
 
-        console.log(req.body)
+    
         const usuario = await Usuario.findAll({where:{ dni_cuil:dni_cuil }});
 
-        console.log(usuario[0].password)
         if(!usuario){
             return res.json ({
                 ok: false,
@@ -41,7 +40,7 @@ export const login = async( req: Request, res: Response) => {
         })
 
      } catch (error) {
-        console.log(error);
+      
         res.status(400).json({
             ok:false,
             msg:'hable con el administrador',
