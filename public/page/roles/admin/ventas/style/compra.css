@@ -45,14 +45,25 @@
 
     
 }
-form{
+
+
+
+/* form{
 
     display: flex;
     flex-direction: column;
   
     row-gap: 10px;
 
+} */
+
+
+.agregar {
+    display: grid;
+    justify-content: center;
+
 }
+
 .checkAgegar{
     display: grid;
     justify-content: center;
@@ -69,6 +80,8 @@ form{
 
     display: none;
     visibility: hidden;
+    justify-content: center;
+    margin-bottom: 10px;
 /*      display: block;
     visibility: visible;   */  
 }
@@ -102,7 +115,7 @@ form{
 .boton2{
     display: grid;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .boton2 button{

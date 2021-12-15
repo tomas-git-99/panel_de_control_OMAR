@@ -383,8 +383,7 @@ window.descontar_total = (id) => {
 
     const id_usuario = localStorage.getItem("id");
     descontarEltotal(id_usuario, id);
-    console.log(id)
-
+   
 }
 
 const descontarEltotal = (id_usuario, id_orden) => {
@@ -417,9 +416,48 @@ const descontarEltotal = (id_usuario, id_orden) => {
             }
         })
         .catch(err =>{
-            algo_salio_mal(`Algo salio mal : ${ err.message }`)
+            algo_salio_mal(`Algo salio mal : ${ err }`)
 
         })
+}
+
+
+window.descontar_talle = (id) => {
+    const id_usuario = localStorage.getItem("id");
+    descontar_por_talle(id_usuario, id);
+}
+
+const descontar_por_talle = (id_usuario, id_orden) => {
+
+    fecthNormalPOST_PUT("PUT", `carrito/${id_usuario}/${id_orden}`)
+    .then( res => {
+        if(res.ok){
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: res.msg,
+                showConfirmButton: false,
+                timer: 1500
+              }) 
+
+            aca_id_orden.id= id_orden;
+            aca_id_orden_para_mi.id = id_orden;
+
+            localStorage.removeItem("id_orden");
+
+            volverAtras(quitar_total_o_individual, comprobante);
+            //mandar a la ventana para imprimir en pdf los tickets
+        }else{
+            advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
+
+            btn_confirmar.id = id_orden;
+            localStorage.setItem('id_orden', id_orden);
+        }
+    })
+    .catch(err =>{
+        algo_salio_mal(`Algo salio mal : ${ err }`)
+
+    })
 }
 
 

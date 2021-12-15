@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
+const dist_1 = require("sequelize/dist");
 const carrito_1 = require("../../models/ventas/carrito");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
@@ -17,13 +18,21 @@ const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const {id_usuario, id_producto, cantidad, talle } = req.body;
-        // const dato:any = {
-        //     id_usuario,
-        //     id_producto,
-        //     cantidad, 
-        //     talle
-        // }
+        const verificar = yield carrito_1.Carrito.findAll({ where: { [dist_1.Op.or]: [{ id_usuario: req.body.id_usuario }, { id_producto: req.body.id_producto }] } });
+        console.log(verificar);
+        if (verificar) {
+            if (!req.body.talle == null || !req.body.talle == undefined) {
+                if (verificar[0].talle == req.body.talle) {
+                    let nuevaCantidad = req.body.cantidad + verificar[0].cantidad;
+                    yield verificar[0].update({ cantidad: nuevaCantidad });
+                    delete req.body.talle;
+                }
+            }
+            let nuevo = req.body.cantidad + verificar[0].cantidad;
+            yield verificar[0].update({ cantidad: nuevo });
+            delete req.body.talle;
+        }
+        console.log(req.body);
         const carrito = new carrito_1.Carrito(req.body);
         yield carrito.save();
         res.json({
@@ -32,6 +41,7 @@ const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: error
@@ -84,35 +94,52 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const { id, id_orden } = req.params;
         //CON middleware VAMOS A COMPROBAR SI EL ID DE ESE USUARIO ES VALIDO
         const carrito = yield carrito_1.Carrito.findAll({ where: { id_usuario: id } });
+        let sumaTotal = 0;
         let idProductos = [];
         carrito.map(e => {
             idProductos.push(e.id_producto);
         });
         const talle = yield talles_1.Talle.findAll({ where: { id_producto: idProductos } });
-        talle.map((e, i) => {
-            carrito.map((p) => __awaiter(void 0, void 0, void 0, function* () {
-                if (p.id_producto == e.id_producto) {
-                    if (e.cantidad < p.cantidad || e.cantidad == 0) {
-                        return res.json({
-                            ok: false,
-                            msg: ` el producto con el id ${e.id_producto} no tiene stock suficiente`
-                        });
-                    }
-                    let actualizarStock = e.cantidad - p.cantidad;
-                    yield talle[i].update({ cantidad: actualizarStock });
-                }
-            }));
-        });
         const productos = yield producto_1.Producto.findAll({ where: { id: idProductos } });
-        productos.map((e, i) => {
+        let productos_sin_stock = [];
+        let stockDisponible = talle.map(e => {
+            carrito.map(p => {
+                if (p.id_producto == e.id_producto) {
+                    if (p.talle == e.talle) {
+                        if (p.cantidad < e.cantidad || p.cantidad == 0) {
+                            let nombre_producto = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n.nombre; });
+                            productos_sin_stock.push(`El producto "${nombre_producto}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                        }
+                    }
+                }
+            });
+        });
+        if (productos_sin_stock.length > 0) {
+            return res.json({
+                ok: false,
+                msg: "No ahi stock suficiente con los productos ...",
+                productos_sin_stock
+            });
+        }
+        talle.map((e, i) => {
             carrito.map((p, c) => __awaiter(void 0, void 0, void 0, function* () {
-                if (e.id == p.id_producto) {
+                if (e.id_producto == p.id_producto) {
+                    let producto_dato = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n; });
                     let orden = {
                         id_orden,
                         id_producto: p.id_producto,
+                        nombre_producto: producto_dato.nombre,
+                        talle: p.talle,
                         cantidad: p.cantidad,
-                        precio: e.precio
+                        precio: producto_dato.precio
                     };
+                    let nuevaSuma = p.cantidad * producto_dato.precio;
+                    sumaTotal += sumaTotal + nuevaSuma;
+                    let nuevoStock = e.cantidad - p.cantidad;
+                    yield talle[i].update({ cantidad: nuevoStock })
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
                     let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
                     yield orden_detalle.save()
                         .catch(err => {
@@ -122,9 +149,11 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 }
             }));
         });
+        const orden = yield orden_1.Orden.findByPk(id_orden);
+        yield orden.update({ total: sumaTotal });
         res.json({
             ok: true,
-            msg: "todo salio correctamente"
+            msg: "Su compra fue exitosa"
         });
     }
     catch (error) {
@@ -158,7 +187,6 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 }
             });
         });
-        console.log(productos_sin_stock);
         if (productos_sin_stock.length > 0) {
             return res.json({
                 ok: false,

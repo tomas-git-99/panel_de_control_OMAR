@@ -14,18 +14,29 @@ import producto from "../../routers/ventas/producto";
 export const agregarCarrito = async (req: Request, res: Response) => {
 
     try {
-        
-            // const {id_usuario, id_producto, cantidad, talle } = req.body;
-        
-        
-            // const dato:any = {
-            //     id_usuario,
-            //     id_producto,
-            //     cantidad, 
-            //     talle
-            // }
+           const verificar = await Carrito.findAll({where:{[Op.or]:[{id_usuario:req.body.id_usuario}, {id_producto:req.body.id_producto}]}});
+
+           console.log(verificar)
+           if(verificar){
+
+            if(!req.body.talle == null || !req.body.talle == undefined){
+
+                if(verificar[0].talle == req.body.talle){
+                    let nuevaCantidad = req.body.cantidad + verificar[0].cantidad
+                    await verificar[0].update({cantidad:nuevaCantidad});
+
+                    delete req.body.talle
+                }
+            }
+              
+            let nuevo = req.body.cantidad + verificar[0].cantidad;
+                    await verificar[0].update({cantidad:nuevo});
+                    delete req.body.talle
+
+           }
+           console.log(req.body)
+            
             const carrito = new Carrito(req.body);
-        
             await carrito.save();
         
             res.json({
@@ -34,6 +45,7 @@ export const agregarCarrito = async (req: Request, res: Response) => {
             })
         
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: error
@@ -110,6 +122,7 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
     
         const carrito = await Carrito.findAll({where:{id_usuario:id}});
     
+        let sumaTotal = 0;
     
         let idProductos:number[] = []
     
@@ -119,60 +132,83 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
         })
     
         const talle = await Talle.findAll({where:{id_producto:idProductos}});
-    
-    
-    
-        talle.map( (e, i) => {
-            carrito.map( async(p) => {
-    
-                if (p.id_producto == e.id_producto){
-
-                    if(e.cantidad < p.cantidad || e.cantidad == 0){
-                        return res.json({
-                            ok: false,
-                            msg: ` el producto con el id ${e.id_producto} no tiene stock suficiente`
-                        });
-                    }
-    
-                    let actualizarStock = e.cantidad - p.cantidad
-                    await talle[i].update({cantidad: actualizarStock});
-                }
-            })
-        });
-
 
         const productos = await Producto.findAll({where:{id:idProductos}});
+        
 
-        productos.map( (e, i) => {
+        let productos_sin_stock:any = []
+        
+        let stockDisponible = talle.map( e => {
+            carrito.map(p => {
 
+                if(p.id_producto == e.id_producto){
+                    if(p.talle == e.talle){
+                        if(p.cantidad < e.cantidad || p.cantidad == 0){
+
+                            let nombre_producto = productos.map( n => n.id == e.id_producto ?? n.nombre);
+                            productos_sin_stock.push(`El producto "${nombre_producto}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
+
+                        }
+                    }
+                }
+            })
+        })
+
+        if(productos_sin_stock.length > 0){
+            return res.json({
+                ok: false,
+                msg: "No ahi stock suficiente con los productos ...",
+                productos_sin_stock
+            })
+        }
+
+        talle.map((e, i) => {
             carrito.map( async(p, c) => {
-                if(e.id == p.id_producto){
+                if(e.id_producto == p.id_producto){
+                    let producto_dato:any = productos.map( n => n.id == e.id_producto ?? n);
 
                     let orden:any = {
 
                         id_orden,
                         id_producto:p.id_producto,
+                        nombre_producto:producto_dato.nombre,
+                        talle:p.talle,
                         cantidad:p.cantidad,
-                        precio: e.precio
+                        precio: producto_dato.precio
                     }
 
-                    let orden_detalle = new OrdenDetalle(orden);
+                    let nuevaSuma = p.cantidad * producto_dato.precio;
+                    sumaTotal += sumaTotal + nuevaSuma;
 
+                    let nuevoStock = e.cantidad - p.cantidad;
+
+                    await talle[i].update({cantidad:nuevoStock})
+                            .catch(err => {
+                                return res.json({ok: false, msg: err})
+                            });
+                            
+                    
+                    let orden_detalle = new OrdenDetalle(orden);
                     await orden_detalle.save()
-                        .catch(err => {
-                            return res.json({ok: false, msg: err})
-                        });
+                            .catch(err => {
+                                return res.json({ok: false, msg: err})
+                            });
 
                     await carrito[c].destroy();
-
+                    
                 }
             })
         })
-    
+
+        const orden = await Orden.findByPk(id_orden)
+
+        await orden!.update({total:sumaTotal});
+
+
         res.json({
             ok: true,
-            msg: "todo salio correctamente"
-        })
+            msg: "Su compra fue exitosa"
+        });
     
     } catch (error) {
         res.json({
@@ -218,8 +254,6 @@ export const descontarElTotal= async(req: Request, res: Response) => {
                 }
             })
         });
-
-        console.log(productos_sin_stock);
 
 
         if(productos_sin_stock.length > 0){

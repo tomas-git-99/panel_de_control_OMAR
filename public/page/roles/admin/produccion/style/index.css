@@ -141,14 +141,6 @@
  */
 
 
-    table {
-
-        border-collapse: collapse;
-        margin: 0;
-        padding: 0;
-        table-layout: fixed;
-        width: 100%;
-      }
       
       table tr {
      
@@ -179,6 +171,14 @@
         }
     
       
+    table {
+
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+        table-layout: fixed;
+        width: 100%;
+      }
        
           
         table thead {

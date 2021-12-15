@@ -4,6 +4,7 @@ import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../hel
 
 const cantidad    = document.querySelector(".cantidad");
 const formAgregar = document.querySelector(".formAgregar")
+const checkAgregar = document.getElementById("checkAgregar");
 
 
 //CARGAR HISTORIAL DE LA DB
@@ -13,12 +14,61 @@ fecthNormalGET("GET", "producto")
       });
 
 //FIN ARGAR HISTORIAL DE LA DB
+const aca_viene_id_producto = document.getElementById("aca_viene_id_producto");
+const talle_unico = document.getElementById("talle_unico");
+const cantidad_unica = document.getElementById("cantidad_unica");
 
 window.boton_agregar = (event) => {
  /*  cantidad.style.opacity = 1; */
  cantidad.style.display = "grid";
  cantidad.style.visibility = "visible";
-  localStorage.setItem("id_producto", event);
+ aca_viene_id_producto.id = event;
+
+
+}
+
+window.enviar_datos_producto = (id) => {
+
+  const id_usuario = localStorage.getItem("id");
+
+  console.log(id_usuario);
+  let data = {
+    id_usuario:id_usuario,
+    id_producto: id,
+    cantidad: cantidad_unica.value
+  }
+
+  if(checkAgregar.checked){
+    data["talle"] = talle_unico.value;
+    
+  }
+
+  
+
+  fecthNormalPOST_PUT("POST", "carrito", data)
+  .then( res => {
+    if(res.ok){
+      console.log("todo salio bien");
+      cantidad_unica.value = "";
+      talle_unico.value = "";
+
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+      })
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
+    })
+  })
+      
 }
 
 const tablaCompra = document.querySelector(".tablaCompra")
@@ -52,7 +102,7 @@ const leerHistorial = (res) => {
 
 }
 
-formAgregar.addEventListener("submit", (event) => {
+/* formAgregar.addEventListener("submit", (event) => {
 
       event.preventDefault();
 
@@ -89,6 +139,7 @@ formAgregar.addEventListener("submit", (event) => {
           }
         })
         .catch(err => {
+          console.log(err)
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -97,10 +148,11 @@ formAgregar.addEventListener("submit", (event) => {
         })
             
 
-  })
+  }) */
 
 
 const carrito = document.querySelector(".carrito");
+const talleUnica = document.querySelector(".talleUnica");
 
 carrito.addEventListener("click", () => {
 
@@ -109,9 +161,8 @@ carrito.addEventListener("click", () => {
 })
 
 
-const checkAgregar = document.getElementById("checkAgregar");
-const talle_unico = document.getElementById("talle_unico");
-const talleUnica = document.querySelector(".talleUnica");
+
+
 
 
 checkAgregar.addEventListener("change", (e) => {
