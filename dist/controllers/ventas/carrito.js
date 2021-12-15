@@ -18,27 +18,39 @@ const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const verificar = yield carrito_1.Carrito.findAll({ where: { [dist_1.Op.or]: [{ id_usuario: req.body.id_usuario }, { id_producto: req.body.id_producto }] } });
+        const verificar = yield carrito_1.Carrito.findAll({ where: { [dist_1.Op.and]: [{ id_usuario: req.body.id_usuario }, { id_producto: req.body.id_producto }] } });
         console.log(verificar);
-        if (verificar) {
-            if (!req.body.talle == null || !req.body.talle == undefined) {
-                if (verificar[0].talle == req.body.talle) {
-                    let nuevaCantidad = req.body.cantidad + verificar[0].cantidad;
-                    yield verificar[0].update({ cantidad: nuevaCantidad });
-                    delete req.body.talle;
+        if (verificar.length > 0) {
+            let cantidadBody = parseInt(req.body.cantidad);
+            verificar.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
+                if (e.talle == req.body.talle) {
+                    console.log("1");
+                    let nuevaCantidad = cantidadBody + e.cantidad;
+                    return yield verificar[i].update({ cantidad: nuevaCantidad });
                 }
-            }
-            let nuevo = req.body.cantidad + verificar[0].cantidad;
-            yield verificar[0].update({ cantidad: nuevo });
-            delete req.body.talle;
+                else if (req.body.talle == null || req.body.talle == undefined) {
+                    if (e.talle == null) {
+                        console.log("2");
+                        let nuevaCantidad = cantidadBody + e.cantidad;
+                        return yield verificar[i].update({ cantidad: nuevaCantidad });
+                    }
+                }
+            }));
+            const carrito = new carrito_1.Carrito(req.body);
+            yield carrito.save();
+            return res.json({
+                ok: true,
+                carrito
+            });
         }
-        console.log(req.body);
-        const carrito = new carrito_1.Carrito(req.body);
-        yield carrito.save();
-        res.json({
-            ok: true,
-            carrito
-        });
+        else {
+            const carrito = new carrito_1.Carrito(req.body);
+            yield carrito.save();
+            return res.json({
+                ok: true,
+                carrito
+            });
+        }
     }
     catch (error) {
         console.log(error);

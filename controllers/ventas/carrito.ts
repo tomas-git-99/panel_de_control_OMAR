@@ -14,36 +14,52 @@ import producto from "../../routers/ventas/producto";
 export const agregarCarrito = async (req: Request, res: Response) => {
 
     try {
-           const verificar = await Carrito.findAll({where:{[Op.or]:[{id_usuario:req.body.id_usuario}, {id_producto:req.body.id_producto}]}});
+           const verificar = await Carrito.findAll({where:{[Op.and]:[{id_usuario:req.body.id_usuario}, {id_producto:req.body.id_producto}]}});
 
-           console.log(verificar)
-           if(verificar){
+           console.log(verificar);
+           if(verificar.length > 0){
+   
+            let cantidadBody = parseInt(req.body.cantidad);
 
-            if(!req.body.talle == null || !req.body.talle == undefined){
+            verificar.map( async(e,i) => {
 
-                if(verificar[0].talle == req.body.talle){
-                    let nuevaCantidad = req.body.cantidad + verificar[0].cantidad
-                    await verificar[0].update({cantidad:nuevaCantidad});
+                if(e.talle == req.body.talle){
+                    console.log("1")
+                    let nuevaCantidad = cantidadBody + e.cantidad;
+                    return await verificar[i].update({cantidad:nuevaCantidad});
+         
 
-                    delete req.body.talle
+                }else if (req.body.talle == null || req.body.talle == undefined){
+
+                    if( e.talle == null){
+
+                        console.log("2")
+                        let nuevaCantidad = cantidadBody + e.cantidad;
+                        return await verificar[i].update({cantidad:nuevaCantidad});
+                    }
+
                 }
-            }
-              
-            let nuevo = req.body.cantidad + verificar[0].cantidad;
-                    await verificar[0].update({cantidad:nuevo});
-                    delete req.body.talle
+            })
 
-           }
-           console.log(req.body)
-            
             const carrito = new Carrito(req.body);
             await carrito.save();
-        
-            res.json({
+            return res.json({
                 ok: true,
                 carrito
             })
         
+           }else{
+
+               const carrito = new Carrito(req.body);
+               await carrito.save();
+               return res.json({
+                   ok: true,
+                   carrito
+           })
+           
+           }
+            
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
