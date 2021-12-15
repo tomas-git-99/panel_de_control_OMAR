@@ -1,4 +1,5 @@
 import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../helpers/ventas/fetch.js";
 
@@ -7,16 +8,26 @@ import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../hel
 const cantidad    = document.querySelector(".cantidad");
 const formAgregar = document.querySelector(".formAgregar")
 const checkAgregar = document.getElementById("checkAgregar");
+const bienvenido = document.getElementsByClassName("cartel");
+
+
 
 
 //CARGAR HISTORIAL DE LA DB
-fecthNormalGET("GET", "producto")
-      .then(res => {
-        leerHistorial(res.productos)
+const main_historial = () => {
+  cargaMedio("spinner_load", true);
+
+  fecthNormalGET("GET", "producto")
+        .then(res => {
+          cargaMedio("spinner_load", false);
+
+          leerHistorial(res.productos)
+        })
+        .catch( err =>{
+          algo_salio_mal(`Algo salio mal: ${ err }`)
       })
-      .catch( err =>{
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
+}
+main_historial()
 
 //FIN ARGAR HISTORIAL DE LA DB
 const aca_viene_id_producto = document.getElementById("aca_viene_id_producto");
@@ -31,9 +42,10 @@ window.boton_agregar = (event) => {
 
 
 }
-
+const boton_para_cargar = document.querySelector(".boton_para_cargar")
 window.enviar_datos_producto = (id) => {
 
+  load_normal(boton_para_cargar, true)
   const id_usuario = localStorage.getItem("id");
 
   let data = {
@@ -55,6 +67,8 @@ window.enviar_datos_producto = (id) => {
 
       cantidad_unica.value = "";
       talle_unico.value = "";
+      load_normal(boton_para_cargar, false, "Agregar")
+
 
     }else if (res.error == 10 || res.error == "10"){
       localStorage.removeItem("x-token");
@@ -205,10 +219,12 @@ opcionesDeLocales();
 
 window.cambioDeLocal = (dato) => {
 
+  cargaMedio("spinner_load", true);
   if (dato.value == 0){
-    return fecthNormalGET("GET", "producto")
+     fecthNormalGET("GET", "producto")
       .then(res => {
-        leerHistorial(res.productos)
+        cargaMedio("spinner_load", false);
+        leerHistorial(res.productos);
       })
       .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -217,6 +233,8 @@ window.cambioDeLocal = (dato) => {
 
   fecthNormalGET_QUERY("GET", "producto/locales/seleccionado/local?", "local=", dato.value)
       .then((response) => {
+        cargaMedio("spinner_load", false);
+
         leerHistorial(response.locales);
       })
       .catch( err =>{

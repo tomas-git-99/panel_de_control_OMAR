@@ -15,6 +15,8 @@ const ordenar_por_talle = document.querySelector(".ordenar_por_talle");
 const aca_viene_id_producto = document.getElementById("aca_viene_id_producto")
 const botonSI = document.getElementById("botonSI");
 
+
+
 window.entrar = (id) => {
     aca_viene_id_producto.id = id;
     volverAtras(pregunta_ordenar_por_talle, ordenar_por_talle);
@@ -81,7 +83,7 @@ formulario_por_talle.addEventListener("submit", (e) => {
         
     } 
 
-   agregarPorTalle(aca_viene_id_producto.id, forData);
+   agregarPorTalle(aca_viene_id_producto.id, forData, aca_viene_id_producto);
    for(let el of formulario_por_talle.elements){
        el.value = "";
    }

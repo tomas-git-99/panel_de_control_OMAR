@@ -4,6 +4,7 @@ import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -11,10 +12,14 @@ const url = ( window.location.hostname.includes('localhost'))
       : '';
 
 let token = localStorage.getItem('x-token');
+
       
-verificarToken(token);
+/* verificarToken(token); */
+
 
 const historialGet = () => {
+
+    cargaMedio("spinner_load", true);
 
     fetch(url + "producto",{ 
         method: "GET",
@@ -22,7 +27,10 @@ const historialGet = () => {
     })
     .then(response => response.json())
     .then(res => {
-        leerHistorial(res.productos)
+
+        cargaMedio("spinner_load", false);
+
+        leerHistorial(res.productos);
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -151,6 +159,7 @@ search.addEventListener("keyup", ({keyCode}) => {
 const getSearch = (valor) => {
 
     
+    cargaMedio("spinner_load", true);
 
     fetch(url + "producto/search?" + `nombre=${valor}`,{ 
         method: "GET",
@@ -158,6 +167,8 @@ const getSearch = (valor) => {
     })
     .then(response => response.json())
     .then(res => {
+    cargaMedio("spinner_load", false);
+
         leerHistorial(res.producto);
     })
     .catch( err =>{

@@ -6,6 +6,7 @@ import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../he
 import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 
 
 
@@ -21,8 +22,10 @@ comprobarCarritoStorage();
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 const carritoActualizar = (id=0) => {
 
+    cargaMedio("spinner_load", true)
     fecthNormalGET("GET", `carrito/${1}`)
     .then( res => {
+        cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);
         })
     .catch( err => {
@@ -290,6 +293,7 @@ const formCliente = document.querySelector(".formProducto")
 const descontar_total_id = document.getElementById("descontar_total_id")
 const descontar_talle_id = document.getElementById("descontar_talle_id")
 
+const btnCliente = document.querySelector(".btnCliente")
 
 
 formCliente.addEventListener("submit", async(e) =>{
@@ -300,6 +304,7 @@ formCliente.addEventListener("submit", async(e) =>{
     const forDataDireccion = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
     const forDataConfirmar = {}  // 2 DATOS PARA GENERAR NUEVA ORDEN
     
+    load_normal(btnCliente, true)
     for(let el of formCliente.elements){
         if(el.name.length > 0){
 
@@ -336,9 +341,12 @@ formCliente.addEventListener("submit", async(e) =>{
         
         fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
             .then( (res) => {
+
+                load_normal(btnCliente, false, "CONFIRMAR")
                 generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
             })
             .catch(err =>{
+                load_normal(btnCliente, false, "CONFIRMAR")
                 algo_salio_mal(`Algo salio mal: ${ err }`)
             })
 
@@ -390,11 +398,13 @@ window.descontar_total = (id) => {
     descontarEltotal(id_usuario, id);
    
 }
+const total_db = document.querySelector(".total_db");
 
 const descontarEltotal = (id_usuario, id_orden) => {
-
+    load_normal(total_db, true)
     fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
         .then( res => {
+            load_normal(total_db, false, "TOTAL")
             if(res.ok){
                 Swal.fire({
                     position: 'center',
@@ -426,6 +436,7 @@ const descontarEltotal = (id_usuario, id_orden) => {
         })
 }
 
+const talle_db = document.querySelector(".talle_db");
 
 window.descontar_talle = (id) => {
     const id_usuario = localStorage.getItem("id");
@@ -433,10 +444,12 @@ window.descontar_talle = (id) => {
 }
 
 const descontar_por_talle = (id_usuario, id_orden) => {
-
+    
+    load_normal(talle_db, true)
     fecthNormalPOST_PUT("PUT", `carrito/${id_usuario}/${id_orden}`)
     .then( res => {
         if(res.ok){
+            load_normal(talle_db, false, "TALLE")
             Swal.fire({
                 position: 'center',
                 icon: 'success',

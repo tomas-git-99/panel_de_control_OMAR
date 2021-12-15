@@ -274,7 +274,7 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
 export const historialOrden = async (req: Request, res: Response) => {
 
     //const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
-    const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
+    const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:15 , order: [['updatedAt', 'DESC']]});
 
     let id_cliente:any = []
     let id_direccion:any = []

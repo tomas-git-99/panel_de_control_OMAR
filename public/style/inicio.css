@@ -37,13 +37,21 @@ li{
 .ventas{
     padding-bottom: 20px;
     display: grid;
-;
+
+}
+
+#spinner_load{
+    position: fixed;
+    place-self: center;
+    display: none;
+    visibility: hidden;
 }
 
 .ventas a{
     text-decoration: none;
     color: #3d3d3d;
 }
+
 
 .produccion a{
     text-decoration: none;

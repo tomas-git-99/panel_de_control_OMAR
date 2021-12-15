@@ -4,10 +4,8 @@ CREATE TABLE cliente(
     apellido VARCHAR(50),
     dni_cuil INT NOT NULL,
     tel_cel INT NOT NULL,
-    direcCion VARCHAR(50),
-    provincia VARCHAR(50),
-    localidad VARCHAR(50),
-    cp VARCHAR(10),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
 
@@ -17,8 +15,11 @@ CREATE TABLE usuario(
     nombre VARCHAR(50) NOT NULL,
     dni_cuil INT NOT NULL,
     email VARCHAR(80),
-    password VARCHAR(150)
-
+    password VARCHAR(180),
+    estado  BOOLEAN DEFAULT TRUE,
+    rol VARCHAR(15),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -30,7 +31,10 @@ CREATE TABLE producto(
     cantidad INT NOT NULL,
     local VARCHAR(250) NOT NULL,
     tela VARCHAR(100) NOT NULL,
-    precio INT NOT NULL
+    precio INT NOT NULL,
+    talles VARCHAR(50),
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 
@@ -40,6 +44,8 @@ CREATE TABLE talles(
     id_producto INT NOT NULL,
     talle INT NOT NULL,
     cantidad INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY fk_id_producto (id_producto)
     REFERENCES producto (id)
@@ -51,17 +57,22 @@ CREATE TABLE orden(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_cliente INT NOT NULL,
     id_usuario INT NOT NULL,
+    id_direccion INT NOT NULL ,
+    fecha DATE,
+    transporte VARCHAR(100),
     total INT NOT NULL,
-    url_pdf_cliente VARCHAR(800),
-    url_pdf_venta  VARCHAR(800),
+
 
 
     FOREIGN KEY fk_id_cliente (id_cliente)
     REFERENCES cliente (id),
 
     FOREIGN KEY fk_id_usuario (id_usuario)
-    REFERENCES usuario (id)
-    );
+    REFERENCES usuario (id),
+
+    FOREIGN KEY fk_id_direccion(id_direccion) 
+    REFERENCES direccion (id)
+);
 
 ALTER TABLE orden AUTO_INCREMENT = 100
 
@@ -72,13 +83,18 @@ CREATE TABLE orden_detalle(
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
     precio INT NOT NULL,
-
+    talle INT,
+    nombre_producto VARCHAR(150),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY fk_id_producto (id_producto)
     REFERENCES producto (id),
 
     FOREIGN KEY fk_id_orden (id_orden)
     REFERENCES orden (id)
+
+    
 );
 
 
@@ -90,7 +106,7 @@ CREATE TABLE carrito(
     id_usuario INT NOT NULL,
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
-
+    talle INT,
 
 
     FOREIGN KEY fk_id_usuario (id_usuario)
@@ -106,15 +122,6 @@ ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 
-ALTER TABLE usuario
-ADD rol VARCHAR(15);
-
-
-ALTER TABLE orden_detalle
-ADD talle INT;
-
-ALTER TABLE usuario
-ADD estado BOOLEAN DEFAULT TRUE;
 
 CREATE TABLE direccion(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -123,61 +130,15 @@ CREATE TABLE direccion(
     provincia VARCHAR(50),
     localidad VARCHAR(50),
     cp VARCHAR(10),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY fk_id_cliente (id_cliente)
     REFERENCES cliente (id)
 );
 
-ALTER TABLE cliente 
-    DROP COLUMN direccion ,
-    DROP COLUMN provincia ,
-    DROP COLUMN localidad ,
-    DROP COLUMN cp;
 
 
-ALTER TABLE orden
-   ADD fecha DATE,
-   ADD transporte VARCHAR(100);
-
-ALTER TABLE orden
-    ADD FOREIGN KEY fk_id_direccion(id_direccion) REFERENCES direccion (id);
-
-
-ALTER TABLE orden ADD constraint fk_id_direccion FOREIGN KEY (id_direccion) REFERENCES direccion(id)
-
-
-CREATE TABLE orden(
-
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_cliente INT NOT NULL,
-    id_usuario INT NOT NULL,
-    id_direccion INT NOT NULL ,
-    total INT NOT NULL,
-    url_pdf_cliente VARCHAR(800),
-    url_pdf_venta  VARCHAR(800),
-    fecha DATE,
-    transporte VARCHAR(100)
-
-
-    FOREIGN KEY fk_id_cliente (id_cliente)
-    REFERENCES cliente (id),
-
-    FOREIGN KEY fk_id_usuario (id_usuario)
-    REFERENCES usuario (id),
-
-    FOREIGN KEY fk_id_direccion(id_direccion) 
-    REFERENCES direccion (id)
-
-    );
-
-
-ALTER TABLE orden
-    ADD id_direccion INT NOT NULL ,
-    ADD CONSTRAINT fk_id_direccion FOREIGN KEY (id_direccion)
-        REFERENCES direccion(id);
-
-
-PRODUCCION 
 
 
 
@@ -192,13 +153,16 @@ CREATE TABLE producto_produccion (
     total_por_talle INT,
     talles VARCHAR(100),
     total INT,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     id_taller INT,
     fecha_de_salida DATE,
     fecha_de_entrada DATE,
-    estado BOOLEAN default false
+    fecha_de_pago DATE,
+    peso_promedio INT,
+    estado BOOLEAN default false,
+
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
 

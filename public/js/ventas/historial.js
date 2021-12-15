@@ -3,17 +3,23 @@ import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 
 
+const main_historial = () => {
 
-fecthNormalGET("GET","orden/historial/full")
-    .then( res => {
-        imprimirEnPantalla(res.datos)
-    })
-    .catch( err =>{
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
-
+    cargaMedio("spinner_load", true);
+    fecthNormalGET("GET","orden/historial/full")
+    
+        .then( res => {
+            cargaMedio("spinner_load", false);
+            imprimirEnPantalla(res.datos);
+        })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+}
+main_historial();
 const imprimir_historial = document.querySelector(".imprimir_historial")
 
 const imprimirEnPantalla = (res) => {
@@ -100,9 +106,12 @@ buscar_producto.addEventListener("keyup", ({keyCode}) => {
 });
 
 const getSearch = (valor) => {
-
+    cargaMedio("spinner_load", true);
+    
     fecthNormalGET("GET", `orden/historial/p/id?id=${valor}`)
     .then( res => {
+    cargaMedio("spinner_load", false);
+
         imprimirEnPantalla(res.datos)
     })
     .catch( err =>{

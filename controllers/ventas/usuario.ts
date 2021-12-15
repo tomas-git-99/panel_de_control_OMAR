@@ -59,6 +59,7 @@ export const crearUsuario = async( req: Request, res: Response) => {
         const { nombre, email, password, dni_cuil, rol} = req.body;
 
 
+    
         
         const salt = await bcryptjs.genSaltSync(10);
         

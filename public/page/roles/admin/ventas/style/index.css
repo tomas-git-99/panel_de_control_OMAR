@@ -265,3 +265,11 @@ table {
       }
 }
    
+
+#spinner_load{
+    position: fixed;
+    place-self: center;
+    
+  /*   display: none;
+    visibility: hidden; */
+}

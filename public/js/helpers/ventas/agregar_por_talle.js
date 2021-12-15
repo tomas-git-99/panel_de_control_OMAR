@@ -6,11 +6,16 @@ import { fecthNormalPOST_PUT } from "./fetch.js";
 // error 2: error de advertencia de color rojo
 // error 3: errro comunes 
 
-export const agregarPorTalle = (id_producto, forData) =>{
+export const agregarPorTalle = (id_producto, forData, carga) =>{
 
+    carga.innerHTML = `
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="sr-only">Loading...</span>
+    `
     fecthNormalPOST_PUT("POST", `talle/${id_producto}`, forData)
         .then( (res) => {
             if(res.ok == true){
+                carga.innerHTML = "Agregar"
                 return salio_todo_bien("Agregado con exito")
             }else if (res.ok == false){
 
