@@ -106,8 +106,10 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const carrito = yield carrito_1.Carrito.findAll({ where: { id_usuario: id } });
         let sumaTotal = 0;
         let idProductos = [];
+        let talleProducto = [];
         carrito.map(e => {
             idProductos.push(e.id_producto);
+            talleProducto.push(e.talle);
         });
         const talle = yield talles_1.Talle.findAll({ where: { id_producto: idProductos } });
         const productos = yield producto_1.Producto.findAll({ where: { id: idProductos } });
@@ -117,8 +119,9 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 if (p.id_producto == e.id_producto) {
                     if (p.talle == e.talle) {
                         if (e.cantidad < p.cantidad || e.cantidad == 0) {
-                            let nombre_producto = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n; });
-                            productos_sin_stock.push(`El producto "${nombre_producto.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                            //let nombre_producto:any = productos.map( n => n.id == e.id_producto ?? n);
+                            let dato_producto = productos.find(e => e.id == p.id_producto);
+                            productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
                         }
                     }
                 }
@@ -131,34 +134,36 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 productos_sin_stock
             });
         }
-        talle.map((e, i) => {
-            carrito.map((p, c) => __awaiter(void 0, void 0, void 0, function* () {
-                if (e.id_producto == p.id_producto) {
-                    let producto_dato = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n; });
-                    let orden = {
-                        id_orden,
-                        id_producto: p.id_producto,
-                        nombre_producto: producto_dato.nombre,
-                        talle: p.talle,
-                        cantidad: p.cantidad,
-                        precio: producto_dato.precio
-                    };
-                    let nuevaSuma = p.cantidad * producto_dato.precio;
-                    sumaTotal += sumaTotal + nuevaSuma;
-                    let nuevoStock = p.cantidad - e.cantidad;
-                    yield talle[i].update({ cantidad: nuevoStock })
-                        .catch(err => {
-                        return res.json({ ok: false, msg: err });
-                    });
-                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
-                    yield orden_detalle.save()
-                        .catch(err => {
-                        return res.json({ ok: false, msg: err });
-                    });
-                    yield carrito[c].destroy();
+        for (let e of talle) {
+            for (let n of carrito) {
+                if (e.id_producto == n.id_producto) {
+                    if (e.talle == n.talle) {
+                        let dato_producto = productos.find(e => e.id == n.id_producto);
+                        let orden = {
+                            id_orden,
+                            id_producto: n.id_producto,
+                            nombre_producto: dato_producto.nombre,
+                            talle: n.talle,
+                            cantidad: n.cantidad,
+                            precio: dato_producto.precio
+                        };
+                        let nuevaSuma = n.cantidad * dato_producto.precio;
+                        sumaTotal += sumaTotal + nuevaSuma;
+                        let nuevoStock = e.cantidad - n.cantidad;
+                        yield e.update({ cantidad: nuevoStock })
+                            .catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                        let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                        yield orden_detalle.save()
+                            .catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                        yield n.destroy();
+                    }
                 }
-            }));
-        });
+            }
+        }
         const orden = yield orden_1.Orden.findByPk(id_orden);
         yield orden.update({ total: sumaTotal });
         res.json({

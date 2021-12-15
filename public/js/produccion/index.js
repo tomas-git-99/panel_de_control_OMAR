@@ -12,7 +12,6 @@ const token = localStorage.getItem('x-token');
 fecthNormalGET("GET", "produccion/producto_produccion")
     .then( res => {
         if(res.ok){
-        
             colorearTable(res.produccion);
         }
     })
@@ -53,12 +52,12 @@ const imprimirTable = (e, color) => {
     <td data-label="FECHA DE SALIDA">${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
     <td data-label="FECHA DE ENTRA">${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
     <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
-    <td>
+    <td data-label= "AJUSTES"> 
     <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
     </div>
     </td>
-    <td>
+    <td data-label="PREVISUALIZAR">
     <div id="${e.produccion.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
     </div>
@@ -313,6 +312,12 @@ const opcines_taller = (id) => {
 window.salir_cambios = () => {
     opciones_cambio.style.display = "none";
     opciones_cambio.style.visibility = "hidden";
+    fecthNormalGET("GET", "produccion/producto_produccion")
+    .then( res => {
+        if(res.ok){
+            colorearTable(res.produccion);
+        }
+    })
 }
 
 

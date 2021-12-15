@@ -96,6 +96,7 @@ btnConfirmar.addEventListener("click", (e) => {
     }else{
         volverAtras(bienvenido, quitar_total_o_individual);
         descontar_total_id.id = btnConfirmar.id;
+        descontar_talle_id.id = btnConfirmar.id;
     }
 
         

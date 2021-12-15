@@ -145,12 +145,14 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
         let sumaTotal = 0;
     
         let idProductos:number[] = []
-    
+
+        let talleProducto:number[] = []
         carrito.map( e => {
             idProductos.push(e.id_producto);
+            talleProducto.push(e.talle)
+        });
 
-        })
-    
+
         const talle = await Talle.findAll({where:{id_producto:idProductos}});
 
         const productos = await Producto.findAll({where:{id:idProductos}});
@@ -160,13 +162,14 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
         
         let stockDisponible = talle.map( e => {
             carrito.map(p => {
-
                 if(p.id_producto == e.id_producto){
                     if(p.talle == e.talle){
                         if(e.cantidad < p.cantidad || e.cantidad == 0){
 
-                            let nombre_producto:any = productos.map( n => n.id == e.id_producto ?? n);
-                            productos_sin_stock.push(`El producto "${nombre_producto.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
+                            //let nombre_producto:any = productos.map( n => n.id == e.id_producto ?? n);
+                            let dato_producto:any = productos.find( e => e.id == p.id_producto);
+
+                            productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
 
                         }
                     }
@@ -182,46 +185,49 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
             })
         }
 
-        talle.map((e, i) => {
-            carrito.map( async(p, c) => {
-                if(e.id_producto == p.id_producto){
+        for( let e of talle){
 
-                    let producto_dato:any = productos.map( n => n.id == e.id_producto ?? n);
+            for( let n of carrito){
 
-                    let orden:any = {
-                        id_orden,
-                        id_producto:p.id_producto,
-                        nombre_producto:producto_dato.nombre,
-                        talle:p.talle,
-                        cantidad:p.cantidad,
-                        precio: producto_dato.precio
+                if(e.id_producto == n.id_producto){
+
+                    if(e.talle == n.talle){
+
+                        let dato_producto:any = productos.find( e => e.id == n.id_producto);
+
+                        let orden:any = {
+                            id_orden,
+                            id_producto:n.id_producto, 
+                            nombre_producto:dato_producto.nombre,
+                            talle: n.talle, 
+                            cantidad: n.cantidad,
+                            precio: dato_producto.precio
+                        }
+
+                        let nuevaSuma = n.cantidad * dato_producto.precio;
+                        sumaTotal += sumaTotal + nuevaSuma;
+                        let nuevoStock = e.cantidad -n.cantidad ;
+
+                        await e.update({cantidad:nuevoStock})
+                                    .catch(err => {
+                                        return res.json({ok: false, msg: err})
+                                    });
+                        let orden_detalle = new OrdenDetalle(orden);
+
+                        await orden_detalle.save()
+                                .catch(err => {
+                                    return res.json({ok: false, msg: err})
+                                });
+    
+                        await n.destroy();
                     }
-
-                    let nuevaSuma = p.cantidad * producto_dato.precio;
-                    sumaTotal += sumaTotal + nuevaSuma;
-
-                    let nuevoStock = p.cantidad - e.cantidad ;
-
-                    await talle[i].update({cantidad:nuevoStock})
-                            .catch(err => {
-                                return res.json({ok: false, msg: err})
-                            });
-                            
-                    
-                    let orden_detalle = new OrdenDetalle(orden);
-                    await orden_detalle.save()
-                            .catch(err => {
-                                return res.json({ok: false, msg: err})
-                            });
-
-                    await carrito[c].destroy();
-                    
                 }
-            })
-        })
+            }
+        }
 
-        const orden = await Orden.findByPk(id_orden)
 
+
+        const orden = await Orden.findByPk(id_orden);
         await orden!.update({total:sumaTotal});
 
 

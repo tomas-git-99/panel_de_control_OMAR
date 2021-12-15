@@ -23,6 +23,7 @@ router.get('/', orden_1.buscarOrden);
 router.get('/dni', orden_1.buscarOrdenDNI);
 router.get('/full/:id', orden_1.ordenParaImprimir);
 router.get('/historial/full', orden_1.historialOrden);
+router.get('/historial/p/id', orden_1.buscarPorID);
 router.get('/imprimir/parami/:id', orden_1.imptimirSoloVentas);
 // CARRITO
 exports.default = router;

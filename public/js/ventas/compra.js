@@ -82,7 +82,7 @@ const leerHistorial = (res) => {
         <td data-label="ID">${e.id}</td>
         <td data-label="NOMBRE">${e.nombre}</td>
         <td data-label="STOCK">${e.cantidad}</td>
-        <td data-label="TALLES">1,2,3,4,5</td>
+        <td data-label="TALLES">${e.talles == null ? "- -" : e.talles}</td>
         <td data-label="TELA">${e.tela}</td>
         <td data-label="LOCAL">${e.local}</td>
         <td data-label="PRECIO">$${e.precio}</td>
@@ -102,53 +102,6 @@ const leerHistorial = (res) => {
 
 }
 
-/* formAgregar.addEventListener("submit", (event) => {
-
-      event.preventDefault();
-
-      const id_producto = localStorage.getItem("id_producto");
-      const id_usuario = localStorage.getItem("id");
-
-      const forData = {id_producto, id_usuario};
-
-      for(let el of formAgregar.elements){
-          if(el.name.length > 0){
-            if(el.value.length > 0){
-
-              forData[el.name] = el.value;    
-            }
-          }
-             
-          }
-          
-    //agregar a carrito para despues comprar con el metodo POST
-    fecthNormalPOST_PUT("POST", "carrito", forData)
-        .then( res => {
-          if(res.ok){
-            localStorage.removeItem("id_producto");
-            for(let el of formAgregar.elements){
-              el.value = "";
-            }
-
-          }else{
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
-            })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
-          })
-        })
-            
-
-  }) */
 
 
 const carrito = document.querySelector(".carrito");

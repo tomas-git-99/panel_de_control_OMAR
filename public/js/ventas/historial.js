@@ -82,3 +82,22 @@ window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
 }
+const buscar_producto = document.getElementById("buscar_producto");
+
+
+buscar_producto.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(buscar_producto.length === 0){return;}
+
+    getSearch(buscar_producto.value);
+    buscar_producto.value = "";
+});
+
+const getSearch = (valor) => {
+
+    fecthNormalGET("GET", `orden/historial/p/id?id=${valor}`)
+    .then( res => {
+        imprimirEnPantalla(res.datos)
+    })
+}
