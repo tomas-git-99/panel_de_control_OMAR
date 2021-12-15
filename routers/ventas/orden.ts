@@ -9,14 +9,14 @@ const router = Router();
 
 //GENERAR ORDEN 
 router.post('/:idCliente/:idUsuario/:idDireccion',[
-    validarJWT,
-    validarCampos,
+    // validarJWT,
+    // validarCampos,
 ], generarOrden)
 
 // GENERAR DETALLES DE COMPRA
 router.post('/detalles/:idOrden/:idProducto',[
-    validarJWT,
-    validarCampos,
+    // validarJWT,
+    // validarCampos,
 ], ordenDetalles)
 
 

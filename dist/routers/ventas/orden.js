@@ -2,18 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orden_1 = require("../../controllers/ventas/orden");
-const validar_campo_1 = require("../../middlewares/validar-campo");
-const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //GENERAR ORDEN 
 router.post('/:idCliente/:idUsuario/:idDireccion', [
-    validar_JWT_1.validarJWT,
-    validar_campo_1.validarCampos,
+// validarJWT,
+// validarCampos,
 ], orden_1.generarOrden);
 // GENERAR DETALLES DE COMPRA
 router.post('/detalles/:idOrden/:idProducto', [
-    validar_JWT_1.validarJWT,
-    validar_campo_1.validarCampos,
+// validarJWT,
+// validarCampos,
 ], orden_1.ordenDetalles);
 // GENERAR ORDEN SUBIENDO EL PDF A NUBE
 router.put('/confirmar/:idOrden', orden_1.confirmarPedido);

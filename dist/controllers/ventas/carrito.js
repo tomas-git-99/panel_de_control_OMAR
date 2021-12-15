@@ -19,38 +19,36 @@ const talles_1 = require("../../models/ventas/talles");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const verificar = yield carrito_1.Carrito.findAll({ where: { [dist_1.Op.and]: [{ id_usuario: req.body.id_usuario }, { id_producto: req.body.id_producto }] } });
-        console.log(verificar);
-        if (verificar.length > 0) {
-            let cantidadBody = parseInt(req.body.cantidad);
-            verificar.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
-                if (e.talle == req.body.talle) {
-                    console.log("1");
+        let cantidadBody = parseInt(req.body.cantidad);
+        const talle = parseInt(req.body.talle);
+        for (let e of verificar) {
+            if (e.talle == talle) {
+                console.log("talle");
+                let nuevaCantidad = cantidadBody + e.cantidad;
+                yield e.update({ cantidad: nuevaCantidad });
+                return res.json({
+                    ok: true,
+                });
+            }
+        }
+        if (req.body.talle == null || req.body.talle === undefined) {
+            for (let e of verificar) {
+                if (e.talle == null) {
+                    console.log("null");
                     let nuevaCantidad = cantidadBody + e.cantidad;
-                    return yield verificar[i].update({ cantidad: nuevaCantidad });
+                    yield e.update({ cantidad: nuevaCantidad });
+                    return res.json({
+                        ok: true,
+                    });
                 }
-                else if (req.body.talle == null || req.body.talle == undefined) {
-                    if (e.talle == null) {
-                        console.log("2");
-                        let nuevaCantidad = cantidadBody + e.cantidad;
-                        return yield verificar[i].update({ cantidad: nuevaCantidad });
-                    }
-                }
-            }));
-            const carrito = new carrito_1.Carrito(req.body);
-            yield carrito.save();
-            return res.json({
-                ok: true,
-                carrito
-            });
+            }
         }
-        else {
-            const carrito = new carrito_1.Carrito(req.body);
-            yield carrito.save();
-            return res.json({
-                ok: true,
-                carrito
-            });
-        }
+        const carrito = new carrito_1.Carrito(req.body);
+        yield carrito.save();
+        res.json({
+            ok: true,
+            carrito
+        });
     }
     catch (error) {
         console.log(error);
@@ -118,9 +116,9 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
             carrito.map(p => {
                 if (p.id_producto == e.id_producto) {
                     if (p.talle == e.talle) {
-                        if (p.cantidad < e.cantidad || p.cantidad == 0) {
-                            let nombre_producto = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n.nombre; });
-                            productos_sin_stock.push(`El producto "${nombre_producto}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                        if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                            let nombre_producto = productos.map(n => { var _a; return (_a = n.id == e.id_producto) !== null && _a !== void 0 ? _a : n; });
+                            productos_sin_stock.push(`El producto "${nombre_producto.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
                         }
                     }
                 }
@@ -147,7 +145,7 @@ const descontarPorUnidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     };
                     let nuevaSuma = p.cantidad * producto_dato.precio;
                     sumaTotal += sumaTotal + nuevaSuma;
-                    let nuevoStock = e.cantidad - p.cantidad;
+                    let nuevoStock = p.cantidad - e.cantidad;
                     yield talle[i].update({ cantidad: nuevoStock })
                         .catch(err => {
                         return res.json({ ok: false, msg: err });

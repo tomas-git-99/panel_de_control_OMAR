@@ -14,51 +14,55 @@ import producto from "../../routers/ventas/producto";
 export const agregarCarrito = async (req: Request, res: Response) => {
 
     try {
-           const verificar = await Carrito.findAll({where:{[Op.and]:[{id_usuario:req.body.id_usuario}, {id_producto:req.body.id_producto}]}});
+        const verificar = await Carrito.findAll({where:{[Op.and]:[{id_usuario:req.body.id_usuario}, {id_producto:req.body.id_producto}]}});
 
-           console.log(verificar);
-           if(verificar.length > 0){
-   
-            let cantidadBody = parseInt(req.body.cantidad);
+       
+        let cantidadBody = parseInt(req.body.cantidad);
 
-            verificar.map( async(e,i) => {
+        const talle = parseInt(req.body.talle);
+  
 
-                if(e.talle == req.body.talle){
-                    console.log("1")
-                    let nuevaCantidad = cantidadBody + e.cantidad;
-                    return await verificar[i].update({cantidad:nuevaCantidad});
-         
+        for( let e of verificar){
 
-                }else if (req.body.talle == null || req.body.talle == undefined){
+            if(e.talle == talle){
+                console.log("talle")
+                let nuevaCantidad = cantidadBody + e.cantidad;
+                await e.update({cantidad: nuevaCantidad});
+             
+                return res.json({
+                     ok: true,
+                  
+                 });
+                
+         }
+        }
+       
 
-                    if( e.talle == null){
 
-                        console.log("2")
-                        let nuevaCantidad = cantidadBody + e.cantidad;
-                        return await verificar[i].update({cantidad:nuevaCantidad});
-                    }
+     if(req.body.talle == null || req.body.talle === undefined ){
 
-                }
-            })
-
-            const carrito = new Carrito(req.body);
-            await carrito.save();
-            return res.json({
-                ok: true,
-                carrito
-            })
-        
-           }else{
-
-               const carrito = new Carrito(req.body);
-               await carrito.save();
-               return res.json({
-                   ok: true,
-                   carrito
-           })
-           
-           }
+        for( let e of verificar){
+            if(e.talle == null){
+                console.log("null")
+                let nuevaCantidad = cantidadBody + e.cantidad;
+                await e.update({cantidad:nuevaCantidad})
+                return res.json({
+                    ok: true,
             
+                });
+                
+            }
+        }
+    }
+                
+  
+    const carrito = new Carrito(req.body);
+    await carrito.save();
+    res.json({
+        ok: true,
+        carrito
+    })
+    
 
     } catch (error) {
         console.log(error);
@@ -159,10 +163,10 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
 
                 if(p.id_producto == e.id_producto){
                     if(p.talle == e.talle){
-                        if(p.cantidad < e.cantidad || p.cantidad == 0){
+                        if(e.cantidad < p.cantidad || e.cantidad == 0){
 
-                            let nombre_producto = productos.map( n => n.id == e.id_producto ?? n.nombre);
-                            productos_sin_stock.push(`El producto "${nombre_producto}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
+                            let nombre_producto:any = productos.map( n => n.id == e.id_producto ?? n);
+                            productos_sin_stock.push(`El producto "${nombre_producto.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
 
                         }
                     }
@@ -181,10 +185,10 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
         talle.map((e, i) => {
             carrito.map( async(p, c) => {
                 if(e.id_producto == p.id_producto){
+
                     let producto_dato:any = productos.map( n => n.id == e.id_producto ?? n);
 
                     let orden:any = {
-
                         id_orden,
                         id_producto:p.id_producto,
                         nombre_producto:producto_dato.nombre,
@@ -196,7 +200,7 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
                     let nuevaSuma = p.cantidad * producto_dato.precio;
                     sumaTotal += sumaTotal + nuevaSuma;
 
-                    let nuevoStock = e.cantidad - p.cantidad;
+                    let nuevoStock = p.cantidad - e.cantidad ;
 
                     await talle[i].update({cantidad:nuevoStock})
                             .catch(err => {
