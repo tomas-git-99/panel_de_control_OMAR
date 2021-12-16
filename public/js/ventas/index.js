@@ -9,7 +9,7 @@ import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
-      : '';
+      : 'http://159.223.108.51:8000/api/';
 
 let token = localStorage.getItem('x-token');
 
