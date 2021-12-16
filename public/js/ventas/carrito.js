@@ -20,10 +20,15 @@ comprobarCarritoStorage();
 
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
-const carritoActualizar = (id=0) => {
+
+
+const carritoActualizar = () => {
+    let id = localStorage.getItem("id")
 
     cargaMedio("spinner_load", true)
-    fecthNormalGET("GET", `carrito/${1}`)
+
+    fecthNormalGET("GET", `carrito/${id}`)
+    
     .then( res => {
         cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);
@@ -518,7 +523,7 @@ window.configurar = (id) => {
 
 //BOTON PARA SALIR DE LA VENTA DE MODIFICACION DE CARRITO Y ACTUALIZAR CARRITO
 window.salir_actualizar_carrito = (id) => {
-    carritoActualizar(id);
+    carritoActualizar();
     modificarCarrito.style.display = "none";
     modificarCarrito.style.visibility = "hidden";
 }
