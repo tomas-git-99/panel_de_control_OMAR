@@ -66,6 +66,7 @@
     height: 30px
 }
 .boton{
+    padding-top: 50px;
     grid-column: 1/ 4;
 
 }
