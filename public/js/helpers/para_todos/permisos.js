@@ -44,7 +44,6 @@ export const enviarLocal = (dato) => {
             return true;
         }
         //return window.location = "/page/roles/admin/ventas/index.html";
-
     }else if(dato == "VENTAS"){
         if(params == "/page/roles/usuario_ventas/index.html"){
             return true;

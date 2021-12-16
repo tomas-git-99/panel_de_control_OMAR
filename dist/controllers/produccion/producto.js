@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const talller_1 = require("../../models/produccion/talller");
@@ -178,4 +178,27 @@ const searchFunc = (palabra, valor) => __awaiter(void 0, void 0, void 0, functio
     });
     return produccion;
 });
+const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const dato = req.query;
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
+            nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
+        } });
+    const taller = yield talller_1.Taller.findAll();
+    let produccion = [];
+    produccion_productos.map((e, i) => {
+        taller.map((p, m) => {
+            if (e.id_taller == p.id) {
+                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+            }
+        });
+        if (e.id_taller === null) {
+            produccion = [...produccion, { produccion: produccion_productos[i] }];
+        }
+    });
+    res.json({
+        ok: true,
+        produccion
+    });
+});
+exports.buscar = buscar;
 //# sourceMappingURL=producto.js.map

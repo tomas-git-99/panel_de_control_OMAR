@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { actualizarProducto, crearProducto, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango, unicoDatoQuery } from "../../controllers/produccion/producto";
+import { actualizarProducto, buscar, crearProducto, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango, unicoDatoQuery } from "../../controllers/produccion/producto";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -30,5 +30,8 @@ router.post('/busqueda/todos/:query', ordenarPorRango)
 router.post('/busqueda/unico/dato/:query', ordenarPorFechaExacta)
 
 router.get('/busqueda/unicos/completo/p/:query', unicoDatoQuery)
+
+
+router.get('/busqueda/name', buscar)
 
 export default router;

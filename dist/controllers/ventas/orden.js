@@ -182,7 +182,7 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.ordenParaImprimir = ordenParaImprimir;
 const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+    //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, limit: 15, order: [['updatedAt', 'DESC']] });
     let id_cliente = [];
     let id_direccion = [];
@@ -193,18 +193,11 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
     const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
     let datos = [];
-    cliente.map((e, i) => {
-        orden.map((p, m) => {
-            let direcciones = direccion.find(h => {
-                if (h.id == p.id_direccion) {
-                    return h;
-                }
-            });
-            if (p.id_cliente == e.id) {
-                datos = [...datos, { orden: orden[m], cliente: cliente[i], direccion: direcciones }];
-            }
-        });
-    });
+    for (let i of orden) {
+        let newcliente = cliente.find(e => e.id == i.id_cliente);
+        let direcciones = direccion.find(h => h.id == i.id_direccion);
+        datos = [...datos, { orden: i, cliente: newcliente, direccion: direcciones }];
+    }
     res.json({
         datos
     });

@@ -3,6 +3,7 @@ import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.j
 
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 
 
 
@@ -465,3 +466,35 @@ window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
 }
+
+
+
+const search = document.querySelector("#search");
+
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+    search.value = "";
+});
+
+
+const getSearch = (valor) => {
+
+    
+    cargaMedio("spinner_load", true);
+
+
+    fecthNormalGET("GET", "produccion/producto_produccion/busqueda/name?" + `nombre=${valor}`)
+    .then(res => {
+    cargaMedio("spinner_load", false);
+
+    colorearTable(res.produccion);
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+

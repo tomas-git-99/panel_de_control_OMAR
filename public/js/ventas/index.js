@@ -14,7 +14,7 @@ const url = ( window.location.hostname.includes('localhost'))
 let token = localStorage.getItem('x-token');
 
       
-/* verificarToken(token); */
+verificarToken(token);
 
 
 const historialGet = () => {

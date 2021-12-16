@@ -17,5 +17,6 @@ router.put('/:id', producto_1.actualizarProducto);
 router.post('/busqueda/todos/:query', producto_1.ordenarPorRango);
 router.post('/busqueda/unico/dato/:query', producto_1.ordenarPorFechaExacta);
 router.get('/busqueda/unicos/completo/p/:query', producto_1.unicoDatoQuery);
+router.get('/busqueda/name', producto_1.buscar);
 exports.default = router;
 //# sourceMappingURL=producto_produccion.js.map

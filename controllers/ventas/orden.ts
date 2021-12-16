@@ -6,6 +6,7 @@ import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
 import cliente from "../../routers/ventas/cliente";
+import { ordenarPorFechaExacta } from "../produccion/producto";
 
 
 export const generarOrden = async(req: Request, res: Response) => {
@@ -273,7 +274,7 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
 
 export const historialOrden = async (req: Request, res: Response) => {
 
-    //const orden = await Orden.findAll({order: [['updatedAt', 'DESC']]});
+    //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:15 , order: [['updatedAt', 'DESC']]});
 
     let id_cliente:any = []
@@ -284,25 +285,20 @@ export const historialOrden = async (req: Request, res: Response) => {
         id_direccion.push(e.id_direccion);
     });
 
-
+    
     const cliente = await Cliente.findAll({where:{id:id_cliente}});
     const direccion = await Direccion.findAll({where:{id:id_direccion}});
 
     let datos:any = [];
-    cliente.map( (e,i) => {
-        orden.map( (p, m) => {
+    for ( let i of orden){
 
-            let direcciones = direccion.find( h => {
-                if (h.id == p.id_direccion){
-                    return h;
-                }
-            });
-            
-            if( p.id_cliente == e.id){
-                datos = [...datos,{orden:orden[m], cliente:cliente[i], direccion:direcciones}];
-            }
-        })
-    })
+        let newcliente = cliente.find( e => e.id == i.id_cliente);
+        let direcciones = direccion.find( h => h.id == i.id_direccion);
+
+        datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones}];
+
+    }
+    
 
 
     res.json({
