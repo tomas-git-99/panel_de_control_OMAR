@@ -19,7 +19,13 @@
     grid-template-columns: 1fr 1fr;
 }
 
-
+#id_comprobante{
+    position: fixed;
+    display: grid;
+    justify-content: start;
+    font-size: 25px;
+    padding-left: 20px;
+}
 .hrDiv{
     border-top: 2px solid #3d3d3d;
 }
