@@ -141,7 +141,7 @@ const imprimir_html_datos = (res) => {
         </tr>
         <tr>
             <td><span>ROLLOS : </span>${e.producto.rollos}</td>
-            <td><span>PESO PROMEDIO : </span>${e.producto.peso_promedio}</td>
+            <td><span>PESO PROMEDIO : </span>${e.producto.peso_promedio} Kg</td>
             <td><span>TOTAL POR TALLE : </span>${e.producto.total_por_talle}</td>
             <td><span>TALLES : </span>${e.producto.talles}</td>
         </tr>

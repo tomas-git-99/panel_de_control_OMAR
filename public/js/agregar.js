@@ -1,6 +1,7 @@
 import { advertencia, algo_salio_mal} from "./helpers/para_todos/alertas.js";
 import { verificarToken } from "./helpers/para_todos/permisos.js";
 import { fecthNormalPOST_PUT } from "./helpers/ventas/fetch.js";
+import { cerrar_login } from "./helpers/para_todos/cerrar.js";
 
 const form = document.querySelector("form");
 let value_rol;
@@ -53,4 +54,8 @@ form.addEventListener('submit', (e) => {
 
 window.rol = (e) => {
     value_rol = e.value;
+}
+
+window.cerrar_seccion = () => {
+    cerrar_login();
 }
