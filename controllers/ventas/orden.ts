@@ -275,35 +275,46 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
 export const historialOrden = async (req: Request, res: Response) => {
 
     //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
-    const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:15 , order: [['updatedAt', 'DESC']]});
 
-    let id_cliente:any = []
-    let id_direccion:any = []
+    try {
+        
+        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:15 , order: [['updatedAt', 'DESC']]});
     
-    orden.map(async(e, i)=> {
-        id_cliente.push(e.id_cliente);
-        id_direccion.push(e.id_direccion);
-    });
-
+        let id_cliente:any = []
+        let id_direccion:any = []
+        
+        orden.map(async(e, i)=> {
+            id_cliente.push(e.id_cliente);
+            id_direccion.push(e.id_direccion);
+        });
     
-    const cliente = await Cliente.findAll({where:{id:id_cliente}});
-    const direccion = await Direccion.findAll({where:{id:id_direccion}});
-
-    let datos:any = [];
-    for ( let i of orden){
-
-        let newcliente = cliente.find( e => e.id == i.id_cliente);
-        let direcciones = direccion.find( h => h.id == i.id_direccion);
-
-        datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones}];
-
+        
+        const cliente = await Cliente.findAll({where:{id:id_cliente}});
+        const direccion = await Direccion.findAll({where:{id:id_direccion}});
+    
+        let datos:any = [];
+    
+        for ( let i of orden){
+    
+            let newcliente = cliente.find( e => e.id == i.id_cliente);
+            let direcciones = direccion.find( h => h.id == i.id_direccion);
+    
+            datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones}];
+    
+        }
+        
+    
+    
+        res.json({
+            datos
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: error
+        })
     }
-    
-
-
-    res.json({
-        datos
-    })
 }
 
 export const buscarPorID = async (req: Request, res: Response) => {

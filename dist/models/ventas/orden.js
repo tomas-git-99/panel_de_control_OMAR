@@ -32,12 +32,6 @@ Orden.init({
     },
     total: {
         type: sequelize_1.DataTypes.NUMBER
-    },
-    url_pdf_cliente: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    url_pdf_venta: {
-        type: sequelize_1.DataTypes.STRING
     }
 }, {
     sequelize: conectarDB_1.default,

@@ -10,8 +10,7 @@ export interface TodoAtributos {
     fecha: number;
     transporte: string;
     total:number;
-    url_pdf_cliente:string;
-    url_pdf_venta:string;
+
 }
 
 
@@ -23,9 +22,6 @@ export class Orden extends Model <TodoAtributos>{
     public fecha!: number;
     public transporte!: string;
     public total!:number;
-    public url_pdf_cliente!:string;
-    public url_pdf_venta!:string;
-
 }
 
 
@@ -54,12 +50,6 @@ Orden.init(
         },
         total:{
             type:DataTypes.NUMBER
-        },
-        url_pdf_cliente:{
-            type:DataTypes.STRING
-        },
-        url_pdf_venta:{
-            type:DataTypes.STRING
         }
 
         

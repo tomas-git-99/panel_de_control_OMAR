@@ -190,3 +190,8 @@ CREATE TABLE historial_taller(
     FOREIGN KEY fk_id_taller (id_taller)
     REFERENCES taller (id)
 );
+
+
+ALTER TABLE orden 
+    ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
