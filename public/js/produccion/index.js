@@ -11,16 +11,26 @@ let table_produccion = document.querySelector('.table_produccion');
 const token = localStorage.getItem('x-token');
 verificarToken(token);
 
-fecthNormalGET("GET", "produccion/producto_produccion")
-    .then( res => {
-        if(res.ok){
-            colorearTable(res.produccion);
-        }
-    })
-    .catch( err =>{
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
+
+const main_historial = () => {
+    cargaMedio("spinner_load", true);
     
+    fecthNormalGET("GET", "produccion/producto_produccion")
+        .then( res => {
+            if(res.ok){
+        cargaMedio("spinner_load", false);
+    
+                colorearTable(res.produccion);
+            }
+        })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+        
+
+}
+
+main_historial();
 const colorearTable = (res) => {
 
     let resultado = ""
@@ -119,7 +129,7 @@ const imprimir_previsualizar = (id) => {
 }
 
 const imprimir_html_datos = (res) => {
-
+    
     res.map ( e => {
 
         tabla_previsualizar.innerHTML = `
@@ -269,7 +279,7 @@ window.enviar_taller_nuevo = (id) => {
 
 }
 window.enviar_cambio = (id) => {
-    const input_cambio = document.getElementById("input_cambio");
+    let input_cambio = document.getElementById("input_cambio");
 
     let dato = {
         name: input_cambio.value
@@ -319,15 +329,7 @@ const opcines_taller = (id) => {
 window.salir_cambios = () => {
     opciones_cambio.style.display = "none";
     opciones_cambio.style.visibility = "hidden";
-    fecthNormalGET("GET", "produccion/producto_produccion")
-    .then( res => {
-        if(res.ok){
-            colorearTable(res.produccion);
-        }
-    })
-    .catch( err =>{
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
+    main_historial()
 }
 
 
@@ -341,16 +343,7 @@ window.ordenar = (e) => {
 
     if(e.value === "0" || e.value == 0){
 
-        fecthNormalGET("GET", "produccion/producto_produccion")
-        .then( res => {
-            if(res.ok){
-                colorearTable(res.produccion);
-            }
-        })
-        .catch( err =>{
-            algo_salio_mal(`Algo salio mal: ${ err }`)
-        })
-    
+        main_historial()
     }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
         
         opciones_input.innerHTML = `
@@ -366,13 +359,19 @@ window.ordenar = (e) => {
        </div>
     
         `
-    }else if ( e[e.selectedIndex].id == "taller" || e[e.selectedIndex].id == "fecha_de_entrada" || e[e.selectedIndex].id == "fecha_de_pago"){
+    }else if ( e[e.selectedIndex].id == "id_taller" || e[e.selectedIndex].id == "fecha_de_entrada" || e[e.selectedIndex].id == "fecha_de_pago"){
+
+    cargaMedio("spinner_load", true);
 
         fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${e[e.selectedIndex].id }`)
             .then( res =>{
+                cargaMedio("spinner_load", false);
+
                 colorearTable(res.produccion)
             })
             .catch( err =>{
+                cargaMedio("spinner_load", false);
+
                 algo_salio_mal(`Algo salio mal: ${ err }`)
             })
     

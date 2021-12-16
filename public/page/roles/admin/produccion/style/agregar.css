@@ -1,9 +1,9 @@
 
 .bienvenido_form{
- /*    display: none;
-    visibility: hidden; */
-    display: grid;
-    visibility: visible;
+    display: none;
+    visibility: hidden;
+/*     display: grid;
+    visibility: visible; */
     align-items:center;
     text-align: center;
  
@@ -80,8 +80,7 @@
 }
 
 .opciones{
-    display: none;
-    visibility: hidden; 
+
     position: fixed;
     place-self: center;
     width: auto;

@@ -99,15 +99,11 @@ export const obetenerUnProducto = async (req: Request, res: Response) => {
 
     const productos = await Produccion_producto.findByPk(id);
 
-    let taller
+    let taller = await Taller.findByPk(productos?.id_taller);
 
     let producto:any = []
+
     
-    if(!productos?.id_taller == null || !productos?.id_taller == undefined){
-
-        taller = await Taller.findByPk(productos?.id_taller);
-    }
-
     producto = [...producto, {producto:productos, taller:taller}]
 
     res.json({
@@ -173,6 +169,7 @@ export const unicoDatoQuery = async (req: Request, res: Response) =>{
 
     try {
         const { query } = req.params;
+
     
         let valor:null | false = null
     

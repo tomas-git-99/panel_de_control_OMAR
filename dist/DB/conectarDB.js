@@ -10,8 +10,7 @@ dotenv_1.default.config();
     host: 'localhost',
     dialect: 'mysql',
     //logging: false,
-});
-  */
+}); */
 const db = new sequelize_1.Sequelize(process.env.DB_NAME_DATABASE || "", process.env.DB_NAME_USER || "", process.env.DB_PASSWORD || "", {
     host: process.env.DB_HOST,
     port: 25060,

@@ -9,8 +9,8 @@ dotenv.config();
     host: 'localhost',
     dialect: 'mysql',
     //logging: false,
-});
-  */
+}); */
+ 
 
 
 const db = new Sequelize(process.env.DB_NAME_DATABASE || "", process.env.DB_NAME_USER || "", process.env.DB_PASSWORD || "", {

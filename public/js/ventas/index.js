@@ -50,7 +50,7 @@ window.abrirVentana = (id) => {
 
     let nuevoButtonID = `
     <button  type="button" class="btn btn-danger" id="${id}" onclick="salir(this.id)"">Terminar</button>
-    <button  type="submit" class="btn btn-success" id="${id}" onclick="enviar_talle(this.id)">Agregar</button>
+    <button  type="submit" class="btn btn-success cambiar_carga" id="${id}" onclick="enviar_talle(this.id)">Agregar</button>
     `
     boton_ordenar_talle.innerHTML = nuevoButtonID;
 
@@ -66,7 +66,7 @@ window.enviar_talle = (id) => {
         cantidad: id_cantidad.value
     };
 
-    agregarPorTalle(id, dato);
+    agregarPorTalle(id, dato, "cambiar_carga");
     id_talle.value = "";
     id_cantidad.value = "";
 
@@ -81,9 +81,14 @@ window.actualizar_salir = () => {
 
 window.salir = (id) => {
 
+    const id_talle = document.getElementById("id_talle");
+    const id_cantidad = document.getElementById("id_cantidad");
+
     ordenar_por_talle.style.display = "none";
     ordenar_por_talle.style.visibility = "hidden";
 
+    id_cantidad.value = "";
+    id_talle.value = "";
     previsualizar_producto(id);
 
 }
@@ -115,6 +120,7 @@ window.previsualizar_producto = (id) => {
 
 const leerHistorial = (res) => {
     let historial = ""
+   
     res.map( e => {
         historial += `
    
@@ -229,7 +235,7 @@ const ordenarProductoTable = (res) => {
             </td>
             </tr>
             <tr>
-            <td>Talles: (${res.talle}) : </td>
+            <td>Talles: (${res.talles}) : </td>
             <td><input type="text" id="producto_talle" name="talle"></td>
             <td> 
                 <button  id="talle_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
@@ -367,7 +373,7 @@ const cambiar_stock_talle = (id, suma_resta) => {
         .then(res => {
             if(res.ok) {
                 cambiarStock.innerHTML = `(${res.talle.cantidad})`;
-                salio_todo_bien(`Se agrego correctamente la cantidad de: ${ input.value }`);
+                salio_todo_bien(`Se quito correctamente la cantidad de: ${ input.value }`);
                 input.value = "";
             }else {
                 algo_salio_mal(`Algo salio mal`)

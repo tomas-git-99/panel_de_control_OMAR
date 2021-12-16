@@ -195,54 +195,6 @@
                             </div>
 
 
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
-
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
                         </div>
                     </div>
                     
@@ -265,17 +217,17 @@
                    <form class="formulario">
                        <div class="talle">
                            <label for="">Talle : </label>
-                           <input type="text" name="talle" id="id_talle">
+                           <input type="number" min="1" name="talle" id="id_talle">
                        </div>
                            <div class="cantidad">
                                <label for="">Cantidad : </label>
-                               <input type="text" name="cantidad" id="id_cantidad">
+                               <input type="number" min="1" name="cantidad" id="id_cantidad">
                            </div>
 
 
                            <div class="boton_ordenar_talle">
                                <button  type="button" class="btn btn-danger"  onclick="salir(this.id)">Terminar</button>
-                               <button  type="submit" class="btn btn-success" onclick="enviar_talle(this.id)">Agregar</button>
+                               <button  type="submit" class="btn btn-success cambiar_carga" onclick="enviar_talle(this.id)">Agregar</button>
                            </div>
                        </form>
                    </div>

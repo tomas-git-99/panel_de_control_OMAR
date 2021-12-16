@@ -98,7 +98,6 @@ const imprimir_opciones = (res) => {
 }
 let id_taller 
 window.selecciconCambios = (e) => {
-    console.log(e.value)
     id_taller = e.value;
 }
 

@@ -78,11 +78,8 @@ exports.obtenerProduccion = obtenerProduccion;
 const obetenerUnProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const productos = yield productos_produccion_1.Produccion_producto.findByPk(id);
-    let taller;
+    let taller = yield talller_1.Taller.findByPk(productos === null || productos === void 0 ? void 0 : productos.id_taller);
     let producto = [];
-    if (!(productos === null || productos === void 0 ? void 0 : productos.id_taller) == null || !(productos === null || productos === void 0 ? void 0 : productos.id_taller) == undefined) {
-        taller = yield talller_1.Taller.findByPk(productos === null || productos === void 0 ? void 0 : productos.id_taller);
-    }
     producto = [...producto, { producto: productos, taller: taller }];
     res.json({
         ok: true,

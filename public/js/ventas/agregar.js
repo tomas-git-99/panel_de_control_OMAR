@@ -4,6 +4,7 @@ import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { salio_todo_bien, algo_salio_mal, advertencia } from "../helpers/para_todos/alertas.js";
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { load_normal } from "../helpers/para_todos/carga_de_botones.js";
 
 
 
@@ -28,9 +29,10 @@ window.salir = () => {
 }
 
 
-
+const boton_guardar = document.querySelector(".boton_guardar")
 formProducto.addEventListener("submit", (e) => {
     e.preventDefault();
+    load_normal(boton_guardar, true)
 
     const forData = {};
     
@@ -45,16 +47,24 @@ formProducto.addEventListener("submit", (e) => {
         .then( (res) => {
             if(res.ok == true) {
                 botonSI.id = res.producto.id;
+
+                load_normal(boton_guardar, false, "GUARDAR")
                 volverAtras(bienvenido, pregunta_ordenar_por_talle);
             }else if (res.error == 10 || res.error == "10"){
                 localStorage.removeItem("x-token");
                 window.location.href = `${window.location.origin}/index.html`
             }else{
+                load_normal(boton_guardar, false, "GUARDAR")
+                  
+
                 advertencia(res.msg || res.errors[0].msg || res.errors[1].msg || res.errors[2].msg);
 
             }
         })
         .catch(err => {
+            load_normal(boton_guardar, false, "GUARDAR")
+
+
             algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
             
         })
@@ -83,10 +93,13 @@ formulario_por_talle.addEventListener("submit", (e) => {
         
     } 
 
-   agregarPorTalle(aca_viene_id_producto.id, forData, aca_viene_id_producto);
-   for(let el of formulario_por_talle.elements){
-       el.value = "";
-   }
+   agregarPorTalle(aca_viene_id_producto.id, forData, "aca_viene_id_producto");
+   setTimeout(() => {
+       
+       for(let el of formulario_por_talle.elements){
+           el.value = "";
+       }
+   }, 1000);
 
 })
 

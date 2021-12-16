@@ -64,16 +64,17 @@ window.enviar_datos_producto = (id) => {
   fecthNormalPOST_PUT("POST", "carrito", data)
   .then( res => {
     if(res.ok){
-
       cantidad_unica.value = "";
       talle_unico.value = "";
-      load_normal(boton_para_cargar, false, "Agregar")
-
+      load_normal(boton_para_cargar, false, "Agregar");
+      
 
     }else if (res.error == 10 || res.error == "10"){
       localStorage.removeItem("x-token");
       window.location.href = `${window.location.origin}/index.html`
     }else{
+      load_normal(boton_para_cargar, false, "Agregar")
+      console.log(res)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -82,6 +83,7 @@ window.enviar_datos_producto = (id) => {
     }
   })
   .catch(err => {
+    load_normal(boton_para_cargar, false, "Agregar")
 
     Swal.fire({
       icon: 'error',

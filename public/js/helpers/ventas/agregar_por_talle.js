@@ -8,28 +8,36 @@ import { fecthNormalPOST_PUT } from "./fetch.js";
 
 export const agregarPorTalle = (id_producto, forData, carga) =>{
 
-    carga.innerHTML = `
+    if(forData.talle == 0 || forData.talle == "" || forData.cantidad == 0 || forData.cantidad == ""){
+        return advertencia("No puede enviar campos vacios")
+    }
+    
+    document.querySelector(`.${carga}`).innerHTML = `
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     <span class="sr-only">Loading...</span>
     `
     fecthNormalPOST_PUT("POST", `talle/${id_producto}`, forData)
         .then( (res) => {
             if(res.ok == true){
-                carga.innerHTML = "Agregar"
+
+                document.querySelector(`.${carga}`).innerHTML = "Agregar"
+
                 return salio_todo_bien("Agregado con exito")
+
             }else if (res.ok == false){
 
                 if(res.error == 2){
+                    document.querySelector(`.${carga}`).innerHTML = "Agregar"
                     return advertencia(res.msg);
                 }
                 return algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
             }
         })
         .catch(err => {
-            return algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
 
-       
-            }) 
+             algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
+
+        }) 
     
  
 }
