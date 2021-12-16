@@ -26,12 +26,13 @@
 .cantidad{
 
     /* con opacidad cambia la vista para agregar los productos en stock */
-    opacity: 0;
+    display: none;
+    visibility: hidden;
     transition: .3s all;
 
     position: fixed;
-    top: 40%;
-    left: 42%;
+
+    place-self: center;
     width: 280PX;
     height: auto;
 
@@ -44,14 +45,25 @@
 
     
 }
-form{
+
+
+
+/* form{
 
     display: flex;
     flex-direction: column;
   
     row-gap: 10px;
 
+} */
+
+
+.agregar {
+    display: grid;
+    justify-content: center;
+
 }
+
 .checkAgegar{
     display: grid;
     justify-content: center;
@@ -68,6 +80,8 @@ form{
 
     display: none;
     visibility: hidden;
+    justify-content: center;
+    margin-bottom: 10px;
 /*      display: block;
     visibility: visible;   */  
 }
@@ -101,7 +115,7 @@ form{
 .boton2{
     display: grid;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .boton2 button{
@@ -129,4 +143,10 @@ form{
 
 .carrito{
     cursor: pointer;
+}
+
+@media (max-width: 767px){
+    .carrito{
+        left: 10px;
+    }
 }

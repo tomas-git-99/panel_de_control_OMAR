@@ -109,7 +109,7 @@ btnConfirmar.addEventListener("click", (e) => {
 });
 
 window.volver_atras = () => {
-    location.href = "/page/roles/admin/ventas/compra.html"
+    location.href = "compra.html"
 }
  
 //CLIENTE NUEVO O EXISTENTE

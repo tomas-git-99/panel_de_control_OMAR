@@ -34,7 +34,8 @@
             </div>
 
             <div class="ulMenu">
-    
+
+   
                 <div class="produccion">
                     <h5>  <a href="./index.html">PRODUCCION</a> </h5>
                     <ul>
@@ -44,9 +45,12 @@
                 </div>
             </div>
 
-            <div class="cerrar_seccion" onclick="cerrar_seccion()">
-                <h4>SALIR</h4>
-            </div>
+    
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
+            
+            
         </div>
         
         
@@ -71,7 +75,7 @@
                             <option value="fecha_de_entrada">Fecha de entrada</option>
                             <option value="fecha_de_salida">Fecha de salida</option>
                             <option value="fecha_de_pago">Fecha de pago</option>
-                            <option id= "taller" >Sin taller</option>
+                            <option id= "id_taller" >Sin taller</option>
                             <option id= "fecha_de_entrada" >Sin entregar</option>
                             <option id= "fecha_de_pago" >No pagado</option>
                           </select>
@@ -116,7 +120,9 @@
                       </table>
                 </div>
 
-                       
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status" id="spinner_load">
+                    <span class="sr-only"></span>
+                  </div>
         </div>
 
         <div class="opciones_cambio" id="aca_va_el_ID">

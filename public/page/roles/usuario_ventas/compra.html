@@ -24,11 +24,13 @@
 <body>
     <div class="contenido">
 
+        <div class="hamburger" onclick="style_menu()">
+            <img src="/img/menu.png" alt="">
+        </div>
         
         <div class="menu">
-            
             <div class="usuario">
-                <div class="icono">
+                <div class="icono" onclick="style_menu_salir()">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
                 </div>
                 <h5 id="nombre_usario"></h5>
@@ -45,12 +47,15 @@
                     </ul>
                 </div>
     
-                
-            </div>
-            <div class="cerrar_seccion" onclick="cerrar_seccion()">
-                <h4>SALIR</h4>
+
             </div>
 
+
+       
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
+   
             
         </div>
         
@@ -68,11 +73,12 @@
                     </div>
                     <div class="carrito">
                         <img src="/img/shopping.svg" alt="" width="40px">
+                        
                     </div>
                   </div>
             </div>
                 <div class="cartel">
-
+      
                     <div class="opcionesDeLocal">
                         <select class="custom-select custom-select-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
                             <option value="0">Ordenar por local</option>
@@ -102,46 +108,56 @@
                             
                           </table>
                     </div>
+
+                    
                 </div>
+                
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status" id="spinner_load">
+                    <span class="sr-only"></span>
+                  </div>
+            
+      
+                
             </div>
+                    <div class="cantidad">
+            
+                        <div class="pregunta">
+            
+                            <div class="nombreDeProducto">
+                                <img src="/img/close.svg" alt=""  width="20px" class="titleX">
+                                <h4>AGREGAR ...</h4>
+                         
+                            </div>
+            
+                                <div class="formAgregar">
+
+                                    <div class="agregar">
+                                        <span>Cantidad</span>
+                                        <input type="number" class="form-control" name="cantidad" id="cantidad_unica" value="12">
+                                    </div>
+                
+                                    <div class="checkAgegar">
+                                        <span><input type="checkbox" id="checkAgregar"> Agregar por talle</span>
+                                        
+                                    </div>
+                
+                                    <div class="agregar talleUnica">
+                                        <span>Talle</span>
+                                        <input type="text" class="form-control" name="talle" id="talle_unico" value="1">
+                                    </div>
+                
+                                    <div class="boton2">
+                                        <button id="aca_viene_id_producto" onclick="enviar_datos_producto(this.id)" class="boton_para_cargar">Agregar</button>
+                                    </div>
+                                </div>
+                        </div>
+                        
+                    </div>
 
         </div>
 
         
 
-
-        <div class="cantidad">
-            <div class="pregunta">
-
-                <div class="nombreDeProducto">
-                    <img src="/img/close.svg" alt=""  width="20px" class="titleX">
-                    <h4>AGREGAR ...</h4>
-             
-                </div>
-
-                <form action="" class="formAgregar">
-
-                    <div class="agregar">
-                        <span>Cantidad</span>
-                        <input type="number" class="form-control" name="cantidad">
-                    </div>
-
-                    <div class="checkAgegar">
-                        <span><input type="checkbox" id="checkAgregar"> Agregar por talle</span>
-                        
-                    </div>
-
-                    <div class="agregar talleUnica">
-                        <span>Talle</span>
-                        <input type="text" class="form-control" name="talle" id="talle_unico">
-                    </div>
-
-                    <div class="boton2">
-                        <button>Agregar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
     <script src="/js/ventas/compra.js" type="module" ></script>
 

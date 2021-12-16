@@ -20,9 +20,11 @@
 <body>
     <div class="contenido">
 
+        <div class="hamburger" onclick="style_menu()">
+            <img src="/img/menu.png" alt="">
+        </div>
         
         <div class="menu">
-            
             <div class="usuario">
                 <div class="icono">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
@@ -41,12 +43,15 @@
                     </ul>
                 </div>
     
+
             </div>
 
-            <div class="cerrar_seccion" onclick="cerrar_seccion()">
-                <h4>SALIR</h4>
-            </div>
-            
+
+       
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
+        
         </div>
         
         <div class="centro">
@@ -60,7 +65,7 @@
                         <hr width="100%" >
                     </div>
 
-                    <form action="" class="formProducto" id="agregar_producto_db">
+                    <form action="" class="formProducto" id="agregar_producto_db" autocomplete="off">
 
                         <div class="nombre">
                             <span>Nombre</span>
@@ -89,7 +94,7 @@
 
 
                         <div class="boton" type="submit" >
-                            <button>GUARDAR</button>
+                            <button class="boton_guardar">GUARDAR</button>
                         </div>
                     </form>
 
@@ -106,7 +111,7 @@
                 </div>
                 <div class="botones_preguntas">
                     <button type="button" class="btn btn-danger"  id="botonNO" onclick="salir(this)">NO</button>
-                    <button type="button" class="btn btn-primary" id="botonSI" onclick="entrar(this)">SI</button>
+                    <button type="button" class="btn btn-primary" id="botonSI" onclick="entrar(this.id)">SI</button>
                 </div>
             </div>
 
@@ -128,8 +133,9 @@
 
 
                         <div class="boton_ordenar_talle">
+                            
                              <button  type="button" class="btn btn-danger" onclick="salir(this)"">Terminar</button>
-                             <button  type="submit" class="btn btn-success" >Agregar</button>
+                             <button  type="submit" class="btn btn-success aca_viene_id_producto" id="aca_viene_id_producto">Agregar</button>
                         </div>
                       </form>
                 </div>

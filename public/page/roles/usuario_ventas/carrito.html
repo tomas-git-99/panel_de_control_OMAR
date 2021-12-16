@@ -28,7 +28,6 @@
 
         
         <div class="menu">
-            
             <div class="usuario">
                 <div class="icono">
                     <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
@@ -47,12 +46,15 @@
                     </ul>
                 </div>
     
-            </div>
-            <div class="cerrar_seccion" onclick="cerrar_seccion()">
-                <h4>SALIR</h4>
+
             </div>
 
 
+       
+                <div class="cerrar_seccion" onclick="cerrar_seccion()">
+                    <h4>SALIR</h4>
+                </div>
+   
             
         </div>
         
@@ -65,6 +67,7 @@
             </div>
 
                 <div class="cartel" id="cartel">
+
                     <div id="message"></div>
                     <table class="table" id="tableContact">
                         <thead>
@@ -75,6 +78,7 @@
                             <th scope="col">PRECIO UD</th>
                             <th scope="col">TOTAL</th>
                             <th scope="col"></th>
+                        
                                 
                           </tr>
                         </thead>
@@ -87,12 +91,15 @@
 
 
                 </div>
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status" id="spinner_load" >
+                    <span class="sr-only"></span>
+                  </div>
 
                 <div class="hrDiv"></div>
                 <div class="total">
                     <div class="botones">
-                        <button class="btns salir" onclick="volver_atras()">Salir</button>
-                        <button class="btns confirmar" id="btn_confirmar">Confirmar</button>
+                        <button class="btn btn-danger salir" onclick="volver_atras()">Salir</button>
+                        <button class="btn btn-primary confirmar" id="btn_confirmar">Confirmar</button>
                     </div>
 
                     <div class="resumen">
@@ -107,7 +114,7 @@
 
                 <div class="panel">
                     <button class="nuevo">Cliente Nuevo</button>
-                    <button class="existe">Cliente Existete</button>
+                    <button class="existe">Cliente Existente</button>
                 </div>
             </div>
 
@@ -120,7 +127,7 @@
                     </div>
 
                     <h5>Buscar Cliente</h5>
-                    <input id="search" type="text" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input id="search" type="text" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2" autocomplete="off">
                     
                     <div class="nombreCliente">
                         
@@ -281,8 +288,8 @@
                 </div>
 
                 <div class="butones_confimacion_descontar">
-                    <button type="button" class="btn btn-outline-dark" id="descontar_total_id" onclick="descontar_total(this.id)">TOTAL</button>
-                    <button type="button" class="btn btn-outline-dark" id="descontar_talle_id" onclick="descontar_talle(this.id)">TALLE</button>
+                    <button type="button" class="btn btn-outline-dark total_db" id="descontar_total_id" onclick="descontar_total(this.id)">TOTAL</button>
+                    <button type="button" class="btn btn-outline-dark talle_db" id="descontar_talle_id" onclick="descontar_talle(this.id)">TALLE</button>
                 </div>
 
             </div>
