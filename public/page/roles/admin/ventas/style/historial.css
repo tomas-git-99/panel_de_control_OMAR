@@ -76,6 +76,14 @@
     background:white;
 
 }
+#id_comprobante{
+    position: fixed;
+    display: grid;
+    justify-content: start;
+    font-size: 25px;
+    padding-left: 20px;
+}
+
 .tituloImprimir{
     text-align: center;
     padding-top:10px;

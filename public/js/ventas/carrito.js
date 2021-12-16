@@ -28,7 +28,6 @@ const carritoActualizar = () => {
     cargaMedio("spinner_load", true)
 
     fecthNormalGET("GET", `carrito/${id}`)
-    
     .then( res => {
         cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);

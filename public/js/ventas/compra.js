@@ -42,7 +42,8 @@ window.boton_agregar = (event) => {
 
 
 }
-const boton_para_cargar = document.querySelector(".boton_para_cargar")
+const boton_para_cargar = document.querySelector(".boton_para_cargar");
+
 window.enviar_datos_producto = (id) => {
 
   load_normal(boton_para_cargar, true)
