@@ -1,6 +1,6 @@
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
-      : 'http://159.223.108.51:8000/api/';
+      : 'https://tiendamilena.com.ar/api/';
 
 const token = localStorage.getItem('x-token')
 
