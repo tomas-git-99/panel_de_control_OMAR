@@ -3,9 +3,9 @@ import { advertencia } from "./alertas.js"
 
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
-      : 'http://159.223.108.51:8000/api/';
+      : 'https://tiendamilena.com.ar/api/';
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjM5NDQxNzY5LCJleHAiOjE2Mzk0NjMzNjl9.jUrcjXAf_SjaQi4DhO_JgAo26UadbJ_aIl9gGT9NrQc
+
 const url_local = window.location.origin;
 
 export const verificarToken = (token) => {
