@@ -140,6 +140,7 @@ export const imprimirDirecto = () => {
 
 
 export const imprimirComprobante_cliente = (id) => {
+
 const precio_final = document.querySelector(".precio_final");
 const id_comprobante = document.querySelector("#id_comprobante");
     
@@ -147,7 +148,7 @@ const id_comprobante = document.querySelector("#id_comprobante");
     fecthNormalGET("GET", `orden/full/${id}`)
     .then( res => {
         if(res.ok){
-           /*  escribirEnHTML(res); */
+            escribirEnHTML(res);
             imprimirProducto(res.productos)
             let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
@@ -186,7 +187,7 @@ const escribirEnHTML = (e) => {
     <label for="">Direccion: <span>${e.direccion.direccion}</span> </label>
     </div>
     <div class="Codigo">
-    <label for="">Codigo: <span>${e.direccion.cp}</span> </label>
+    <label for="">CP: <span>${e.direccion.cp}</span> </label>
     </div>
     `
     

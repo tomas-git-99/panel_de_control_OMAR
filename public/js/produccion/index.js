@@ -8,7 +8,9 @@ import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 
 
 let table_produccion = document.querySelector('.table_produccion');
+
 const token = localStorage.getItem('x-token');
+
 verificarToken(token);
 
 

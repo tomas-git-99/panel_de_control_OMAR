@@ -99,19 +99,20 @@ li{
 }
 
 .icono img{
-    width:90px;
+    width:110px;
+
     
 }
 .icono{
-    width:95px;
-    height:100px;
+    width:auto;
+    height:90px;
     background: #FBFBF2;
-    border-radius: 0% 0% 20% 20%;
+    border-radius: 0% 0% 25% 25%;
     display: grid;
     justify-content: center;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .form_usuario{

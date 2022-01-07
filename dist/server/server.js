@@ -44,7 +44,7 @@ class ServerApp {
             hisorial: '/api/produccion/hisorial',
         };
         this.app = express_1.default();
-        this.port = process.env.PORT || '8000';
+        this.port = '8000';
         /* middleware */
         this.middlewares();
         /* base de datos */

@@ -40,10 +40,13 @@ export const enviarLocal = (dato) => {
     const params = window.location.pathname;
 
     if(dato == "ADMIN"){
+
         if(params){
+
             return true;
         }
-        //return window.location = "/page/roles/admin/ventas/index.html";
+        /* return window.location = "/page/roles/admin/ventas/index.html"; */
+
     }else if(dato == "VENTAS"){
         if(params == "/page/roles/usuario_ventas/index.html"){
             return true;
