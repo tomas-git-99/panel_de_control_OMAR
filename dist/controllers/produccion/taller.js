@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarUnicTaller = exports.obtenerTaller = exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
+exports.buscarSoloPortaller = exports.buscarUnicTaller = exports.obtenerTaller = exports.eliminarTaller = exports.actualizarTaller = exports.crearTaller = void 0;
 const dist_1 = require("sequelize/dist");
+const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const talller_1 = require("../../models/produccion/talller");
 const crearTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const taller = new talller_1.Taller(req.body);
@@ -59,4 +60,25 @@ const buscarUnicTaller = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.buscarUnicTaller = buscarUnicTaller;
+const buscarSoloPortaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id } });
+    const taller = yield talller_1.Taller.findAll();
+    let produccion = [];
+    produccion_productos.map((e, i) => {
+        taller.map((p, m) => {
+            if (e.id_taller == p.id) {
+                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+            }
+        });
+        if (e.id_taller === null) {
+            produccion = [...produccion, { produccion: produccion_productos[i] }];
+        }
+    });
+    res.json({
+        ok: true,
+        produccion
+    });
+});
+exports.buscarSoloPortaller = buscarSoloPortaller;
 //# sourceMappingURL=taller.js.map

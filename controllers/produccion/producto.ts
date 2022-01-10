@@ -10,14 +10,20 @@ export const crearProducto = async (req: Request, res: Response) => {
 
     const producto = new Produccion_producto(req.body);
 
+    const estado = req.query.estado;
+
+    if(estado == "true"){
+
+        
+    }
 
 
-    await producto.save();
+    // await producto.save();
     
-    res.json({
-        ok: true,
-        producto
-    })
+    // res.json({
+    //     ok: true,
+    //     producto
+    // })
         
     } catch (error) {
         res.status(505).json({

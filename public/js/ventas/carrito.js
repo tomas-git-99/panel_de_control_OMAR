@@ -580,3 +580,11 @@ const nombre_usario = document.querySelector("#nombre_usario");
 
 
 nombre_usario.innerHTML =  nombre;
+
+
+
+
+//////////////////////////////// VENTAS AL PUBLICO //////////////////////////////////
+
+//DATA = {nombre, email, cuil o dni}
+

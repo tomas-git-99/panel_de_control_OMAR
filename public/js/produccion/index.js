@@ -36,8 +36,10 @@ main_historial();
 const colorearTable = (res) => {
 
     let resultado = ""
+    
     res.map ( e => {
         if(e.produccion.id_taller == undefined || e.produccion.id_taller == null){
+
             resultado += imprimirTable(e, "table-active")
         }else if(e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null){
             resultado += imprimirTable(e, "table-danger")
@@ -377,10 +379,68 @@ window.ordenar = (e) => {
                 algo_salio_mal(`Algo salio mal: ${ err }`)
             })
     
+    }else if( e[e.selectedIndex].id == "taller"){
+
+        opciones_input.innerHTML = `
+        <div class="p">
+        <select class="custom-select taller" id="${e.value}" onchange="buscarDataTaller(this)">
+            <option selected>Filtrar ...</option>
+ 
+          </select>
+           </div>
+           <div class="input_fecha">
     
+       </div>
+    
+        `
+
+        opciones_de_taller();
     }
 
 }
+
+
+
+
+const opciones_de_taller = () => {
+
+    fecthNormalGET("GET","produccion/taller")
+    .then(res =>{
+        imprimir_taller(res.taller)
+    })
+    .catch (err => {
+        algo_salio_mal(`Algo salio mal: ${ err.message }`)
+    })
+}
+
+
+const imprimir_taller = (talleres) => {
+
+    const taller = document.querySelector(".taller");
+
+    let data_taller = "<option selected>Filtrar ...</option>"
+    talleres.map (e => {
+
+        data_taller += `
+        <option value="${e.id}">${e.nombre_completo}</option>
+        `
+    })
+
+    taller.innerHTML = data_taller;
+}
+
+window.buscarDataTaller = (value) => {
+
+    fecthNormalGET("GET","produccion/taller/full/" + value.value)
+    .then(res =>{
+        colorearTable(res.produccion)
+    })
+    .catch (err => {
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+
 
 window.cambiar_filtro = (e) => {
 

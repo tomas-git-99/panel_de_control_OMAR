@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarTaller, buscarUnicTaller, crearTaller, eliminarTaller, obtenerTaller } from "../../controllers/produccion/taller";
+import { actualizarTaller, buscarSoloPortaller, buscarUnicTaller, crearTaller, eliminarTaller, obtenerTaller } from "../../controllers/produccion/taller";
 
 
 const router = Router();
@@ -21,4 +21,5 @@ router.put("/:id", actualizarTaller);
 router.delete("/:id", eliminarTaller);
 
 
+router.get("/full/:id", buscarSoloPortaller)
 export default router;

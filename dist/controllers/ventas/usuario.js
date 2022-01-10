@@ -35,7 +35,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: 'Usuario / Password no son correctos'
             });
         }
-        const token = yield generar_JWT_1.generarJWT(usuario[0].id);
+        const token = yield (0, generar_JWT_1.generarJWT)(usuario[0].id);
         res.json({
             ok: true,
             usuario,

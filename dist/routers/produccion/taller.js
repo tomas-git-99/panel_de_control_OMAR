@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const taller_1 = require("../../controllers/produccion/taller");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //OBTENER TALLER 
 router.get('/', taller_1.obtenerTaller);
 router.get("/buscar", taller_1.buscarUnicTaller);
@@ -12,5 +12,6 @@ router.post('/', taller_1.crearTaller);
 router.put("/:id", taller_1.actualizarTaller);
 //ELIMINAR TALLER
 router.delete("/:id", taller_1.eliminarTaller);
+router.get("/full/:id", taller_1.buscarSoloPortaller);
 exports.default = router;
 //# sourceMappingURL=taller.js.map

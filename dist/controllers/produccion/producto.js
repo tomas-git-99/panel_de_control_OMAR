@@ -16,11 +16,14 @@ const talller_1 = require("../../models/produccion/talller");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const producto = new productos_produccion_1.Produccion_producto(req.body);
-        yield producto.save();
-        res.json({
-            ok: true,
-            producto
-        });
+        const estado = req.query.estado;
+        if (estado == "true") {
+        }
+        // await producto.save();
+        // res.json({
+        //     ok: true,
+        //     producto
+        // })
     }
     catch (error) {
         res.status(505).json({
@@ -179,6 +182,7 @@ const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const dato = req.query;
     const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];

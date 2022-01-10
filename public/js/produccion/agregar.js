@@ -21,6 +21,11 @@ window.agregar_taller = () => {
 
 const formProducto = document.querySelector(".formProducto");
 
+let estapadoEstado
+window.estanpado = (value) => {
+    estapadoEstado = value.value ;
+}
+
 formProducto.addEventListener("submit", (e) => {
 
     e.preventDefault();
@@ -48,9 +53,9 @@ formProducto.addEventListener("submit", (e) => {
     !id_taller == 0 || !id_taller == "0" ? forData.id_taller = id_taller : forData;
     
 
-    fecthNormalPOST_PUT("POST", "produccion/producto_produccion", forData)
+    fecthNormalPOST_PUT("POST", "produccion/producto_produccion?estado="+ estapadoEstado , forData)
         .then( res => {
-            if(res.ok){
+            if(res.ok){ 
                 salio_todo_bien("Salio todo correcto");
                 volverAtras(bienvenido_form, opciones);
             }else if (res.error == 10 || res.error == "10"){
