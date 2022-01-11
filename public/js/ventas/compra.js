@@ -227,6 +227,7 @@ opcionesDeLocales();
 window.cambioDeLocal = (dato) => {
 
   cargaMedio("spinner_load", true);
+
   if (dato.value == 0){
      fecthNormalGET("GET", "producto")
       .then(res => {
@@ -236,17 +237,19 @@ window.cambioDeLocal = (dato) => {
       .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+  }else{
+
+    fecthNormalGET_QUERY("GET", "producto/locales/seleccionado/local?", "local=", dato.value)
+        .then((response) => {
+          cargaMedio("spinner_load", false);
+  
+          leerHistorial(response.locales);
+        })
+        .catch( err =>{
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
   }
 
-  fecthNormalGET_QUERY("GET", "producto/locales/seleccionado/local?", "local=", dato.value)
-      .then((response) => {
-        cargaMedio("spinner_load", false);
-
-        leerHistorial(response.locales);
-      })
-      .catch( err =>{
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
 }
 
 

@@ -7,6 +7,7 @@ import { volverAtras } from "../helpers/ventas/volver_atras.js"
 const bienvenido_form = document.querySelector(".bienvenido_form");
 const form_taller = document.querySelector(".form_taller");
 const opciones = document.querySelector(".opciones");
+const form_estanpador = document.querySelector(".form_estanpador");
 
 const boton = document.querySelector(".boton")
 
@@ -18,7 +19,28 @@ window.agregar_taller = () => {
     volverAtras(opciones, form_taller);
 
 }
+window.agregar_estanpador = () => {
+    volverAtras(opciones, form_estanpador);
+    
+}
 
+
+window.salir_ventana = (data) => {
+    if(data == "estanpado"){
+    limpiar(form_estanpador_agregar)
+    volverAtras(form_estanpador, opciones);
+    }else if(data == "taller"){
+    limpiar(form_taller_agregar)
+
+    volverAtras(form_taller, opciones);
+
+    }else if(data == "producto"){
+    limpiar(formProducto)
+
+        volverAtras(bienvenido_form, opciones);
+
+    }
+}
 const formProducto = document.querySelector(".formProducto");
 
 let estapadoEstado
@@ -147,6 +169,31 @@ form_taller_agregar.addEventListener("submit", (event) => {
 
 })
 
+
+const form_estanpador_agregar = document.querySelector(".form_estanpador_agregar");
+form_estanpador_agregar.addEventListener("submit", (e) => {
+
+    e.preventDefault();
+    
+    const forData = {};
+    
+    for(let el of form_estanpador_agregar.elements){
+        if(el.name.length > 0)
+            forData[el.name] = el.value;    
+        }
+
+
+})
+
+
+
+const limpiar = (element) => {
+
+    for(let el of element.elements){
+        if(el.name.length > 0)
+            el.value = "";    
+        }
+}
 //calcular el el total por talle y talles
 
 const total_por_talle = document.getElementById('total_por_talle');

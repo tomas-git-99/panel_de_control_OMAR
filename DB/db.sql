@@ -215,10 +215,18 @@ CREATE TABLE estanpados(
     dibujo VARCHAR(255),
     fecha_de_entrada DATE,
     pagado BOOLEAN default false,
+    
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 
 CREATE TABLE estanpador(
+    
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50),
     telefono VARCHAR(25),
-    direccion VARCHAR(100)
+    direccion VARCHAR(100),
+
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )

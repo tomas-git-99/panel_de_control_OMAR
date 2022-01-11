@@ -74,6 +74,7 @@
             <div class="bienvenido_form">
 
                 <div class="cartel_form">
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_ventana('producto')"></button>
 
                     <div class="titulo">
                         <h1>PRODUCTO</h1>
@@ -173,14 +174,19 @@
 
 
             <div class="opciones">
-                <div class="agregar_producto" onclick="agregar_producto()">
+                <div class="cubo_agregar agregar_producto" onclick="agregar_producto()">
                     <h3>Agregar Producto</h3>
                     <p>Podras agregar nuevos productos para produccion</p>
                 </div>
     
-                <div class="agregar_taller" onclick="agregar_taller()">
+                <div class="cubo_agregar agregar_taller" onclick="agregar_taller()">
                     <h3>Agregar taller</h3>
                     <p>Podras agregrar nuevos talleres</p>
+                </div>
+
+                <div class="cubo_agregar agregar_estanpador" onclick="agregar_estanpador()">
+                    <h3>Agregar estanpador(oficial)</h3>
+                    <p>Podras agregrar nuevos estanpadores(oficial)</p>
                 </div>
             </div>
 
@@ -189,6 +195,7 @@
             <div class="form_taller">
 
                 <div class="cartel_form_taller">
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_ventana('taller')"></button>
 
                     <div class="titulo">
                         <h1>TALLER</h1>
@@ -196,6 +203,40 @@
                     </div>
 
                     <form action="" class="form_taller_agregar" id="agregar_taller_db">
+                        <div class="nombre_completo">
+                            <span>Nombre completo</span>
+                            <input type="text"class="form-control" name="nombre_completo">
+                        </div>
+                        <div class="telefono">
+                            <span>Telefono</span>
+                            <input type="text"class="form-control" name="telefono">
+                        </div>
+                        <div class="direccion">
+                            <span>Direccion</span>
+                            <input type="text"class="form-control" name="direccion">
+                        </div>
+                        <div class="boton_taller" type="submit" >
+                            <button class="btn btn-primary">GUARDAR</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                
+            </div>
+
+
+            <div class="form_estanpador">
+                <div class="cartel_form_estanpador">
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_ventana('estanpado')"></button>
+                    
+                    <div class="titulo">
+                        <h1>ESTANPADOR</h1>
+                        <hr width="100%" >
+                    </div>
+
+                    <form action="" class="form_estanpador_agregar" id="agregar_taller_db">
                         <div class="nombre_completo">
                             <span>Nombre completo</span>
                             <input type="text"class="form-control" name="nombre_completo">

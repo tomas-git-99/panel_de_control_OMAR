@@ -14,6 +14,7 @@ export interface TodoAtributos {
     talles: number,
     total: number,
     peso_promedio: number,
+    cantidad_entregada:number,
     id_taller: number,
     fecha_de_salida: number,
     fecha_de_entrada: number,
@@ -36,7 +37,7 @@ export class Produccion_producto extends Model <TodoAtributos>{
     public talles!: number;
     public total!: number;
     public peso_promedio!: number;
-
+    public cantidad_entregada!:number;
     public id_taller!: number;
     public fecha_de_salida!: number;
     public fecha_de_entrada!: number;
@@ -85,6 +86,9 @@ Produccion_producto.init(
         peso_promedio:{
             type:DataTypes.NUMBER
         },
+        cantidad_entregada:{
+            type:DataTypes.NUMBER        }
+        ,
         id_taller:{
             type:DataTypes.NUMBER
         },

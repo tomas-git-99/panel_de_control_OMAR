@@ -45,6 +45,9 @@ Produccion_producto.init({
     peso_promedio: {
         type: sequelize_1.DataTypes.NUMBER
     },
+    cantidad_entregada: {
+        type: sequelize_1.DataTypes.NUMBER
+    },
     id_taller: {
         type: sequelize_1.DataTypes.NUMBER
     },

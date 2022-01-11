@@ -4,6 +4,7 @@ import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.j
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 
 
 
@@ -104,6 +105,7 @@ window.enviar_id = (id) => {
         <option id="${id}" value="taller">Taller</option>
         <option id="${id}" value="fecha_de_salida">Fecha de salida</option>
         <option id="${id}" value="fecha_de_entrada">Fecha de entrada</option>
+        <option id="${id}" value="cantidad_entregada">Cantidad entregada</option>
         <option id="${id}" value="estado">Pagado</option>
         
     `
@@ -138,27 +140,32 @@ const imprimir_html_datos = (res) => {
 
         tabla_previsualizar.innerHTML = `
             <tr>
-            <td><span>ID : </span>${e.producto.id_corte}</td>
-            <td><span>NOMBRE : </span>${e.producto.nombre}</td>
-            <td><span>FECHA DE CORTE : </span>${e.producto.fecha_de_corte == null || e.producto.fecha_de_corte == undefined ? "- -" : e.producto.fecha_de_corte}</td>
-            <td><span>EDAD : </span>${e.producto.edad}</td>
+            <td><span>ID : </span>${devolverString(e.producto.id_corte)}</td>
+            <td><span>NOMBRE : </span>${devolverString(e.producto.nombre)}</td>
+            <td><span>FECHA DE CORTE : </span>${devolverString(e.producto.fecha_de_corte)}</td>
+            <td><span>EDAD : </span>${devolverString(e.producto.edad)}</td>
         </tr>
         <tr>
-            <td><span>ROLLOS : </span>${e.producto.rollos}</td>
-            <td><span>PESO PROMEDIO : </span>${e.producto.peso_promedio} Kg</td>
-            <td><span>TOTAL POR TALLE : </span>${e.producto.total_por_talle}</td>
-            <td><span>TALLES : </span>${e.producto.talles}</td>
+            <td><span>ROLLOS : </span>${devolverString(e.producto.rollos)}</td>
+            <td><span>PESO PROMEDIO : </span>${devolverString(e.producto.peso_promedio)} Kg</td>
+            <td><span>TOTAL POR TALLE : </span>${devolverString(e.producto.total_por_talle)}</td>
+            <td><span>TALLES : </span>${devolverString(e.producto.talles)}</td>
         </tr>
         <tr>
         
-            <td><span>TOTAL : </span>${e.producto.total}</td>
+            <td><span>TOTAL : </span>${devolverString(e.producto.total)}</td>
           </tr>
         <tr>
-            <td><span>TALLER : </span>${e.taller == null || e.taller == undefined ? "- -" : e.taller.nombre_completo}</td>
-            <td><span>FECHA DE SALIDA : </span>${e.producto.fecha_de_salida == null || e.producto.fecha_de_salida == undefined ? "- -" : e.producto.fecha_de_salida}</td>
-            <td><span>FECHA DE ENTRADA : </span>${e.producto.fecha_de_entrada == null || e.producto.fecha_de_entrada == undefined ? "- -" : e.producto.fecha_de_entrada}</td>
+            <td><span>TALLER : </span>${devolverString(e.taller)}</td>
+            <td><span>FECHA DE SALIDA : </span>${devolverString(e.producto.fecha_de_salida)}</td>
+            <td><span>FECHA DE ENTRADA : </span>${devolverString(e.producto.fecha_de_entrada)}</td>
             <td><span>PAGO : </span>${e.producto.estado == false ? "NO PAGADO" : "PAGADO"} </td>
-        
+            
+            </tr>
+            
+            <tr>
+            
+            <td><span>CANTIDAD ENTREGADA : </span>${devolverString(e.producto.cantidad_entregada)}</td>
           </tr>
 
         `
@@ -346,7 +353,8 @@ window.ordenar = (e) => {
     const opciones_input = document.querySelector(".opciones_input");
 
     if(e.value === "0" || e.value == 0){
-
+        escribir_busquedas.style.display = "none";
+        escribir_busquedas.style.visibility = "hidden";
         main_historial()
     }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
         
@@ -412,13 +420,13 @@ const opciones_de_taller = () => {
         algo_salio_mal(`Algo salio mal: ${ err.message }`)
     })
 }
-
+const escribir_busquedas = document.querySelector(".escribir_busquedas");
 
 const imprimir_taller = (talleres) => {
 
     const taller = document.querySelector(".taller");
 
-    let data_taller = "<option selected>Filtrar ...</option>"
+    let data_taller = "<option value='0' selected >Filtrar ...</option>"
     talleres.map (e => {
 
         data_taller += `
@@ -431,13 +439,26 @@ const imprimir_taller = (talleres) => {
 
 window.buscarDataTaller = (value) => {
 
-    fecthNormalGET("GET","produccion/taller/full/" + value.value)
-    .then(res =>{
-        colorearTable(res.produccion)
-    })
-    .catch (err => {
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
+    if(value.value == "0" || value.value == 0){
+        escribir_busquedas.style.display = "none";
+        escribir_busquedas.style.visibility = "hidden";
+        main_historial()
+    }else{
+        fecthNormalGET("GET","produccion/taller/full/" + value.value)
+        .then(res =>{
+            if(res.produccion.length == 0){
+                escribir_busquedas.style.display = "grid";
+                escribir_busquedas.style.visibility = "visible";
+                escribir_busquedas.innerHTML = `<h3>No se pudo encontrar ningun taller</h3>`
+
+            }else{
+                colorearTable(res.produccion)
+            }
+        })
+        .catch (err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+    }
 }
 
 
