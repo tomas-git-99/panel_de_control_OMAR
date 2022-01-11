@@ -223,21 +223,30 @@ const ordenarProductoTable = (res) => {
 
         result += `
             <tr>
-            <td>${res.nombre} : </td>
+            <td>${devolverString(res.nombre)} : </td>
             <td><input type="text" id="producto_nombre" name="nombre"></td>
             <td> 
                 <button  id="nombre_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
+
             <tr>
-            <td>Cantidad Total: (${res.cantidad}) : </td>
+            <td>${devolverString(res.diseño)} : </td>
+            <td><input type="text" id="producto_diseño" name="diseño"></td>
+            <td> 
+                <button  id="diseño_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+            </td>
+            </tr>
+
+            <tr>
+            <td>Cantidad Total: (${devolverString(res.cantidad)}) : </td>
             <td><input type="text" id="producto_cantidad" name="cantidad"></td>
             <td> 
                 <button  id="cantidad_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
             <tr>
-            <td>Talles: (${res.talles}) : </td>
+            <td>Talles: (${devolverString(res.talles)}) : </td>
             <td><input type="text" id="producto_talle" name="talle"></td>
             <td> 
                 <button  id="talle_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
@@ -245,14 +254,14 @@ const ordenarProductoTable = (res) => {
             </tr>
            
             <tr>
-            <td> Precio:$ ${res.precio} : </td>
+            <td> Precio:$ ${devolverString(res.precio)} : </td>
             <td><input type="text" id="producto_precio" name="precio" ></td>
             <td> 
                 <button  id="precio_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
             </tr>
             <tr>
-            <td>Local: (${res.local}) : </td>
+            <td>Local: (${devolverString(res.local)}) : </td>
             <td><input type="text" id="producto_local" name="local" ></td>
             <td> 
                 <button  id="local_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>

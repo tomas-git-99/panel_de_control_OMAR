@@ -1,3 +1,4 @@
+import { devolverString } from "../para_todos/null.js";
 import { fecthNormalGET } from "./fetch.js";
 
 export const funcionParaImprimir = (nombre_cliente, elemento) => {
@@ -185,28 +186,28 @@ const escribirEnHTML = (e, data="", estado=false) => {
 
         escribir += `
         <div class="nombre">
-        <label for="">NOMBRE: <span>${e.cliente.nombre == null ? '- -' : e.cliente.nombre}</span> </label>
+        <label for="">NOMBRE: <span>${devolverString(e.cliente.nombre)}</span> </label>
         </div>
         <div class="DNI O CUIL">
-        <label for="">DNI O CUIL: <span>${e.cliente.dni_cuil == null ? '- -' : e.cliente.dni_cuil}</span> </label>
+        <label for="">DNI O CUIL: <span>${devolverString(e.cliente.dni_cuil)}</span> </label>
         </div>
         <div class="Telefono">
-        <label for="">Telefono: <span>${e.cliente.tel_cel == null ? '- -' : e.cliente.tel_cel}</span> </label>
+        <label for="">Telefono: <span>${devolverString(e.cliente.tel_cel)}</span> </label>
         </div>
         <div class="Provincia">
-        <label for="">Provincia: <span>${e.direccion.provincia  == null ? '- -' : e.direccion.provincia}</span> </label>
+        <label for="">Provincia: <span>${devolverString(e.direccion.provincia)}</span> </label>
         </div>
         <div class="Localida">
-        <label for="">Localidad: <span>${e.direccion.localidad  == null ? '- -' : e.direccion.localidad}</span> </label>
+        <label for="">Localidad: <span>${devolverString(e.direccion.localidad)}</span> </label>
         </div>
         <div class="Direccion">
-        <label for="">Direccion: <span>${e.direccion.direccion == null ? '- -' : e.direccion.direccion}</span> </label>
+        <label for="">Direccion: <span>${devolverString(e.direccion.direccion)}</span> </label>
         </div>
         <div class="Codigo">
-        <label for="">CP: <span>${e.direccion.cp == null ? '- -' : e.direccion.cp}</span> </label>
+        <label for="">CP: <span>${devolverString(e.direccion.cp)}</span> </label>
         </div>
         <div class="transporte">
-        <label for="">Transporte: <span>${e.orden.transporte == null ? '- -' : e.orden.transporte}</span> </label>
+        <label for="">Transporte: <span>${devolverString(e.orden.transporte)}</span> </label>
         </div>
         `
         
@@ -216,16 +217,16 @@ const escribirEnHTML = (e, data="", estado=false) => {
 
         escribir += `
         <div class="nombre">
-        <label for="">NOMBRE: <span>${e.cliente.nombre == null ? '- -' : e.cliente.nombre}</span> </label>
+        <label for="">NOMBRE: <span>${devolverString(e.cliente.nombre)}</span> </label>
         </div>
         <div class="DNI O CUIL">
-        <label for="">DNI O CUIL: <span>${e.cliente.dni_cuil == null ? '- -' : e.cliente.dni_cuil}</span> </label>
+        <label for="">DNI O CUIL: <span>${devolverString(e.cliente.dni_cuil )}</span> </label>
         </div>
         <div class="Telefono">
-        <label for="">Telefono: <span>${e.cliente.tel_cel == null ? "- -" : e.cliente.tel_cel}</span> </label>
+        <label for="">Telefono: <span>${devolverString(e.cliente.tel_cel)}</span> </label>
         </div>
         <div class="email">
-        <label for="">Email: <span>${e.cliente.email == null ? "- -" : e.cliente.email}</span> </label>
+        <label for="">Email: <span>${devolverString(e.cliente.email)}</span> </label>
         </div>
         `
 
@@ -247,9 +248,9 @@ const imprimirProducto = (res, elemento) => {
         escribir += `
         <tr>
         
-        <td>${e.nombre_producto}</td>
-        <td>${e.cantidad}</td>
-        <td>$ ${e.precio}</td>
+        <td>${devolverString(e.nombre_producto)}</td>
+        <td>${devolverString(e.cantidad)}</td>
+        <td>$ ${devolverString(e.precio)}</td>
         <td>$ ${e.precio * e.cantidad}</td>
         
         
@@ -304,11 +305,11 @@ const ticket_parami = (res, elemento) => {
     res.map( (e,i) => {
         resultado += `
         <tr>
-        <th>${e.detalles.nombre_producto}</th>
-        <th>aca va el diseño</th>
-        <td>${e.producto.tela == null || e.producto.tela == undefined ? "- -": e.producto.tela}</td>
-        <td>${e.detalles.talle == null || e.detalles.talle == undefined ? "- -" : e.detalles.talle}</td>
-        <td>${e.detalles.cantidad}</td>
+        <th>${devolverString(e.detalles.nombre_producto)}</th>
+        <th>${devolverString(e.producto.diseño)}</th>
+        <td>${devolverString(e.producto.tela)}</td>
+        <td>${devolverString(e.detalles.talle)}</td>
+        <td>${devolverString(e.detalles.cantidad)}</td>
         </tr>
         `
     })

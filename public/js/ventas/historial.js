@@ -4,6 +4,7 @@ import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobant
 import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 
 
 const main_historial = () => {
@@ -21,6 +22,8 @@ const main_historial = () => {
         })
 }
 main_historial();
+
+
 const imprimir_historial = document.querySelector(".imprimir_historial")
 
 const imprimirEnPantalla = (res) => {
@@ -35,11 +38,11 @@ const imprimirEnPantalla = (res) => {
              <tr>
              <th scope="row">${e.orden.id}</th>
      
-             <td>${e.cliente.nombre} ${e.cliente.apellido || ""}</td>
-             <td>${e.cliente.dni_cuil}</td>
-             <td>${e.cliente.tel_cel == undefined || e.cliente.tel_cel == null ? "- -" : e.cliente.tel_cel}</td>
-             <td>${e.orden.fecha === undefined || e.orden.fecha ==  null? "- -" : e.orden.fecha  }</td>
-             <td>${e.direccion.direccion == undefined || e.direccion.direccion == null || e.direccion.direccion == "" ? "- -" : e.direccion.direccion  }</td>
+             <td>${devolverString(e.cliente.nombre)} ${e.cliente.apellido || ""}</td>
+             <td>${devolverString(e.cliente.dni_cuil)}</td>
+             <td>${devolverString(e.cliente.tel_cel)}</td>
+             <td>${devolverString(e.orden.fecha) }</td>
+             <td>${devolverString(e.direccion.direccion)}</td>
              <td>$ ${cambio_de_moneda}</td>
 
              <td>
