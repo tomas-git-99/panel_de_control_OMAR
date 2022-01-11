@@ -14,7 +14,6 @@ const dist_1 = require("sequelize/dist");
 const carrito_1 = require("../../models/ventas/carrito");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
-const orden_publico_1 = require("../../models/ventas/orden_publico");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
 const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -237,15 +236,8 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
             }));
         });
         // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
-        const { publico } = req.query;
-        if (publico == "true") {
-            const orden_publico = yield orden_publico_1.Orden_publico.findByPk(id_orden);
-            yield orden_publico.update({ total: sumaTotal });
-        }
-        else if (publico == null || publico == undefined || publico == "") {
-            const orden = yield orden_1.Orden.findByPk(id_orden);
-            yield orden.update({ total: sumaTotal });
-        }
+        const orden = yield orden_1.Orden.findByPk(id_orden);
+        yield orden.update({ total: sumaTotal });
         res.json({
             ok: true,
             msg: "Su compra fue exitosa"

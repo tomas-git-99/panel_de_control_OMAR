@@ -38,7 +38,7 @@ const imprimirEnPantalla = (res) => {
              <td>${e.cliente.nombre} ${e.cliente.apellido || ""}</td>
              <td>${e.cliente.dni_cuil}</td>
              <td>${e.cliente.tel_cel == undefined || e.cliente.tel_cel == null ? "- -" : e.cliente.tel_cel}</td>
-             <td>${e.orden.fecha === undefined ? "- -" : "gato"}</td>
+             <td>${e.orden.fecha === undefined || e.orden.fecha ==  null? "- -" : e.orden.fecha  }</td>
              <td>${e.direccion.direccion == undefined || e.direccion.direccion == null || e.direccion.direccion == "" ? "- -" : e.direccion.direccion  }</td>
              <td>$ ${cambio_de_moneda}</td>
 
@@ -53,7 +53,14 @@ const imprimirEnPantalla = (res) => {
     imprimir_historial.innerHTML = result;
 }
 
+const prueba = (e) => {
 
+    try {
+        e == null || e == undefined || e == "" ? "- -" : e
+    } catch (error) {
+        return "- -"
+    }
+}
 
 const comprobante = document.querySelector('.comprobante');
 const aca_id_orden = document.getElementById("aca_id_orden")

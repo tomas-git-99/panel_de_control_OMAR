@@ -337,22 +337,17 @@ export const descontarElTotal= async(req: Request, res: Response) => {
 
      // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
 
-     const { publico } = req.query;
-
-
+  
     
     
-     if(publico == "true"){
+    
 
-        const orden_publico = await Orden_publico.findByPk(id_orden);
-        await orden_publico!.update({total:sumaTotal});
+    
 
-     }else if(publico == null || publico == undefined || publico == ""){
+    const orden = await Orden.findByPk(id_orden);
+    await orden!.update({total:sumaTotal});
 
-        const orden = await Orden.findByPk(id_orden);
-        await orden!.update({total:sumaTotal});
-
-     }
+     
 
 
 

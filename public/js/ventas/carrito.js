@@ -1,5 +1,5 @@
 import { comprobarCarritoStorage, preguntarSiConCliente } from "../helpers/ventas/comprobarCarritoStorage.js";
-import { agregarAlFormularioCliente } from "../helpers/ventas/agregarAlFormularioCliente.js";
+import { agregarAlFormularioCliente, limpiarForm } from "../helpers/ventas/agregarAlFormularioCliente.js";
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
@@ -10,6 +10,8 @@ import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.
 
 
 
+
+let ventaPublico = false
 
  ///////////////CONFIRMAR CARRITO EN LOCALSTORAGE/////////////////////////////// 
 comprobarCarritoStorage();
@@ -146,7 +148,7 @@ clienteNuevo.addEventListener("click", (e) =>{
     volverAtras(cliente, cartelCliente);
     seleccionDirec.style.grid = "none";
     seleccionDirec.style.visibility = "hidden";
-
+    btnCliente.id = "id_del_cliente";
 })
 
 retroceder.addEventListener("click", (e) =>{
@@ -154,7 +156,8 @@ retroceder.addEventListener("click", (e) =>{
     
     localStorage.removeItem("dataDireccion");
 
-    volverAtras(cartelCliente, cliente)
+    limpiarForm(clientInformacionSOLO);
+    volverAtras(cartelCliente, cliente);
 
 })
 
@@ -162,6 +165,7 @@ retroceder.addEventListener("click", (e) =>{
 //CLIENTE EXISTENTE
 clienteExistente.addEventListener("click", (e) =>{
     e.preventDefault();
+
     volverAtras(cliente, buscadorCli);
 
 })
@@ -244,6 +248,8 @@ window.mandarID = (e) => {
 
     volverAtras(buscadorCli, cartelCliente);
     direccionCliente(e);
+    seleccionDirec.style.grid = "grid";
+    seleccionDirec.style.visibility = "visible";
     agregarAlFormularioCliente(clientInformacionSOLO);
     id_del_cliente.id = e;
 }
@@ -410,15 +416,20 @@ const btn_confirmar = document.getElementById("btn_confirmar")
 window.descontar_total = (id) => {
 
     const id_usuario = localStorage.getItem("id");
-    descontarEltotal(id_usuario, id);
-   
+
+    if(ventaPublico == true ){
+        
+        return descontarEltotal(id_usuario, id, "true");
+    }
+    
+    descontarEltotal(id_usuario, id)
 }
 const total_db = document.querySelector(".total_db");
 
-const descontarEltotal = (id_usuario, id_orden) => {
+const descontarEltotal = (id_usuario, id_orden, data) => {
 
     load_normal(total_db, true)
-    fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
+    fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}?publico=${data}`)
         .then( res => {
             load_normal(total_db, false, "TOTAL")
             if(res.ok){
@@ -635,6 +646,8 @@ venta_publico_form.addEventListener("submit", async(e) => {
                 volverAtras(venta_publico, quitar_total_o_individual)
                 descontar_total_id.id = res.orden.id;
                 descontar_talle_id.id = res.orden.id;
+                ventaPublico = true;
+
             }else{
                 algo_salio_mal(`Algo salio mal: ${ res }`);
                 volverAtras(venta_publico, bienvenido)

@@ -141,70 +141,104 @@ export const imprimirDirecto = () => {
 
 export const imprimirComprobante_cliente = (id) => {
 
-const precio_final = document.querySelector(".precio_final_envio");
-const id_comprobante = document.querySelector("#id_comprobante");
+    //const id_comprobante = document.querySelector("#id_comprobante");
     
     
     fecthNormalGET("GET", `orden/full/${id}`)
     .then( res => {
-        if(res.ok){
+        if(res.direccion == null){
+
+            const precio_final = document.querySelector(".precio_final_publico");
+            const id_comprobante = document.querySelector(".id_comprobante_publico");
+
+            escribirEnHTML(res, "info_numero_2", true);
+            imprimirProducto(res.productos, "imprimir_productos_publico")
+            let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
+            precio_final.innerHTML = `$ ${cambio_de_moneda}`;
+            id_comprobante.innerHTML = `ID : ${res.orden.id}`
+
+            funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "imprimirCliente_publico" );
+        }else{
+            const precio_final = document.querySelector(".precio_final_envio");
+            const id_comprobante = document.querySelector(".id_comprobante_envio");
+
             escribirEnHTML(res, "infoCliente_envio_10");
-            imprimirProducto(res.productos)
+            imprimirProducto(res.productos, "imprimir_productos_envio")
             let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
             id_comprobante.innerHTML = `ID : ${res.orden.id}`
 
         
             funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "imprimirCliente_envio" );
-        }else{
-            
         }
     })
     
     
 }
 
-const escribirEnHTML = (e, data="") => {
+const escribirEnHTML = (e, data="", estado=false) => {
 
     const infoCliente = document.querySelector(`.${data}`);
     let escribir = "";
-    
-    escribir += `
-    <div class="nombre">
-    <label for="">NOMBRE: <span>${e.cliente.nombre}</span> </label>
-    </div>
-    <div class="DNI O CUIL">
-    <label for="">DNI O CUIL: <span>${e.cliente.dni_cuil}</span> </label>
-    </div>
-    <div class="Telefono">
-    <label for="">Telefono: <span>${e.cliente.tel_cel}</span> </label>
-    </div>
-    <div class="Provincia">
-    <label for="">Provincia: <span>${e.direccion.provincia}</span> </label>
-    </div>
-    <div class="Localida">
-    <label for="">Localidad: <span>${e.direccion.localidad}</span> </label>
-    </div>
-    <div class="Direccion">
-    <label for="">Direccion: <span>${e.direccion.direccion}</span> </label>
-    </div>
-    <div class="Codigo">
-    <label for="">CP: <span>${e.direccion.cp}</span> </label>
-    </div>
-    <div class="transporte">
-    <label for="">Transporte: <span>${e.orden.transporte}</span> </label>
-    </div>
-    `
-    
-    infoCliente.innerHTML = escribir;
+
+    if(estado == false){
+
+        escribir += `
+        <div class="nombre">
+        <label for="">NOMBRE: <span>${e.cliente.nombre}</span> </label>
+        </div>
+        <div class="DNI O CUIL">
+        <label for="">DNI O CUIL: <span>${e.cliente.dni_cuil}</span> </label>
+        </div>
+        <div class="Telefono">
+        <label for="">Telefono: <span>${e.cliente.tel_cel}</span> </label>
+        </div>
+        <div class="Provincia">
+        <label for="">Provincia: <span>${e.direccion.provincia}</span> </label>
+        </div>
+        <div class="Localida">
+        <label for="">Localidad: <span>${e.direccion.localidad}</span> </label>
+        </div>
+        <div class="Direccion">
+        <label for="">Direccion: <span>${e.direccion.direccion}</span> </label>
+        </div>
+        <div class="Codigo">
+        <label for="">CP: <span>${e.direccion.cp}</span> </label>
+        </div>
+        <div class="transporte">
+        <label for="">Transporte: <span>${e.orden.transporte}</span> </label>
+        </div>
+        `
+        
+        infoCliente.innerHTML = escribir;
+
+    }else{
+
+        escribir += `
+        <div class="nombre">
+        <label for="">NOMBRE: <span>${e.cliente.nombre}</span> </label>
+        </div>
+        <div class="DNI O CUIL">
+        <label for="">DNI O CUIL: <span>${e.cliente.dni_cuil}</span> </label>
+        </div>
+        <div class="Telefono">
+        <label for="">Telefono: <span>${e.cliente.tel_cel == null ? "- -" : e.cliente.tel_cel}</span> </label>
+        </div>
+        <div class="email">
+        <label for="">Email: <span>${e.cliente.email == null ? "- -" : e.cliente.email}</span> </label>
+        </div>`
+
+        infoCliente.innerHTML = escribir;
+
+    }
 }
 
 
 
 
-const imprimirProducto = (res) => {
+const imprimirProducto = (res, elemento) => {
     
-    const imprimir_productos = document.querySelector(".imprimir_productos_envio");
+    const imprimir_productos = document.querySelector(`.${elemento}`);
     let escribir = "";
     
     res.map(e => {
@@ -231,26 +265,41 @@ const imprimirProducto = (res) => {
 
 export const imprimir_parami = (id) => {
 
-    let id_comprobante = document.querySelector(".solo_el_id");
-
+    
     fecthNormalGET("GET",`orden/full/${id}`)
     .then(res => {
+        
+        if(res.direccion == null){
+            
+  
+            let id_comprobante = document.querySelector(".solo_el_id_envio_publico");
 
-        escribirEnHTML(res, "info_numero_1");
+            escribirEnHTML(res, "info_numero_3", true);
+     
+            ticket_parami(res.para_mi, "imprimir_para_mi_table_publico");
+            id_comprobante.innerHTML = `<h2>ID : ${res.orden.id}</h2>`
+            funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi_publico");
 
-        console.log(res)
-        ticket_parami(res.para_mi);
-        id_comprobante.innerHTML = `<h2>ID : ${res.orden.id}</h2>`
-        funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi_para_envio");
+        }else{
+            let id_comprobante = document.querySelector(".solo_el_id_envio");
+            escribirEnHTML(res, "info_numero_1", false);
+    
+          
+            ticket_parami(res.para_mi, "imprimir_para_mi_table");
+            id_comprobante.innerHTML = `<h2>ID : ${res.orden.id}</h2>`
+            funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi_para_envio");
+        }
+
+
         })
     }
 
     
-const ticket_parami = (res) => {
+const ticket_parami = (res, elemento) => {
 
-    const imprimir_para_mi_table = document.querySelector(".imprimir_para_mi_table");
+    const imprimir_para_mi_table = document.querySelector(`.${elemento}`);
     let resultado = "";
-   console.log(res)
+   
     res.map( (e,i) => {
         resultado += `
         <tr>

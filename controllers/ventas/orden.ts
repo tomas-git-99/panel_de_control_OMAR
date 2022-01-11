@@ -306,7 +306,7 @@ export const historialOrden = async (req: Request, res: Response) => {
         const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
 
 
-        const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
+        //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
 
 
         
@@ -318,10 +318,10 @@ export const historialOrden = async (req: Request, res: Response) => {
             id_cliente.push(e.id_cliente);
             id_direccion.push(e.id_direccion);
         });
-        orden_publico.map(async(e, i)=> {
+/*         orden_publico.map(async(e, i)=> {
             id_cliente.push(e.id_cliente);
         })
-        
+         */
         const cliente = await Cliente.findAll({where:{id:id_cliente}});
 
         const direccion = await Direccion.findAll({where:{id:id_direccion}});
@@ -333,17 +333,17 @@ export const historialOrden = async (req: Request, res: Response) => {
             let newcliente = cliente.find( e => e.id == i.id_cliente);
             let direcciones = direccion.find( h => h.id == i.id_direccion);
     
-            datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones}];
+            datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones || ""}];
     
         }
 
-        for( let i of orden_publico){
+     /*    for( let i of orden_publico){
 
             let newcliente = cliente.find( e => e.id == i.id_cliente);
     
             datos = [...datos,{orden:i, cliente:newcliente,direccion:""}]
         }
-
+ */
         
         res.json({
             datos
@@ -440,7 +440,7 @@ export const generarOrdenPublico = async (req: Request, res: Response) => {
             id_usuario:idUsuario
         }
     
-        const orden = new Orden_publico(data);
+        const orden = new Orden(data);
     
         await orden.save();
     

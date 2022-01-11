@@ -13,17 +13,6 @@ exports.editarCliente = exports.buscarCliente = exports.crearCliente = void 0;
 const cliente_1 = require("../../models/ventas/cliente");
 const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, apellido, dni_cuil, tel_cel } = req.body;
-        console.log(req.body);
-        /*
-                const datos:any = {
-                    nombre,
-                    apellido,
-                    dni_cuil,
-                    tel_cel,
-                }
-        
-         */
         const cliente = new cliente_1.Cliente(req.body);
         yield cliente.save();
         res.json({
