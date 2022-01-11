@@ -659,3 +659,13 @@ venta_publico_form.addEventListener("submit", async(e) => {
         })
     
 })
+
+window.salir_publico = () => {
+    volverAtras( venta_publico, preguntar_publico_o_online)
+}
+
+window.salir_envio = () => {
+
+    volverAtras( cliente, preguntar_publico_o_online)
+
+}

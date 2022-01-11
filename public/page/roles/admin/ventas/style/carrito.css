@@ -81,17 +81,29 @@
 .cliente{
     display: none;
     visibility: hidden;
-/*     display: block;
-    visibility: visible;  */   
-    place-self: center;
+ 
+/*     display: grid;
+    visibility: visible;   */
+
+    place-self: center; 
+
     position: fixed;
-    display: grid;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height:100%;
+
+    height: auto;
+/*     width: 100%;
+    height:100%; */
    
     
+}
+
+.boton_solo_salir{
+    position: fixed;
+    display: grid;
+    place-self: start; 
+    padding: 15px;
+    z-index: 100;
 }
 
 .panel{
@@ -581,6 +593,9 @@
 .solo_el_id{
     padding-left: 20px;
 }
+
+
+
 
 @media (max-width: 767px){
 
