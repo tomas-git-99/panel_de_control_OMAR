@@ -3,6 +3,7 @@ import { Op } from "sequelize/dist";
 import { Carrito } from "../../models/ventas/carrito";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
+import { Orden_publico } from "../../models/ventas/orden_publico";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
 import producto from "../../routers/ventas/producto";
@@ -312,8 +313,9 @@ export const descontarElTotal= async(req: Request, res: Response) => {
                 }
 
                 let nuevaSuma = p.cantidad * e.precio;
-                sumaTotal += sumaTotal + nuevaSuma;
-                
+                console.log("por: " + nuevaSuma)
+                sumaTotal += nuevaSuma;
+                console.log(sumaTotal);
                 let nuevoStock = e.cantidad - p.cantidad ;
 
                 await productos[i].update({cantidad: nuevoStock})
@@ -335,9 +337,25 @@ export const descontarElTotal= async(req: Request, res: Response) => {
 
      // FIN DESCONTANDO PRODUCTO DE STOCK TOTAL
 
-     const orden = await Orden.findByPk(id_orden)
+     const { publico } = req.query;
 
-     await orden!.update({total:sumaTotal});
+
+    
+    
+     if(publico == "true"){
+
+        const orden_publico = await Orden_publico.findByPk(id_orden);
+        await orden_publico!.update({total:sumaTotal});
+
+     }else if(publico == null || publico == undefined || publico == ""){
+
+        const orden = await Orden.findByPk(id_orden);
+        await orden!.update({total:sumaTotal});
+
+     }
+
+
+
 
     res.json({
         ok: true,

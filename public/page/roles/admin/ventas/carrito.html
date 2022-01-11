@@ -319,7 +319,42 @@
                 <div class="div_para_imprimir_para_mi">
 
                     <div class="id_comprobante">
-                        <h2>ID:</h2>
+
+                        <div class="solo_el_id">
+                            <h2>ID: </h2>
+                        </div>
+
+                       
+
+                            <div class="infoCliente_2">
+                                <div class="nombre">
+                                   <label for="">NOMBRE: <span></span> </label>
+                                </div>
+                                <div class="DNI O CUIL">
+                                    <label for="">DNI O CUIL: <span></span> </label>
+                                 </div>
+                                 <div class="Telefono">
+                                    <label for="">Telefono: <span></span> </label>
+                                 </div>
+                                 <div class="Provincia">
+                                    <label for="">Provincia: <span></span> </label>
+                                 </div>
+                                 <div class="Localida">
+                                     <label for="">Localida: <span></span> </label>
+                                  </div>
+                                  <div class="Direccion">
+                                     <label for="">Direccion: <span></span> </label>
+                                  </div>
+                                  <div class="Codigo">
+                                    <label for="">Codigo: <span></span> </label>
+                                 </div>
+                                 <div class="transporte">
+                                <label for="">Transporte: <span></span> </label>
+                                </div>
+                 
+                            </div>
+                       
+                        
                     </div>
                         <table class="table">
                             <thead>
@@ -353,8 +388,8 @@
                         <h3>¿ Venta al publico o para envio ?</h3>
                     </div>
                     <div class="publico_online">
-                        <button type="button" class="btn btn-outline-secondary" onclick="">Publico</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="">Envios</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="publico(this)">Publico</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="envios(this)">Envios</button>
                     </div>
                 </div>
 
@@ -363,7 +398,7 @@
                     <div class="titulo_publico">
                        <h2> Datos del cliente</h2>
                     </div>
-                    <form action="">
+                    <form action="" class="venta_publico_form">
 
                         <div class="clientInformacionSOLO">
                             
@@ -378,11 +413,15 @@
                             </div>
                             <div class="email">
                                 <span>Email</span>
-                                <input type="text"class="form-control" name="emal" placeholder=" Email">
+                                <input type="text"class="form-control" name="email" placeholder=" Email">
+                            </div>
+                            <div class="direccion">
+                                <span>Direccion</span>
+                                <input type="text"class="form-control" name="direccion" placeholder=" Direccion">
                             </div>
                             <div class="boton_publico">
 
-                                <button type="button" class="btn btn-primary" >CONFRIMAR</button>
+                                <button class="btn btn-primary" >CONFRIMAR</button>
                             </div>
                         </div>
                     </form>
@@ -393,9 +432,22 @@
                     <div class="imprimirCliente" id="imprimirCliente">
     
                         <div class="tituloImprimir">
+
                             <span id="id_comprobante">ID :</span>
-                            <h2>Comprobante</h2>
-                            <hr>
+                        
+                            <div class="titulo_comprobante">
+
+                                <h2>Comprobante</h2>
+                            </div>
+                         
+                            <div class="logo_imprimir">
+                                <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                                <div class="datos_comprobante">
+                                    <p>Bogota 3481 - Tel: 1234567899 -  <br>  Bs. As. - Email: milena@live.com</p>
+                                </div>
+                            </div>
+<!-- 
+                            <hr> -->
                         </div>
     
                         
@@ -421,7 +473,7 @@
                                  <label for="">Direccion: <span>tomas</span> </label>
                               </div>
                               <div class="Codigo">
-                                <label for="">Codigo: <span>tomas</span> </label>
+                                <label for="">CP: <span>tomas</span> </label>
                              </div>
              
     

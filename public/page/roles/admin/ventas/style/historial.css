@@ -33,7 +33,7 @@
 
     display: none;
     visibility: hidden;
-    /* display: block;
+ /*    display: block;
     visibility: visible; */
     position: fixed;
     place-self: center;
@@ -44,7 +44,7 @@
     height: 800px;
     column-gap: 20px;
     background: white;
-    border-radius: 20px;
+ /*    border-radius: 20px; */
     
     font-family: 'Poppins', sans-serif;
     font-weight:600; 
@@ -58,7 +58,7 @@
 .id_comprobante{
     width: 100%;
     text-align: start;
-    padding-left: 20px;
+   /*  padding-left: 20px; */
 }
 
 
@@ -85,8 +85,15 @@
 }
 
 .tituloImprimir{
+    
+    display: grid;
+    position: relative;
     text-align: center;
     padding-top:10px;
+    align-items: center;
+
+    height:150px;
+     border-bottom: 1px solid;
 }
 .imprimirCliente{
     display: grid;
@@ -102,6 +109,9 @@
     grid-template-columns: 1fr 1fr 1fr;
     padding-left: 20px;
     text-align: start;
+    border-bottom: 1px solid;
+
+
     
 }
 .infoCliente span{
@@ -159,4 +169,91 @@
 .cartel::-webkit-scrollbar { 
     /* solo oculta su visualizacion */
     display: none;
+}
+
+
+
+
+.logo_imprimir{
+    position:absolute;
+    display: grid;
+    place-self: end;
+    align-content: center;
+    align-items: center;
+    padding-right: 20px;
+    
+}
+.logo_imprimir p{
+
+    font-family: 'Poppins', sans-serif;
+    font-weight:400; 
+    font-size: 12px;
+}
+
+.logo_imprimir img{
+    place-self: center;
+ 
+    width: 150px;
+}
+
+
+.datos_de_venta{    
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    display: grid;
+    width: 100%;
+}
+
+.solo_el_id{
+    padding-left: 20px;
+}
+
+
+
+.infoCliente_2{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-left: 20px;
+    text-align: start;
+
+
+    
+}
+.infoCliente_2 span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:300;
+    font-size: 16px;
+
+}
+.infoCliente_2 label{
+    font-family: 'Poppins', sans-serif;
+    font-weight:500;
+    font-size: 18px;
+    margin: 5px;
+}
+
+
+
+.comprobante_publico{
+    position: fixed;
+    place-self: center;
+    background: white;
+    display: none;
+    visibility: hidden;
+  /*    display: block;
+    visibility: visible;  */
+}
+
+
+.comprobante_publico_para_mi{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible; */
+
+    position: fixed;
+    place-self: center;
+    background: white;
+    width: 700px;
+    
 }

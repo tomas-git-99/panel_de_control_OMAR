@@ -12,9 +12,8 @@ export const crearCliente = async (req: Request, res: Response) => {
 
         const { nombre, apellido, dni_cuil, tel_cel} = req.body;
 
-
-
-
+        console.log(req.body);
+/* 
         const datos:any = {
             nombre,
             apellido,
@@ -22,9 +21,10 @@ export const crearCliente = async (req: Request, res: Response) => {
             tel_cel,
         }
 
+ */
 
+        const cliente = new Cliente(req.body);
 
-        const cliente = new Cliente(datos);
         await cliente.save();
 
 
@@ -36,7 +36,7 @@ export const crearCliente = async (req: Request, res: Response) => {
 
 
     } catch (error) {
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: "Hablar con el administrador"
         });

@@ -13,6 +13,7 @@ const main_historial = () => {
     
         .then( res => {
             cargaMedio("spinner_load", false);
+            
             imprimirEnPantalla(res.datos);
         })
         .catch( err =>{
@@ -29,15 +30,16 @@ const imprimirEnPantalla = (res) => {
     res.map ( e => {
         let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(e.orden.total)
 
+      
         result += `
              <tr>
              <th scope="row">${e.orden.id}</th>
      
-             <td>${e.cliente.nombre} ${e.cliente.apellido}</td>
+             <td>${e.cliente.nombre} ${e.cliente.apellido || ""}</td>
              <td>${e.cliente.dni_cuil}</td>
-             <td>${e.cliente.tel_cel}</td>
-             <td>${e.orden.fecha}</td>
-             <td>${e.direccion.direccion}</td>
+             <td>${e.cliente.tel_cel == undefined || e.cliente.tel_cel == null ? "- -" : e.cliente.tel_cel}</td>
+             <td>${e.orden.fecha === undefined ? "- -" : "gato"}</td>
+             <td>${e.direccion.direccion == undefined || e.direccion.direccion == null || e.direccion.direccion == "" ? "- -" : e.direccion.direccion  }</td>
              <td>$ ${cambio_de_moneda}</td>
 
              <td>
@@ -50,6 +52,8 @@ const imprimirEnPantalla = (res) => {
     })
     imprimir_historial.innerHTML = result;
 }
+
+
 
 const comprobante = document.querySelector('.comprobante');
 const aca_id_orden = document.getElementById("aca_id_orden")

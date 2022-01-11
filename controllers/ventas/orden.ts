@@ -4,6 +4,7 @@ import { Cliente } from "../../models/ventas/cliente";
 import { Direccion } from "../../models/ventas/direccion";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
+import { Orden_publico } from "../../models/ventas/orden_publico";
 import { Producto } from "../../models/ventas/producto";
 import cliente from "../../routers/ventas/cliente";
 import { ordenarPorFechaExacta } from "../produccion/producto";
@@ -250,24 +251,48 @@ export const confirmarPedido = async (req: Request, res: Response) => {
 
 
 export const ordenParaImprimir = async (req: Request, res: Response) => {
+
+    
     const { id } = req.params;
 
     const orden = await Orden.findByPk(id);
 
     const productos = await OrdenDetalle.findAll({where:{id_orden:id}});
 
+
+
+    let ids:any = []
+
+
+    productos.map( e => {
+        ids.push(e.id_producto)
+    })
+
+
+    const detalles_producto = await Producto.findAll({where:{id:ids}})
+
     const direccion = await Direccion.findByPk(orden?.id_direccion);
 
     const cliente = await Cliente.findByPk(orden?.id_cliente);
 
+    let para_mi:any = []
 
+    productos.map( e => {
+        let data = detalles_producto.find( h => h.id == e.id_producto);
+
+        para_mi = [...para_mi, { producto:data, detalles:e} ]
+    })
+
+
+    console.log(id);
 
     res.json({
         ok: true,
         orden,
         cliente,
         direccion,
-        productos
+        productos,
+        para_mi
     })
 
 }
@@ -278,8 +303,14 @@ export const historialOrden = async (req: Request, res: Response) => {
 
     try {
         
-        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:15 , order: [['updatedAt', 'DESC']]});
-    
+        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
+
+
+        const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
+
+
+        
+
         let id_cliente:any = []
         let id_direccion:any = []
         
@@ -287,9 +318,12 @@ export const historialOrden = async (req: Request, res: Response) => {
             id_cliente.push(e.id_cliente);
             id_direccion.push(e.id_direccion);
         });
-    
+        orden_publico.map(async(e, i)=> {
+            id_cliente.push(e.id_cliente);
+        })
         
         const cliente = await Cliente.findAll({where:{id:id_cliente}});
+
         const direccion = await Direccion.findAll({where:{id:id_direccion}});
     
         let datos:any = [];
@@ -302,9 +336,15 @@ export const historialOrden = async (req: Request, res: Response) => {
             datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones}];
     
         }
+
+        for( let i of orden_publico){
+
+            let newcliente = cliente.find( e => e.id == i.id_cliente);
+    
+            datos = [...datos,{orden:i, cliente:newcliente,direccion:""}]
+        }
+
         
-    
-    
         res.json({
             datos
         })
@@ -384,4 +424,35 @@ export const imptimirSoloVentas = async (req: Request, res: Response) => {
         ok: true,
         orden_detalle
     })
+}
+
+
+
+export const generarOrdenPublico = async (req: Request, res: Response) => {
+
+
+    try {
+        
+        const { idCliente, idUsuario } = req.params;
+    
+        const data:any = {
+            id_cliente:idCliente,
+            id_usuario:idUsuario
+        }
+    
+        const orden = new Orden_publico(data);
+    
+        await orden.save();
+    
+        res.json({
+            ok: true,
+            orden
+        })
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+
 }

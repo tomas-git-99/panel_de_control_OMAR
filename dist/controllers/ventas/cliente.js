@@ -14,13 +14,17 @@ const cliente_1 = require("../../models/ventas/cliente");
 const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { nombre, apellido, dni_cuil, tel_cel } = req.body;
-        const datos = {
-            nombre,
-            apellido,
-            dni_cuil,
-            tel_cel,
-        };
-        const cliente = new cliente_1.Cliente(datos);
+        console.log(req.body);
+        /*
+                const datos:any = {
+                    nombre,
+                    apellido,
+                    dni_cuil,
+                    tel_cel,
+                }
+        
+         */
+        const cliente = new cliente_1.Cliente(req.body);
         yield cliente.save();
         res.json({
             ok: true,
@@ -28,7 +32,7 @@ const crearCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: "Hablar con el administrador"
         });

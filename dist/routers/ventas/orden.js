@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orden_1 = require("../../controllers/ventas/orden");
 const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = (0, express_1.Router)();
+const router = express_1.Router();
 //GENERAR ORDEN 
 router.post('/:idCliente/:idUsuario/:idDireccion', [
     validar_JWT_1.validarJWT,
@@ -25,5 +25,7 @@ router.get('/historial/full', orden_1.historialOrden);
 router.get('/historial/p/id', orden_1.buscarPorID);
 router.get('/imprimir/parami/:id', orden_1.imptimirSoloVentas);
 // CARRITO
+//ORDEN PUBLICO 
+router.get('/publico/orden/completo/:idUsuario/:idCliente', orden_1.generarOrdenPublico);
 exports.default = router;
 //# sourceMappingURL=orden.js.map

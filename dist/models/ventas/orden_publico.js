@@ -3,35 +3,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Cliente = void 0;
+exports.Orden_publico = void 0;
 const sequelize_1 = require("sequelize");
 const conectarDB_1 = __importDefault(require("../../DB/conectarDB"));
-class Cliente extends sequelize_1.Model {
+class Orden_publico extends sequelize_1.Model {
 }
-exports.Cliente = Cliente;
-Cliente.init({
+exports.Orden_publico = Orden_publico;
+Orden_publico.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    nombre: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    apellido: {
-        type: sequelize_1.DataTypes.STRING,
-    },
-    dni_cuil: {
+    id_usuario: {
         type: sequelize_1.DataTypes.NUMBER
     },
-    tel_cel: {
+    id_cliente: {
         type: sequelize_1.DataTypes.NUMBER
     },
-    email: {
-        type: sequelize_1.DataTypes.STRING
+    total: {
+        type: sequelize_1.DataTypes.NUMBER,
     }
 }, {
     sequelize: conectarDB_1.default,
-    tableName: "cliente"
+    tableName: "orden_publico"
 });
-//# sourceMappingURL=cliente.js.map
+//# sourceMappingURL=orden_publico.js.map

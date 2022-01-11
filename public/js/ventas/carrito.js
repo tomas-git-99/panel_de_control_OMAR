@@ -91,6 +91,8 @@ const leerCarrito = (res) => {
 const bienvenido = document.querySelector(".bienvenido");
 const cliente = document.querySelector(".cliente");
 const btnConfirmar = document.querySelector(".confirmar");
+const preguntar_publico_o_online = document.querySelector(".preguntar_publico_o_online");
+const venta_publico = document.querySelector(".venta_publico");
 
 
 btnConfirmar.addEventListener("click", (e) => {
@@ -99,7 +101,8 @@ btnConfirmar.addEventListener("click", (e) => {
     const id_orden = localStorage.getItem("id_orden");
 
     if(id_orden == null || id_orden == undefined){
-        volverAtras(bienvenido, cliente)
+        //volverAtras(bienvenido, cliente)
+        volverAtras(bienvenido, preguntar_publico_o_online);
 
     }else{
         volverAtras(bienvenido, quitar_total_o_individual);
@@ -111,6 +114,14 @@ btnConfirmar.addEventListener("click", (e) => {
     //CUANDO APRETE EL BOTON PREGUNTAR SI ESTOS PRODUCTOS YA TIENEN CLIENTES
     
 });
+
+window.envios = () => {
+    volverAtras(preguntar_publico_o_online, cliente)
+}
+window.publico = () => {
+    volverAtras(preguntar_publico_o_online, venta_publico)
+
+}
 
 window.volver_atras = () => {
     location.href = "compra.html"
@@ -405,6 +416,7 @@ window.descontar_total = (id) => {
 const total_db = document.querySelector(".total_db");
 
 const descontarEltotal = (id_usuario, id_orden) => {
+
     load_normal(total_db, true)
     fecthNormalPOST_PUT("PUT", `carrito/total/${id_usuario}/${id_orden}`)
         .then( res => {
@@ -426,6 +438,7 @@ const descontarEltotal = (id_usuario, id_orden) => {
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
+                console.log(res)
                 advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
                 //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage
                 //localStorage.removeItem("carrito");
@@ -588,3 +601,48 @@ nombre_usario.innerHTML =  nombre;
 
 //DATA = {nombre, email, cuil o dni}
 
+const venta_publico_form = document.querySelector(".venta_publico_form");
+
+
+
+
+venta_publico_form.addEventListener("submit", async(e) => {
+    e.preventDefault();
+
+
+    const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+
+    
+    for(let el of venta_publico_form.elements){
+        if(el.name.length > 0){
+
+            forData[el.name] = el.value;
+          
+
+        }
+    }
+
+    const id_usuario = localStorage.getItem("id");
+
+    let data = await fecthNormalPOST_PUT("POST", "cliente", forData);
+
+    console.log(data)
+
+    fecthNormalGET("GET",`orden/publico/orden/completo/${id_usuario}/${data.cliente.id}?publico=true`)
+        .then( res => {
+            if(res.ok == true){
+
+                volverAtras(venta_publico, quitar_total_o_individual)
+                descontar_total_id.id = res.orden.id;
+                descontar_talle_id.id = res.orden.id;
+            }else{
+                algo_salio_mal(`Algo salio mal: ${ res }`);
+                volverAtras(venta_publico, bienvenido)
+            }
+        })
+        .catch ( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`);
+            volverAtras(venta_publico, bienvenido)
+        })
+    
+})

@@ -141,19 +141,21 @@ export const imprimirDirecto = () => {
 
 export const imprimirComprobante_cliente = (id) => {
 
-const precio_final = document.querySelector(".precio_final");
+const precio_final = document.querySelector(".precio_final_envio");
 const id_comprobante = document.querySelector("#id_comprobante");
     
     
     fecthNormalGET("GET", `orden/full/${id}`)
     .then( res => {
         if(res.ok){
-            escribirEnHTML(res);
+            escribirEnHTML(res, "infoCliente_envio_10");
             imprimirProducto(res.productos)
             let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
             id_comprobante.innerHTML = `ID : ${res.orden.id}`
-            funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "imprimirCliente" );
+
+        
+            funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "imprimirCliente_envio" );
         }else{
             
         }
@@ -162,9 +164,9 @@ const id_comprobante = document.querySelector("#id_comprobante");
     
 }
 
-const escribirEnHTML = (e) => {
-    
-    const infoCliente = document.querySelector(".infoCliente");
+const escribirEnHTML = (e, data="") => {
+
+    const infoCliente = document.querySelector(`.${data}`);
     let escribir = "";
     
     escribir += `
@@ -189,6 +191,9 @@ const escribirEnHTML = (e) => {
     <div class="Codigo">
     <label for="">CP: <span>${e.direccion.cp}</span> </label>
     </div>
+    <div class="transporte">
+    <label for="">Transporte: <span>${e.orden.transporte}</span> </label>
+    </div>
     `
     
     infoCliente.innerHTML = escribir;
@@ -196,9 +201,10 @@ const escribirEnHTML = (e) => {
 
 
 
+
 const imprimirProducto = (res) => {
     
-    const imprimir_productos = document.querySelector(".imprimir_productos");
+    const imprimir_productos = document.querySelector(".imprimir_productos_envio");
     let escribir = "";
     
     res.map(e => {
@@ -225,14 +231,17 @@ const imprimirProducto = (res) => {
 
 export const imprimir_parami = (id) => {
 
-    let id_comprobante = document.querySelector(".id_comprobante")
-    fecthNormalGET("GET",`orden/imprimir/parami/${id}`)
+    let id_comprobante = document.querySelector(".solo_el_id");
+
+    fecthNormalGET("GET",`orden/full/${id}`)
     .then(res => {
 
-        
-            ticket_parami(res.orden_detalle);
-            id_comprobante.innerHTML = `<h2>ID : ${res.orden_detalle[0].orden_detalle.id_orden}</h2>`
-            funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi");
+        escribirEnHTML(res, "info_numero_1");
+
+        console.log(res)
+        ticket_parami(res.para_mi);
+        id_comprobante.innerHTML = `<h2>ID : ${res.orden.id}</h2>`
+        funcionParaImprimir_sin_nombre("div_para_imprimir_para_mi_para_envio");
         })
     }
 
@@ -241,17 +250,22 @@ const ticket_parami = (res) => {
 
     const imprimir_para_mi_table = document.querySelector(".imprimir_para_mi_table");
     let resultado = "";
-
-    res.map( e => {
-        
+   console.log(res)
+    res.map( (e,i) => {
         resultado += `
         <tr>
-        <th>${e.orden_detalle.nombre_producto}</th>
-        <td>${e.productos.tela == null || e.productos.tela == undefined ? "- -": e.productos.tela}</td>
-        <td>${e.orden_detalle.talle == null || e.orden_detalle.talle == undefined ? "- -" : e.orden_detalle.talle}</td>
-        <td>${e.orden_detalle.cantidad}</td>
+        <th>${e.detalles.nombre_producto}</th>
+        <th>aca va el diseño</th>
+        <td>${e.producto.tela == null || e.producto.tela == undefined ? "- -": e.producto.tela}</td>
+        <td>${e.detalles.talle == null || e.detalles.talle == undefined ? "- -" : e.detalles.talle}</td>
+        <td>${e.detalles.cantidad}</td>
         </tr>
         `
     })
     imprimir_para_mi_table.innerHTML  = resultado;
 }
+
+
+
+
+

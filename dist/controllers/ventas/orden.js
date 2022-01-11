@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.imptimirSoloVentas = exports.buscarPorID = exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.generarOrdenPublico = exports.imptimirSoloVentas = exports.buscarPorID = exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const direccion_1 = require("../../models/ventas/direccion");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
+const orden_publico_1 = require("../../models/ventas/orden_publico");
 const producto_1 = require("../../models/ventas/producto");
 const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -171,26 +172,42 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { id } = req.params;
     const orden = yield orden_1.Orden.findByPk(id);
     const productos = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+    let ids = [];
+    productos.map(e => {
+        ids.push(e.id_producto);
+    });
+    const detalles_producto = yield producto_1.Producto.findAll({ where: { id: ids } });
     const direccion = yield direccion_1.Direccion.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_direccion);
     const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
+    let para_mi = [];
+    productos.map(e => {
+        let data = detalles_producto.find(h => h.id == e.id_producto);
+        para_mi = [...para_mi, { producto: data, detalles: e }];
+    });
+    console.log(id);
     res.json({
         ok: true,
         orden,
         cliente,
         direccion,
-        productos
+        productos,
+        para_mi
     });
 });
 exports.ordenParaImprimir = ordenParaImprimir;
 const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     try {
-        const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, limit: 15, order: [['updatedAt', 'DESC']] });
+        const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, limit: 10, order: [['updatedAt', 'DESC']] });
+        const orden_publico = yield orden_publico_1.Orden_publico.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, limit: 10, order: [['updatedAt', 'DESC']] });
         let id_cliente = [];
         let id_direccion = [];
         orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
             id_cliente.push(e.id_cliente);
             id_direccion.push(e.id_direccion);
+        }));
+        orden_publico.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
+            id_cliente.push(e.id_cliente);
         }));
         const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
         const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
@@ -199,6 +216,10 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
             let newcliente = cliente.find(e => e.id == i.id_cliente);
             let direcciones = direccion.find(h => h.id == i.id_direccion);
             datos = [...datos, { orden: i, cliente: newcliente, direccion: direcciones }];
+        }
+        for (let i of orden_publico) {
+            let newcliente = cliente.find(e => e.id == i.id_cliente);
+            datos = [...datos, { orden: i, cliente: newcliente, direccion: "" }];
         }
         res.json({
             datos
@@ -263,4 +284,26 @@ const imptimirSoloVentas = (req, res) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 exports.imptimirSoloVentas = imptimirSoloVentas;
+const generarOrdenPublico = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idCliente, idUsuario } = req.params;
+        const data = {
+            id_cliente: idCliente,
+            id_usuario: idUsuario
+        };
+        const orden = new orden_publico_1.Orden_publico(data);
+        yield orden.save();
+        res.json({
+            ok: true,
+            orden
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.generarOrdenPublico = generarOrdenPublico;
 //# sourceMappingURL=orden.js.map

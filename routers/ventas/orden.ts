@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarOrden, buscarOrdenDNI, buscarPorID, confirmarCompra, confirmarPedido, generarOrden, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
+import { buscarOrden, buscarOrdenDNI, buscarPorID, confirmarCompra, confirmarPedido, generarOrden, generarOrdenPublico, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -43,5 +43,9 @@ router.get('/imprimir/parami/:id', imptimirSoloVentas)
 
 // CARRITO
 
+
+//ORDEN PUBLICO 
+
+router.get('/publico/orden/completo/:idUsuario/:idCliente', generarOrdenPublico)
 
 export default router;

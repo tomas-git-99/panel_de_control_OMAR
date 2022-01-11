@@ -55,8 +55,8 @@ CREATE TABLE talles(
 CREATE TABLE orden(
 
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_cliente INT NOT NULL,
-    id_usuario INT NOT NULL,
+    id_cliente   INT NOT NULL,
+    id_usuario   INT NOT NULL,
     id_direccion INT NOT NULL ,
     fecha DATE,
     transporte VARCHAR(100),
@@ -74,17 +74,28 @@ CREATE TABLE orden(
     REFERENCES direccion (id)
 );
 
+
+CREATE TABLE orden_publico(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    total INT,
+
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 ALTER TABLE orden AUTO_INCREMENT = 100
 
 
 CREATE TABLE orden_detalle(
+
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_orden INT NOT NULL,
+    nombre_producto VARCHAR(150),
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
     precio INT NOT NULL,
     talle INT,
-    nombre_producto VARCHAR(150),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -93,8 +104,6 @@ CREATE TABLE orden_detalle(
 
     FOREIGN KEY fk_id_orden (id_orden)
     REFERENCES orden (id)
-
-    
 );
 
 
@@ -195,3 +204,21 @@ CREATE TABLE historial_taller(
 ALTER TABLE carrito 
     ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ADD updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+
+
+CREATE TABLE estanpados(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT NOT NULL,
+    id_estanpador INT NOT NULL,
+    dibujo VARCHAR(255),
+    fecha_de_entrada DATE,
+    pagado BOOLEAN default false,
+)
+
+CREATE TABLE estanpador(
+    nombre VARCHAR(50),
+    telefono VARCHAR(25),
+    direccion VARCHAR(100)
+)
