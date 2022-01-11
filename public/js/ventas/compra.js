@@ -1,6 +1,7 @@
 import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../helpers/ventas/fetch.js";
 
 
@@ -97,19 +98,22 @@ window.enviar_datos_producto = (id) => {
 
 const tablaCompra = document.querySelector(".tablaCompra")
 
+devolverString
+
 const leerHistorial = (res) => {
 
   let historial = ""
   res.map( e => {
       historial += `
       <tr>
-        <td data-label="ID">${e.id}</td>
-        <td data-label="NOMBRE">${e.nombre}</td>
-        <td data-label="STOCK">${e.cantidad}</td>
-        <td data-label="TALLES">${e.talles == null ? "- -" : e.talles}</td>
-        <td data-label="TELA">${e.tela}</td>
-        <td data-label="LOCAL">${e.local}</td>
-        <td data-label="PRECIO">$${e.precio}</td>
+        <td data-label="ID">${devolverString(e.id)}</td>
+        <td data-label="NOMBRE">${devolverString(e.nombre)}</td>
+        <td data-label="DISEÑO">${devolverString(e.diseño)}</td>
+        <td data-label="STOCK">${devolverString(e.cantidad)}</td>
+        <td data-label="TALLES">${devolverString(e.talles)}</td>
+        <td data-label="TELA">${devolverString(e.tela)}</td>
+        <td data-label="LOCAL">${devolverString(e.local)}</td>
+        <td data-label="PRECIO">$${devolverString(e.precio)}</td>
         <td>
         <div class="boton preview">
             <button class="eliminar" id="${e.id}" onclick="boton_agregar(this.id)" >

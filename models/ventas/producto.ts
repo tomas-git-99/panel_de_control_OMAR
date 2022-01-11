@@ -7,6 +7,7 @@ export interface TodoAtributos {
     id: number;
     nombre: string;
     cantidad: number;
+    diseño: string;
     local:string;
     tela:string;
     precio:number;
@@ -20,6 +21,7 @@ export class Producto extends Model <TodoAtributos>{
     public id!: number;
     public nombre!: string;
     public cantidad!: number;
+    public diseño!: string;
     public local!:string;
     public tela!:string;
     public precio!:number;
@@ -42,6 +44,9 @@ Producto.init(
         },
         cantidad:{
             type:DataTypes.NUMBER,
+        },
+        diseño:{
+            type:DataTypes.STRING
         },
         local:{
             type:DataTypes.STRING

@@ -21,6 +21,9 @@ Producto.init({
     cantidad: {
         type: sequelize_1.DataTypes.NUMBER,
     },
+    diseño: {
+        type: sequelize_1.DataTypes.STRING
+    },
     local: {
         type: sequelize_1.DataTypes.STRING
     },

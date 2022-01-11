@@ -5,6 +5,7 @@ import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -127,12 +128,13 @@ const leerHistorial = (res) => {
         <tr>
           <td data-label="ID">${e.id}</td>
 
-          <td data-label="NOMBRE">${e.nombre}</td>
-          <td data-label="STOCK">${e.cantidad}</td>
-          <td data-label="TALLES">${e.talles == null? "- -" : e.talles}</td>
-          <td data-label="TELA">${e.tela}</td>
-          <td data-label="LOCAL">${e.local}</td>
-          <td data-label="PRECIO">$${e.precio}</td>
+          <td data-label="NOMBRE">${devolverString(e.nombre)}</td>
+          <td data-label="DISEÑO">${devolverString(e.diseño)}</td>
+          <td data-label="STOCK">${devolverString(e.cantidad)}</td>
+          <td data-label="TALLES">${devolverString(e.talles)}</td>
+          <td data-label="TELA">${devolverString(e.tela)}</td>
+          <td data-label="LOCAL">${devolverString(e.local)}</td>
+          <td data-label="PRECIO">$${devolverString(e.precio)}</td>
           <td>
             <img id="${e.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="previsualizar_producto(this.id)"/>
           </td>
