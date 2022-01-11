@@ -221,9 +221,7 @@ const descontarElTotal = (req, res) => __awaiter(void 0, void 0, void 0, functio
                         precio: e.precio
                     };
                     let nuevaSuma = p.cantidad * e.precio;
-                    console.log("por: " + nuevaSuma);
                     sumaTotal += nuevaSuma;
-                    console.log(sumaTotal);
                     let nuevoStock = e.cantidad - p.cantidad;
                     yield productos[i].update({ cantidad: nuevoStock })
                         .catch(err => {
