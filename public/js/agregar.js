@@ -59,3 +59,6 @@ window.rol = (e) => {
 window.cerrar_seccion = () => {
     cerrar_login();
 }
+
+
+

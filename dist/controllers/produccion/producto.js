@@ -11,19 +11,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
+const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const talller_1 = require("../../models/produccion/talller");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const producto = new productos_produccion_1.Produccion_producto(req.body);
         const estado = req.query.estado;
+        yield producto.save();
         if (estado == "true") {
+            const data = {
+                id_corte: req.body.id_corte
+            };
+            const estanpados = new estanpados_1.Estanpados(data);
+            yield estanpados.save();
         }
-        // await producto.save();
-        // res.json({
-        //     ok: true,
-        //     producto
-        // })
+        res.json({
+            ok: true,
+            producto
+        });
     }
     catch (error) {
         res.status(505).json({

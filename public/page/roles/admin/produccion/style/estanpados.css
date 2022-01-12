@@ -42,3 +42,26 @@ box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px
 .boton_estanpado{
     grid-column: 1/ 3;    
 } */
+
+
+.opciones_cambio{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible; */
+
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-weight:300; 
+
+
+
+}
+
+.opciones_cambio select{
+    font-size: 18px;
+}
+
+.input_con_el_valor{
+    padding: 10px;
+}

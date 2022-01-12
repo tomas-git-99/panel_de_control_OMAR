@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/index.css">
     <link rel="stylesheet" type="text/css" href="/page/roles/admin/produccion/style/estanpados.css">
     
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <title>Milena</title>
@@ -119,14 +121,30 @@
         
           </tr>
         </thead>
-        <tbody class="table_produccion">
+        <tbody class="table_produccion_estanpado">
 
         </tbody>
       </table>
 </div>
 
+<div class="opciones_cambio" id="aca_va_el_ID">
+    <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir" onclick="salir_cambios()"/>
+    <h3>Cambiar ...</h3>
+    <select class="custom-select" id="seleccion_cambio" onchange="selecciconCambios(this)">
+
+      </select>
+      <div class="input_con_el_valor">
+
+      </div>
+
+
+</div>
+
 
         </div>
     </div>
+
+
+    <script src="/js/produccion/estanpados.js"  type="module"></script>
 </body>
 </html>

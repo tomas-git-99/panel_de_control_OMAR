@@ -3,7 +3,7 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
     
-    // id:number,
+  /*   id:number, */
     id_corte: number,
     nombre:string,
     fecha_de_corte: number,
@@ -26,7 +26,7 @@ export interface TodoAtributos {
 
 export class Produccion_producto extends Model <TodoAtributos>{
 
-    // public id!:number;
+  /*   public id!:number; */
     public id_corte!: number;
     public fecha_de_corte!: number;
     public nombre!:string;
@@ -50,12 +50,11 @@ export class Produccion_producto extends Model <TodoAtributos>{
 
 Produccion_producto.init(
     {
-        // id:{
-        //     type:DataTypes.INTEGER,
-        //     primaryKey:true,
-        //     autoIncrement: true,
+/*          id:{
 
-        // },
+            type:DataTypes.NUMBER
+
+        }, */
         id_corte:{
             type:DataTypes.NUMBER
         },

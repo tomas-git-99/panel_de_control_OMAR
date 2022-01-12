@@ -210,15 +210,15 @@ ALTER TABLE carrito
 
 CREATE TABLE estanpados(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_producto INT NOT NULL,
-    id_estanpador INT NOT NULL,
+    id_producto INT,
+    id_estanpador INT,
     dibujo VARCHAR(255),
     fecha_de_entrada DATE,
     pagado BOOLEAN default false,
     
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 CREATE TABLE estanpador(
     
@@ -229,4 +229,4 @@ CREATE TABLE estanpador(
 
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);

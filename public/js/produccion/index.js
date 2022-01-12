@@ -310,6 +310,7 @@ window.enviar_cambio = (id) => {
 }
 
 const imprimir_opciones = (res , id) => {
+
 const seleccion_cambio_taller = document.getElementById("seleccion_cambio_taller");
 
 
@@ -323,7 +324,9 @@ const seleccion_cambio_taller = document.getElementById("seleccion_cambio_taller
         `
         seleccion_cambio_taller.innerHTML += talleres;
     });
+    
 }
+
  
 const opcines_taller = (id) => {
 

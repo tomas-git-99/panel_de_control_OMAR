@@ -10,11 +10,11 @@ class Produccion_producto extends sequelize_1.Model {
 }
 exports.Produccion_producto = Produccion_producto;
 Produccion_producto.init({
-    // id:{
-    //     type:DataTypes.INTEGER,
-    //     primaryKey:true,
-    //     autoIncrement: true,
-    // },
+    /*          id:{
+    
+                type:DataTypes.NUMBER
+    
+            }, */
     id_corte: {
         type: sequelize_1.DataTypes.NUMBER
     },

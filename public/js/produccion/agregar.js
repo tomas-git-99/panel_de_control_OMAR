@@ -182,6 +182,23 @@ form_estanpador_agregar.addEventListener("submit", (e) => {
             forData[el.name] = el.value;    
         }
 
+    fecthNormalPOST_PUT("POST", "produccion/estanpado", forData)
+        .then( res => {
+
+            console.log(res)
+            if(res.ok){
+                salio_todo_bien("Salio todo correcto");
+                volverAtras(form_estanpador, opciones);
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
+            }else{
+                algo_salio_mal(`Algo salio mal`)
+            }
+        })
+        .catch (err => {
+            algo_salio_mal(`Algo salio mal: ${ err.message }`)
+        })
 
 })
 

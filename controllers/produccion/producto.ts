@@ -1,5 +1,6 @@
 import { query, Request, Response } from "express";
 import { Op } from "sequelize/dist";
+import { Estanpados } from "../../models/produccion/estanpados";
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
 import { Taller } from "../../models/produccion/talller";
 
@@ -12,18 +13,26 @@ export const crearProducto = async (req: Request, res: Response) => {
 
     const estado = req.query.estado;
 
+
+    await producto.save();
+
+
     if(estado == "true"){
 
-        
+        const data:any = {
+            id_corte:req.body.id_corte
+        }
+
+        const estanpados = new Estanpados(data);
+
+        await estanpados.save();
+
     }
-
-
-    // await producto.save();
     
-    // res.json({
-    //     ok: true,
-    //     producto
-    // })
+    res.json({
+         ok: true,
+         producto
+    })
         
     } catch (error) {
         res.status(505).json({
