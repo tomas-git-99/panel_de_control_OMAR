@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
+exports.buscarEstapados = exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
 const estanpador_1 = require("../../models/produccion/estanpador");
 const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
@@ -93,4 +93,62 @@ const obtenerEstanpadorID = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.obtenerEstanpadorID = obtenerEstanpadorID;
+const buscarEstapados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { valor } = req.body;
+    const { query } = req.params;
+    /*     if(fecha == undefined){
+            
+            const { pagado } = req.body;
+     */
+    searchFunc(query, valor)
+        .then(data => {
+        res.json({
+            ok: true,
+            data
+        });
+    });
+    /*     }else{
+    
+            searchFunc(query, fecha)
+                .then( data => {
+                    res.json({
+                        ok: true,
+                        data
+                    })
+                })
+        } */
+});
+exports.buscarEstapados = buscarEstapados;
+const searchFunc = (palabra, valor) => __awaiter(void 0, void 0, void 0, function* () {
+    let buscar = {
+        where: {}, order: [['updatedAt', 'DESC']]
+    };
+    buscar.where[`${palabra}`] = valor;
+    /*     const produccion_productos = await Estanpados.findAll(buscar);
+        
+        const taller = await Estanpador.findAll() */
+    const estanpado = yield estanpados_1.Estanpados.findAll(buscar);
+    const estanpador = yield estanpador_1.Estanpador.findAll();
+    const producto = yield productos_produccion_1.Produccion_producto.findAll();
+    let data = [];
+    for (let i of estanpado) {
+        let productoNew = producto.find(h => h.id_corte == i.id_corte);
+        let estanpadorNew = estanpador.find(e => e.id == i.id_estanpador);
+        data = [...data, { estanpado: i, estanpador: estanpadorNew || "", producto: productoNew }];
+    }
+    /*
+             estanpado.map ( (e, i) =>{
+                estanpador.map ( (p,m) => {
+                     if(e.id_estanpador == p.id){
+    
+                        let productoNew = producto.find( h => h.id_corte == e.id_corte);
+    
+                        data = [...data, {estanpado:e, estanpador:p, producto:productoNew}];
+                     }
+        
+                 })
+       
+             }) */
+    return data;
+});
 //# sourceMappingURL=estanpados.js.map

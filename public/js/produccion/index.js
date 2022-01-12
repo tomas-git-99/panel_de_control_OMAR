@@ -202,7 +202,7 @@ window.selecciconCambios = (e) => {
         <div class="input-group mb-3">
         <input type="date" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
         <div class="input-group-append">
-        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
+        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Cambiar</button>
         </div>
         </div>
         
@@ -222,7 +222,7 @@ window.selecciconCambios = (e) => {
         <div class="input-group mb-3">
         <input type="text" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
         <div class="input-group-append">
-        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
+        <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Cambiar</button>
         </div>
         </div>
         

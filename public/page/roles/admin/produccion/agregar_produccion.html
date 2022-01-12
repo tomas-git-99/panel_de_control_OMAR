@@ -162,7 +162,7 @@
                             <input type="text"class="form-control" name="estado">
                         </div> -->
                         <div class="boton" type="submit" >
-                            <button class="btn btn-primary">GUARDAR</button>
+                            <button class="btn btn-primary">AGREGAR</button>
                         </div>
 
                     </form>
@@ -187,6 +187,12 @@
                 <div class="cubo_agregar agregar_estanpador" onclick="agregar_estanpador()">
                     <h3>Agregar estanpador(oficial)</h3>
                     <p>Podras agregrar nuevos estanpadores(oficial)</p>
+                </div>
+
+
+                <div class="cubo_agregar agregar_rollo" onclick="agregar_rollo()">
+                    <h3>Agregar Rollo</h3>
+                    <p>Podras agregrar nuevos rollos</p>
                 </div>
             </div>
 
@@ -216,7 +222,7 @@
                             <input type="text"class="form-control" name="direccion">
                         </div>
                         <div class="boton_taller" type="submit" >
-                            <button class="btn btn-primary">GUARDAR</button>
+                            <button class="btn btn-primary">AGREGAR</button>
                         </div>
 
                     </form>
@@ -250,7 +256,7 @@
                             <input type="text"class="form-control" name="direccion">
                         </div>
                         <div class="boton_taller" type="submit" >
-                            <button class="btn btn-primary">GUARDAR</button>
+                            <button class="btn btn-primary">AGREGAR</button>
                         </div>
 
                     </form>
@@ -259,6 +265,35 @@
 
                 
             </div>
+
+
+
+            <div class="form_rollo">
+                <div class="cartel_form_rollo">
+
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_ventana('rollo')"></button>
+                    
+                    <div class="titulo">
+                        <h1>ROLLO</h1>
+                        <hr width="100%" >
+                    </div>
+
+                    <form action="" class="form_rollo_agregar" id="agregar_taller_db">
+                        <div class="nombre_completo">
+                            <span>Nombre</span>
+                            <input type="text"class="form-control" name="nombre">
+                        </div>
+                        <div class="boton_taller" type="submit" >
+                            <button class="btn btn-primary">AGREGAR</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                
+            </div>
+
 
 
         

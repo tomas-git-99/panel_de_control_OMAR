@@ -35,7 +35,7 @@ const imprimirHistorial = (data) => {
 
         historial += `
         <tr>
-        <td data-label="ID">${devolverString(e.producto.id_corte)}</td>
+        <td data-label="ID">${devolverString(e.estanpado.id_corte)}</td>
         <td data-label="NOMBRE / MODELO">${devolverString(e.producto.nombre)}</td>
         <td data-label="DIBUJO">${devolverString(e.estanpado.dibujo)}</td>
         <td data-label="ESTANPADOR">${devolverString(e.estanpador.nombre)}</td>
@@ -94,6 +94,7 @@ const input_con_el_valor = document.querySelector(".input_con_el_valor");
 
 window.selecciconCambios = (e) => {
 
+  
 
   if(e.value == "estanpador"){
     input_con_el_valor.innerHTML = `
@@ -107,7 +108,7 @@ window.selecciconCambios = (e) => {
     `
 
 
-    console.log(e[e.selectedIndex].id)
+    
     return  opcines_taller(e[e.selectedIndex].id);
   }else if (e.value == "pagado"){
 
@@ -120,17 +121,26 @@ window.selecciconCambios = (e) => {
     <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="fecha_De_pago(this.id)">Cambiar</button>
     `
 
+  }else if (e.value == "fecha_de_entrada"){
+    input_con_el_valor.innerHTML = `
+    <div class="input-group mb-3">
+    <input type="date" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
+    <div class="input-group-append">
+    <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Cambiar</button>
+    </div>
+    </div>
+    
+    `
   }else{
     input_con_el_valor.innerHTML = `
     <div class="input-group mb-3">
     <input type="text" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
     <div class="input-group-append">
-    <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Button</button>
+    <button class="btn btn-outline-primary " id="${e[e.selectedIndex].id}" type="button" onclick="enviar_cambio(this.id)">Cambiar</button>
     </div>
     </div>
     
     `
-
   }
 }
 
@@ -193,14 +203,14 @@ const imprimir_opciones = (res , id) => {
               imprimir_opciones(res.estanpador, id)
           })
           .catch (err => {
-              algo_salio_mal(`Algo salio mal: ${ err.message }`)
+              algo_salio_mal(`Algo salio mal: ${ err }`)
           })
   }
 
 
   window.enviar_taller_nuevo = (id) => {
 
-    console.log(id);
+    
     const palabras = id.split('_');
 
     fecthNormalPOST_PUT("PUT", `produccion/estanpado/${palabras[1]}`, {id_estanpador:palabras[0]})
@@ -286,7 +296,7 @@ const imprimir_previsualizar = (id) => {
 
     fecthNormalGET("GET",`produccion/estanpado/unico/${id}`)
         .then( res => {
-          console.log(res);
+          
             imprimir_html_datos(res)
         })
         .catch( err => {
@@ -326,4 +336,194 @@ window.img_salir_previsualizar = () => {
 
   previsualizar.style.display = "none";
   previsualizar.style.visibility = "hidden";
+}
+
+
+
+window.ordenar = (e) => {
+  const opciones_input = document.querySelector(".opciones_input");
+
+  if(e.value == "fecha_de_entrada"){
+    opciones_input.innerHTML = `
+    <div class="p">
+    <select class="custom-select" id="${e.value}" onchange="cambiar_filtro(this)">
+        <option selected>Filtrar ...</option>
+        <option value="1">Rango de fecha</option>
+        <option value="2">Fecha exacta</option>
+      </select>
+       </div>
+       <div class="input_fecha">
+
+   </div>
+
+    `
+  }else if ( e.value == "estanpador"){
+    opciones_input.innerHTML = `
+    <div class="p">
+    <select class="custom-select taller" id="${e.value}" onchange="buscarDataTaller(this)">
+        <option selected>Filtrar ...</option>
+
+      </select>
+       </div>
+       <div class="input_fecha">
+
+   </div>
+
+    `
+
+    opciones_de_taller();
+
+  }else if (e.value == "pagado"){
+
+    let data = {
+      pagado:false
+    }
+
+
+    fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${e.value}`, data)
+    .then( res =>{
+    
+        if(res.ok){
+          imprimirHistorial(res.data)
+
+        }else{
+            algo_salio_mal(`Algo salio mal`)
+        }
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+
+
+  }else if (e.value == "0"){
+    
+    main_historial();
+  }
+}
+
+
+
+window.cambiar_filtro = (e) => {
+
+  const input_fecha = document.querySelector(".input_fecha")
+  if(e.value == 1){
+      input_fecha.innerHTML = `
+      <input type="date" id="startDate">
+      <input type="date" id="endDate">
+      <button id="${e.id}" class="btn btn-primary btn-sm" onclick="rango_buscar(this.id)">Buscar</button>
+      `
+
+  }else if(e.value == 2){
+      input_fecha.innerHTML = `
+      <input type="date" id="fecha_exacta">
+      <button id="${e.id}" class="btn btn-primary btn-sm" onclick="exacto_buscar(this.id)">Buscar</button>
+      `
+  }
+}
+
+
+
+window.rango_buscar = (id) =>{
+  const startDate = document.getElementById("startDate");
+  const endDate = document.getElementById("endDate");
+
+  let dato ={valor:[startDate.value, endDate.value]}
+
+ 
+  fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${id}`, dato)
+      .then( res =>{
+          if(res.ok){
+            imprimirHistorial(res.data)
+
+          }else{
+              algo_salio_mal(`Algo salio mal`)
+          }
+      })
+      .catch( err =>{
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
+  
+
+}
+
+
+window.exacto_buscar = (id) => {
+
+  const fecha_exacta = document.getElementById("fecha_exacta");
+  const dato = {
+      valor:fecha_exacta.value
+  }
+
+  fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${id}`, dato)
+      .then( res =>{
+   
+        imprimirHistorial(res.data)
+      })
+      .catch( err =>{
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
+  
+  
+
+}
+
+
+
+
+const opciones_de_taller = () => {
+
+  fecthNormalGET("GET","produccion/estanpado/oficial")
+  .then(res =>{
+      imprimir_taller(res.estanpador)
+  })
+  .catch (err => {
+      algo_salio_mal(`Algo salio mal: ${ err }`)
+  })
+}
+const escribir_busquedas = document.querySelector(".escribir_busquedas");
+
+const imprimir_taller = (talleres) => {
+
+  const taller = document.querySelector(".taller");
+
+  let data_taller = "<option value='0' selected >Filtrar ...</option>"
+  talleres.map (e => {
+
+      data_taller += `
+      <option value="${e.id}">${e.nombre}</option>
+      `
+  })
+
+  taller.innerHTML = data_taller;
+}
+
+
+window.buscarDataTaller = (value) => {
+
+  if(value.value == "0" || value.value == 0){
+  /*     escribir_busquedas.style.display = "none";
+      escribir_busquedas.style.visibility = "hidden"; */
+      /* main_historial() */
+  }else{
+
+    let data = {
+      valor: value.value 
+    }
+   
+      fecthNormalPOST_PUT("POST",`produccion/estanpado/buscar/filtro/${"id_estanpador"}`, data)
+      .then(res =>{
+/*           if(res.produccion.length == 0){
+              escribir_busquedas.style.display = "grid";
+              escribir_busquedas.style.visibility = "visible";
+              escribir_busquedas.innerHTML = `<h3>No se pudo encontrar ningun taller</h3>`
+
+          }else{ */
+         
+            imprimirHistorial(res.data)
+          /* } */
+      })
+      .catch (err => {
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
+  }
 }

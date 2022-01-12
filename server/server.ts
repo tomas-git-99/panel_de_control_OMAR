@@ -18,6 +18,7 @@ import produccionProducto from  "../routers/produccion/producto_produccion"
 import produccionHistorial from  "../routers/produccion/historial"
 import produccionTaller from  "../routers/produccion/taller"
 import produccionEstanpado from  "../routers/produccion/estanpados"
+import produccionRollos from  "../routers/produccion/rollos"
 
 import db from "../DB/conectarDB";
 
@@ -43,6 +44,7 @@ class ServerApp {
         taller:            '/api/produccion/taller',
         hisorial:          '/api/produccion/hisorial',
         estanpado:          '/api/produccion/estanpado',
+        rollos:          '/api/produccion/rollos',
     };
 
     constructor(){
@@ -104,6 +106,7 @@ class ServerApp {
         this.app.use( this.apiPaths.taller,            produccionTaller)
         this.app.use( this.apiPaths.hisorial,          produccionHistorial)
         this.app.use( this.apiPaths.estanpado,         produccionEstanpado)
+        this.app.use( this.apiPaths.rollos,            produccionRollos)
 
     }
  

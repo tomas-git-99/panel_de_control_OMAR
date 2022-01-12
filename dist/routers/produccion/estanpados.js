@@ -8,5 +8,6 @@ router.get('/unico/:id', estanpados_1.obtenerEstanpadorID);
 router.put('/:id', estanpados_1.cambiarEstanpado);
 router.get('/oficial', estanpados_1.getEstanpadores);
 router.post('/', estanpados_1.nuevoEstanpador);
+router.post('/buscar/filtro/:query', estanpados_1.buscarEstapados);
 exports.default = router;
 //# sourceMappingURL=estanpados.js.map

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import fecha from "fecha";
 import { Estanpador } from "../../models/produccion/estanpador";
 import { Estanpados } from "../../models/produccion/estanpados"
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
@@ -136,4 +137,87 @@ try {
         msg: error
     })
 }
+}
+
+
+export const buscarEstapados = async (req: Request, res: Response) => {
+
+
+    const { valor } = req.body;
+    const { query } = req.params; 
+
+/*     if(fecha == undefined){
+        
+        const { pagado } = req.body;
+ */
+    
+            searchFunc(query, valor)
+                .then( data => {
+                    res.json({
+                        ok: true,
+                        data
+                    })
+                })
+
+       
+/*     }else{
+
+        searchFunc(query, fecha)
+            .then( data => {
+                res.json({
+                    ok: true,
+                    data
+                })
+            })
+    } */
+}
+
+
+
+const searchFunc = async(palabra:any, valor: false | null | number) =>{
+
+    let buscar:any = {
+        where: {
+
+        },order: [['updatedAt', 'DESC']]
+    }
+
+    buscar.where[`${palabra}`] = valor;
+
+/*     const produccion_productos = await Estanpados.findAll(buscar);
+    
+    const taller = await Estanpador.findAll() */
+    const estanpado = await Estanpados.findAll(buscar);
+
+    const estanpador = await Estanpador.findAll()
+
+    const producto = await Produccion_producto.findAll()
+
+    let data:any = []
+
+    for (let i of estanpado){
+        let productoNew = producto.find( h => h.id_corte == i.id_corte);
+        let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
+
+        data = [...data, {estanpado:i, estanpador:estanpadorNew || "", producto:productoNew}];
+
+    }
+/* 
+         estanpado.map ( (e, i) =>{
+            estanpador.map ( (p,m) => {
+                 if(e.id_estanpador == p.id){
+
+                    let productoNew = producto.find( h => h.id_corte == e.id_corte);
+
+                    data = [...data, {estanpado:e, estanpador:p, producto:productoNew}];
+                 }
+    
+             })
+   
+         }) */
+
+ 
+
+    return data;
+
 }

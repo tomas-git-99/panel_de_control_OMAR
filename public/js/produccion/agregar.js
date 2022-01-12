@@ -8,6 +8,7 @@ const bienvenido_form = document.querySelector(".bienvenido_form");
 const form_taller = document.querySelector(".form_taller");
 const opciones = document.querySelector(".opciones");
 const form_estanpador = document.querySelector(".form_estanpador");
+const form_rollo = document.querySelector(".form_rollo");
 
 const boton = document.querySelector(".boton")
 
@@ -23,7 +24,9 @@ window.agregar_estanpador = () => {
     volverAtras(opciones, form_estanpador);
     
 }
-
+window.agregar_rollo = () => {
+    volverAtras(opciones, form_rollo);
+}
 
 window.salir_ventana = (data) => {
     if(data == "estanpado"){
@@ -38,6 +41,10 @@ window.salir_ventana = (data) => {
     limpiar(formProducto)
 
         volverAtras(bienvenido_form, opciones);
+
+    }else if(data == "rollo"){
+
+        volverAtras(form_rollo, opciones);
 
     }
 }
@@ -185,7 +192,7 @@ form_estanpador_agregar.addEventListener("submit", (e) => {
     fecthNormalPOST_PUT("POST", "produccion/estanpado", forData)
         .then( res => {
 
-            console.log(res)
+     
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
                 volverAtras(form_estanpador, opciones);
@@ -202,7 +209,36 @@ form_estanpador_agregar.addEventListener("submit", (e) => {
 
 })
 
+const form_rollo_agregar = document.querySelector(".form_rollo_agregar");
 
+
+form_rollo_agregar.addEventListener ("submit", (e) => {
+    e.preventDefault();
+
+    const forData = {};
+    
+    for(let el of form_rollo_agregar.elements){
+        if(el.name.length > 0)
+            forData[el.name] = el.value;    
+        }
+    fecthNormalPOST_PUT("POST", "produccion/rollos", forData)
+        .then( res => {
+            
+            if(res.ok){
+                salio_todo_bien("Salio todo correcto");
+                volverAtras(form_rollo, opciones);
+            }else if (res.error == 10 || res.error == "10"){
+                localStorage.removeItem("x-token");
+                window.location.href = `${window.location.origin}/index.html`
+            }else{
+                algo_salio_mal(`Algo salio mal`)
+            }
+        })
+        .catch (err => {
+            algo_salio_mal(`Algo salio mal: ${ err.message }`)
+        })
+    
+})
 
 const limpiar = (element) => {
 

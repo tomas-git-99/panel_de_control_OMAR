@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cambiarEstanpado, getEstanpadores, nuevoEstanpador, obtenerEstanpadorID, obtenerEstanpados } from "../../controllers/produccion/estanpados";
+import { buscarEstapados, cambiarEstanpado, getEstanpadores, nuevoEstanpador, obtenerEstanpadorID, obtenerEstanpados } from "../../controllers/produccion/estanpados";
 
 
 const router = Router();
@@ -23,6 +23,8 @@ router.get('/oficial', getEstanpadores)
 router.post('/', nuevoEstanpador)
 
 
+
+router.post('/buscar/filtro/:query', buscarEstapados)
 
 
 export default router;

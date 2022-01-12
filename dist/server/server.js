@@ -27,6 +27,7 @@ const producto_produccion_1 = __importDefault(require("../routers/produccion/pro
 const historial_1 = __importDefault(require("../routers/produccion/historial"));
 const taller_1 = __importDefault(require("../routers/produccion/taller"));
 const estanpados_1 = __importDefault(require("../routers/produccion/estanpados"));
+const rollos_1 = __importDefault(require("../routers/produccion/rollos"));
 const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
@@ -44,6 +45,7 @@ class ServerApp {
             taller: '/api/produccion/taller',
             hisorial: '/api/produccion/hisorial',
             estanpado: '/api/produccion/estanpado',
+            rollos: '/api/produccion/rollos',
         };
         this.app = express_1.default();
         this.port = '8000';
@@ -89,6 +91,7 @@ class ServerApp {
         this.app.use(this.apiPaths.taller, taller_1.default);
         this.app.use(this.apiPaths.hisorial, historial_1.default);
         this.app.use(this.apiPaths.estanpado, estanpados_1.default);
+        this.app.use(this.apiPaths.rollos, rollos_1.default);
     }
     listen() {
         this.app.listen(this.port, () => console.log(`En el port ${this.port}`));
