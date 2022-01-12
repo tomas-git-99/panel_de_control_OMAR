@@ -16,6 +16,10 @@ const main_historial = () => {
       .then( res => {
         imprimirHistorial(res.data)
       })
+      .catch (err => {
+        algo_salio_mal(`Algo salio mal: ${ err}`)
+      })
+
 }
 
 main_historial()
@@ -26,15 +30,15 @@ main_historial()
 
 const imprimirHistorial = (data) => {
    
-    let historial 
+    let historial = ""
     data.map ( e => {
 
-        historial = `
+        historial += `
         <tr>
         <td data-label="ID">${devolverString(e.producto.id_corte)}</td>
         <td data-label="NOMBRE / MODELO">${devolverString(e.producto.nombre)}</td>
         <td data-label="DIBUJO">${devolverString(e.estanpado.dibujo)}</td>
-        <td data-label="ESTANPADOR">${devolverString(e.estanpado.id_estanpador)}</td>
+        <td data-label="ESTANPADOR">${devolverString(e.estanpador.nombre)}</td>
         <td data-label="FECHA DE ENTRADA">${devolverString(e.estanpado.fecha_de_entrada)}</td>
         <td data-label="PAGADO">${e.estanpado.pagado == false ? "NO PAGADO" : "PAGADO"}</td>
 
@@ -43,19 +47,24 @@ const imprimirHistorial = (data) => {
         <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
         </div>
         </td>
-        <td data-label="PREVISUALIZAR">
-        <div id="${e.estanpado.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
-        <img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
-        </div>
-        </td>
+
+  
+
       </tr>
 
         ` 
-        table_produccion.innerHTML += historial;
-    })
+      })
+      table_produccion.innerHTML = historial;
+
 
 }
 
+// LO SACAQUE PORQUE NO ERA NESECARIO POR EL TEMA DE YA TODOS LOS DATOS SE MUESTRAN EN PANTALLA
+//<td data-label="PREVISUALIZAR">
+//<div id="${e.estanpado.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
+//<img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
+//</div>
+//</td>
 
 const opciones_cambio = document.querySelector(".opciones_cambio");
 const seleccion_cambio = document.querySelector("#seleccion_cambio");
@@ -100,6 +109,17 @@ window.selecciconCambios = (e) => {
 
     console.log(e[e.selectedIndex].id)
     return  opcines_taller(e[e.selectedIndex].id);
+  }else if (e.value == "pagado"){
+
+    input_con_el_valor.innerHTML = `
+    <select class="custom-select" style="width:auto;" id="seleccion_cambio_taller" onchange="cambiar_pagar(this)">
+    <option selected value="0">Eligir...</option>
+    <option value="${false}" id="${e[e.selectedIndex].id}">NO PAGADO</option>
+    <option value="${true}" id="${e[e.selectedIndex].id}">PAGADO</option>
+    </select>
+    <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="fecha_De_pago(this.id)">Cambiar</button>
+    `
+
   }else{
     input_con_el_valor.innerHTML = `
     <div class="input-group mb-3">
@@ -191,4 +211,119 @@ const imprimir_opciones = (res , id) => {
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 
+}
+
+
+let id_para_pagar
+window.cambiar_pagar = (e) => {
+    let estado = document.querySelector(".pagar_taller");
+    
+    estado.id = e.value;
+    
+    id_para_pagar = e[e.selectedIndex].id;
+
+}
+
+
+
+
+window.fecha_De_pago = (e) => {
+ 
+/*   let date = new Date()
+  let day = `${(date.getDate())}`.padStart(2,'0');
+  let month = `${(date.getMonth()+1)}`.padStart(2,'0');
+  let year = date.getFullYear();
+  let todayDate = `${year}-${month}-${day}`; */
+
+  if(e == true || e == "true") {
+      fecthNormalPOST_PUT("PUT", `produccion/estanpado/${id_para_pagar}`, {pagado:true})
+      .then( (res) => {
+          salio_todo_bien("Todo salio exelente")
+      })
+      .catch( err => {
+          algo_salio_mal(`Algo salio mal: ${ err}`)
+      })
+      
+  }else if ( e == false || e == "false"){
+
+      fecthNormalPOST_PUT("PUT", `produccion/estanpado/${id_para_pagar}`, {pagado:false})
+      .then( (res) => {
+          salio_todo_bien("Todo salio exelente")
+      })
+      .catch( err => {
+          algo_salio_mal(`Algo salio mal: ${ err}`)
+      })
+  }
+}
+
+
+window.salir_cambios = () => {
+  opciones_cambio.style.display = "none";
+  opciones_cambio.style.visibility = "hidden";
+  main_historial()
+}
+
+
+
+
+const previsualizar = document.querySelector(".previsualizar");
+
+window.previsualizar_id = (id) => {
+    previsualizar.style.display = "grid";
+    previsualizar.style.visibility = "visible";
+    imprimir_previsualizar(id);
+
+
+
+}
+
+
+
+const tabla_previsualizar = document.querySelector("#tabla_previsualizar");
+
+
+const imprimir_previsualizar = (id) => {
+
+    fecthNormalGET("GET",`produccion/estanpado/unico/${id}`)
+        .then( res => {
+          console.log(res);
+            imprimir_html_datos(res)
+        })
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+}
+
+
+const imprimir_html_datos = (res) => {
+    
+/*     res.map ( e => { */
+
+        tabla_previsualizar.innerHTML = `
+        <tr>
+        <td><span>ID : </span>${devolverString(res.producto.id_corte)}</td>
+        <td><span>NOMBRE : </span>${devolverString(res.producto.nombre)}</td>
+
+        <td><span>ESTANPADOR : </span>${devolverString(res.estanpador.nombre)}</td>
+    </tr>
+
+    <tr>
+        <td><span>DIBUJO : </span>${devolverString(res.estanpados.dibujo)}</td>
+        <td><span>FECHA DE ENTREGA : </span>${devolverString(res.estanpados.fecha_de_entrada)}</td>
+        <td><span>PAGO : </span>${res.estanpados.pagado == false ? "NO PAGADO" : "PAGADO"} </td>
+
+    </tr>
+
+
+ 
+
+        `
+    /* }) */
+}
+
+
+window.img_salir_previsualizar = () => {
+
+  previsualizar.style.display = "none";
+  previsualizar.style.visibility = "hidden";
 }

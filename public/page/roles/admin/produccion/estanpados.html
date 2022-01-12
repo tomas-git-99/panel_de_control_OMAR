@@ -81,12 +81,8 @@
         <select class="custom-select" onchange="ordenar(this)">
             <option value="0" selected>Ordenar por ...</option>
             <option value="fecha_de_entrada">Fecha de entrada</option>
-            <option value="fecha_de_salida">Fecha de salida</option>
-            <option value="fecha_de_pago">Fecha de pago</option>
-            <option id= "id_taller" >Sin taller</option>
-            <option id= "fecha_de_entrada" >Sin entregar</option>
-            <option id= "fecha_de_pago" >No pagado</option>
-            <option id= "taller" >Taller</option>
+            <option id= "pagado" >No pagado</option>
+            <option id= "estanpador" >Estanpador</option>
           </select>
 
           
@@ -138,6 +134,18 @@
       </div>
 
 
+</div>
+
+<div class="previsualizar">
+    <div class="titulo_previsualizar">
+        <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir_previsualizar" onclick="img_salir_previsualizar()"/>
+        <h3>Previsualizar corte</h3>
+    </div>
+
+
+      <table class="table table-striped" id="tabla_previsualizar">
+
+      </table>
 </div>
 
 

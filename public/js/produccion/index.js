@@ -16,6 +16,7 @@ verificarToken(token);
 
 
 const main_historial = () => {
+
     cargaMedio("spinner_load", true);
     
     fecthNormalGET("GET", "produccion/producto_produccion")
@@ -34,6 +35,7 @@ const main_historial = () => {
 }
 
 main_historial();
+
 const colorearTable = (res) => {
 
     let resultado = ""
@@ -133,6 +135,7 @@ const imprimir_previsualizar = (id) => {
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
+
 
 const imprimir_html_datos = (res) => {
     
