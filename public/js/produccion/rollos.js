@@ -1,4 +1,5 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 
@@ -86,8 +87,8 @@ const imprimir_historial = (res) => {
 
         historial += `
         <tr id="${e.rollo.id}_${e.rollo.nombre}" onclick="abrir_id(this.id)">
-        <td>${e.rollo.nombre}</td>
-        <td>${contador}</td>
+        <td data-label="NOMBRE">${e.rollo.nombre}</td>
+        <td data-label="TOTAL">${contador}</td>
         </tr>
         `
         contador = 0;
@@ -249,3 +250,31 @@ window.enviar_id = (id) => {
   
   
   }
+
+
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
+}
+
+window.cerrar_seccion = () => {
+    cerrar_login();
+}

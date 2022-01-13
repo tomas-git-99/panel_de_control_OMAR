@@ -42,6 +42,13 @@
     justify-content: center;
     align-items: end;
 }
+.estanpado{
+    display:grid;
+    justify-content: center;
+    align-items: end;
+    font-size: 16px;
+}
+
 .taller select {
     width: 170px;
 }
@@ -90,13 +97,24 @@
     justify-content: center;
     grid-template-columns: 1fr 1fr;
 
-    column-gap: 60px;
+   /*  column-gap: 60px; */
 
     font-family: 'Poppins', sans-serif;
     font-weight:500; 
+    gap: 20px;
 }
-
-.agregar_producto{
+.cubo_agregar{
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    height: 170px;
+    width:  400px;
+    text-align: center;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;    border-radius: 10px;
+    cursor: pointer;
+}
+/* .agregar_producto{
     display:grid;
     justify-content: center;
     align-content: center;
@@ -118,8 +136,9 @@
     display:grid;
     justify-content: center;
     align-content: center;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;}
-
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+ */
 
 
 .form_taller{
@@ -132,6 +151,32 @@
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 15px;
     text-align: center;
+}
+
+
+.form_estanpador{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible; */
+    position: fixed;
+    place-self: center;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 15px;
+    text-align: center;
+}
+.cartel_form_estanpador{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    background: white;
+    height: 400px;
+    width: 300px;
+}
+.cartel_form_estanpador form{
+    display: grid;
+
+    row-gap:15px;
 }
 
 .cartel_form_taller{
@@ -162,8 +207,29 @@
 }
 
 
+.form_rollo{
+    display: none;
+    visibility: hidden;
+/*     display: block;
+    visibility: visible; */
 
+    position:fixed;
+    place-self: center;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.boton_taller{
+    padding: 10px;
+}
 
+.cartel_form_rollo{
+    display:grid;
+    padding: 10px;
+}
+
+.titulo{
+    text-align: center;
+}
 
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;

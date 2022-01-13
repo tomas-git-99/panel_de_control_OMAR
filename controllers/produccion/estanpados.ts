@@ -13,6 +13,10 @@ import { Produccion_producto } from "../../models/produccion/productos_produccio
 export const obtenerEstanpados = async (req: Request, res: Response) => {
 
 
+
+
+    try {
+        
     const estanpado = await Estanpados.findAll();
 
     let ids:any = [];
@@ -40,20 +44,6 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
         data = [...data, { producto:productoNew, estanpado:i, estanpador:estanpadorNew || ""}];
 
     }
-/*     producto.map ( e => {
-
-        estanpado.map( i => {
-
-            if (e.id_corte == i.id_corte){
-
-                data = [...data, { producto:e, estanpado:i}];
-            }
-        })
-
-    }) */
-
-
-
 
 
 
@@ -61,6 +51,12 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
         ok: true,
         data
     });
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
 
 }
 
@@ -68,18 +64,27 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
 
 export const cambiarEstanpado = async (req: Request, res: Response) => {
 
+    try {
+        const { id } = req.params;
 
-    const { id } = req.params;
+        const producto = await Estanpados.findByPk(id);
+    
+    
+        await producto?.update(req.body);
+    
+    
+        res.json({
+            ok: true
+        })
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
 
-    const producto = await Estanpados.findByPk(id);
 
 
-    await producto?.update(req.body);
-
-
-    res.json({
-        ok: true
-    })
 }
 
 
@@ -98,13 +103,22 @@ export const getEstanpadores = async (req: Request, res: Response) =>{
 
 export const nuevoEstanpador = async (req: Request, res: Response) => {
 
-    const estanpador = new Estanpador(req.body);
+    try {
+        const estanpador = new Estanpador(req.body);
 
-    await estanpador.save();
-    res.json({
-        ok: true,
-        estanpador,
-    })
+        await estanpador.save();
+        res.json({
+            ok: true,
+            estanpador,
+        })
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+
+
 }
 
 
@@ -147,11 +161,7 @@ export const buscarEstapados = async (req: Request, res: Response) => {
     const { valor } = req.body;
     const { query } = req.params; 
 
-/*     if(fecha == undefined){
-        
-        const { pagado } = req.body;
- */
-    
+
             searchFunc(query, valor)
                 .then( data => {
                     res.json({
@@ -159,18 +169,14 @@ export const buscarEstapados = async (req: Request, res: Response) => {
                         data
                     })
                 })
-
-       
-/*     }else{
-
-        searchFunc(query, fecha)
-            .then( data => {
-                res.json({
-                    ok: true,
-                    data
+                .catch (error => {
+                    res.json({
+                        ok: false,
+                        msg: error
+                    })
                 })
-            })
-    } */
+
+ 
 }
 
 
@@ -228,43 +234,52 @@ const searchFunc = async(palabra:any, valor: false | null | number) =>{
 
 export const buscarEstampados = async (req: Request, res: Response) => {
 
-    const dato = req.query;
+    try {
+        const dato = req.query;
 
-    const produccion_productos = await Produccion_producto.findAll({ where:{ 
-        nombre:{ [Op.like]: '%'+ dato.nombre +'%'},
-        // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
-    }});
-
-
-
-
-    let ids:any = []
-
-    produccion_productos.map ( e => {
-        ids.push(e.id_corte);
-    })
-    const estanpado = await Estanpados.findAll({where:{ id_corte: ids}});
-
-    const estanpador = await Estanpador.findAll()
-   
-
-
-    let data:any = []
- 
-    for ( let i of estanpado){
-
-        let productoNew = produccion_productos.find( h => h.id_corte == i.id_corte);
-        let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
-
-        data = [...data, {estanpado:i, estanpador:estanpadorNew || "", producto:productoNew}];
-        
+        const produccion_productos = await Produccion_producto.findAll({ where:{ 
+            nombre:{ [Op.like]: '%'+ dato.nombre +'%'},
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        }});
+    
+    
+    
+    
+        let ids:any = []
+    
+        produccion_productos.map ( e => {
+            ids.push(e.id_corte);
+        })
+        const estanpado = await Estanpados.findAll({where:{ id_corte: ids}});
+    
+        const estanpador = await Estanpador.findAll()
+       
+    
+    
+        let data:any = []
+     
+        for ( let i of estanpado){
+    
+            let productoNew = produccion_productos.find( h => h.id_corte == i.id_corte);
+            let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
+    
+            data = [...data, {estanpado:i, estanpador:estanpadorNew || "", producto:productoNew}];
+            
+        }
+    
+    
+    
+        res.json({
+            ok:true,
+            data
+        })
+    } catch (error) {
+        res.json({
+            ok:false,
+            msg:error
+        })
     }
 
 
-
-    res.json({
-        ok:true,
-        data
-    })
 
 }

@@ -21,8 +21,7 @@
     place-self: center;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    width:auto;
-    
+    width:800px;
     max-height:800px;
     display:grid;
 
@@ -38,7 +37,7 @@
     display:grid;
     justify-items: center;
   
-    width:600px;
+    width:750px;
     height:auto;
     overflow:auto;
     max-height:600px;
@@ -85,6 +84,7 @@
 .boton_agregar{
     place-self: center;
 }
+
 
 @media (max-width: 767px){
     .contenido_de_data{

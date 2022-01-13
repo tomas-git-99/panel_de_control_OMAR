@@ -26,11 +26,14 @@
 <body >
     <div class="contenido">
 
+        <div class="hamburger" onclick="style_menu()">
+            <img src="/img/menu.png" alt="">
+        </div>
         
         <div class="menu">
             <div class="usuario">
                 <div class="icono">
-                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" onclick="style_menu_salir()" >
                 </div>
                 <h5 id="nombre_usario"></h5>
             </div>
@@ -42,20 +45,18 @@
                     <ul>
                         <li><a href="./agregar_ventas.html">Agregar</a> </li>
                         <li><a href="./compra.html">Comprar</a> </li>
-                        <li><a href="./historial.html">Historial</a> </li>
+                
                     </ul>
                 </div>
     
-
-            </div>
-
-
-       
+    
+            </div>  
+            <div class="crear_nuevo_usuario">
+                
                 <div class="cerrar_seccion" onclick="cerrar_seccion()">
                     <h4>SALIR</h4>
                 </div>
-   
-            
+            </div> 
         </div>
         
         <div class="centro">
@@ -111,6 +112,10 @@
 
 
             <div class="cliente">
+                
+                <div class="boton_solo_salir">
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_envio()"></button>
+                </div>
 
                 <div class="panel">
                     <button class="nuevo">Cliente Nuevo</button>
@@ -195,9 +200,13 @@
                                 <span>DNI O CUIL</span>
                                 <input type="text"class="form-control" name="dni_cuil" placeholder="DNI O CUIL">
                             </div>
-                            <div class="talles">
+                            <div class="tel_cel">
                                 <span>Telefono o Celular</span>
                                 <input type="text"class="form-control" name="tel_cel" placeholder=" Telefono o Celular">
+                            </div>
+                            <div class="email">
+                                <span>Email</span>
+                                <input type="text"class="form-control" name="email" placeholder=" Email">
                             </div>
 
                         </div>
@@ -306,115 +315,350 @@
                 </div>
             </div>
 
+<!-- ACA PLANTILLA PARA IMPRIMIR -->
+
+<div class="imprimir_para_mi">
+
+    <div class="div_para_imprimir_para_mi div_para_imprimir_para_mi_para_envio">
+
+        <div class="id_comprobante">
+            <div class="solo_el_id solo_el_id_envio">
+
+                <h2>ID: </h2>
+            </div>
+
+                <div class="infoCliente info_numero_1">
+
+                    <div class="nombre">
+                       <label for="">NOMBRE: <span></span> </label>
+                    </div>
+                    <div class="DNI O CUIL">
+                        <label for="">DNI O CUIL: <span></span> </label>
+                     </div>
+                     <div class="Telefono">
+                        <label for="">Telefono: <span></span> </label>
+                     </div>
+                     <div class="Provincia">
+                        <label for="">Provincia: <span></span> </label>
+                     </div>
+                     <div class="Localida">
+                         <label for="">Localida: <span></span> </label>
+                      </div>
+                      <div class="Direccion">
+                         <label for="">Direccion: <span></span> </label>
+                      </div>
+                      <div class="Codigo">
+                        <label for="">Codigo: <span></span> </label>
+                     </div>
+                     <div class="transporte">
+                    <label for="">Transporte: <span></span> </label>
+                    </div>
+     
+                </div>
+            
+        </div>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">DISEÑO</th>
+                    <th scope="col">TELA</th>
+                    <th scope="col">TALLE</th>
+                    <th scope="col">CANTIDAD</th>
+
+                        
+                  </tr>
+                </thead>
+                <tbody class="imprimir_para_mi_table">
+                  <tr>
+
+
+                  </tr>
+
+                </tbody>
+              </table>
+        
+    </div>
+    </div>
+
+    <!-- COMPROBANTE PARA EL PUBLICO -->
+
+    <div class="comprobante_publico">
+
+        <div class="imprimirCliente imprimirCliente_publico" id="imprimirCliente">
+
+            <div class="tituloImprimir">
+                <span id="id_comprobante" class="id_comprobante_publico">ID :</span>
+
+                <h2>Comprobante</h2>
+
+                <div class="logo_imprimir">
+                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                    <div class="datos_comprobante">
+                        <p>Bogota 3481 - Bs. As.<br> Cel: +54 9 11 6253-6201 (Central)<br> 11-5180-4160(STEFY) / 11-5693-0533(SILVIA)</p>
+                    </div>
+                </div>
+            </div>
 
             
-            <div class="imprimir_para_mi">
-                <div class="div_para_imprimir_para_mi">
 
-                    <div class="id_comprobante">
-                        <h2>ID:</h2>
-                    </div>
-                        <table class="table">
+            <div class="infoCliente info_numero_2">
+
+                <div class="nombre">
+                   <label for="">Nombre: <span></span> </label>
+                </div>
+                <div class="DNI O CUIL">
+                    <label for="">DNI O CUIL: <span></span> </label>
+                 </div>
+                 <div class="Telefono">
+                    <label for="">Telefono: <span></span> </label>
+                 </div>
+
+                 <div class="email">
+                    <label for="">Email: <span></span> </label>
+                 </div>
+            </div>
+
+            <div class="comprasHechas">
+
+             
+
+                    <table class="table" id="tablaImprimir">
                             <thead>
                               <tr>
                                 <th scope="col">NOMBRE</th>
-                                <th scope="col">TELA</th>
-                                <th scope="col">TALLE</th>
                                 <th scope="col">CANTIDAD</th>
-    
+                                <th scope="col">PRECIO UD</th>
+                                <th scope="col">TOTAL</th>
+                      
                                     
                               </tr>
                             </thead>
-                            <tbody class="imprimir_para_mi_table">
-                              <tr>
-                                <th scope="row">134</th>
-                                <td>TOMAS LOPEZ</td>
-                                <td>68123439</td>
-                                <td>156808989782</td>
-    
-    
-                              </tr>
-    
+                            <tbody class="imprimir_productos imprimir_productos_publico">
+
                             </tbody>
-                          </table>
-                    
-                </div>
-                </div>
+                    </table>
+            
+            </div>
+ 
+
+       
+
+            <div class="totalImprimir">
+                <div class="totaLinia"></div>
+                <label for="">TOTAL: <span class="precio_final precio_final_publico"> $9012</span> </label>
+            </div>
 
 
-                <div class="bienvenido_imprimir">
 
-                    <div class="imprimirCliente" id="imprimirCliente">
-    
-                        <div class="tituloImprimir">
-                            <h2>Comprobante</h2>
-                            <hr>
-                        </div>
-    
-                        
-    
-                        <div class="infoCliente">
-    
+        </div>
+    </div>
+
+
+
+
+    <div class="comprobante_publico_para_mi">
+       
+            <div class="div_para_imprimir_para_mi div_para_imprimir_para_mi_publico">
+
+                <div class="id_comprobante">
+                    <div class="solo_el_id solo_el_id_envio_publico">
+
+                        <h2>ID: </h2>
+                    </div>
+
+                        <div class="infoCliente info_numero_3">
+
                             <div class="nombre">
-                               <label for="">NOMBRE: <span>tomas</span> </label>
+                               <label for="">NOMBRE: <span></span> </label>
                             </div>
                             <div class="DNI O CUIL">
-                                <label for="">DNI O CUIL: <span>tomas</span> </label>
+                                <label for="">DNI O CUIL: <span></span> </label>
                              </div>
                              <div class="Telefono">
-                                <label for="">Telefono: <span>tomas</span> </label>
+                                <label for="">Telefono: <span></span> </label>
                              </div>
-                             <div class="Provincia">
-                                <label for="">Provincia: <span>tomas</span> </label>
-                             </div>
-                             <div class="Localida">
-                                 <label for="">Localida: <span>tomas</span> </label>
-                              </div>
-                              <div class="Direccion">
-                                 <label for="">Direccion: <span>tomas</span> </label>
-                              </div>
-                              <div class="Codigo">
-                                <label for="">Codigo: <span>tomas</span> </label>
+                             <div class="email">
+                                <label for="">Email: <span></span> </label>
                              </div>
              
-    
                         </div>
+                    
+                </div>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">DISEÑO</th>
+                            <th scope="col">TELA</th>
+                            <th scope="col">TALLE</th>
+                            <th scope="col">CANTIDAD</th>
 
-                        <div class="comprasHechas">
+                                
+                          </tr>
+                        </thead>
+                        <tbody class="imprimir_para_mi_table imprimir_para_mi_table_publico">
+                          <tr>
+  
 
-                         
+                          </tr>
 
-                                <table class="table" id="tablaImprimir">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col">NOMBRE</th>
-                                            <th scope="col">CANTIDAD</th>
-                                            <th scope="col">PRECIO UD</th>
-                                            <th scope="col">TOTAL</th>
-                                  
-                                                
-                                          </tr>
-                                        </thead>
-                                        <tbody class="imprimir_productos">
-        
-                                        </tbody>
-                                      </table>
-                        
-                        </div>
+                        </tbody>
+                      </table>
+                
+            </div>
+            
+    </div>
+
+
+    <!-- COMPROBANTE PARA EL PUBLICO FIN-->
+
+    <div class="bienvenido_imprimir">
+
+        <div class="imprimirCliente imprimirCliente_envio" id="imprimirCliente">
+
+            <div class="tituloImprimir">
+                <span id="id_comprobante" class="id_comprobante_envio">ID :</span>
+
+                <h2>Comprobante</h2>
+
+                <div class="logo_imprimir">
+                    <img src="/img/icon-removebg-preview.png" alt="" srcset="" >
+                    <div class="datos_comprobante">
+                        <p>Bogota 3481 - Bs. As.<br> Cel: +54 9 11 6253-6201 (Central)<br> 11-5180-4160(STEFY) / 11-5693-0533(SILVIA)</p>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="infoCliente infoCliente_envio_10">
+
+                <div class="nombre">
+                   <label for="">NOMBRE: <span></span> </label>
+                </div>
+                <div class="DNI O CUIL">
+                    <label for="">DNI O CUIL: <span></span> </label>
+                 </div>
+                 <div class="Telefono">
+                    <label for="">Telefono: <span></span> </label>
+                 </div>
+                 <div class="Provincia">
+                    <label for="">Provincia: <span></span> </label>
+                 </div>
+                 <div class="Localida">
+                     <label for="">Localida: <span></span> </label>
+                  </div>
+                  <div class="Direccion">
+                     <label for="">Direccion: <span></span> </label>
+                  </div>
+                  <div class="Codigo">
+                    <label for="">Codigo: <span></span> </label>
+                 </div>
+                 <div class="transporte">
+                    <label for="">Transporte: <span></span> </label>
+                    </div>
+
+            </div>
+
+            <div class="comprasHechas">
+
              
 
-                   
+                    <table class="table" id="tablaImprimir">
+                            <thead>
+                              <tr>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">CANTIDAD</th>
+                                <th scope="col">PRECIO UD</th>
+                                <th scope="col">TOTAL</th>
+                      
+                                    
+                              </tr>
+                            </thead>
+                            <tbody class="imprimir_productos imprimir_productos_envio">
 
-                        <div class="totalImprimir">
-                            <div class="totaLinia"></div>
-                            <label for="">TOTAL: <span class="precio_final"> $9012</span> </label>
-                        </div>
-    
-    
-    
+                            </tbody>
+                    </table>
+            
+            </div>
+ 
+
+       
+
+            <div class="totalImprimir">
+                <div class="totaLinia"></div>
+                <label for="">TOTAL: <span class="precio_final precio_final_envio"> $9012</span> </label>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+<!-- ACA PLANTILLA PARA IMPRIMIR FINAL -->
+       
+
+
+
+
+
+                <div class="preguntar_publico_o_online">
+                    <div class="titulo_opcion_publico">
+                        <h3>¿ Venta al publico o para envio ?</h3>
+                    </div>
+                    <div class="publico_online">
+                        <button type="button" class="btn btn-outline-secondary" onclick="publico(this)">Publico</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="envios(this)">Envios</button>
                     </div>
                 </div>
 
+
+
+                <div class="venta_publico">
+
+                    <button type="button" class="btn-close" aria-label="Close" onclick="salir_publico()"></button>
+
+                    <div class="titulo_publico">
+                       <h2> Datos del cliente</h2>
+                    </div>
+
+                    <form action="" class="venta_publico_form">
+
+                        <div class="clientInformacionSOLO">
+                            
+                            <div class="nombre">
+                                <span>Nombre</span>
+                                <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                            </div>
+            
+                            <div class="cantidad">
+                                <span>DNI O CUIL</span>
+                                <input type="text"class="form-control" name="dni_cuil" placeholder="DNI O CUIL">
+                            </div>
+                            <div class="tel_cel">
+                                <span>Telefono o Celular</span>
+                                <input type="text"class="form-control" name="tel_cel" placeholder=" Telefono o Celular">
+                            </div>
+                            <div class="email">
+                                <span>Email</span>
+                                <input type="text"class="form-control" name="email" placeholder=" Email">
+                            </div>
+                            <div class="direccion">
+                                <span>Direccion</span>
+                                <input type="text"class="form-control" name="direccion" placeholder=" Direccion">
+                            </div>
+                            <div class="boton_publico">
+
+                                <button class="btn btn-primary" >CONFRIMAR</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+        
 
 
         </div>

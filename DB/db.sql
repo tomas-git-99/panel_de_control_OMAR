@@ -4,6 +4,7 @@ CREATE TABLE cliente(
     apellido VARCHAR(50),
     dni_cuil INT NOT NULL,
     tel_cel INT NOT NULL,
+    email VARCHAR(140),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
@@ -33,7 +34,7 @@ CREATE TABLE producto(
     tela VARCHAR(100) NOT NULL,
     precio INT NOT NULL,
     talles VARCHAR(50),
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -57,7 +58,7 @@ CREATE TABLE orden(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_cliente   INT NOT NULL,
     id_usuario   INT NOT NULL,
-    id_direccion INT NOT NULL ,
+    id_direccion INT,
     fecha DATE,
     transporte VARCHAR(100),
     total INT NOT NULL,
@@ -90,7 +91,7 @@ ALTER TABLE orden AUTO_INCREMENT = 100
 CREATE TABLE orden_detalle(
 
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_orden INT NOT NULL,
+    id_orden INT,
     nombre_producto VARCHAR(150),
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,

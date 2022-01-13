@@ -1,4 +1,5 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 
@@ -602,3 +603,31 @@ const getSearch = (valor) => {
     })
 }
 
+
+
+const nombre = localStorage.getItem("nombre");
+
+
+const nombre_usario = document.querySelector("#nombre_usario");
+
+
+nombre_usario.innerHTML =  nombre;
+
+
+const menu = document.querySelector(".menu");
+
+window.style_menu = () => {
+    menu.style.left = "0px"
+    menu.style.transition = ".5s all"
+    menu.style.zIndex = "200"
+}
+
+window.style_menu_salir = () => {
+    menu.style.left = "-300px"
+    menu.style.transition = ".5s all"
+}
+
+
+window.cerrar_seccion = () => {
+  cerrar_login();
+}
