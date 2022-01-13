@@ -65,13 +65,13 @@ const imprimirTable = (e, color) => {
   
     return `
     <tr class="${color}">
-    <td data-label="ID">${e.produccion.id_corte}</td>
-    <td data-label="NOMBRE">${e.produccion.nombre}</td>
-    <td data-label="TELA">${e.produccion.tela}</td>
-    <td data-label="PESO PROMEDIO">${e.produccion.peso_promedio} Kg</td>
+    <td data-label="CODIGO">${devolverString(e.produccion.id_corte)}</td>
+    <td data-label="MODELO">${devolverString(e.produccion.nombre)}</td>
+    <td data-label="TELA">${devolverString(e.produccion.tela)}</td>
+    <td data-label="PESO PROMEDIO">${devolverString(e.produccion.peso_promedio)} Kg</td>
     <td data-label="TALLER">${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
-    <td data-label="FECHA DE SALIDA">${e.produccion.fecha_de_salida == undefined || e.produccion.fecha_de_salida == null ? "-" : e.produccion.fecha_de_salida}</td>
-    <td data-label="FECHA DE ENTRA">${e.produccion.fecha_de_entrada == undefined || e.produccion.fecha_de_entrada == null ? "-" : e.produccion.fecha_de_entrada}</td>
+    <td data-label="FECHA DE SALIDA">${devolverString(e.produccion.fecha_de_salida)}</td>
+    <td data-label="FECHA DE ENTRA">${devolverString(e.produccion.fecha_de_entrada)}</td>
     <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
     <td data-label= "AJUSTES"> 
     <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
@@ -96,8 +96,8 @@ window.enviar_id = (id) => {
     opciones_cambio.style.visibility = "visible";
     seleccion_cambio.innerHTML = `
         <option selected>Seleccione que cambiar</option>
-        <option id="${id}" value="id_corte">ID</option>
-        <option id="${id}" value="nombre">Nombre</option>
+        <option id="${id}" value="id_corte">Codigo</option>
+        <option id="${id}" value="nombre">Modelo</option>
         <option id="${id}" value="fecha_de_corte">Fecha de corte</option>
         <option id="${id}" value="edad">Edad</option>
         <option id="${id}" value="rollos">Rollos</option>
@@ -143,8 +143,8 @@ const imprimir_html_datos = (res) => {
 
         tabla_previsualizar.innerHTML = `
             <tr>
-            <td><span>ID : </span>${devolverString(e.producto.id_corte)}</td>
-            <td><span>NOMBRE : </span>${devolverString(e.producto.nombre)}</td>
+            <td><span>CODIGO : </span>${devolverString(e.producto.id_corte)}</td>
+            <td><span>MODELO : </span>${devolverString(e.producto.nombre)}</td>
             <td><span>FECHA DE CORTE : </span>${devolverString(e.producto.fecha_de_corte)}</td>
             <td><span>EDAD : </span>${devolverString(e.producto.edad)}</td>
         </tr>
@@ -159,7 +159,7 @@ const imprimir_html_datos = (res) => {
             <td><span>TOTAL : </span>${devolverString(e.producto.total)}</td>
           </tr>
         <tr>
-            <td><span>TALLER : </span>${devolverString(e.taller)}</td>
+            <td><span>TALLER : </span>${devolverString(e.taller.nombre_completo)}</td>
             <td><span>FECHA DE SALIDA : </span>${devolverString(e.producto.fecha_de_salida)}</td>
             <td><span>FECHA DE ENTRADA : </span>${devolverString(e.producto.fecha_de_entrada)}</td>
             <td><span>PAGO : </span>${e.producto.estado == false ? "NO PAGADO" : "PAGADO"} </td>

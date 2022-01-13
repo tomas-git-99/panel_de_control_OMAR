@@ -1,11 +1,17 @@
 
-export const agregarAlFormularioCliente = (cliente) => {
+export const agregarAlFormularioCliente = (cliente, id) => {
 
     let data = JSON.parse(localStorage.getItem("dataCliente"));
 
+
+    let dato = data.find( e => e.id == id);
+
+    let clientes = [dato]
+
+    console.log(dato)
     let historial = ""
 
-    data.map( e => {
+    clientes.map( e => {
         historial += ` 
 
         <div class="nombre">
@@ -29,9 +35,9 @@ export const agregarAlFormularioCliente = (cliente) => {
          <input type="text"class="form-control" name="email" placeholder=" Email"value="${e.email == null || e.email == '' ? '- -' : e.email}" disabled>
      </div>
         `
+        cliente.innerHTML = historial
     })
 
-    cliente.innerHTML = historial
 
 }
 

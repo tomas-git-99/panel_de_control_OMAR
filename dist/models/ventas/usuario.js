@@ -18,7 +18,7 @@ Usuario.init({
     nombre: {
         type: sequelize_1.DataTypes.STRING
     },
-    email: {
+    venta: {
         type: sequelize_1.DataTypes.STRING,
     },
     password: {

@@ -7,7 +7,7 @@ export interface TodoAtributos {
     id:number;
 
     nombre: string;
-    email: string;
+    venta: string;
     password: string;
     dni_cuil: number;
     rol: string;
@@ -20,7 +20,7 @@ export class Usuario extends Model <TodoAtributos>{
     public id!:number;
 
     public nombre!: string;
-    public email!: string;
+    public venta!: string;
     public password!: string;
     public dni_cuil!: number;
     public rol!: string;
@@ -40,7 +40,7 @@ Usuario.init(
         nombre:{
             type:DataTypes.STRING
         },
-        email:{
+        venta:{
             type:DataTypes.STRING,
         },
         password:{

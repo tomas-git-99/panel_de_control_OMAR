@@ -5,6 +5,7 @@ import { cerrar_login } from "./helpers/para_todos/cerrar.js";
 
 const form = document.querySelector("form");
 let value_rol;
+let online_local_usuario;
 let token = localStorage.getItem('x-token');
 verificarToken(token);
 
@@ -25,8 +26,18 @@ form.addEventListener('submit', (e) => {
         return algo_salio_mal("Eliga un rol para continuar")
     }
 
+    if(value_rol == "VENTAS"){
+        
+        if(online_local_usuario == 0 || online_local_usuario == "0" || online_local_usuario == null || online_local_usuario == undefined){
+    
+            return algo_salio_mal("Porfavor eliga si esta cuenta se va usar para ventas online o por local")
+        }
+    }
+
     forData["rol"] = value_rol;
- 
+    forData["venta"] = online_local_usuario;
+
+
     fecthNormalPOST_PUT("POST", "usuario", forData)
          .then((res) => {
              if(res.ok == true){
@@ -41,21 +52,36 @@ form.addEventListener('submit', (e) => {
                         el.value = "";
                     } 
              }else{
-
-                 advertencia(res.msg || res.errors[0].msg || res.errors[1].msg || res.errors[2].msg);
+                 
+                advertencia(res.msg || res.errors[0].msg || res.errors[1].msg || res.errors[2].msg);
              }
          })
          .catch((err) => {
+            console.log(err)
              algo_salio_mal(`Algo salio mal: ${ err }`);
  
          })
  
  }) 
 
-window.rol = (e) => {
+ 
+ const online_o_local = document.querySelector(".online_o_local");
+ 
+ window.rol = (e) => {
     value_rol = e.value;
+    if(e.value == "VENTAS"){
+        online_o_local.style.display = "grid";
+        online_o_local.style.visibility = "visible";
+        
+    }else{
+        online_local_usuario = "";
+        online_o_local.style.display = "none";
+        online_o_local.style.visibility = "hidden";
+    }
 }
-
+window.online_local = (e) => {
+    online_local_usuario = e.value
+}
 window.cerrar_seccion = () => {
     cerrar_login();
 }

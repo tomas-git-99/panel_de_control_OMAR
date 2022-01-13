@@ -170,6 +170,13 @@ li{
 .hamburger img{
     width: 45px
 }
+
+
+
+.online_o_local{
+    display:none;
+    visibility: hidden;
+}
 @media screen and (max-height: 720px){
 
     .hamburger{

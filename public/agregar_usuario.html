@@ -73,10 +73,10 @@
                             <span>Nombre</span>
                             <input type="text"class="form-control" name="nombre">
                         </div>
-                        <div class="email">
+<!--                         <div class="email">
                             <span>Email</span>
                             <input type="text"class="form-control" name="email">
-                        </div>
+                        </div> -->
                         <div class="dni">
                             <span>DNI O CUIL</span>
                             <input type="text"class="form-control" name="dni_cuil">
@@ -85,12 +85,21 @@
                             <span>Contraseña</span>
                             <input type="text"class="form-control" name="password">
                         </div>
+                        
                         <select class="custom-select" onchange="rol(this)">
                             <option value="0" selected>AGREGAR UN ROL</option>
                             <option value="ADMIN">ADMIN</option>
                             <option value="VENTAS">VENTAS</option>
                             <option value="PRODUCCION">PRODUCCION</option>
                           </select>
+
+                          <div class="online_o_local">
+                            <select class="custom-select" onchange="online_local(this)">
+                                <option value="0" selected>VENTA POR ...</option>
+                                <option value="ONLINE">ONLINE</option>
+                                <option value="LOCAL">LOCAL</option>
+                              </select>
+                          </div>
 
                         <div class="boton_usuario" type="submit" >
                             <button class="btn btn-primary">GUARDAR</button>

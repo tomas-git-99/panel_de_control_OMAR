@@ -38,7 +38,7 @@ const imprimirHistorial = (e, color) => {
         historial +=  */
         return `
         <tr class="${color}">
-        <td data-label="ID">${devolverString(e.estanpado.id_corte)}</td>
+        <td data-label="CODIGO">${devolverString(e.estanpado.id_corte)}</td>
         <td data-label="NOMBRE / MODELO">${devolverString(e.producto.nombre)}</td>
         <td data-label="DIBUJO">${devolverString(e.estanpado.dibujo)}</td>
         <td data-label="ESTAMPADOR">${devolverString(e.estanpador.nombre)}</td>

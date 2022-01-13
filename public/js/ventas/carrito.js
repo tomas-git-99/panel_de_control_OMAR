@@ -53,7 +53,7 @@ const leerCarrito = (res) => {
         historial += `
     
         <tr>
-          <td data-label="NOMBRE" >${e.productos.nombre}</td>
+          <td data-label="MODELO" >${e.productos.nombre}</td>
           <td data-label="CANTIDAD" > ${e.carritos.cantidad}</td>
           <td data-label="TALLE" > ${e.carritos.talle == null || e.carritos.talle == undefined ? "- -" : e.carritos.talle}</td>
           <td data-label="PRECIO UD" >$${e.productos.precio}</td>
@@ -134,6 +134,8 @@ const clienteNuevo = document.querySelector(".nuevo");
 const clienteExistente = document.querySelector(".existe");
 
 const buscadorCli = document.querySelector(".buscadorCli");
+const buscador = document.querySelector(".buscador");
+
 const cartelCliente = document.querySelector(".cartelCliente");
 
 const retroceder = document.querySelector(".retroceder");
@@ -164,16 +166,17 @@ retroceder.addEventListener("click", (e) =>{
 
 //CLIENTE EXISTENTE
 clienteExistente.addEventListener("click", (e) =>{
-    e.preventDefault();
 
-    volverAtras(cliente, buscadorCli);
+    e.preventDefault();
+    console.log("como estas")
+    volverAtras(cliente, buscador);
 
 })
 
 retrocederBuscar.addEventListener("click", (e) =>{
 
     e.preventDefault();
-    volverAtras(buscadorCli, cliente);
+    volverAtras(buscador, cliente);
 })
 
 
@@ -246,11 +249,11 @@ const id_del_cliente = document.getElementById("id_del_cliente")
 
 window.mandarID = (e) => {
 
-    volverAtras(buscadorCli, cartelCliente);
+    volverAtras(buscador, cartelCliente);
     direccionCliente(e);
     seleccionDirec.style.grid = "grid";
     seleccionDirec.style.visibility = "visible";
-    agregarAlFormularioCliente(clientInformacionSOLO);
+    agregarAlFormularioCliente(clientInformacionSOLO, e);
     id_del_cliente.id = e;
 }
 

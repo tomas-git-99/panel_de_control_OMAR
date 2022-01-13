@@ -8,7 +8,7 @@ const validar_JWT_1 = require("../../middlewares/validar-JWT");
 const router = express_1.Router();
 //CREAR USUARIO NUEVO
 router.post('/', [
-    validar_JWT_1.validarJWT,
+    /*    validarJWT, */
     express_validator_1.check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     express_validator_1.check('dni_cuil', "El dni o cuil es obligatorio").not().isEmpty(),
     express_validator_1.check('password', "La contraseña es obligatorio").not().isEmpty(),

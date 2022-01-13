@@ -12,7 +12,7 @@ const router = Router();
 
 //CREAR USUARIO NUEVO
 router.post('/',[
-    validarJWT,
+ /*    validarJWT, */
     check('nombre', 'El nombre es obligatorio' ).not().isEmpty(),
     check('dni_cuil', "El dni o cuil es obligatorio").not().isEmpty(),
     check('password', "La contraseña es obligatorio").not().isEmpty(),

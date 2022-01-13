@@ -7,16 +7,16 @@ import { generarJWT } from "../../helpers/generar-JWT";
 export const login = async( req: Request, res: Response) => {
 
      try {
-        const { dni_cuil, password } = req.body;
+        const { nombre, password } = req.body;
 
     
-        const usuario = await Usuario.findAll({where:{ dni_cuil:dni_cuil }});
+        const usuario = await Usuario.findAll({where:{ nombre:nombre }});
 
         if(!usuario){
             return res.json ({
                 ok: false,
                 fallo: 1,
-                msg:'Usuario / Password no son correctos'
+                msg:'Nombre / Password no son correctos'
             })
         }
 
@@ -27,7 +27,7 @@ export const login = async( req: Request, res: Response) => {
             return res.json ( {
                 ok: false,
                 fallo: 3,
-                msg:'Usuario / Password no son correctos'
+                msg:'Nombre / Password no son correctos'
             });
         }
 
@@ -56,30 +56,27 @@ export const crearUsuario = async( req: Request, res: Response) => {
 
     try {
 
-        const { nombre, email, password, dni_cuil, rol} = req.body;
+      
+        const usuarios:any = await Usuario.findAll({where:{ nombre:req.body.nombre}});
 
 
+        if(usuarios.length > 0) {
+            return res.json({
+                ok:false, 
+                msg: "El usuario con este nombre ya esta registrado: " + req.body.nombre
+            })
+        }
     
-        
         const salt = await bcryptjs.genSaltSync(10);
         
-        const newPassword = await bcryptjs.hashSync( password, salt );
-        
-        
-        const datos:any = {
-      
-            nombre,
-            email,
-            password:newPassword,
-            dni_cuil,
-            rol,
+        const newPassword = await bcryptjs.hashSync( req.body.password, salt );
 
-            
-        }
+
         
+        req.body.password = newPassword;
+    
         
-        
-        const usuario = new Usuario(datos);
+        const usuario = new Usuario(req.body);
     
         await usuario.save();
 
@@ -92,6 +89,7 @@ export const crearUsuario = async( req: Request, res: Response) => {
 
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: "Hablar con el administrador"

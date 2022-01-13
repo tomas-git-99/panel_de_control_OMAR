@@ -18,13 +18,13 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generar_JWT_1 = require("../../helpers/generar-JWT");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { dni_cuil, password } = req.body;
-        const usuario = yield usuario_1.Usuario.findAll({ where: { dni_cuil: dni_cuil } });
+        const { nombre, password } = req.body;
+        const usuario = yield usuario_1.Usuario.findAll({ where: { nombre: nombre } });
         if (!usuario) {
             return res.json({
                 ok: false,
                 fallo: 1,
-                msg: 'Usuario / Password no son correctos'
+                msg: 'Nombre / Password no son correctos'
             });
         }
         const validPassword = bcryptjs_1.default.compareSync(password, usuario[0].password);
@@ -32,7 +32,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.json({
                 ok: false,
                 fallo: 3,
-                msg: 'Usuario / Password no son correctos'
+                msg: 'Nombre / Password no son correctos'
             });
         }
         const token = yield generar_JWT_1.generarJWT(usuario[0].id);
@@ -53,17 +53,17 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.login = login;
 const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, email, password, dni_cuil, rol } = req.body;
+        const usuarios = yield usuario_1.Usuario.findAll({ where: { nombre: req.body.nombre } });
+        if (usuarios.length > 0) {
+            return res.json({
+                ok: false,
+                msg: "El usuario con este nombre ya esta registrado: " + req.body.nombre
+            });
+        }
         const salt = yield bcryptjs_1.default.genSaltSync(10);
-        const newPassword = yield bcryptjs_1.default.hashSync(password, salt);
-        const datos = {
-            nombre,
-            email,
-            password: newPassword,
-            dni_cuil,
-            rol,
-        };
-        const usuario = new usuario_1.Usuario(datos);
+        const newPassword = yield bcryptjs_1.default.hashSync(req.body.password, salt);
+        req.body.password = newPassword;
+        const usuario = new usuario_1.Usuario(req.body);
         yield usuario.save();
         res.json({
             ok: true,
@@ -71,6 +71,7 @@ const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: "Hablar con el administrador"
