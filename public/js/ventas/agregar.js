@@ -38,7 +38,7 @@ formProducto.addEventListener("submit", (e) => {
     
     for(let el of formProducto.elements){
         if(el.name.length > 0)
-            forData[el.name] = el.value;    
+            forData[el.name] = el.value.replace(/\s*$/,"");    
         } 
 
 

@@ -1,5 +1,6 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 
@@ -87,8 +88,8 @@ const imprimir_historial = (res) => {
 
         historial += `
         <tr id="${e.rollo.id}_${e.rollo.nombre}" onclick="abrir_id(this.id)">
-        <td data-label="NOMBRE">${e.rollo.nombre}</td>
-        <td data-label="TOTAL">${contador}</td>
+        <td data-label="NOMBRE">${devolverString(e.rollo.nombre)}</td>
+        <td data-label="TOTAL">${devolverString(contador)}</td>
         </tr>
         `
         contador = 0;
@@ -123,9 +124,9 @@ const imprimir_historial_view = (res) => {
 
         historial += `
         <tr id="${e.id}">
-        <td>${e.cantidad}</td>
-        <td>${e.estanpado || ""}</td>
-        <td>${e.color}</td>
+        <td>${devolverString(e.cantidad)}</td>
+        <td>${devolverString(e.estanpado)}</td>
+        <td>${devolverString(e.color)}</td>
 
         <td data-label= "AJUSTES"> 
         <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">

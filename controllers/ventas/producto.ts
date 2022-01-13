@@ -210,6 +210,8 @@ export const soloLocales = async (req: Request, res: Response) => {
     		result.push(item.local);
     	}
     })
+
+    
     
       res.json({
           ok: true,

@@ -306,7 +306,7 @@ window.cambiar_dato = (id) => {
 
     let input = document.getElementById(`producto_${palabras[0]}`);
     const nombre = input.name;
-    const valor = input.value;
+    const valor = input.value.replace(/\s*$/,"");
 
     
     let dato = {name:valor}

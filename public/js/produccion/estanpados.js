@@ -15,7 +15,7 @@ const main_historial = () => {
 
     fecthNormalGET("GET", "produccion/estanpado")
       .then( res => {
-        /* imprimirHistorial(res.data) */
+
         colorearTable(res.data)
       })
       .catch (err => {
