@@ -32,9 +32,25 @@ exports.crearNuevoRollo = crearNuevoRollo;
 const obtenerTodoRollo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const rollo = yield rollo_1.Rollo.findAll();
+        let ids = [];
+        rollo.map(e => {
+            ids.push(e.id);
+        });
+        const rollos = yield rollos_1.Rollos.findAll({ where: { id_rollo: ids } });
+        let data = [];
+        for (let i of rollo) {
+            let rollosNew = rollos.filter(e => {
+                let contador = 0;
+                if (e.id_rollo == i.id) {
+                    contador += e.cantidad;
+                    return contador;
+                }
+            });
+            data = [...data, { rollos: rollosNew, rollo: i }];
+        }
         res.json({
             ok: true,
-            rollo
+            data
         });
     }
     catch (error) {

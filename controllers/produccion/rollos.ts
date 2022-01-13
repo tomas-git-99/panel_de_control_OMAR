@@ -37,9 +37,39 @@ export const obtenerTodoRollo = async (req: Request, res: Response) => {
         const rollo = await Rollo.findAll();
 
 
+        let ids:any = []
+
+        rollo.map ( e => {
+            ids.push(e.id);
+        });
+
+        const rollos = await Rollos.findAll({where:{id_rollo:ids}});
+
+        let data:any = []
+
+        for( let i of rollo ){
+
+
+            let rollosNew = rollos.filter( e => {
+                let contador:number = 0;
+                if( e.id_rollo == i.id){
+
+                    contador += e.cantidad;
+
+                    return contador;
+                }
+
+                
+            })
+            data = [...data, { rollos: rollosNew, rollo:i}]
+                    
+        
+        }
+
+   
         res.json({
             ok: true,
-            rollo
+            data
         })
     } catch (error) {
         res.json({

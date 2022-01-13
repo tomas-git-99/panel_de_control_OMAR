@@ -33,13 +33,18 @@ window.abrir_id = (id) => {
 
 window.cerrar_view = (data) => {
     if(data == "1"){
-
+        main_historial()
         volverAtras(view_data_rollos, bienvenido);
     }else if (data == "2"){
+
         agregar_rollos.style.display="none";
         agregar_rollos.style.visibility="hidden";
+        abrir_buscar_id(aca_va_solo_el_ID.id)
+
     }else if (data == "3"){
-        abrir_buscar_id(opciones_cambio.id)
+
+        
+        abrir_buscar_id(solo_para_id.id)
         volverAtras( opciones_cambio, view_data_rollos);
 
     }
@@ -54,7 +59,8 @@ const main_historial = () => {
 
     fecthNormalGET("GET", "produccion/rollos")
     .then( res => {
-        imprimir_historial(res.rollo)
+    
+        imprimir_historial(res.data)
     })
     .catch (err => {
         algo_salio_mal(`Algo salio mal: ${ err }`);
@@ -69,15 +75,24 @@ const imprimir_historial = (res) => {
 
     let historial = ""
 
+    let contador = 0;
+   
+ 
 
-    res.map( e => {
+    res.map( (e,p) => {
+        for(let i of res[p].rollos){
+            contador = i.cantidad + contador;
+        } 
 
         historial += `
-        <tr id="${e.id}_${e.nombre}" onclick="abrir_id(this.id)">
-        <td>${e.nombre}</td>
+        <tr id="${e.rollo.id}_${e.rollo.nombre}" onclick="abrir_id(this.id)">
+        <td>${e.rollo.nombre}</td>
+        <td>${contador}</td>
         </tr>
         `
-    })
+        contador = 0;
+
+    });
 
     table_rollos.innerHTML = historial;
 

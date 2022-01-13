@@ -15,7 +15,7 @@ export interface TodoAtributos {
 export class Rollos extends Model <TodoAtributos>{
 
     public id!:number;
-    public id_rollo!:string; 
+    public id_rollo!:number; 
     public cantidad!:number; 
     public estanpado!:string;
     public color!:string; 

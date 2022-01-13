@@ -346,6 +346,7 @@ const opcines_taller = (id) => {
 window.salir_cambios = () => {
     opciones_cambio.style.display = "none";
     opciones_cambio.style.visibility = "hidden";
+    input_con_el_valor.innerHTML = "";
     main_historial()
 }
 

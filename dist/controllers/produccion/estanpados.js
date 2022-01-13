@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarEstapados = exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
+exports.buscarEstampados = exports.buscarEstapados = exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
+const dist_1 = require("sequelize/dist");
 const estanpador_1 = require("../../models/produccion/estanpador");
 const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
@@ -151,4 +152,27 @@ const searchFunc = (palabra, valor) => __awaiter(void 0, void 0, void 0, functio
              }) */
     return data;
 });
+const buscarEstampados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const dato = req.query;
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
+            nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
+        } });
+    let ids = [];
+    produccion_productos.map(e => {
+        ids.push(e.id_corte);
+    });
+    const estanpado = yield estanpados_1.Estanpados.findAll({ where: { id_corte: ids } });
+    const estanpador = yield estanpador_1.Estanpador.findAll();
+    let data = [];
+    for (let i of estanpado) {
+        let productoNew = produccion_productos.find(h => h.id_corte == i.id_corte);
+        let estanpadorNew = estanpador.find(e => e.id == i.id_estanpador);
+        data = [...data, { estanpado: i, estanpador: estanpadorNew || "", producto: productoNew }];
+    }
+    res.json({
+        ok: true,
+        data
+    });
+});
+exports.buscarEstampados = buscarEstampados;
 //# sourceMappingURL=estanpados.js.map

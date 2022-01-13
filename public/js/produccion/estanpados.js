@@ -14,7 +14,8 @@ const main_historial = () => {
 
     fecthNormalGET("GET", "produccion/estanpado")
       .then( res => {
-        imprimirHistorial(res.data)
+        /* imprimirHistorial(res.data) */
+        colorearTable(res.data)
       })
       .catch (err => {
         algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -28,17 +29,18 @@ main_historial()
 
 
 
-const imprimirHistorial = (data) => {
+const imprimirHistorial = (e, color) => {
    
-    let historial = ""
+  /*   let historial = ""
     data.map ( e => {
 
-        historial += `
-        <tr>
+        historial +=  */
+        return `
+        <tr class="${color}">
         <td data-label="ID">${devolverString(e.estanpado.id_corte)}</td>
         <td data-label="NOMBRE / MODELO">${devolverString(e.producto.nombre)}</td>
         <td data-label="DIBUJO">${devolverString(e.estanpado.dibujo)}</td>
-        <td data-label="ESTANPADOR">${devolverString(e.estanpador.nombre)}</td>
+        <td data-label="ESTAMPADOR">${devolverString(e.estanpador.nombre)}</td>
         <td data-label="FECHA DE ENTRADA">${devolverString(e.estanpado.fecha_de_entrada)}</td>
         <td data-label="PAGADO">${e.estanpado.pagado == false ? "NO PAGADO" : "PAGADO"}</td>
 
@@ -48,23 +50,54 @@ const imprimirHistorial = (data) => {
         </div>
         </td>
 
-  
+        <td data-label="PREVISUALIZAR">
+        <div id="${e.estanpado.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
+        <img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
+        </div>
+        </td>
 
       </tr>
 
         ` 
-      })
-      table_produccion.innerHTML = historial;
+   /*    })
+      table_produccion.innerHTML = historial; */
 
 
 }
 
+
+
+const colorearTable = (res) => {
+
+  let resultado = ""
+  
+  res.map ( e => {
+      if(e.estanpado.id_estanpador == undefined || e.estanpado.id_estanpador == null){
+
+          resultado += imprimirHistorial(e, "table-active")
+
+      }else if(e.estanpado.fecha_de_entrada == undefined || e.estanpado.fecha_de_entrada == null){
+
+          resultado += imprimirHistorial(e, "table-danger")
+
+      }else if(e.estanpado.pagado == true){
+
+          resultado += imprimirHistorial(e, "table-success")    
+
+      }else{
+          resultado += imprimirHistorial(e, "table-warning")    
+
+      }
+
+      ///innerHTML a table
+      table_produccion.innerHTML = resultado;
+  })
+}
+
+
+
 // LO SACAQUE PORQUE NO ERA NESECARIO POR EL TEMA DE YA TODOS LOS DATOS SE MUESTRAN EN PANTALLA
-//<td data-label="PREVISUALIZAR">
-//<div id="${e.estanpado.id}" onclick="previsualizar_id(this.id)" class="boton_seleccion">
-//<img src="https://img.icons8.com/ios/50/000000/file-preview.png"width="25px"/>
-//</div>
-//</td>
+
 
 const opciones_cambio = document.querySelector(".opciones_cambio");
 const seleccion_cambio = document.querySelector("#seleccion_cambio");
@@ -81,7 +114,7 @@ window.enviar_id = (id) => {
 
   <option id="${id}" value="nombre">NOMBRE / MODELO</option>
   <option id="${id}" value="dibujo">Dibujo</option>
-  <option id="${id}" value="estanpador">Estanpador</option>
+  <option id="${id}" value="estanpador">Estampador</option>
   <option id="${id}" value="fecha_de_entrada">Fecha de entrada</option>
   <option id="${id}" value="pagado">Pagar</option>
 
@@ -298,6 +331,7 @@ const imprimir_previsualizar = (id) => {
         .then( res => {
           
             imprimir_html_datos(res)
+          
         })
         .catch( err => {
             algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -313,7 +347,6 @@ const imprimir_html_datos = (res) => {
         <tr>
         <td><span>ID : </span>${devolverString(res.producto.id_corte)}</td>
         <td><span>NOMBRE : </span>${devolverString(res.producto.nombre)}</td>
-
         <td><span>ESTANPADOR : </span>${devolverString(res.estanpador.nombre)}</td>
     </tr>
 
@@ -322,6 +355,11 @@ const imprimir_html_datos = (res) => {
         <td><span>FECHA DE ENTREGA : </span>${devolverString(res.estanpados.fecha_de_entrada)}</td>
         <td><span>PAGO : </span>${res.estanpados.pagado == false ? "NO PAGADO" : "PAGADO"} </td>
 
+    </tr>
+    <tr>
+    <td><span>TOTAL POR TALLE : </span>${devolverString(res.producto.total_por_talle)}</td>
+    <td><span>TALLES (cantidad) : </span>${devolverString(res.producto.talles)}</td>
+    <td><span>TOTAL : </span>${devolverString(res.producto.total)} </td>
     </tr>
 
 
@@ -376,15 +414,16 @@ window.ordenar = (e) => {
   }else if (e.value == "pagado"){
 
     let data = {
-      pagado:false
+      valor:false
     }
 
 
     fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${e.value}`, data)
     .then( res =>{
-    
+  
+      console.log(res)
         if(res.ok){
-          imprimirHistorial(res.data)
+          colorearTable(res.data)
 
         }else{
             algo_salio_mal(`Algo salio mal`)
@@ -433,7 +472,7 @@ window.rango_buscar = (id) =>{
   fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${id}`, dato)
       .then( res =>{
           if(res.ok){
-            imprimirHistorial(res.data)
+            colorearTable(res.data)
 
           }else{
               algo_salio_mal(`Algo salio mal`)
@@ -457,7 +496,7 @@ window.exacto_buscar = (id) => {
   fecthNormalPOST_PUT("POST", `produccion/estanpado/buscar/filtro/${id}`, dato)
       .then( res =>{
    
-        imprimirHistorial(res.data)
+        colorearTable(res.data)
       })
       .catch( err =>{
           algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -519,7 +558,7 @@ window.buscarDataTaller = (value) => {
 
           }else{ */
          
-            imprimirHistorial(res.data)
+            colorearTable(res.data)
           /* } */
       })
       .catch (err => {
@@ -527,3 +566,39 @@ window.buscarDataTaller = (value) => {
       })
   }
 }
+
+
+
+///buscador 
+
+
+const search = document.querySelector("#search");
+
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+    search.value = "";
+});
+
+
+const getSearch = (valor) => {
+
+    
+  /*   cargaMedio("spinner_load", true); */
+
+
+    fecthNormalGET("GET", "produccion/estanpado/buscar/solo/nombre?" + `nombre=${valor}`)
+    .then(res => {
+    /* cargaMedio("spinner_load", false); */
+
+    
+    colorearTable(res.data);
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+

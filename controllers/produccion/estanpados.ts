@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import fecha from "fecha";
+import { Op, where } from "sequelize/dist";
 import { Estanpador } from "../../models/produccion/estanpador";
 import { Estanpados } from "../../models/produccion/estanpados"
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
@@ -219,5 +220,51 @@ const searchFunc = async(palabra:any, valor: false | null | number) =>{
  
 
     return data;
+
+}
+
+
+
+
+export const buscarEstampados = async (req: Request, res: Response) => {
+
+    const dato = req.query;
+
+    const produccion_productos = await Produccion_producto.findAll({ where:{ 
+        nombre:{ [Op.like]: '%'+ dato.nombre +'%'},
+        // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+    }});
+
+
+
+
+    let ids:any = []
+
+    produccion_productos.map ( e => {
+        ids.push(e.id_corte);
+    })
+    const estanpado = await Estanpados.findAll({where:{ id_corte: ids}});
+
+    const estanpador = await Estanpador.findAll()
+   
+
+
+    let data:any = []
+ 
+    for ( let i of estanpado){
+
+        let productoNew = produccion_productos.find( h => h.id_corte == i.id_corte);
+        let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
+
+        data = [...data, {estanpado:i, estanpador:estanpadorNew || "", producto:productoNew}];
+        
+    }
+
+
+
+    res.json({
+        ok:true,
+        data
+    })
 
 }
