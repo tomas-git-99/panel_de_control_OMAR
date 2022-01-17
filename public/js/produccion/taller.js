@@ -21,7 +21,6 @@ main();
 const imprimir = (res) => {
 
     let resultado = "";
-
     res.map ( e => {
         resultado += `
         <tr>
@@ -86,11 +85,16 @@ window.enviar_cambio = (id) => {
 
     fecthNormalPOST_PUT("PUT", `produccion/taller/${id}`, dato)
         .then( res => {
+
             salio_todo_bien("Todo salio exelente")
-            input_cambio = "";
+            input_cambio.value = "";
+           
+            
         })
         .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
+
+            console.log(err)
         })
 }
 
