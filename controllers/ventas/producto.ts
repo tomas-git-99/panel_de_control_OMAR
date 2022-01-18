@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Op, where } from "sequelize/dist";
+import db from "../../DB/conectarDB";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
 
@@ -89,17 +90,34 @@ export const buscarProducto = async (req: Request, res: Response) => {
 
 
 export const eliminarProducto = async (req: Request, res: Response) => {
-    const { id } = req.params;
 
-    const producto = await Producto.findByPk(id);
+    try {
+        
+        const { id } = req.params;
+    
+        const producto = await Producto.findByPk(id);
+    
+    
+        await producto?.destroy().then((response) => {
 
-
-    await producto?.destroy()
-
-    res.json({
-        ok: true,
-        msg: `El producto ${producto?.nombre} fue eliminado con exito`
-    })
+            res.json({
+                ok: true,
+                msg: `El producto ${producto?.nombre} fue eliminado con exito`
+            })
+        }).catch( (error) =>{
+            console.log(error)
+            res.json({
+                ok: false,
+                msg: error
+            })
+        })
+    
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg:error
+        })
+    }
 }
 
 
@@ -234,3 +252,5 @@ export const buscarLocal = async (req: Request, res: Response) => {
         locales
     })
 }
+
+

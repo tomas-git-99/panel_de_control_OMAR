@@ -68,13 +68,28 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.buscarProducto = buscarProducto;
 const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const producto = yield producto_1.Producto.findByPk(id);
-    yield (producto === null || producto === void 0 ? void 0 : producto.destroy());
-    res.json({
-        ok: true,
-        msg: `El producto ${producto === null || producto === void 0 ? void 0 : producto.nombre} fue eliminado con exito`
-    });
+    try {
+        const { id } = req.params;
+        const producto = yield producto_1.Producto.findByPk(id);
+        yield (producto === null || producto === void 0 ? void 0 : producto.destroy().then((response) => {
+            res.json({
+                ok: true,
+                msg: `El producto ${producto === null || producto === void 0 ? void 0 : producto.nombre} fue eliminado con exito`
+            });
+        }).catch((error) => {
+            console.log(error);
+            res.json({
+                ok: false,
+                msg: error
+            });
+        }));
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
 });
 exports.eliminarProducto = eliminarProducto;
 const agregarMasStock = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

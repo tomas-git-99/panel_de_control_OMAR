@@ -44,6 +44,7 @@ const producto_id = document.getElementById("producto_id")
 const ordenar_por_talle = document.querySelector(".ordenar_por_talle")
 const formulario_por_talle = document.querySelector(".formulario");
 const boton_ordenar_talle = document.querySelector(".boton_ordenar_talle");
+let id_elimanar_producto = document.querySelector(".id_elimanar_producto");
 
 window.abrirVentana = (id) => {
 
@@ -107,6 +108,7 @@ window.previsualizar_producto = (id) => {
             ordenarPorTalle(res.talles);
             ordenarProductoTable(res.producto);
             producto_id.id = id;
+            id_elimanar_producto.id = id;
 
         }
     }) 
@@ -396,6 +398,29 @@ const cambiar_stock_talle = (id, suma_resta) => {
         })
 }
 
+
+
+//ELIMINAR  PRODUCTO 
+
+window.eliminar_Producto = (id) => {
+    console.log(id.id)
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar este producto?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+          fecthNormalGET("DELETE", `producto/${id.id}`)
+             .then(res => {
+                 salio_todo_bien("El producto se elimino con exito")
+             })
+             .catch((err) => {
+                 alert("Error: " + err)
+             })
+      })
+}
 const menu = document.querySelector(".menu");
 
 window.style_menu = () => {
