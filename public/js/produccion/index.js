@@ -223,6 +223,7 @@ window.selecciconCambios = (e) => {
         <select class="custom-select" style="width:auto;" id="seleccion_cambio_taller" onchange="agregarEstampador_value(this)">
         <option selected value="0">Eligir...</option>
         <option value="agregar" id="${e[e.selectedIndex].id}">AGREGAR</option>
+        <option value="eliminar" id="${e[e.selectedIndex].id}">ELIMINAR</option>
         </select>
         <button class="btn btn-outline-primary pagar_taller" id="${e[e.selectedIndex].id}" type="button" onclick="agregarEstampador(this.id)">Cambiar</button>
         `
@@ -256,6 +257,16 @@ window.agregarEstampador = (e) => {
             if(res.ok == true){
 
                 salio_todo_bien("Los cambios fueron exitosos")
+            }else{
+                advertencia(res.msg)
+            }
+        })
+    }else if (estampadorEstado == "eliminar"){
+
+        fecthNormalPOST_PUT("DELETE", `produccion/producto_produccion/${e}`)
+        .then( res=> {
+            if(res.ok == true){
+                salio_todo_bien("El producto se elimino de Estampados")
             }else{
                 advertencia(res.msg)
             }

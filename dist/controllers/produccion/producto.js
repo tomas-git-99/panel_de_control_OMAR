@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.agregarProductoAestampos = exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.eliminarProductoDeEstampados = exports.agregarProductoAestampos = exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
@@ -237,4 +237,28 @@ const agregarProductoAestampos = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.agregarProductoAestampos = agregarProductoAestampos;
+const eliminarProductoDeEstampados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const producto = yield productos_produccion_1.Produccion_producto.findByPk(id);
+        const estampdos = yield estanpados_1.Estanpados.findAll({ where: { id_corte: producto === null || producto === void 0 ? void 0 : producto.id_corte } });
+        if (estampdos.length == 0) {
+            return res.json({
+                ok: false,
+                msg: "El producto que quiere elimnar no esta en estampados"
+            });
+        }
+        yield estampdos[0].destroy();
+        res.json({
+            ok: true
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.eliminarProductoDeEstampados = eliminarProductoDeEstampados;
 //# sourceMappingURL=producto.js.map

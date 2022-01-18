@@ -321,3 +321,31 @@ export const agregarProductoAestampos = async (req: Request, res: Response) => {
     }
 
 }
+
+export const eliminarProductoDeEstampados = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const producto = await Produccion_producto.findByPk(id)
+
+    
+        const estampdos = await Estanpados.findAll({where: {id_corte:producto?.id_corte}});
+
+        if(estampdos.length == 0) {
+            return res.json({
+                ok: false,
+                msg:"El producto que quiere elimnar no esta en estampados"
+            })
+        }
+
+        await estampdos[0].destroy();
+
+        res.json({
+            ok: true
+        })
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+}

@@ -14,6 +14,7 @@ router.post('/', [
 //ACTUALIZAR PRODUCTO
 router.put('/:id', producto_1.actualizarProducto);
 router.post('/agregar/:id', producto_1.agregarProductoAestampos);
+router.delete('/:id', producto_1.eliminarProductoDeEstampados);
 //search 
 router.post('/busqueda/todos/:query', producto_1.ordenarPorRango);
 router.post('/busqueda/unico/dato/:query', producto_1.ordenarPorFechaExacta);
