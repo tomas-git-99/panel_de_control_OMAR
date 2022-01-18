@@ -1,7 +1,7 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
-import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
@@ -45,11 +45,23 @@ const imprimirEnPantalla = (res) => {
              <td>${devolverString(e.direccion.direccion)}</td>
              <td>$ ${cambio_de_moneda}</td>
 
+ 
              <td>
+             <div class="botones_historial">
+
+             <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
+                <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+             </div>
+
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
                  </div>
+
+             </div>
+
              </td>
+
+
              </tr>
         `
     })
@@ -144,3 +156,38 @@ const nombre_usario = document.querySelector("#nombre_usario");
 
 
 nombre_usario.innerHTML =  nombre;
+
+
+
+//MODIFICAR ORDEN
+
+window.eliminar_orden = (e) => {
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta orden?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            fecthNormalPOST_PUT("DELETE", `orden/${e}`)
+              .then( res =>{
+                console.log(res)
+
+
+                  if(res.ok == true){
+                      salio_todo_bien("Se elimino correctamente");
+                      main_historial();
+
+                  }else{
+                    algo_salio_mal(`Algo salio mal: ${ res.msg }`)
+                  }
+              })
+              .catch( err => {
+                  algo_salio_mal(`Algo salio mal: ${ err }`)
+              })
+        }
+      })
+}

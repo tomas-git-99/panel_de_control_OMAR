@@ -456,3 +456,62 @@ export const generarOrdenPublico = async (req: Request, res: Response) => {
     }
 
 }
+
+
+export const deshacerOrden = async(req: Request, res: Response) => {
+
+    try {
+        
+        const { idOrden } = req.params;
+
+        console.log(idOrden);
+        const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden:idOrden }});
+
+        let ids:any = [];
+
+        ordenDetalle.map( (e) => {
+
+            ids.push(e.id_producto)
+        })
+        const productos = await Producto.findAll({where:{id:ids}});
+
+
+        for ( let i of ordenDetalle ){
+
+
+            for ( let e of productos ){
+
+                
+                if(e.id == i.id_producto){
+
+                    let nuevoStock:number = e.cantidad + i.cantidad;
+
+                    await e.update({cantidad:nuevoStock});
+
+                    await i.destroy();
+                }
+
+            }
+            
+         
+
+           
+            
+        }
+
+        const orden = await Orden.findByPk(idOrden);
+
+        await orden?.destroy();
+
+        res.json({
+            ok:true
+        })
+
+
+    } catch (error) {
+        res.json({
+            ok:false,
+            msg:error
+        })
+    }
+}

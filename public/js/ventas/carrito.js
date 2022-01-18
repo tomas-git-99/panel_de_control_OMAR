@@ -640,10 +640,11 @@ venta_publico_form.addEventListener("submit", async(e) => {
 
     let data = await fecthNormalPOST_PUT("POST", "cliente", forData);
 
-    console.log(data)
+ 
 
     fecthNormalGET("GET",`orden/publico/orden/completo/${id_usuario}/${data.cliente.id}?publico=true`)
         .then( res => {
+            console.log(res)
             if(res.ok == true){
 
                 volverAtras(venta_publico, quitar_total_o_individual)
@@ -657,6 +658,7 @@ venta_publico_form.addEventListener("submit", async(e) => {
             }
         })
         .catch ( err => {
+            console.log(err)
             algo_salio_mal(`Algo salio mal: ${ err }`);
             volverAtras(venta_publico, bienvenido)
         })

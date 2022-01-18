@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generarOrdenPublico = exports.imptimirSoloVentas = exports.buscarPorID = exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
+exports.deshacerOrden = exports.generarOrdenPublico = exports.imptimirSoloVentas = exports.buscarPorID = exports.historialOrden = exports.ordenParaImprimir = exports.confirmarPedido = exports.buscarOrdenDNI = exports.buscarOrden = exports.confirmarCompra = exports.ordenDetalles = exports.generarOrden = void 0;
 const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const direccion_1 = require("../../models/ventas/direccion");
@@ -309,4 +309,37 @@ const generarOrdenPublico = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.generarOrdenPublico = generarOrdenPublico;
+const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idOrden } = req.params;
+        console.log(idOrden);
+        const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: idOrden } });
+        let ids = [];
+        ordenDetalle.map((e) => {
+            ids.push(e.id_producto);
+        });
+        const productos = yield producto_1.Producto.findAll({ where: { id: ids } });
+        for (let i of ordenDetalle) {
+            for (let e of productos) {
+                if (e.id == i.id_producto) {
+                    let nuevoStock = e.cantidad + i.cantidad;
+                    yield e.update({ cantidad: nuevoStock });
+                    yield i.destroy();
+                }
+            }
+        }
+        const orden = yield orden_1.Orden.findByPk(idOrden);
+        yield (orden === null || orden === void 0 ? void 0 : orden.destroy());
+        res.json({
+            ok: true
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.deshacerOrden = deshacerOrden;
 //# sourceMappingURL=orden.js.map

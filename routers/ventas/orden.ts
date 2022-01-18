@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarOrden, buscarOrdenDNI, buscarPorID, confirmarCompra, confirmarPedido, generarOrden, generarOrdenPublico, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
+import { buscarOrden, buscarOrdenDNI, buscarPorID, confirmarCompra, confirmarPedido, deshacerOrden, generarOrden, generarOrdenPublico, historialOrden, imptimirSoloVentas, ordenDetalles, ordenParaImprimir } from "../../controllers/ventas/orden";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -21,6 +21,11 @@ router.post('/detalles/:idOrden/:idProducto',[
 
 // GENERAR ORDEN SUBIENDO EL PDF A NUBE
 router.put('/confirmar/:idOrden', confirmarPedido)
+
+
+//ELIMINAR ORDEN 
+
+router.delete('/:idOrden', deshacerOrden)
 
 
 // BUSCAR ORDEN POR ID O DNI

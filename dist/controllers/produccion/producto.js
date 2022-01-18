@@ -188,7 +188,6 @@ const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const dato = req.query;
     const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];

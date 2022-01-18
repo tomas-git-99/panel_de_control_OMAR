@@ -257,3 +257,9 @@
     width: 700px;
     
 }
+
+.botones_historial{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

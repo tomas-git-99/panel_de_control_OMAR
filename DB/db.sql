@@ -2,8 +2,8 @@ CREATE TABLE cliente(
     id INT NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50),
-    dni_cuil INT NOT NULL,
-    tel_cel INT NOT NULL,
+    dni_cuil INT,
+    tel_cel INT,
     email VARCHAR(140),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -15,7 +15,7 @@ CREATE TABLE usuario(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     dni_cuil INT NOT NULL,
-    email VARCHAR(80),
+    venta VARCHAR(50),
     password VARCHAR(180),
     estado  BOOLEAN DEFAULT TRUE,
     rol VARCHAR(15),
@@ -34,6 +34,8 @@ CREATE TABLE producto(
     tela VARCHAR(100) NOT NULL,
     precio INT NOT NULL,
     talles VARCHAR(50),
+    diseño VARCHAR(140),
+    estado BOOLEAN DEFAULT TRUE,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -62,7 +64,8 @@ CREATE TABLE orden(
     fecha DATE,
     transporte VARCHAR(100),
     total INT NOT NULL,
-
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
 
     FOREIGN KEY fk_id_cliente (id_cliente)
@@ -117,7 +120,8 @@ CREATE TABLE carrito(
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
     talle INT,
-
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY fk_id_usuario (id_usuario)
     REFERENCES usuario (id),
@@ -168,7 +172,8 @@ CREATE TABLE producto_produccion (
     fecha_de_salida DATE,
     fecha_de_entrada DATE,
     fecha_de_pago DATE,
-    peso_promedio INT,
+    peso_promedio DECIMAL(4,1),
+    cantidad_entregada INT,
     estado BOOLEAN default false,
 
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -211,7 +216,7 @@ ALTER TABLE carrito
 
 CREATE TABLE estanpados(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    id_producto INT,
+    id_corte VARCHAR(50),
     id_estanpador INT,
     dibujo VARCHAR(255),
     fecha_de_entrada DATE,
