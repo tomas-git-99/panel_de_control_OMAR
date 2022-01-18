@@ -119,7 +119,7 @@ export const obetenerUnProducto = async (req: Request, res: Response) => {
     let producto:any = []
 
     
-    producto = [...producto, {producto:productos, taller:taller}]
+    producto = [...producto, {producto:productos, taller:taller || ""}]
 
     res.json({
         ok: true,

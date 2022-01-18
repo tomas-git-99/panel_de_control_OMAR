@@ -138,7 +138,7 @@ const imprimir_previsualizar = (id) => {
 
 
 const imprimir_html_datos = (res) => {
-    
+    console.log(res)
     res.map ( e => {
 
         tabla_previsualizar.innerHTML = `

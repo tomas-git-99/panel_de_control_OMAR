@@ -89,7 +89,7 @@ const obetenerUnProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const productos = yield productos_produccion_1.Produccion_producto.findByPk(id);
     let taller = yield talller_1.Taller.findByPk(productos === null || productos === void 0 ? void 0 : productos.id_taller);
     let producto = [];
-    producto = [...producto, { producto: productos, taller: taller }];
+    producto = [...producto, { producto: productos, taller: taller || "" }];
     res.json({
         ok: true,
         producto,
