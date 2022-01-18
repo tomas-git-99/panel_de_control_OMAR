@@ -13,6 +13,7 @@ router.post('/', [
 ], producto_1.crearProducto);
 //ACTUALIZAR PRODUCTO
 router.put('/:id', producto_1.actualizarProducto);
+router.post('/agregar/:id', producto_1.agregarProductoAestampos);
 //search 
 router.post('/busqueda/todos/:query', producto_1.ordenarPorRango);
 router.post('/busqueda/unico/dato/:query', producto_1.ordenarPorFechaExacta);

@@ -1,5 +1,5 @@
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
-import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { advertencia, algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
@@ -109,6 +109,7 @@ window.enviar_id = (id) => {
         <option id="${id}" value="fecha_de_entrada">Fecha de entrada</option>
         <option id="${id}" value="cantidad_entregada">Cantidad entregada</option>
         <option id="${id}" value="estado">Pagado</option>
+        <option id="${id}" value="estampar">Estampar</option>
         
     `
 }
@@ -216,6 +217,16 @@ window.selecciconCambios = (e) => {
         </select>
         <button class="btn btn-outline-primary pagar_taller" id="estado" type="button" onclick="fecha_De_pago(this.id)">Cambiar</button>
         `
+    }else if(e.value == 'estampar'){
+
+        input_con_el_valor.innerHTML = `
+        <select class="custom-select" style="width:auto;" id="seleccion_cambio_taller" onchange="agregarEstampador_value(this)">
+        <option selected value="0">Eligir...</option>
+        <option value="agregar" id="${e[e.selectedIndex].id}">AGREGAR</option>
+        </select>
+        <button class="btn btn-outline-primary pagar_taller" id="${e[e.selectedIndex].id}" type="button" onclick="agregarEstampador(this.id)">Cambiar</button>
+        `
+
     }else{
 
         input_con_el_valor.innerHTML = `
@@ -229,6 +240,31 @@ window.selecciconCambios = (e) => {
         `
     }
 }
+
+let estampadorEstado
+
+window.agregarEstampador_value = (e) => {
+    estampadorEstado = e.value
+}
+
+window.agregarEstampador = (e) => {
+    
+
+    if(estampadorEstado == "agregar"){
+        fecthNormalPOST_PUT("POST", `produccion/producto_produccion/agregar/${e}`)
+        .then( res=> {
+            if(res.ok == true){
+
+                salio_todo_bien("Los cambios fueron exitosos")
+            }else{
+                advertencia(res.msg)
+            }
+        })
+    }else{
+        algo_salio_mal("Eliga algunas de las opciones para continuar")
+    }
+}
+
 
 
 let id_para_pagar

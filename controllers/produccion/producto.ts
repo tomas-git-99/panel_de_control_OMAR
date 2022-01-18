@@ -1,5 +1,5 @@
 import { query, Request, Response } from "express";
-import { Op } from "sequelize/dist";
+import { Op, where } from "sequelize/dist";
 import { Estanpados } from "../../models/produccion/estanpados";
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
 import { Taller } from "../../models/produccion/talller";
@@ -278,5 +278,46 @@ export const buscar = async (req: Request, res: Response) => {
         ok:true,
         produccion
     })
+
+}
+
+export const agregarProductoAestampos = async (req: Request, res: Response) => {
+
+
+    try {
+        const { id } = req.params
+
+        const producto = await Produccion_producto.findByPk(id)
+
+    
+        const estampdos = await Estanpados.findAll({where: {id_corte:producto?.id_corte}});
+
+        if(estampdos.length > 0){
+
+            return res.json({
+                ok:false,
+                msg: `El producto "${producto?.nombre}" ya esta agregado en Estampados`
+            })
+        }
+
+        
+        const data:any = {
+            id_corte:producto?.id_corte
+        }
+    
+        const estanpados = new Estanpados(data);
+    
+        await estanpados.save();
+        res.json({
+            ok: true,
+            estanpados
+        })
+
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
 
 }

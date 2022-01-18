@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.agregarProductoAestampos = exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
@@ -207,4 +207,33 @@ const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.buscar = buscar;
+const agregarProductoAestampos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const producto = yield productos_produccion_1.Produccion_producto.findByPk(id);
+        const estampdos = yield estanpados_1.Estanpados.findAll({ where: { id_corte: producto === null || producto === void 0 ? void 0 : producto.id_corte } });
+        if (estampdos.length > 0) {
+            return res.json({
+                ok: false,
+                msg: `El producto "${producto === null || producto === void 0 ? void 0 : producto.nombre}" ya esta agregado en Estampados`
+            });
+        }
+        const data = {
+            id_corte: producto === null || producto === void 0 ? void 0 : producto.id_corte
+        };
+        const estanpados = new estanpados_1.Estanpados(data);
+        yield estanpados.save();
+        res.json({
+            ok: true,
+            estanpados
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.agregarProductoAestampos = agregarProductoAestampos;
 //# sourceMappingURL=producto.js.map
