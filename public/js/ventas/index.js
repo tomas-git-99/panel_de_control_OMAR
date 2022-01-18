@@ -403,7 +403,7 @@ const cambiar_stock_talle = (id, suma_resta) => {
 //ELIMINAR  PRODUCTO 
 
 window.eliminar_Producto = (id) => {
-    console.log(id.id)
+
     Swal.fire({
         title: '¿Esta seguro que quiere eliminar este producto?',
         icon: 'warning',
@@ -412,12 +412,12 @@ window.eliminar_Producto = (id) => {
         cancelButtonColor: '#d33',
         confirmButtonText: 'SI'
       }).then((result) => {
-          fecthNormalGET("DELETE", `producto/${id.id}`)
+          fecthNormalGET("DELETE", `producto/${id}`)
              .then(res => {
                  salio_todo_bien("El producto se elimino con exito")
              })
              .catch((err) => {
-                 alert("Error: " + err)
+                 algo_salio_mal("Error: " + err)
              })
       })
 }

@@ -36,6 +36,9 @@ Producto.init({
     talles: {
         type: sequelize_1.DataTypes.STRING
     },
+    estado: {
+        type: sequelize_1.DataTypes.BOOLEAN
+    }
 }, {
     sequelize: conectarDB_1.default,
     tableName: "producto"

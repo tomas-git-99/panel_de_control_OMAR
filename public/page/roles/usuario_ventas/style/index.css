@@ -211,6 +211,16 @@ table {
     text-align: center;
   }
 
+  @media (max-height: 650px){
+    .previsualizar{
+        height: 400px;
+    }
+  }
+  @media (max-height: 500px){
+    .previsualizar{
+        height: 300px;
+    }
+  }
   
 @media (max-width: 767px){
 

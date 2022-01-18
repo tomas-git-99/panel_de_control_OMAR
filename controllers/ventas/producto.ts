@@ -94,22 +94,15 @@ export const eliminarProducto = async (req: Request, res: Response) => {
     try {
         
         const { id } = req.params;
-    
-        const producto = await Producto.findByPk(id);
-    
-    
-        await producto?.destroy().then((response) => {
 
-            res.json({
-                ok: true,
-                msg: `El producto ${producto?.nombre} fue eliminado con exito`
-            })
-        }).catch( (error) =>{
-            console.log(error)
-            res.json({
-                ok: false,
-                msg: error
-            })
+       
+        const producto = await Producto.findByPk(id);
+
+
+        await producto?.update({estado:false})
+
+        res.json({
+            ok:true
         })
     
     } catch (error) {
@@ -168,7 +161,7 @@ export const quitarStock = async (req: Request, res: Response) => {
 export const hitorialProductos = async (req: Request, res: Response) => {
     try {
         
-        const productos = await Producto.findAll({order: [['updatedAt', 'DESC']]});
+        const productos = await Producto.findAll({where:{estado:true},order: [['updatedAt', 'DESC']]});
 
         res.json({
             ok: true,
