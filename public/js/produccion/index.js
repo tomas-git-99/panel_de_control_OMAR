@@ -83,6 +83,13 @@ const imprimirTable = (e, color) => {
     <td data-label="FECHA DE SALIDA">${devolverString(e.produccion.fecha_de_salida)}</td>
     <td data-label="FECHA DE ENTRA">${devolverString(e.produccion.fecha_de_entrada)}</td>
     <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
+
+    <td data-label="ELIMINAR">
+    <div class="boton_seleccion" id="${e.produccion.id}" onclick="eliminar_Producto(this.id)">
+    <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+    </div>
+    </td>
+
     <td data-label= "AJUSTES"> 
     <div id="${e.produccion.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
     <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
@@ -133,6 +140,43 @@ window.previsualizar_id = (id) => {
 
 
 }
+
+
+
+window.eliminar_Producto = (e) => {
+
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta orden?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            fecthNormalPOST_PUT("DELETE", `produccion/producto_produccion/item/${e}`)
+              .then( res =>{
+               
+                  if(res.ok == true){
+                      salio_todo_bien("Se elimino correctamente");
+                     
+
+                  }else{
+                    algo_salio_mal(`Algo salio mal: ${ res.msg }`)
+                  }
+              })
+              .catch( err => {
+                  algo_salio_mal(`Algo salio mal: ${ err }`)
+              })
+        }
+      })
+    
+}
+
+
+
+
 const tabla_previsualizar = document.querySelector("#tabla_previsualizar");
 
 
@@ -352,12 +396,17 @@ window.enviar_taller_nuevo = (id) => {
 window.enviar_cambio = (id) => {
     let input_cambio = document.getElementById("input_cambio");
 
+
     let dato = {
-        name: input_cambio.value
+        name: input_cambio.value.length > 0 ? input_cambio.value : null
     }
+        
+    
 
     dato[`${input_cambio.name}`] = dato.name;
     delete dato.name;
+
+    
 
     fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id}`, dato)
         .then( res => {
@@ -404,7 +453,7 @@ window.salir_cambios = () => {
     opciones_cambio.style.display = "none";
     opciones_cambio.style.visibility = "hidden";
     input_con_el_valor.innerHTML = "";
-    main_historial()
+    main_historial(recargaPaginaIgual);
 }
 
 
@@ -712,7 +761,7 @@ const paginacion = (valor, query=undefined) => {
 
 }
 
-
+let recargaPaginaIgual
 window.pagina_id = (e) => {
 
     const cambiarSeleccion = document.getElementById(`${e}`);
@@ -747,7 +796,7 @@ window.pagina_id = (e) => {
         
     }else{
         main_historial(datos[1]+"0") 
-
+        recargaPaginaIgual = datos[1]+"0";
     }
 
     

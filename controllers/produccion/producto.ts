@@ -46,36 +46,45 @@ export const crearProducto = async (req: Request, res: Response) => {
 
 export const actualizarProducto = async (req: Request, res: Response) => {
 
-    const { id } = req.params;
-
-    const producto = await Produccion_producto.findByPk(id);
-
-
-    let dato = req.body;
-    const { estado } = req.body;
-    let nombre = Object.keys(dato);
-
-    if(nombre[0] == "total_por_talle"){
-
-        let newTotal:number = producto!.talles * dato.total_por_talle;
-        await producto?.update({total: newTotal});
+    try {
+        
+        const { id } = req.params;
+    
+        const producto = await Produccion_producto.findByPk(id);
+    
+    
+        let dato = req.body;
+        const { estado } = req.body;
+        let nombre = Object.keys(dato);
+    
+     
+    
+        if(nombre[0] == "total_por_talle"){
+    
+            let newTotal:number = producto!.talles * dato.total_por_talle;
+            await producto?.update({total: newTotal});
+        }
+        if( nombre[0] == "talles" ){
+            let newTotal:number = dato.talles * producto!.total_por_talle;
+            await producto?.update({total: newTotal});
+        }
+    
+        if( estado == false){
+            let dato_verdad:any = null
+            await producto?.update({fecha_de_pago:dato_verdad})
+        }
+        
+    
+        await producto?.update(req.body);
+    
+        res.json({
+            ok: true,
+            producto
+        })
+    } catch (error) {
+        console.log(error);
     }
-    if( nombre[0] == "talles" ){
-        let newTotal:number = dato.talles * producto!.total_por_talle;
-        await producto?.update({total: newTotal});
-    }
 
-    if( estado == false){
-        let dato_verdad:any = null
-        await producto?.update({fecha_de_pago:dato_verdad})
-    }
-
-    await producto?.update(req.body);
-
-    res.json({
-        ok: true,
-        producto
-    })
 }
 
 
@@ -367,4 +376,37 @@ export const eliminarProductoDeEstampados = async (req: Request, res: Response) 
             msg: error
         })
     }
+}
+
+
+export const eliminarProducto = async (req: Request, res: Response) => {
+
+    try {
+        
+        const { id } = req.params;
+    
+    
+        const producto = await Produccion_producto.findByPk(id);
+
+        const estampdos = await Estanpados.findAll({where: {id_corte:producto?.id_corte}});
+
+        if(estampdos.length > 0) {
+            await estampdos[0].destroy();
+        }
+    
+        await producto?.destroy();
+    
+    
+        res.json({
+            ok: true
+        })
+    } catch (error) {
+        
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+
+
 }

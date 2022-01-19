@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { actualizarProducto, agregarProductoAestampos, buscar, crearProducto, eliminarProductoDeEstampados, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango, unicoDatoQuery } from "../../controllers/produccion/producto";
+import { actualizarProducto, agregarProductoAestampos, buscar, crearProducto, eliminarProducto, eliminarProductoDeEstampados, obetenerUnProducto, obtenerProduccion, ordenarPorFechaExacta, ordenarPorRango, unicoDatoQuery } from "../../controllers/produccion/producto";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -13,6 +13,8 @@ router.get('/', obtenerProduccion);
 
 router.get('/:id', obetenerUnProducto);
 
+router.delete('/item/:id', eliminarProducto)
+
 //AGREGAR PRODUCTO
 router.post('/',[
     validarJWT,
@@ -23,6 +25,8 @@ router.put('/:id', actualizarProducto);
 
 
 router.post('/agregar/:id', agregarProductoAestampos)
+
+
 router.delete('/:id', eliminarProductoDeEstampados)
 
 

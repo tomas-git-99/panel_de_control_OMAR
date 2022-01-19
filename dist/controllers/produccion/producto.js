@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarProductoDeEstampados = exports.agregarProductoAestampos = exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
+exports.eliminarProducto = exports.eliminarProductoDeEstampados = exports.agregarProductoAestampos = exports.buscar = exports.unicoDatoQuery = exports.ordenarPorFechaExacta = exports.ordenarPorRango = exports.obetenerUnProducto = exports.obtenerProduccion = exports.actualizarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
@@ -40,28 +40,33 @@ const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.crearProducto = crearProducto;
 const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const producto = yield productos_produccion_1.Produccion_producto.findByPk(id);
-    let dato = req.body;
-    const { estado } = req.body;
-    let nombre = Object.keys(dato);
-    if (nombre[0] == "total_por_talle") {
-        let newTotal = producto.talles * dato.total_por_talle;
-        yield (producto === null || producto === void 0 ? void 0 : producto.update({ total: newTotal }));
+    try {
+        const { id } = req.params;
+        const producto = yield productos_produccion_1.Produccion_producto.findByPk(id);
+        let dato = req.body;
+        const { estado } = req.body;
+        let nombre = Object.keys(dato);
+        if (nombre[0] == "total_por_talle") {
+            let newTotal = producto.talles * dato.total_por_talle;
+            yield (producto === null || producto === void 0 ? void 0 : producto.update({ total: newTotal }));
+        }
+        if (nombre[0] == "talles") {
+            let newTotal = dato.talles * producto.total_por_talle;
+            yield (producto === null || producto === void 0 ? void 0 : producto.update({ total: newTotal }));
+        }
+        if (estado == false) {
+            let dato_verdad = null;
+            yield (producto === null || producto === void 0 ? void 0 : producto.update({ fecha_de_pago: dato_verdad }));
+        }
+        yield (producto === null || producto === void 0 ? void 0 : producto.update(req.body));
+        res.json({
+            ok: true,
+            producto
+        });
     }
-    if (nombre[0] == "talles") {
-        let newTotal = dato.talles * producto.total_por_talle;
-        yield (producto === null || producto === void 0 ? void 0 : producto.update({ total: newTotal }));
+    catch (error) {
+        console.log(error);
     }
-    if (estado == false) {
-        let dato_verdad = null;
-        yield (producto === null || producto === void 0 ? void 0 : producto.update({ fecha_de_pago: dato_verdad }));
-    }
-    yield (producto === null || producto === void 0 ? void 0 : producto.update(req.body));
-    res.json({
-        ok: true,
-        producto
-    });
 });
 exports.actualizarProducto = actualizarProducto;
 const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -268,4 +273,25 @@ const eliminarProductoDeEstampados = (req, res) => __awaiter(void 0, void 0, voi
     }
 });
 exports.eliminarProductoDeEstampados = eliminarProductoDeEstampados;
+const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const producto = yield productos_produccion_1.Produccion_producto.findByPk(id);
+        const estampdos = yield estanpados_1.Estanpados.findAll({ where: { id_corte: producto === null || producto === void 0 ? void 0 : producto.id_corte } });
+        if (estampdos.length > 0) {
+            yield estampdos[0].destroy();
+        }
+        yield (producto === null || producto === void 0 ? void 0 : producto.destroy());
+        res.json({
+            ok: true
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.eliminarProducto = eliminarProducto;
 //# sourceMappingURL=producto.js.map

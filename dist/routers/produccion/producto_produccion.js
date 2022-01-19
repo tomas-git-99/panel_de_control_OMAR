@@ -7,6 +7,7 @@ const router = express_1.Router();
 //OBTENER PRODUCCION
 router.get('/', producto_1.obtenerProduccion);
 router.get('/:id', producto_1.obetenerUnProducto);
+router.delete('/item/:id', producto_1.eliminarProducto);
 //AGREGAR PRODUCTO
 router.post('/', [
     validar_JWT_1.validarJWT,
