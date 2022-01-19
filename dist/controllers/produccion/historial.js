@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.historialTaller = void 0;
+exports.buscarProductosFecha = exports.historialTaller = void 0;
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const historialTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_taller } = req.params;
@@ -20,4 +20,13 @@ const historialTaller = (req, res) => __awaiter(void 0, void 0, void 0, function
     });
 });
 exports.historialTaller = historialTaller;
+const buscarProductosFecha = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id, fecha_de_entrada: req.body.fecha_de_entrada } });
+    res.json({
+        productos
+    });
+});
+exports.buscarProductosFecha = buscarProductosFecha;
 //# sourceMappingURL=historial.js.map

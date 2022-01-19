@@ -19,3 +19,19 @@ export const historialTaller = async (req: Request, res: Response) => {
 
 
 }
+
+
+
+export const buscarProductosFecha = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    console.log(id)
+
+    const productos = await Produccion_producto.findAll({where: {id_taller: id, fecha_de_entrada: req.body.fecha_de_entrada}});
+
+
+
+    res.json({
+        productos
+    })
+}
