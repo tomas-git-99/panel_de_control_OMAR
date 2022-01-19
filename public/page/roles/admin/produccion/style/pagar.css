@@ -7,7 +7,7 @@
 }
 
 .formPago{
-    opacity: 0;
+
     display: grid;
     place-self: center;
     justify-content: center;
@@ -45,7 +45,11 @@
  
 }
 .data_pago{
-    display: grid;
+    display: none;
+    visibility: hidden;
+ 
+/*     visibility: visible;
+    display: grid; */
     justify-items: center;
     font-family: 'Poppins', sans-serif;
     font-weight:300; 
@@ -53,19 +57,37 @@
     position: fixed;
     place-self: center;
     background: white;
-    width: 1000px;
+    width: 950px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
 }
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
 
 .cantidad_entregada{
-    display:grid;
+    display:flex;
     justify-content: center;
     place-self: center;
+    
 }
+.cantidad_entregada span{
+    font-family: 'Poppins', sans-serif;
+    font-weight:600; 
+    font-size: 22px;
+}
+.cantidad_entregada_label{
+    display:flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+
 .cantidad_entregada input{
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
+/*     width: 120px; */
 }
 
 .cambiar_pago{
@@ -91,4 +113,9 @@
     place-self: end;
 
    
+}
+
+.boton_para_Salir{
+    display: grid;
+    padding: 10px;
 }

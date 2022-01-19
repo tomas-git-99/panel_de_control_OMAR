@@ -17,6 +17,6 @@ router.get('/:id', historialTaller);
 //buscar producto para pagar 
 
 
-router.get('/pagar/:id', buscarProductosFecha)
+router.post('/pagar/:id', buscarProductosFecha)
 
 export default router;

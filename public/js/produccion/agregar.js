@@ -131,6 +131,7 @@ const imprimir_opciones = (res) => {
     });
 }
 let id_taller 
+
 window.selecciconCambios = (e) => {
     id_taller = e.value;
 }

@@ -7,6 +7,6 @@ const router = express_1.Router();
 router.get('/:id', historial_1.historialTaller);
 // MOSTRAR HISTORIAL SOLO PRODUCTOS
 //buscar producto para pagar 
-router.get('/pagar/:id', historial_1.buscarProductosFecha);
+router.post('/pagar/:id', historial_1.buscarProductosFecha);
 exports.default = router;
 //# sourceMappingURL=historial.js.map

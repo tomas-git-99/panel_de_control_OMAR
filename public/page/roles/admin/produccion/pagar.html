@@ -78,29 +78,28 @@
 
             <div class="formPago">
 
-                <form action="">
+                <form action="" class="formPagoGet">
 
                     <div class="seleccion_De_taller">
 
-                        <select class="form-control ">
-                            <option>Small select</option>
+                        <select class="form-control" id="cambiar_taller" onchange="selecciconCambios(this)">
+                           
                           </select>
                     </div>
                   
                       
                       <div class="de">
                           <label for="disabledTextInput">Deste...</label>
-                        <input type="date" name="" id=""  class="form-control" >
+                        <input type="date" class="form-control" name="fecha_desde">
                     </div>
                     <div class="a">
                         <label for="disabledTextInput">Hasta...</label>
-
-                        <input type="date" name="" id=""  class="form-control" >
+                        <input type="date" class="form-control" name="fecha_hasta">
 
                     </div>
-                    <div class="boton_cofirmacion">
 
-                        <button type="button" class="btn btn-primary">Confrmar</button>
+                    <div class="boton_cofirmacion">
+                        <button type="submit" class="btn btn-primary">Confrmar</button>
                     </div>
                 </form>
             </div>
@@ -109,7 +108,10 @@
             <div class="data_pago">
 
                 <div class="tabla_de_pagos">
-                    
+                    <div class="boton_para_Salir">
+                        <button type="button" class="btn-close" aria-label="Close" onclick="salir()"></button>
+                    </div>
+
                     <table class="table">
                         <thead>
                           <tr>
@@ -123,7 +125,7 @@
                           </tr>
                         </thead>
                         <tbody class="table_Data">
-                            <tr>
+<!--                             <tr>
                 
                                 <td>Mark</td>
                                 <td>Otto</td>
@@ -136,7 +138,8 @@
                                 </td>
                                 <td>
                                     <div class="cantidad_entregada">
-                                        <input type="text" class="form-control form-control-sm" disabled value="450" style="width:80px">
+                                      <input type="text" class="form-control form-control-sm" id="cantidad_pagada_${e.id}" disabled value="" style="width:80px"><span>$</span>
+
                                     </div>
                                 </td>
                                 <td>
@@ -152,7 +155,7 @@
                                     </div>
 
                                 </td>
-                              </tr>
+                              </tr> -->
     
                             
                         </tbody>
@@ -168,7 +171,7 @@
                     <div class="total">
                         <label for="disabledTextInput">TOTAL</label>
 
-                        <input class="form-control form-control" type="text" disabled value="450$">
+                        <input class="form-control form-control suma_total_final" id="0" type="text" disabled value="0">
 
                     </div>
                 </div>

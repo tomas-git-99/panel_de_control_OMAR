@@ -42,6 +42,7 @@
 }
 
 .opciones_cambio{
+    z-index: 100;
     
     display: none;
     visibility: hidden;
@@ -75,6 +76,7 @@
 }
 
 .previsualizar{
+    z-index: 100;
     
     display: none;
     visibility: hidden;

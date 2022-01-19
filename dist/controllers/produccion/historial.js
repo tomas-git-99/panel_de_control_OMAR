@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscarProductosFecha = exports.historialTaller = void 0;
+const dist_1 = require("sequelize/dist");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const historialTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_taller } = req.params;
@@ -22,8 +23,18 @@ const historialTaller = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.historialTaller = historialTaller;
 const buscarProductosFecha = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    console.log(id);
-    const productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id, fecha_de_entrada: req.body.fecha_de_entrada } });
+    const { fecha_de_entrada } = req.body;
+    const productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id, fecha_de_entrada: { [dist_1.Op.between]: [fecha_de_entrada[0], fecha_de_entrada[1]] }, estado: false } });
+    /*
+        let data:any = [];
+    
+        productos.filter( (e:any) => {
+    
+            if(e.id_taller == id){
+                data.push(e)
+            }
+        })
+     */
     res.json({
         productos
     });
