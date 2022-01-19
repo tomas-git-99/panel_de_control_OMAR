@@ -102,10 +102,16 @@ input[type=number]::-webkit-inner-spin-button {
     gap: 100px;
 }
 .total{
-    width: 100PX;
+    display: grid;
+    justify-items:center;
+  
+    
 }
+
+
 .total input{
     text-align: center;
+    width: 130px;
 }
 
 .botones_pagar_imprimir{

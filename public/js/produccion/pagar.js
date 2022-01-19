@@ -69,6 +69,7 @@ const cargar_datos_productos = (res) => {
      
             </div>
         </td>
+  
         <td>
             <div class="cambiar_pago">
 
@@ -210,5 +211,47 @@ window.calcular = (e) => {
 
     valor_input.value = "";
 
+
+}
+
+
+
+
+export const funcionParaImprimir = ( elemento) => {
+
+    const elementoAimprimir =  document.querySelector(`.${elemento}`);
+
+
+    html2pdf()
+        .set({
+        margin: 1,
+        filename: `ticket.pdf`,
+        image: {
+            type: 'jpeg',
+            quality: 0.98
+        },
+        html2canvas: {
+            scale: 3, // A mayor escala, mejores gráficos, pero más peso
+            letterRendering: true,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: "mm",
+            format: "a4",
+            orientation: 'portrait' // landscape o portrait
+        }
+    })
+      .from(elementoAimprimir)
+      .save()
+      .catch( err => { console.log(err)})
+
+}
+
+
+window.imprimir = () => {
+
+
+
+    funcionParaImprimir("tabla_de_pagos");
 
 }
