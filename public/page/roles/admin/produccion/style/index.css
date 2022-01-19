@@ -160,6 +160,12 @@
 
 
 }
+.paginacion{
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
       table tr {
      
         padding: .35em;

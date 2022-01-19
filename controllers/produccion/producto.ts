@@ -81,29 +81,41 @@ export const actualizarProducto = async (req: Request, res: Response) => {
 
 export const obtenerProduccion = async (req: Request, res: Response) => {
 
-    const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']]});
+   /*  const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']], limit:10} ); */
+
+    let valor:any = req.query.offset;
+
+    let valorOffset = parseInt(valor)
+
+    
+
+    const produccion_test = await Produccion_producto.findAndCountAll({order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
 
     const taller = await Taller.findAll()
 
+    let contador = produccion_test.count;
     let produccion:any = []
     
-    produccion_productos.map ( (e, i) =>{
+    produccion_test.rows.map ( (e, i) =>{
         taller.map ( (p,m) => {
             if(e.id_taller == p.id){
-                produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                produccion = [...produccion, {produccion:e, taller:taller[m]}];
             }
 
         })
         if(e.id_taller === null){
 
-            produccion = [...produccion, {produccion:produccion_productos[i]}];
+            produccion = [...produccion, {produccion:e}];
         }
     })
 
     res.json({
         ok: true,
+        contador,
         produccion
-    })
+    });
+
+
 }
 
 export const obetenerUnProducto = async (req: Request, res: Response) => {
@@ -137,13 +149,16 @@ export const ordenarPorRango = async (req: Request, res: Response) => {
     const { fecha } = req.body;
     const { query } = req.params;
 
+    const { offset } = req.query;
 
+    
     let valor:any = {[Op.between]:[fecha[0], fecha[1]]};    
  
-    searchFunc(query, valor)
-    .then( produccion => {
+    searchFunc(query, valor, offset)
+    .then( ({produccion, contador}) => {
         return res.json({
             ok: true,
+            contador,
             produccion
         })
     })
@@ -165,7 +180,7 @@ export const ordenarPorFechaExacta = async (req: Request, res: Response) => {
 
 
     searchFunc(query, fecha)
-    .then( produccion => {
+    .then( (produccion) => {
         return res.json({
             ok: true,
             produccion
@@ -194,7 +209,8 @@ export const unicoDatoQuery = async (req: Request, res: Response) =>{
     
     
         searchFunc(query, valor)
-            .then( produccion => {
+            .then( (produccion:any) => {
+              
                 return res.json({
                     ok: true,
                     produccion
@@ -216,35 +232,38 @@ export const unicoDatoQuery = async (req: Request, res: Response) =>{
     
 }
 
-const searchFunc = async(palabra:any, valor: false | null | number) =>{
+const searchFunc = async(palabra:any, valor: false | null | number, numero:number | any = 0) =>{
+
+
+    let valorOffset = parseInt(numero)
 
     let buscar:any = {
         where: {
 
-        },order: [['updatedAt', 'DESC']]
+        },order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset
     }
 
     buscar.where[`${palabra}`] = valor;
 
-    const produccion_productos = await Produccion_producto.findAll(buscar);
+    const produccion_productos = await Produccion_producto.findAndCountAll(buscar);
     const taller = await Taller.findAll()
         
     let produccion:any = []
 
-         produccion_productos.map ( (e, i) =>{
+         produccion_productos.rows.map ( (e, i) =>{
              taller.map ( (p,m) => {
                  if(e.id_taller == p.id){
-                     produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                     produccion = [...produccion, {produccion:e, taller:taller[m]}];
                  }
     
              })
              if(e.id_taller === null){
     
-                 produccion = [...produccion, {produccion:produccion_productos[i]}];
+                 produccion = [...produccion, {produccion:e}];
              }
          })
 
-    return produccion;
+    return {produccion, contador:produccion_productos.count};
 
 }
 

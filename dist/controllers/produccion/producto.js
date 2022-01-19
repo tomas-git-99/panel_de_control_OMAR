@@ -65,21 +65,26 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.actualizarProducto = actualizarProducto;
 const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ order: [['updatedAt', 'DESC']] });
+    /*  const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']], limit:10} ); */
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    const produccion_test = yield productos_produccion_1.Produccion_producto.findAndCountAll({ order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
     const taller = yield talller_1.Taller.findAll();
+    let contador = produccion_test.count;
     let produccion = [];
-    produccion_productos.map((e, i) => {
+    produccion_test.rows.map((e, i) => {
         taller.map((p, m) => {
             if (e.id_taller == p.id) {
-                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                produccion = [...produccion, { produccion: e, taller: taller[m] }];
             }
         });
         if (e.id_taller === null) {
-            produccion = [...produccion, { produccion: produccion_productos[i] }];
+            produccion = [...produccion, { produccion: e }];
         }
     });
     res.json({
         ok: true,
+        contador,
         produccion
     });
 });
@@ -101,11 +106,13 @@ exports.obetenerUnProducto = obetenerUnProducto;
 const ordenarPorRango = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { fecha } = req.body;
     const { query } = req.params;
+    const { offset } = req.query;
     let valor = { [dist_1.Op.between]: [fecha[0], fecha[1]] };
-    searchFunc(query, valor)
-        .then(produccion => {
+    searchFunc(query, valor, offset)
+        .then(({ produccion, contador }) => {
         return res.json({
             ok: true,
+            contador,
             produccion
         });
     })
@@ -121,7 +128,7 @@ const ordenarPorFechaExacta = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const { fecha } = req.body;
     const { query } = req.params;
     searchFunc(query, fecha)
-        .then(produccion => {
+        .then((produccion) => {
         return res.json({
             ok: true,
             produccion
@@ -143,7 +150,7 @@ const unicoDatoQuery = (req, res) => __awaiter(void 0, void 0, void 0, function*
             valor = false;
         }
         searchFunc(query, valor)
-            .then(produccion => {
+            .then((produccion) => {
             return res.json({
                 ok: true,
                 produccion
@@ -164,25 +171,26 @@ const unicoDatoQuery = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.unicoDatoQuery = unicoDatoQuery;
-const searchFunc = (palabra, valor) => __awaiter(void 0, void 0, void 0, function* () {
+const searchFunc = (palabra, valor, numero = 0) => __awaiter(void 0, void 0, void 0, function* () {
+    let valorOffset = parseInt(numero);
     let buscar = {
-        where: {}, order: [['updatedAt', 'DESC']]
+        where: {}, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset
     };
     buscar.where[`${palabra}`] = valor;
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll(buscar);
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll(buscar);
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];
-    produccion_productos.map((e, i) => {
+    produccion_productos.rows.map((e, i) => {
         taller.map((p, m) => {
             if (e.id_taller == p.id) {
-                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                produccion = [...produccion, { produccion: e, taller: taller[m] }];
             }
         });
         if (e.id_taller === null) {
-            produccion = [...produccion, { produccion: produccion_productos[i] }];
+            produccion = [...produccion, { produccion: e }];
         }
     });
-    return produccion;
+    return { produccion, contador: produccion_productos.count };
 });
 const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const dato = req.query;

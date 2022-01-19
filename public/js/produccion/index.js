@@ -14,16 +14,25 @@ const token = localStorage.getItem('x-token');
 
 verificarToken(token);
 
-
-const main_historial = () => {
+let numeroPaginas = null;
+const main_historial = (valor=0) => {
 
     cargaMedio("spinner_load", true);
     
-    fecthNormalGET("GET", "produccion/producto_produccion")
+    fecthNormalGET("GET", `produccion/producto_produccion?offset=${valor}`)
         .then( res => {
             if(res.ok){
-        cargaMedio("spinner_load", false);
-    
+                cargaMedio("spinner_load", false);
+
+                
+                if(numeroPaginas == null || numeroPaginas == "null" ){
+                    paginacion(res.contador)
+
+                }/* else if(typeof numeroPaginas == 'number'){
+                    paginacion(res.contador)
+
+                } */
+                numeroPaginas = res.contador;
                 colorearTable(res.produccion);
             }
         })
@@ -35,6 +44,7 @@ const main_historial = () => {
 }
 
 main_historial();
+/* paginacion(numeroPaginas); */
 
 const colorearTable = (res) => {
 
@@ -139,7 +149,7 @@ const imprimir_previsualizar = (id) => {
 
 
 const imprimir_html_datos = (res) => {
-    console.log(res)
+   
     res.map ( e => {
 
         tabla_previsualizar.innerHTML = `
@@ -536,17 +546,24 @@ window.cambiar_filtro = (e) => {
 }
 
 
+let dataRango = []
+
 window.rango_buscar = (id) =>{
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
 
     let dato ={fecha:[startDate.value, endDate.value]}
 
+    
    
     fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${id}`, dato)
         .then( res =>{
+
             if(res.ok){
-                colorearTable(res.produccion)
+                dataRango = [id, dato];
+                paginacion(res.contador, id);
+                colorearTable(res.produccion);
+
             }else{
                 algo_salio_mal(`Algo salio mal`)
             }
@@ -558,6 +575,25 @@ window.rango_buscar = (id) =>{
 
 }
 
+const rango_prueba = (data, valor=0) =>{
+
+    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${data[0]}?offset=${valor}`, data[1])
+        .then( res =>{
+
+            if(res.ok){
+/*                 dataRango = [id, dato];
+                paginacion(res.contador); */
+                colorearTable(res.produccion);
+
+            }else{
+                algo_salio_mal(`Algo salio mal`)
+            }
+        })
+        .catch( err =>{
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+}
+
 window.exacto_buscar = (id) => {
 
     const fecha_exacta = document.getElementById("fecha_exacta");
@@ -567,7 +603,7 @@ window.exacto_buscar = (id) => {
 
     fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
         .then( res =>{
-     
+           
             colorearTable(res.produccion)
         })
         .catch( err =>{
@@ -632,5 +668,88 @@ const getSearch = (valor) => {
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+}
+
+
+
+
+const paginacion = (valor, query=undefined) => {
+
+    if(query !== undefined){
+        numeroPaginas = null;
+    }
+
+    let valorNumero = parseInt(valor);
+
+    const pagination = document.querySelector(".pagination");
+
+    let calcularPagina = valorNumero / 10;
+
+    let paginas = Math.ceil(calcularPagina);
+
+    let historial = ""
+
+    for (let i = 1; i <= paginas; i++) {
+        let valor = 0
+
+        if (i == 1){
+            historial += `
+            <li class="page-item active" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+
+            `
+        }else{
+            valor = i - 1;
+            historial += `
+            <li class="page-item" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+    
+            `
+        }
+
+    }
+
+    pagination.innerHTML = historial;
+
+
+}
+
+
+window.pagina_id = (e) => {
+
+    const cambiarSeleccion = document.getElementById(`${e}`);
+    const active = document.querySelector(`.active`);
+
+
+    let datos = e.split("-")
+    if(active.id == e){
+        return
+    }
+
+    cambiarSeleccion.className = "page-item active";
+    active.className = "";
+
+    if(datos[2] == "fecha_de_salida"){
+
+      
+        numeroPaginas = null;
+      
+        
+        if(datos[1] == 0){
+            return rango_prueba(dataRango);
+
+        }else{
+            return rango_prueba(dataRango, datos[1]+"0");
+
+        }
+    }
+
+    if(datos[1] == 0){
+        main_historial();
+        
+    }else{
+        main_historial(datos[1]+"0") 
+
+    }
+
+    
 }
 
