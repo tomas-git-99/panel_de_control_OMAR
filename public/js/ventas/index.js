@@ -128,7 +128,7 @@ const leerHistorial = (res) => {
         historial += `
    
         <tr>
-          <td data-label="CODIGO">${e.id}</td>
+          <td data-label="ARTICULO">${e.id}</td>
 
           <td data-label="MODELO">${devolverString(e.nombre)}</td>
           <td data-label="DISEÑO">${devolverString(e.diseño)}</td>
