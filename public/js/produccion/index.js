@@ -792,6 +792,7 @@ window.pagina_id = (e) => {
     }
 
     if(datos[1] == 0){
+        recargaPaginaIgual = "0";
         main_historial();
         
     }else{
