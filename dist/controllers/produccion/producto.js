@@ -112,7 +112,19 @@ const ordenarPorRango = (req, res) => __awaiter(void 0, void 0, void 0, function
     const { fecha } = req.body;
     const { query } = req.params;
     const { offset } = req.query;
-    let valor = { [dist_1.Op.between]: [fecha[0], fecha[1]] };
+    let valor = fecha;
+    if (fecha !== undefined) {
+        if (fecha.length > 1) {
+            valor = { [dist_1.Op.between]: [fecha[0], fecha[1]] };
+        }
+    }
+    else {
+        valor = null;
+        if (query == "estado") {
+            valor = false;
+        }
+    }
+    console.log(valor);
     searchFunc(query, valor, offset)
         .then(({ produccion, contador }) => {
         return res.json({
@@ -199,24 +211,28 @@ const searchFunc = (palabra, valor, numero = 0) => __awaiter(void 0, void 0, voi
     return { produccion, contador: produccion_productos.count };
 });
 const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const dato = req.query;
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
-            id_corte: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
-        } });
+    /*  const dato = req.query; */
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll({ where: {
+            id_corte: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
+        }, limit: 10, offset: valorOffset });
+    let contador = produccion_productos.count;
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];
-    produccion_productos.map((e, i) => {
+    produccion_productos.rows.map((e, i) => {
         taller.map((p, m) => {
             if (e.id_taller == p.id) {
-                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                produccion = [...produccion, { produccion: e, taller: taller[m] }];
             }
         });
         if (e.id_taller === null) {
-            produccion = [...produccion, { produccion: produccion_productos[i] }];
+            produccion = [...produccion, { produccion: e }];
         }
     });
     res.json({
         ok: true,
+        contador,
         produccion
     });
 });

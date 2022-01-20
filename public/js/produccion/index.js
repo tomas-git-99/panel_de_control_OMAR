@@ -473,6 +473,7 @@ window.ordenar = (e) => {
     if(e.value === "0" || e.value == 0){
         escribir_busquedas.style.display = "none";
         escribir_busquedas.style.visibility = "hidden";
+        opciones_input.innerHTML = "";
         main_historial()
     }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
         
@@ -491,25 +492,13 @@ window.ordenar = (e) => {
         `
     }else if ( e[e.selectedIndex].id == "id_taller" || e[e.selectedIndex].id == "fecha_de_entrada" || e[e.selectedIndex].id == "fecha_de_pago"){
 
-    cargaMedio("spinner_load", true);
 
-        fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${e[e.selectedIndex].id }`)
-            .then( res =>{
-                cargaMedio("spinner_load", false);
+    dataRango = [];
 
-                /* if(numeroPaginas == null || numeroPaginas == "null" ){ */
-                    paginacion(res.produccion.contador, e[e.selectedIndex].id );
-                    dataRango = [ e[e.selectedIndex].id ]
-                    
-              /*   } */
-                colorearTable(res.produccion.produccion);
+    let data = [e[e.selectedIndex].id]
 
-            })
-            .catch( err =>{
-                cargaMedio("spinner_load", false);
-
-                algo_salio_mal(`Algo salio mal: ${ err }`)
-            })
+    funcFiltroTodos(data);
+   
     
     }else if( e[e.selectedIndex].id == "taller"){
 
@@ -529,28 +518,6 @@ window.ordenar = (e) => {
         opciones_de_taller();
     }
 
-}
-
-
-const cargarCualquierValor = (data, valor=0) => {
-
-    fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${data}?offset=${valor}`)
-    .then( res =>{
-        cargaMedio("spinner_load", false);
-
-        /* if(numeroPaginas == null || numeroPaginas == "null" ){ */
-            /* paginacion(res.produccion.contador, e[e.selectedIndex].id ); */
-            
-      /*   } */
-      
-        colorearTable(res.produccion.produccion);
-
-    })
-    .catch( err =>{
-        cargaMedio("spinner_load", false);
-
-        algo_salio_mal(`Algo salio mal: ${ err }`)
-    })
 }
 
 
@@ -593,19 +560,11 @@ window.buscarDataTaller = (value) => {
         fecthNormalGET("GET","produccion/taller/full/" + value.value)
         .then(res =>{
 
+            cargaMedio("spinner_load", false);
+            numeroPaginas = null;
+            paginacion(res.contador)
+            colorearTable(res.produccion)
            
-/*             if(res.produccion.length == 0){
-                escribir_busquedas.style.display = "grid";
-                escribir_busquedas.style.visibility = "visible";
-                escribir_busquedas.innerHTML = `<h3>No se pudo encontrar ningun taller</h3>`
-
-            }else{ */
-                cargaMedio("spinner_load", false);
-
-                numeroPaginas = null;
-                paginacion(res.contador)
-                colorearTable(res.produccion)
-           /*  } */
         })
         .catch (err => {
             algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -637,68 +596,71 @@ window.cambiar_filtro = (e) => {
 let dataRango = [] //esta data tango solo para fechas
 
 window.rango_buscar = (id) =>{
+
+    dataRango = []
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
 
     let dato ={fecha:[startDate.value, endDate.value]}
 
-    
-   
-    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${id}`, dato)
-        .then( res =>{
+    let data = [];
+    data = [id ,dato];
 
-            if(res.ok){
-                dataRango = [id, dato];
-                paginacion(res.contador, id);
-                colorearTable(res.produccion);
+    funcFiltroTodos(data);
 
-            }else{
-                algo_salio_mal(`Algo salio mal`)
-            }
-        })
-        .catch( err =>{
-            algo_salio_mal(`Algo salio mal: ${ err }`)
-        })
-    
 
 }
 
-const rango_prueba = (data, valor=0) =>{
 
-    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${data[0]}?offset=${valor}`, data[1])
+
+const funcFiltroTodos = ( data, offset=0) => {
+
+ 
+    let datos = data[1]?.fecha.length >= 1 ? data[1] : undefined;
+    
+    cargaMedio("spinner_load", true);
+
+    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/todos/${data[0]}?offset=${offset}`, datos)
         .then( res =>{
 
             if(res.ok){
-/*                 dataRango = [id, dato];
-                paginacion(res.contador); */
-                colorearTable(res.produccion);
 
+                if( dataRango.length  == 0){
+                    paginacion(res.contador, data[0]);
+                }
+
+                dataRango = [data[0], datos];
+                cargaMedio("spinner_load", false);
+
+                colorearTable(res.produccion);
+    
             }else{
+                cargaMedio("spinner_load", false);
+
                 algo_salio_mal(`Algo salio mal`)
             }
         })
         .catch( err =>{
+            cargaMedio("spinner_load", false);
+
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
+
 }
 
 window.exacto_buscar = (id) => {
+    dataRango = []
 
     const fecha_exacta = document.getElementById("fecha_exacta");
     const dato = {
-        fecha:fecha_exacta.value
+        fecha:[fecha_exacta.value]
     }
+    let data = [];
+    data = [id ,dato];
 
-    fecthNormalPOST_PUT("POST", `produccion/producto_produccion/busqueda/unico/dato/${id}`, dato)
-        .then( res =>{
-           
-            colorearTable(res.produccion)
-        })
-        .catch( err =>{
-            algo_salio_mal(`Algo salio mal: ${ err }`)
-        })
-    
-    
+
+    funcFiltroTodos(data);
+
 
 }
 
@@ -740,23 +702,28 @@ search.addEventListener("keyup", ({keyCode}) => {
     search.value = "";
 });
 
-
-const getSearch = (valor) => {
+let palabraBuscada = "";
+const getSearch = (valor, offset=0) => {
 
     
     cargaMedio("spinner_load", true);
 
 
-    fecthNormalGET("GET", "produccion/producto_produccion/busqueda/name?" + `nombre=${valor}`)
+    fecthNormalGET("GET", "produccion/producto_produccion/busqueda/name?" + `nombre=${valor}&offset=${offset}`)
     .then(res => {
         cargaMedio("spinner_load", false);
+        if(palabraBuscada == ""){
+
+            paginacion(res.contador, "search");
+        }
+
+        palabraBuscada = valor;
         colorearTable(res.produccion);
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 }
-
 
 
 
@@ -802,6 +769,7 @@ const paginacion = (valor, query=undefined) => {
 let recargaPaginaIgual
 window.pagina_id = (e) => {
 
+    const arrNombresFiltro = ["fecha_de_salida", "fecha_de_entrada", "fecha_de_pago", "id_taller"]
 
     const cambiarSeleccion = document.getElementById(`${e}`);
     const active = document.querySelector(`.active`);
@@ -815,23 +783,38 @@ window.pagina_id = (e) => {
     cambiarSeleccion.className = "page-item active";
     active.className = "";
 
-    if(datos[2] == "fecha_de_salida" || datos[2] == "fecha_de_entrada" || datos[2] == "fecha_de_pago"){
 
+    let filtrosNombres = arrNombresFiltro.some( e => e == datos[2]);
+
+    if(filtrosNombres){
+   
 
         numeroPaginas = null;
       
         
         if(datos[1] == 0){
-            //return rango_prueba(dataRango);
-
-            return cargarCualquierValor(dataRango)
+     
+            return funcFiltroTodos(dataRango);
 
         }else{
-            //return rango_prueba(dataRango, datos[1]+"0");
+           
+            return funcFiltroTodos(dataRango, datos[1]+"0");
 
-            return cargarCualquierValor(dataRango[0], datos[1]+"0")
+        
+        }
+    }
 
+    if(datos[2] == "search"){
 
+        if(datos[1] == 0){
+     
+            return getSearch(palabraBuscada);
+
+        }else{
+           
+            return getSearch(palabraBuscada, datos[1]+"0");
+
+        
         }
     }
 

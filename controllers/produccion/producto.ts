@@ -160,8 +160,25 @@ export const ordenarPorRango = async (req: Request, res: Response) => {
 
     const { offset } = req.query;
 
+
+    let valor:any  = fecha;
+
     
-    let valor:any = {[Op.between]:[fecha[0], fecha[1]]};    
+    
+    if( fecha !== undefined ){
+        if(fecha.length > 1) {
+            valor = {[Op.between]:[fecha[0], fecha[1]]}; 
+        } 
+    }else{
+        valor = null;
+        if(query == "estado"){
+            valor = false;
+        }
+    }
+    
+    console.log(valor);
+
+    
  
     searchFunc(query, valor, offset)
     .then( ({produccion, contador}) => {
@@ -279,31 +296,40 @@ const searchFunc = async(palabra:any, valor: false | null | number, numero:numbe
 
 export const buscar = async (req: Request, res: Response) => {
 
-    const dato = req.query;
+   /*  const dato = req.query; */
 
-    const produccion_productos = await Produccion_producto.findAll({ where:{ 
-        id_corte:{ [Op.like]: '%'+ dato.nombre +'%'},
+    let valor:any = req.query.offset;
+    let valorOffset = parseInt(valor);
+
+  
+
+    const produccion_productos = await Produccion_producto.findAndCountAll({ where:{ 
+        id_corte:{ [Op.like]: '%'+ req.query.nombre +'%'},
         // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
-    }});
+    },limit:10, offset:valorOffset});
 
+  
+    let contador = produccion_productos.count;
+    
     const taller = await Taller.findAll()
     let produccion:any = []
     
-    produccion_productos.map ( (e, i) =>{
+    produccion_productos.rows.map ( (e, i) =>{
         taller.map ( (p,m) => {
             if(e.id_taller == p.id){
-                produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                produccion = [...produccion, {produccion:e, taller:taller[m]}];
             }
 
         })
         if(e.id_taller === null){
 
-            produccion = [...produccion, {produccion:produccion_productos[i]}];
+            produccion = [...produccion, {produccion:e}];
         }
     })
 
     res.json({
         ok:true,
+        contador,
         produccion
     })
 
