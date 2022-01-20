@@ -8,5 +8,7 @@ router.get('/:id', historial_1.historialTaller);
 // MOSTRAR HISTORIAL SOLO PRODUCTOS
 //buscar producto para pagar 
 router.post('/pagar/:id', historial_1.buscarProductosFecha);
+//pagar Talleres
+router.post('/pagar/estado/:id', historial_1.pagarAtalleres);
 exports.default = router;
 //# sourceMappingURL=historial.js.map

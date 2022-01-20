@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarProductosFecha, historialTaller } from "../../controllers/produccion/historial";
+import { buscarProductosFecha, historialTaller, pagarAtalleres } from "../../controllers/produccion/historial";
 
 
 const router = Router();
@@ -18,5 +18,11 @@ router.get('/:id', historialTaller);
 
 
 router.post('/pagar/:id', buscarProductosFecha)
+
+
+
+//pagar Talleres
+
+router.post('/pagar/estado/:id', pagarAtalleres)
 
 export default router;

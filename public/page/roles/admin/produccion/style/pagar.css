@@ -41,6 +41,7 @@
 
 .tabla_de_pagos{
     width: 900px;
+   /* width:auto; */
     height: auto;
  
 }
@@ -58,9 +59,17 @@
     place-self: center;
     background: white;
     width: 950px;
+    max-height: 800px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    overflow-y: scroll;
 
 }
+
+.data_pago::-webkit-scrollbar { 
+    /* solo oculta su visualizacion */
+    display: none;
+}
+
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
@@ -124,4 +133,16 @@ input[type=number]::-webkit-inner-spin-button {
 .boton_para_Salir{
     display: grid;
     padding: 10px;
+}
+
+@media (max-width: 767px){
+    .tabla_de_pagos{
+     
+       width:90%; 
+       height: auto;
+     
+    }
+    .data_pago{
+        width: 100%;
+    }
 }

@@ -1,4 +1,4 @@
-import { advertencia } from "../helpers/para_todos/alertas.js";
+import { advertencia, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
@@ -48,22 +48,22 @@ const cargar_datos_productos = (res) => {
         historial += `
         <tr>
                 
-        <td>${devolverString(e.id_corte)}</td>
-        <td>${devolverString(e.nombre)}</td>
-        <td>${devolverString(e.fecha_de_entrada)}</td>
-        <td>
+        <td data-label="CODIGO">${devolverString(e.id_corte)}</td>
+        <td data-label="MODELO">${devolverString(e.nombre)}</td>
+        <td data-label="FECHA DE ENTREGA">${devolverString(e.fecha_de_entrada)}</td>
+        <td data-label="CANTIDAD ENTRGADA">
             <div class="cantidad_entregada">
                 <input type="text" class="form-control form-control-sm" id="cantidad_entregada_${e.id}" disabled value="${e.cantidad_entregada}" style="width:80px">
             </div>
 
         </td>
-        <td>
+        <td data-label="PAGO">
             <div class="cantidad_entregada">
             <input type="text" class="form-control form-control-sm" id="cantidad_pagada_${e.id}" disabled value="" style="width:80px"><span>$</span>
               
             </div>
         </td>
-        <td>
+        <td data-label="TOTAL">
             <div class="cantidad_entregada">
                 <input type="text" class="form-control form-control-sm" id="suma_total_${e.id}" disabled value="" style="width:80px"><span>$</span>
      
@@ -98,6 +98,8 @@ window.salir = () => {
 }
 
 
+let historialBusqueda = {}
+
 formPagoGet.addEventListener( "submit", (e) => {
     e.preventDefault();
 
@@ -124,9 +126,15 @@ formPagoGet.addEventListener( "submit", (e) => {
     }else{
 
         fecthNormalPOST_PUT("POST", `produccion/hisorial/pagar/${id_taller}`,forData)
+
         .then( res => {
+
+            historialBusqueda = forData;
             cargar_datos_productos(res.productos);
-            volverAtras(formPago, data_pago)
+            volverAtras(formPago, data_pago);
+        })
+        .catch(error => {
+            algo_salio_mal(`Algo salio mal: ${ error }`)
         })
     }
 
@@ -253,5 +261,32 @@ window.imprimir = () => {
 
 
     funcionParaImprimir("tabla_de_pagos");
+
+}
+
+
+
+
+window.pagar_estado = () => {
+
+    const suma_total_final = document.querySelector(".suma_total_final");
+    let date = new Date()
+    let day = `${(date.getDate())}`.padStart(2,'0');
+    let month = `${(date.getMonth()+1)}`.padStart(2,'0');
+    let year = date.getFullYear();
+    let todayDate = `${year}-${month}-${day}`;
+
+    historialBusqueda["fecha_de_pago"] = todayDate
+
+    fecthNormalPOST_PUT("POST", `produccion/hisorial/pagar/estado/${id_taller}`, historialBusqueda)
+             .then( res => {
+                volverAtras(data_pago, formPago);
+                suma_total_final.id = "0"
+                suma_total_final.value = "0"
+                salio_todo_bien("El pago se logro con exito");
+             })
+             .catch(  err => {
+                 alert("Error: " + err)
+             })
 
 }

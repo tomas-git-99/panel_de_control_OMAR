@@ -334,10 +334,11 @@ window.agregarEstampador = (e) => {
 
 let id_para_pagar
 window.cambiar_pagar = (e) => {
+
     let estado = document.querySelector(".pagar_taller");
     
     estado.id = e.value;
-    
+
     id_para_pagar = e[e.selectedIndex].id;
 
 }
@@ -353,6 +354,7 @@ window.fecha_De_pago = (e) => {
     if(e == true || e == "true") {
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:true, fecha_de_pago:todayDate})
         .then( (res) => {
+           
             salio_todo_bien("Todo salio exelente")
         })
         .catch( err => {
@@ -492,7 +494,11 @@ window.ordenar = (e) => {
             .then( res =>{
                 cargaMedio("spinner_load", false);
 
-                colorearTable(res.produccion)
+                /* if(numeroPaginas == null || numeroPaginas == "null" ){ */
+                    paginacion(res.produccion.contador);
+              /*   } */
+                colorearTable(res.produccion.produccion);
+
             })
             .catch( err =>{
                 cargaMedio("spinner_load", false);
@@ -710,9 +716,8 @@ const getSearch = (valor) => {
 
     fecthNormalGET("GET", "produccion/producto_produccion/busqueda/name?" + `nombre=${valor}`)
     .then(res => {
-    cargaMedio("spinner_load", false);
-
-    colorearTable(res.produccion);
+        cargaMedio("spinner_load", false);
+        colorearTable(res.produccion);
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -776,7 +781,7 @@ window.pagina_id = (e) => {
     cambiarSeleccion.className = "page-item active";
     active.className = "";
 
-    if(datos[2] == "fecha_de_salida"){
+    if(datos[2] == "fecha_de_salida" || datos[2] == "fecha_de_entrada" || "fecha_de_pago"){
 
       
         numeroPaginas = null;
