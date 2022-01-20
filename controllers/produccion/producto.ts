@@ -282,7 +282,7 @@ export const buscar = async (req: Request, res: Response) => {
     const dato = req.query;
 
     const produccion_productos = await Produccion_producto.findAll({ where:{ 
-        nombre:{ [Op.like]: '%'+ dato.nombre +'%'},
+        id_corte:{ [Op.like]: '%'+ dato.nombre +'%'},
         // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
     }});
 

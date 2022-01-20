@@ -168,7 +168,7 @@ retroceder.addEventListener("click", (e) =>{
 clienteExistente.addEventListener("click", (e) =>{
 
     e.preventDefault();
-    console.log("como estas")
+    
     volverAtras(cliente, buscador);
 
 })
@@ -452,7 +452,7 @@ const descontarEltotal = (id_usuario, id_orden, data) => {
                 volverAtras(quitar_total_o_individual, comprobante);
                 //mandar a la ventana para imprimir en pdf los tickets
             }else{
-                console.log(res)
+              
                 advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
                 //volver a carrito por el error de que no ahi stock y colocar el id_orden en local storage
                 //localStorage.removeItem("carrito");
@@ -644,7 +644,7 @@ venta_publico_form.addEventListener("submit", async(e) => {
 
     fecthNormalGET("GET",`orden/publico/orden/completo/${id_usuario}/${data.cliente.id}?publico=true`)
         .then( res => {
-            console.log(res)
+        
             if(res.ok == true){
 
                 volverAtras(venta_publico, quitar_total_o_individual)
@@ -658,7 +658,7 @@ venta_publico_form.addEventListener("submit", async(e) => {
             }
         })
         .catch ( err => {
-            console.log(err)
+        
             algo_salio_mal(`Algo salio mal: ${ err }`);
             volverAtras(venta_publico, bienvenido)
         })

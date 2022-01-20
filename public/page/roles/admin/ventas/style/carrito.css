@@ -99,10 +99,10 @@
 }
 
 .buscador{
-    display: grid;
-    visibility: visible;  
-  /*   display: none;
-    visibility: hidden; */
+  /*   display: grid;
+    visibility: visible;   */
+    display: none;
+    visibility: hidden;
     background: white;
   
     height: auto;

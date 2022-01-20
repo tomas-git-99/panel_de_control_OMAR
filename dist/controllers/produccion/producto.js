@@ -201,7 +201,7 @@ const searchFunc = (palabra, valor, numero = 0) => __awaiter(void 0, void 0, voi
 const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const dato = req.query;
     const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
-            nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
+            id_corte: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
         } });
     const taller = yield talller_1.Taller.findAll();
     let produccion = [];
