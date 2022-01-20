@@ -16,7 +16,10 @@ export const buscarLocales = async (req: Request, res: Response) => {
     let local:any = [];
 
     locales.map( e => {
-        local.push(e.local);
+        if(e.local !== null){
+
+            local.push(e.local);
+        }
     })
 
 

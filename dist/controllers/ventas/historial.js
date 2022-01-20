@@ -18,7 +18,9 @@ const buscarLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const locales = yield usuario_1.Usuario.findAll();
     let local = [];
     locales.map(e => {
-        local.push(e.local);
+        if (e.local !== null) {
+            local.push(e.local);
+        }
     });
     res.json({
         ok: true,
