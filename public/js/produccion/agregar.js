@@ -65,7 +65,17 @@ formProducto.addEventListener("submit", (e) => {
         if(el.name.length > 0){
             if(!el.value == "" || el.value == null){
 
-                forData[el.name] = el.value;    
+                if(el.name == "id_corte"){
+                    const texto = el.value;
+                    let newValor = texto.split(" ").join("") ;
+                    forData[el.name] = newValor;  
+             
+                    
+                }else{
+
+                    forData[el.name] = el.value;    
+                }
+
             }
 
         }
@@ -96,6 +106,8 @@ formProducto.addEventListener("submit", (e) => {
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
  
+
+      
 
     
 })

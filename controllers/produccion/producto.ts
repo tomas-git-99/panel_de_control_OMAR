@@ -309,6 +309,11 @@ export const buscar = async (req: Request, res: Response) => {
 
 }
 
+
+
+
+ 
+
 export const agregarProductoAestampos = async (req: Request, res: Response) => {
 
 
