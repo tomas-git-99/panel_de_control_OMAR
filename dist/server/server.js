@@ -22,9 +22,10 @@ const producto_1 = __importDefault(require("../routers/ventas/producto"));
 const carrito_1 = __importDefault(require("../routers/ventas/carrito"));
 const direccion_1 = __importDefault(require("../routers/ventas/direccion"));
 const talle_1 = __importDefault(require("../routers/ventas/talle"));
+const historial_1 = __importDefault(require("../routers/ventas/historial"));
 //PRODUCION
 const producto_produccion_1 = __importDefault(require("../routers/produccion/producto_produccion"));
-const historial_1 = __importDefault(require("../routers/produccion/historial"));
+const historial_2 = __importDefault(require("../routers/produccion/historial"));
 const taller_1 = __importDefault(require("../routers/produccion/taller"));
 const estanpados_1 = __importDefault(require("../routers/produccion/estanpados"));
 const rollos_1 = __importDefault(require("../routers/produccion/rollos"));
@@ -40,6 +41,7 @@ class ServerApp {
             carrito: '/api/carrito',
             direccion: '/api/direccion',
             talle: '/api/talle',
+            historial: '/api/historial',
             //PRODUCCION
             producto_producto: '/api/produccion/producto_produccion',
             taller: '/api/produccion/taller',
@@ -86,10 +88,11 @@ class ServerApp {
         this.app.use(this.apiPaths.carrito, carrito_1.default);
         this.app.use(this.apiPaths.direccion, direccion_1.default);
         this.app.use(this.apiPaths.talle, talle_1.default);
+        this.app.use(this.apiPaths.historial, historial_1.default);
         //PRODUCCION
         this.app.use(this.apiPaths.producto_producto, producto_produccion_1.default);
         this.app.use(this.apiPaths.taller, taller_1.default);
-        this.app.use(this.apiPaths.hisorial, historial_1.default);
+        this.app.use(this.apiPaths.hisorial, historial_2.default);
         this.app.use(this.apiPaths.estanpado, estanpados_1.default);
         this.app.use(this.apiPaths.rollos, rollos_1.default);
     }

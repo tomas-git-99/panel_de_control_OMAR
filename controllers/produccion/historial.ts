@@ -75,3 +75,5 @@ export const pagarAtalleres = async (req: Request, res: Response) => {
         res.json({ok:false, msg:error})
     }
 }
+
+

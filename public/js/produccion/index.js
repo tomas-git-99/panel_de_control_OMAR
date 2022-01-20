@@ -24,7 +24,6 @@ const main_historial = (valor=0) => {
             if(res.ok){
                 cargaMedio("spinner_load", false);
 
-                
                 if(numeroPaginas == null || numeroPaginas == "null" ){
                     paginacion(res.contador)
 
@@ -47,6 +46,10 @@ main_historial();
 /* paginacion(numeroPaginas); */
 
 const colorearTable = (res) => {
+
+    if(res.length === 0) {
+        return table_produccion.innerHTML = "";
+    }
 
     let resultado = ""
     
@@ -495,7 +498,9 @@ window.ordenar = (e) => {
                 cargaMedio("spinner_load", false);
 
                 /* if(numeroPaginas == null || numeroPaginas == "null" ){ */
-                    paginacion(res.produccion.contador);
+                    paginacion(res.produccion.contador, e[e.selectedIndex].id );
+                    dataRango = [ e[e.selectedIndex].id ]
+                    
               /*   } */
                 colorearTable(res.produccion.produccion);
 
@@ -526,6 +531,27 @@ window.ordenar = (e) => {
 
 }
 
+
+const cargarCualquierValor = (data, valor=0) => {
+
+    fecthNormalGET("GET", `produccion/producto_produccion/busqueda/unicos/completo/p/${data}?offset=${valor}`)
+    .then( res =>{
+        cargaMedio("spinner_load", false);
+
+        /* if(numeroPaginas == null || numeroPaginas == "null" ){ */
+            /* paginacion(res.produccion.contador, e[e.selectedIndex].id ); */
+            
+      /*   } */
+      
+        colorearTable(res.produccion.produccion);
+
+    })
+    .catch( err =>{
+        cargaMedio("spinner_load", false);
+
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
 
 
 
@@ -563,16 +589,23 @@ window.buscarDataTaller = (value) => {
         escribir_busquedas.style.visibility = "hidden";
         main_historial()
     }else{
+        cargaMedio("spinner_load", true);
         fecthNormalGET("GET","produccion/taller/full/" + value.value)
         .then(res =>{
-            if(res.produccion.length == 0){
+
+           
+/*             if(res.produccion.length == 0){
                 escribir_busquedas.style.display = "grid";
                 escribir_busquedas.style.visibility = "visible";
                 escribir_busquedas.innerHTML = `<h3>No se pudo encontrar ningun taller</h3>`
 
-            }else{
+            }else{ */
+                cargaMedio("spinner_load", false);
+
+                numeroPaginas = null;
+                paginacion(res.contador)
                 colorearTable(res.produccion)
-            }
+           /*  } */
         })
         .catch (err => {
             algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -601,7 +634,7 @@ window.cambiar_filtro = (e) => {
 }
 
 
-let dataRango = []
+let dataRango = [] //esta data tango solo para fechas
 
 window.rango_buscar = (id) =>{
     const startDate = document.getElementById("startDate");
@@ -769,6 +802,7 @@ const paginacion = (valor, query=undefined) => {
 let recargaPaginaIgual
 window.pagina_id = (e) => {
 
+
     const cambiarSeleccion = document.getElementById(`${e}`);
     const active = document.querySelector(`.active`);
 
@@ -781,17 +815,22 @@ window.pagina_id = (e) => {
     cambiarSeleccion.className = "page-item active";
     active.className = "";
 
-    if(datos[2] == "fecha_de_salida" || datos[2] == "fecha_de_entrada" || "fecha_de_pago"){
+    if(datos[2] == "fecha_de_salida" || datos[2] == "fecha_de_entrada" || datos[2] == "fecha_de_pago"){
 
-      
+
         numeroPaginas = null;
       
         
         if(datos[1] == 0){
-            return rango_prueba(dataRango);
+            //return rango_prueba(dataRango);
+
+            return cargarCualquierValor(dataRango)
 
         }else{
-            return rango_prueba(dataRango, datos[1]+"0");
+            //return rango_prueba(dataRango, datos[1]+"0");
+
+            return cargarCualquierValor(dataRango[0], datos[1]+"0")
+
 
         }
     }
@@ -799,8 +838,9 @@ window.pagina_id = (e) => {
     if(datos[1] == 0){
         recargaPaginaIgual = "0";
         main_historial();
-        
+      
     }else{
+        
         main_historial(datos[1]+"0") 
         recargaPaginaIgual = datos[1]+"0";
     }

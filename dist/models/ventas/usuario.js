@@ -32,6 +32,9 @@ Usuario.init({
     },
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
+    },
+    local: {
+        type: sequelize_1.DataTypes.STRING
     }
 }, {
     sequelize: conectarDB_1.default,

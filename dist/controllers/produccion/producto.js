@@ -154,7 +154,8 @@ const unicoDatoQuery = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (query == "estado") {
             valor = false;
         }
-        searchFunc(query, valor)
+        const { offset } = req.query;
+        searchFunc(query, valor, offset)
             .then((produccion) => {
             return res.json({
                 ok: true,

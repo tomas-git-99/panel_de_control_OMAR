@@ -359,7 +359,16 @@ export const historialOrden = async (req: Request, res: Response) => {
 
 export const buscarPorID = async (req: Request, res: Response) => {
 
-    const orden = await Orden.findAll({where:{  id: req.query.id, total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
+
+    const clienteDNI = await Cliente.findAll({where:{  dni_cuil: req.query.id}, order: [['updatedAt', 'DESC']]});
+
+    let ids_clientesDNI:any = [];
+
+    clienteDNI.forEach( e => {
+        ids_clientesDNI.push(e.id)
+    })
+
+    const orden = await Orden.findAll({where:{  id_cliente: ids_clientesDNI, total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
 
     let id_cliente:any = []
     let id_direccion:any = []
@@ -384,7 +393,7 @@ export const buscarPorID = async (req: Request, res: Response) => {
             });
             
             if( p.id_cliente == e.id){
-                datos = [...datos,{orden:orden[m], cliente:cliente[i], direccion:direcciones}];
+                datos = [...datos,{orden:orden[m], cliente:cliente[i], direccion:direcciones || ""}];
             }
         })
     })

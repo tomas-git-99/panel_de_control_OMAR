@@ -263,3 +263,31 @@
     flex-direction: row;
     gap: 10px;
 }
+
+
+.opcionesDeLocal select{
+    outline: none;
+
+    
+    max-width:150px;
+}
+
+.opcionesDeLocal{
+    padding-left: 25px;
+    display: grid;
+  
+}
+
+
+.volver_Atras_buscar{
+    display: none;
+    visibility: hidden;
+    display: grid;
+    align-items: start;
+    cursor: pointer;
+}
+
+.search{
+    display: flex;
+    gap: 10px;
+}

@@ -76,27 +76,30 @@ export const buscarSoloPortaller = async (req: Request, res: Response)=> {
 
     const { id } = req.params;
 
-    const produccion_productos = await Produccion_producto.findAll({ where:{ id_taller: id } });
+    const produccion_productos = await Produccion_producto.findAndCountAll({ where:{ id_taller: id } });
 
     const taller = await Taller.findAll()
+
+    let contador = produccion_productos.count;
         
     let produccion:any = []
 
-         produccion_productos.map ( (e, i) =>{
+         produccion_productos.rows.map ( (e, i) =>{
              taller.map ( (p,m) => {
                  if(e.id_taller == p.id){
-                     produccion = [...produccion, {produccion:produccion_productos[i], taller:taller[m]}];
+                     produccion = [...produccion, {produccion:e, taller:taller[m]}];
                  }
     
              })
              if(e.id_taller === null){
     
-                 produccion = [...produccion, {produccion:produccion_productos[i]}];
+                 produccion = [...produccion, {produccion:e}];
              }
          })
 
     res.json({
         ok: true, 
+        contador,
         produccion
     })
 }

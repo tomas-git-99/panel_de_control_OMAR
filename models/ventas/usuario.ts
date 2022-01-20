@@ -12,6 +12,7 @@ export interface TodoAtributos {
     dni_cuil: number;
     rol: string;
     estado: boolean;
+    local: string;
 }
 
 
@@ -25,6 +26,7 @@ export class Usuario extends Model <TodoAtributos>{
     public dni_cuil!: number;
     public rol!: string;
     public estado!: boolean;
+    public local!: string;
 
 }
 
@@ -55,6 +57,9 @@ Usuario.init(
         },
         estado:{
             type:DataTypes.BOOLEAN
+        },
+        local:{
+            type:DataTypes.STRING
         }
         
     },{

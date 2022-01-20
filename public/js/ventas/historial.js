@@ -28,6 +28,7 @@ const imprimir_historial = document.querySelector(".imprimir_historial")
 
 const imprimirEnPantalla = (res) => {
 
+
     let result = ""
 
     res.map ( e => {
@@ -131,18 +132,28 @@ buscar_producto.addEventListener("keyup", ({keyCode}) => {
     buscar_producto.value = "";
 });
 
+const volver_Atras_buscar = document.querySelector(".volver_Atras_buscar");
+
 const getSearch = (valor) => {
     cargaMedio("spinner_load", true);
     
     fecthNormalGET("GET", `orden/historial/p/id?id=${valor}`)
     .then( res => {
     cargaMedio("spinner_load", false);
-
-        imprimirEnPantalla(res.datos)
+    volver_Atras_buscar.style.display = "grid";
+    volver_Atras_buscar.style.visibility = "visible";
+    imprimirEnPantalla(res.datos)
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+}
+
+
+window.volver_inicio = () => {
+    volver_Atras_buscar.style.display = "none";
+    volver_Atras_buscar.style.visibility = "hidden";
+    main_historial();
 }
 
 window.cerrar_seccion = () => {
@@ -190,4 +201,60 @@ window.eliminar_orden = (e) => {
               })
         }
       })
+}
+
+
+///HISTORIAL POR LOCALES
+
+
+const seleccion_locales = document.querySelector("#seleccion_locales");
+
+const localesFiltro = () => {
+
+    fecthNormalGET("GET","historial")
+      .then( res => {
+
+        opcionesDelocales(res.local)
+      })
+      .catch( err => {
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
+}
+
+
+const opcionesDelocales = (res) => {
+
+    let historial = "";
+
+    seleccion_locales.innerHTML = `<option value="0">Ordenar por local</option>`;
+    res.map ( e => {
+        historial = `
+        <option value="${e}">${e}</option>
+
+        `
+        seleccion_locales.innerHTML += historial
+    })
+
+
+}
+
+localesFiltro();
+
+window.cambioDeLocal = (e) => {
+
+    if(e.value == "0"){
+
+        return main_historial();
+    }
+
+    fecthNormalGET("GET",`historial/buscar/${e.value}?offset=0`)
+    .then( res => {
+
+        
+        imprimirEnPantalla(res.datos)
+    })
+    .catch( err => {
+        console.log(err)
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
 }

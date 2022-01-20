@@ -10,6 +10,10 @@ let token = localStorage.getItem('x-token');
 verificarToken(token);
 
 
+const local = document.querySelector(".local");
+const local_value = document.getElementById("local_value");
+
+
 form.addEventListener('submit', (e) => {
 
     e.preventDefault();
@@ -31,11 +35,22 @@ form.addEventListener('submit', (e) => {
         if(online_local_usuario == 0 || online_local_usuario == "0" || online_local_usuario == null || online_local_usuario == undefined){
     
             return algo_salio_mal("Porfavor eliga si esta cuenta se va usar para ventas online o por local")
+
+        }else if(online_local_usuario == "LOCAL"){
+            if(local_value.value == ""){
+
+                return algo_salio_mal("Porfavor eliga el local que va ser usado esta cuenta")
+            }
+
         }
     }
 
+
     forData["rol"] = value_rol;
     forData["venta"] = online_local_usuario;
+    forData["local"] = local_value.value;
+
+   
 
 
     fecthNormalPOST_PUT("POST", "usuario", forData)
@@ -61,26 +76,42 @@ form.addEventListener('submit', (e) => {
              algo_salio_mal(`Algo salio mal: ${ err }`);
  
          })
+
+
+         /* console.log(forData) */
  
  }) 
 
  
  const online_o_local = document.querySelector(".online_o_local");
  
+ 
  window.rol = (e) => {
     value_rol = e.value;
     if(e.value == "VENTAS"){
         online_o_local.style.display = "grid";
         online_o_local.style.visibility = "visible";
-        
+
+
     }else{
         online_local_usuario = "";
         online_o_local.style.display = "none";
         online_o_local.style.visibility = "hidden";
+
     }
 }
 window.online_local = (e) => {
     online_local_usuario = e.value
+
+    if( e.value == "ONLINE"){
+        local.style.display = "none";
+        local.style.visibility = "hidden";
+        local_value.value = "";
+
+    }else{
+        local.style.display = "grid";
+        local.style.visibility = "visible";
+    }
 }
 window.cerrar_seccion = () => {
     cerrar_login();

@@ -62,21 +62,23 @@ const buscarUnicTaller = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.buscarUnicTaller = buscarUnicTaller;
 const buscarSoloPortaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id } });
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll({ where: { id_taller: id } });
     const taller = yield talller_1.Taller.findAll();
+    let contador = produccion_productos.count;
     let produccion = [];
-    produccion_productos.map((e, i) => {
+    produccion_productos.rows.map((e, i) => {
         taller.map((p, m) => {
             if (e.id_taller == p.id) {
-                produccion = [...produccion, { produccion: produccion_productos[i], taller: taller[m] }];
+                produccion = [...produccion, { produccion: e, taller: taller[m] }];
             }
         });
         if (e.id_taller === null) {
-            produccion = [...produccion, { produccion: produccion_productos[i] }];
+            produccion = [...produccion, { produccion: e }];
         }
     });
     res.json({
         ok: true,
+        contador,
         produccion
     });
 });

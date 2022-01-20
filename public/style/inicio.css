@@ -177,6 +177,12 @@ li{
     display:none;
     visibility: hidden;
 }
+
+
+.local{
+    display:none;
+    visibility: hidden;
+}
 @media screen and (max-height: 720px){
 
     .hamburger{

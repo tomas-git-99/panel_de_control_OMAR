@@ -215,9 +215,9 @@ export const unicoDatoQuery = async (req: Request, res: Response) =>{
         if(query == "estado"){
             valor = false
         }
+        const { offset } = req.query;
     
-    
-        searchFunc(query, valor)
+        searchFunc(query, valor ,offset)
             .then( (produccion:any) => {
               
                 return res.json({

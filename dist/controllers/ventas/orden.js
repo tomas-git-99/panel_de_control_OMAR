@@ -238,7 +238,12 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.historialOrden = historialOrden;
 const buscarPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const orden = yield orden_1.Orden.findAll({ where: { id: req.query.id, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
+    const clienteDNI = yield cliente_1.Cliente.findAll({ where: { dni_cuil: req.query.id }, order: [['updatedAt', 'DESC']] });
+    let ids_clientesDNI = [];
+    clienteDNI.forEach(e => {
+        ids_clientesDNI.push(e.id);
+    });
+    const orden = yield orden_1.Orden.findAll({ where: { id_cliente: ids_clientesDNI, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
     let id_cliente = [];
     let id_direccion = [];
     orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
@@ -256,7 +261,7 @@ const buscarPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 }
             });
             if (p.id_cliente == e.id) {
-                datos = [...datos, { orden: orden[m], cliente: cliente[i], direccion: direcciones }];
+                datos = [...datos, { orden: orden[m], cliente: cliente[i], direccion: direcciones || "" }];
             }
         });
     });

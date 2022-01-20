@@ -11,6 +11,7 @@ import ventasProducto  from "../routers/ventas/producto"
 import ventasCarrito from "../routers/ventas/carrito"
 import ventasDireccion from  "../routers/ventas/direccion"
 import ventasTalle from  "../routers/ventas/talle"
+import ventasHistorial from  "../routers/ventas/historial"
 
 //PRODUCION
 
@@ -37,6 +38,7 @@ class ServerApp {
         carrito:  '/api/carrito',
         direccion:'/api/direccion',
         talle:    '/api/talle',
+        historial:    '/api/historial',
 
         //PRODUCCION
 
@@ -100,6 +102,7 @@ class ServerApp {
         this.app.use( this.apiPaths.carrito,  ventasCarrito)
         this.app.use( this.apiPaths.direccion,ventasDireccion)
         this.app.use( this.apiPaths.talle,    ventasTalle)
+        this.app.use( this.apiPaths.historial,    ventasHistorial)
 
         //PRODUCCION
         this.app.use( this.apiPaths.producto_producto, produccionProducto)
