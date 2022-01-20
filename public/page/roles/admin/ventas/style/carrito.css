@@ -99,11 +99,13 @@
 }
 
 .buscador{
-/*     display: grid;
-    visibility: visible;   */
-    display: none;
-    visibility: hidden;
+    display: grid;
+    visibility: visible;  
+  /*   display: none;
+    visibility: hidden; */
     background: white;
+  
+    height: auto;
 }
 
 .boton_solo_salir{
@@ -153,7 +155,7 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     visibility: hidden;
 
     display: grid;
-    visibility: visible;  */  
+    visibility: visible;    */
     
     display: flex;
     flex-direction: column;
@@ -161,7 +163,7 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     align-items: center;
 
     width: 500px;
-    height: 300px;
+    height: auto;
     background: #00B5EE;
 
     background: rgba( 255, 255, 255, 0.25 );
@@ -196,7 +198,6 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
 
     width: 90%;
     display: grid;
-
     justify-items: center;
 }
 
