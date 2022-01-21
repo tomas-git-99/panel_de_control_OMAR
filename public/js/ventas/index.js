@@ -14,7 +14,7 @@ const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : 'https://tiendamilena.com.ar/api/';
 
-let token = localStorage.getItem('x-token');
+//let token = localStorage.getItem('x-token');
 
 const rol = localStorage.getItem('roles');
 
@@ -22,7 +22,7 @@ usuarioPermisos( rol, "produccion");
 
 
     
-verificarToken(token);
+//verificarToken(token);
 
 
 const historialGet = () => {

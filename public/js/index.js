@@ -8,7 +8,7 @@ const form = document.querySelector("form");
 
 const verificar_Token = () => {
 
-    const token = localStorage.getItem('x-token');
+const token = localStorage.getItem('x-token');
 
     if(token){
         return window.location = "/page/roles/admin/ventas/index.html";

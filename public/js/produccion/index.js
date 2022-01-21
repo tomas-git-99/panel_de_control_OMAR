@@ -13,9 +13,9 @@ usuarioPermisos( rol, "ventas");
 
 let table_produccion = document.querySelector('.table_produccion');
 
-const token = localStorage.getItem('x-token');
+// const token = localStorage.getItem('x-token');
 
-verificarToken(token);
+// verificarToken(token);
 
 let numeroPaginas = null;
 
