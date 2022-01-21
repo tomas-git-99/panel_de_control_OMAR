@@ -59,6 +59,7 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const buscarProducto = req.query;
     const producto = yield producto_1.Producto.findAll({ where: {
             nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     res.json({
@@ -110,7 +111,9 @@ const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.quitarStock = quitarStock;
 const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const productos = yield producto_1.Producto.findAll({ where: { estado: true }, order: [['updatedAt', 'DESC']] });
+        const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true }, order: [['createdAt', 'DESC']] });
+        const contador = productos_rows.count;
+        const productos = productos_rows.rows;
         res.json({
             ok: true,
             productos
@@ -165,6 +168,7 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const query = req.query;
     const locales = yield producto_1.Producto.findAll({ where: {
             local: { [dist_1.Op.like]: '%' + query.local + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         } });
     res.json({
         ok: true,

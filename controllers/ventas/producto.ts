@@ -161,7 +161,9 @@ export const quitarStock = async (req: Request, res: Response) => {
 export const hitorialProductos = async (req: Request, res: Response) => {
     try {
         
-        const productos = await Producto.findAll({where:{estado:true},order: [['updatedAt', 'DESC']]});
+        const productos_rows = await Producto.findAndCountAll({where:{estado:true},order: [['createdAt', 'DESC']]});
+        const contador = productos_rows.count;
+        const productos = productos_rows.rows;
 
         res.json({
             ok: true,

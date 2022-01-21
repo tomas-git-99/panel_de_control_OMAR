@@ -473,7 +473,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
         
         const { idOrden } = req.params;
 
-        console.log(idOrden);
+        
         const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden:idOrden }});
 
         let ids:any = [];

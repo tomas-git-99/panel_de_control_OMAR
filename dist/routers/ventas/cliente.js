@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const cliente_1 = require("../../controllers/ventas/cliente");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 // BUSCAR CLIENTE
 router.get('/', cliente_1.buscarCliente);
 // CREAR NUEVO CLIENTE

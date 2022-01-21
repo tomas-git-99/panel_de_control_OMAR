@@ -7,6 +7,7 @@ import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
+
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "ventas");
 

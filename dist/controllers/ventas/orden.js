@@ -317,7 +317,6 @@ exports.generarOrdenPublico = generarOrdenPublico;
 const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idOrden } = req.params;
-        console.log(idOrden);
         const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: idOrden } });
         let ids = [];
         ordenDetalle.map((e) => {
