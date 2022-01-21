@@ -6,16 +6,16 @@ const form = document.querySelector("form");
 
 
 
-const verificar_Token = () => {
-
-const token = localStorage.getItem('x-token');
-
-    if(token){
-        return window.location = "/page/roles/admin/ventas/index.html";
-    }
-}
-
-verificar_Token();
+//const verificar_Token = () => {
+//
+//const token = localStorage.getItem('x-token');
+//
+//    if(token){
+//        return window.location = "/page/roles/admin/ventas/index.html";
+//    }
+//}
+//
+//verificar_Token();
 
 //FALTA CONFIGURAR LAS RUTAS PARA DIFERENTES ROLES
 export const PERMISOS = {
