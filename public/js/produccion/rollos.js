@@ -128,9 +128,9 @@ const imprimir_historial_view = (res) => {
 
         historial += `
         <tr id="${e.id}">
-        <td>${devolverString(e.cantidad)}</td>
-        <td>${devolverString(e.estanpado)}</td>
         <td>${devolverString(e.color)}</td>
+        <td>${devolverString(e.estanpado)}</td>
+        <td>${devolverString(e.cantidad)}</td>
 
         <td data-label= "AJUSTES"> 
         <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">

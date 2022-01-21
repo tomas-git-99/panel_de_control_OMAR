@@ -236,4 +236,16 @@
           }
     }
        
-    
+
+
+@media (max-height: 600px){
+    .bienvenido{
+
+        /* place-self: start; */
+        height: 100%;
+        width:100%;
+        
+    }
+   
+
+}
