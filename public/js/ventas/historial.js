@@ -5,6 +5,11 @@ import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.j
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
+
+
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "produccion");
 
 
 const main_historial = () => {

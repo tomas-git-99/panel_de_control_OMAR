@@ -29,7 +29,7 @@ const obtenerEstanpados = (req, res) => __awaiter(void 0, void 0, void 0, functi
         for (let i of estanpado) {
             let productoNew = producto.find(e => e.id_corte == i.id_corte);
             let estanpadorNew = estanpador.find(e => e.id == i.id_estanpador);
-            data = [...data, { producto: productoNew, estanpado: i, estanpador: estanpadorNew || "" }];
+            data = [...data, { producto: productoNew || "", estanpado: i, estanpador: estanpadorNew || "" }];
         }
         res.json({
             ok: true,

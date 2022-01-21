@@ -1,9 +1,11 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 
-
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "ventas");
 
 const table_produccion = document.querySelector(".table_produccion_estanpado");
 
@@ -31,6 +33,7 @@ main_historial()
 
 
 const imprimirHistorial = (e, color) => {
+
    
   /*   let historial = ""
     data.map ( e => {

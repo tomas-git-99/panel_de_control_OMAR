@@ -1,8 +1,12 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js"
 
+
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "ventas");
 
 const bienvenido_form = document.querySelector(".bienvenido_form");
 const form_taller = document.querySelector(".form_taller");

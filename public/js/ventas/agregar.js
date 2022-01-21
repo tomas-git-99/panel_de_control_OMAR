@@ -5,7 +5,10 @@ import { salio_todo_bien, algo_salio_mal, advertencia } from "../helpers/para_to
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { load_normal } from "../helpers/para_todos/carga_de_botones.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "produccion");
 
 
 const formProducto = document.querySelector(".formProducto");

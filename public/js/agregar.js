@@ -14,6 +14,7 @@ const local = document.querySelector(".local");
 const local_value = document.getElementById("local_value");
 
 
+
 form.addEventListener('submit', (e) => {
 
     e.preventDefault();

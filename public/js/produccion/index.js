@@ -5,8 +5,10 @@ import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
-
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "ventas");
 
 let table_produccion = document.querySelector('.table_produccion');
 
@@ -15,6 +17,7 @@ const token = localStorage.getItem('x-token');
 verificarToken(token);
 
 let numeroPaginas = null;
+
 const main_historial = (valor=0) => {
 
     cargaMedio("spinner_load", true);
@@ -43,7 +46,7 @@ const main_historial = (valor=0) => {
 }
 
 main_historial();
-/* paginacion(numeroPaginas); */
+
 
 const colorearTable = (res) => {
 

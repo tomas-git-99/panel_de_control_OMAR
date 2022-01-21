@@ -7,7 +7,10 @@ import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "produccion");
 
 
 

@@ -73,7 +73,7 @@ const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, functi
     /*  const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']], limit:10} ); */
     let valor = req.query.offset;
     let valorOffset = parseInt(valor);
-    const produccion_test = yield productos_produccion_1.Produccion_producto.findAndCountAll({ order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
+    const produccion_test = yield productos_produccion_1.Produccion_producto.findAndCountAll({ order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
     const taller = yield talller_1.Taller.findAll();
     let contador = produccion_test.count;
     let produccion = [];
@@ -192,7 +192,7 @@ exports.unicoDatoQuery = unicoDatoQuery;
 const searchFunc = (palabra, valor, numero = 0) => __awaiter(void 0, void 0, void 0, function* () {
     let valorOffset = parseInt(numero);
     let buscar = {
-        where: {}, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset
+        where: {}, order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset
     };
     buscar.where[`${palabra}`] = valor;
     const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll(buscar);

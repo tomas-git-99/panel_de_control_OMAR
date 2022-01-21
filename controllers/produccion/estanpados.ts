@@ -41,7 +41,7 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
         let productoNew = producto.find( e => e.id_corte == i.id_corte);
         let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
 
-        data = [...data, { producto:productoNew, estanpado:i, estanpador:estanpadorNew || ""}];
+        data = [...data, { producto:productoNew || "", estanpado:i, estanpador:estanpadorNew || ""}];
 
     }
 

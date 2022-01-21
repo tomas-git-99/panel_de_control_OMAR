@@ -19,9 +19,9 @@ verificar_Token();
 
 //FALTA CONFIGURAR LAS RUTAS PARA DIFERENTES ROLES
 export const PERMISOS = {
-    "ADMIN": () =>  window.location = "inicio.html",
-    "VENTAS": () =>  window.location = "/page/roles/usuario_ventas/index.html",
-    "PRODUCCION": () =>  window.location = "/page/roles/usuario_produccion/index.html"
+    "ADMIN": () =>  window.location = "/page/roles/admin/ventas/index.html",
+    "VENTAS": () =>  window.location = "/page/roles/admin/ventas/index.html",
+    "PRODUCCION": () =>  window.location = "/page/roles/admin/produccion/index.html"
 }
 
 
@@ -47,6 +47,8 @@ form.addEventListener('submit', (e) => {
             localStorage.setItem("id", res.usuario[0].id)
             localStorage.setItem("nombre", res.usuario[0].nombre);
 
+            localStorage.setItem("roles", res.usuario[0].rol);
+            
             PERMISOS[res.usuario[0].rol]
                 ? PERMISOS[res.usuario[0].rol]()
                 : advertencia("Este usuario no tiene ROL especifico")

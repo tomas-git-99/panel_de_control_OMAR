@@ -12,6 +12,7 @@ export const cerrar_login = () => {
       }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem("x-token");
+            localStorage.removeItem("roles");
             window.location.href = `${window.location.origin}/index.html`
         }
       })

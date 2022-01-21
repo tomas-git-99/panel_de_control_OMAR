@@ -4,6 +4,8 @@ import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { verificarToken } from "../helpers/para_todos/permisos.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
+
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 
@@ -14,7 +16,12 @@ const url = ( window.location.hostname.includes('localhost'))
 
 let token = localStorage.getItem('x-token');
 
-      
+const rol = localStorage.getItem('roles');
+
+usuarioPermisos( rol, "produccion");
+
+
+    
 verificarToken(token);
 
 

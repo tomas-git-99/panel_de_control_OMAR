@@ -1,10 +1,12 @@
 
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js"
 
 const imprimir_taller = document.querySelector(".imprimir_taller");
-
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "ventas");
 
 const main = () => {
 

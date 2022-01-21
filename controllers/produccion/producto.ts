@@ -98,7 +98,7 @@ export const obtenerProduccion = async (req: Request, res: Response) => {
 
     
 
-    const produccion_test = await Produccion_producto.findAndCountAll({order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
+    const produccion_test = await Produccion_producto.findAndCountAll({order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
 
     const taller = await Taller.findAll()
 
@@ -266,7 +266,7 @@ const searchFunc = async(palabra:any, valor: false | null | number, numero:numbe
     let buscar:any = {
         where: {
 
-        },order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset
+        },order: [['createdAt', 'DESC']], limit:10, offset:valorOffset
     }
 
     buscar.where[`${palabra}`] = valor;

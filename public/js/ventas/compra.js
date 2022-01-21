@@ -2,8 +2,11 @@ import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT} from "../helpers/ventas/fetch.js";
 
+const rol = localStorage.getItem('roles');
+usuarioPermisos( rol, "produccion");
 
 
 const cantidad    = document.querySelector(".cantidad");
