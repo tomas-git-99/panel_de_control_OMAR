@@ -719,7 +719,7 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
                             nombre_producto:dato_producto.nombre,
                             talle: n.talle, 
                             cantidad: n.cantidad,
-                            precio: dato_producto.precio
+                            precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                         }
 
                         let nuevaSuma = n.cantidad * dato_producto.precio;
