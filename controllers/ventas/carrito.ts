@@ -159,7 +159,7 @@ export const descontarPorUnidad = async(req: Request, res: Response) => {
         const productos = await Producto.findAll({where:{id:idProductos}});
         
 
-        let productos_sin_stock:any = []
+        let productos_sin_stock:any = [];
         
         let stockDisponible = talle.map( e => {
             carrito.map(p => {
