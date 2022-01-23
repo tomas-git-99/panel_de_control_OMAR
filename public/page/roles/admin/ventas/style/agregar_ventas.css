@@ -179,7 +179,12 @@ input[type=checkbox] {
     align-content: center;
     border: 1px solid red;
 }
+
+.cantidad{
   
+
+}
+
 @media (max-width: 767px){
     .bienvenido{
         width: 100%;

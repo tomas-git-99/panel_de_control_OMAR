@@ -21,6 +21,13 @@ const agregarTalle = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
              */
         const { cantidad, talle } = req.body;
         const talles_unidad = yield talles_1.Talle.findAll({ where: { id_producto: id } });
+        const producto = yield producto_1.Producto.findByPk(id);
+        if ((producto === null || producto === void 0 ? void 0 : producto.cantidad) !== null) {
+            return res.json({
+                ok: false,
+                msg: "Para poder separa por talles este producto tiene que VACIAR la cantidad total de este producto"
+            });
+        }
         let talle_repetido = talles_unidad.find(e => e.talle == talle ? true : false);
         if ((talle_repetido === null || talle_repetido === void 0 ? void 0 : talle_repetido.talle) == talle) {
             return res
@@ -30,7 +37,6 @@ const agregarTalle = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                 msg: "El talle que intento agregar, ya esta registrado con este producto "
             });
         }
-        const producto = yield producto_1.Producto.findByPk(id);
         if (!producto) {
             res.status(505).json({
                 ok: false,

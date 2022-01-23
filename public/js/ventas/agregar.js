@@ -7,9 +7,10 @@ import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
+
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "produccion");
-
+let cantidadComprobante = null;
 
 const formProducto = document.querySelector(".formProducto");
 const bienvenido = document.querySelector(".bienvenido");
@@ -46,29 +47,37 @@ formProducto.addEventListener("submit", (e) => {
 
 
 
-    fecthNormalPOST_PUT("POST", "producto" ,forData)
-        .then( (res) => {
-            if(res.ok == true) {
-                botonSI.id = res.producto.id;
+    if( cantidadComprobante == null){
+        return advertencia("Eliga una opcion en el apartado de 'Cantidad', para poder continuar")
+    }
 
-                load_normal(boton_guardar, false, "GUARDAR")
-                volverAtras(bienvenido, pregunta_ordenar_por_talle);
-            }else if (res.error == 10 || res.error == "10"){
-                localStorage.removeItem("x-token");
-                window.location.href = `${window.location.origin}/index.html`
-            }else{
-                load_normal(boton_guardar, false, "GUARDAR")
+     fecthNormalPOST_PUT("POST", "producto" ,forData)
+         .then( (res) => {
+             if(res.ok == true) {
+                 botonSI.id = res.producto.id;
+
+                 load_normal(boton_guardar, false, "GUARDAR")
+
+                 if( cantidadComprobante == true ){
+
+                     volverAtras(bienvenido, pregunta_ordenar_por_talle);
+                 }
+             }else if (res.error == 10 || res.error == "10"){
+                 localStorage.removeItem("x-token");
+                 window.location.href = `${window.location.origin}/index.html`
+             }else{
+                 load_normal(boton_guardar, false, "GUARDAR")
                   
 
                 advertencia(res.msg || res.errors[0].msg || res.errors[1].msg || res.errors[2].msg);
 
-            }
-        })
-        .catch(err => {
-            load_normal(boton_guardar, false, "GUARDAR")
+             }
+         })
+         .catch(err => {
+             load_normal(boton_guardar, false, "GUARDAR")
 
 
-            algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
+             algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
             
         })
 
@@ -130,4 +139,43 @@ window.style_menu = () => {
 window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
+}
+
+window.cambiarCantidad = (e) => {
+    const cantidad = document.querySelector(".cantidad");
+
+    if(e.value == 1 || e.value == "1"){
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "En la siguente ventana podra agregar la cantidad con su talle correspondiente",
+            showConfirmButton: true,
+            // timer: 2500
+          });
+
+          cantidadComprobante = true;
+
+    }else if(e.value == "0" || e.value == 0){
+        cantidadComprobante = null;
+    }else{
+        cantidadComprobante = false;
+        cantidad.innerHTML = ` 
+        <img src="/img/flecha.svg" alt="" onclick="volverAtras_cantidad()" srcset="" style="border: 1px solid; border-radius: 50%;  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; cursor: pointer; ">
+        <span>Cantida</span>
+        <input type="text"class="form-control" name="cantidad">`
+    }
+}
+
+window.volverAtras_cantidad = () => {
+    const cantidad = document.querySelector(".cantidad");
+
+    cantidad.innerHTML = ` <span>Cantidad</span>
+    <div class="opcionesDeTalles">
+        <select class="form-control form-control-sm" id="seleccion_talles" onchange="cambiarCantidad(this)">
+            <option value="0">¿Colocar total o por talle?</option>
+            <option value="1">Talle</option>
+            <option value="2">Total</option>
+            
+          </select>` 
+;
 }

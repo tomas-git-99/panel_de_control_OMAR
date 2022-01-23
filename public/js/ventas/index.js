@@ -8,6 +8,7 @@ import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/productos_ventas.js";
 
 
 const url = ( window.location.hostname.includes('localhost'))
@@ -24,12 +25,12 @@ usuarioPermisos( rol, "produccion");
     
 //verificarToken(token);
 
-
-const historialGet = () => {
+let numeroPaginas = null;
+const historialGet = (offset=0) => {
 
     cargaMedio("spinner_load", true);
 
-    fetch(url + "producto",{ 
+    fetch(url + "producto?offset="+offset,{ 
         method: "GET",
         headers: {'Content-Type': 'application/json'},
     })
@@ -38,6 +39,12 @@ const historialGet = () => {
 
         cargaMedio("spinner_load", false);
 
+        if(numeroPaginas == null || numeroPaginas == "null" ){
+
+            paginacion(res.contador)
+
+        }
+        numeroPaginas = res.contador;
         leerHistorial(res.productos);
     })
     .catch( err =>{
@@ -85,7 +92,7 @@ window.actualizar_salir = () => {
     previsualizar.style.display = "none";
     previsualizar.style.visibility = "hidden";
   
-    historialGet();
+    historialGet(recargaPaginaIgual);
 }
 
 window.salir = (id) => {
@@ -110,6 +117,7 @@ formulario_por_talle.addEventListener("submit", (e) => {
 window.previsualizar_producto = (id) => {
     fecthNormalGET("GET",`producto/${id}`)
     .then((res) => {
+        console.log(res)
         if(res.ok){
 
             ordenarPorTalle(res.talles);
@@ -130,33 +138,69 @@ window.previsualizar_producto = (id) => {
 
 const leerHistorial = (res) => {
     let historial = ""
-   
-    res.map( e => {
+    //devolverString(e.productos.cantidad)
+    for(let e of res) {
         historial += `
    
         <tr>
-          <td data-label="ARTICULO">${e.id}</td>
+          <td data-label="ARTICULO">${e.productos.id}</td>
 
-          <td data-label="MODELO">${devolverString(e.nombre)}</td>
-          <td data-label="DISEÑO">${devolverString(e.diseño)}</td>
-          <td data-label="STOCK">${devolverString(e.cantidad)}</td>
-          <td data-label="TALLES">${devolverString(e.talles)}</td>
-          <td data-label="TELA">${devolverString(e.tela)}</td>
-          <td data-label="LOCAL">${devolverString(e.local)}</td>
-          <td data-label="PRECIO">$${devolverString(e.precio)}</td>
+          <td data-label="MODELO">${devolverString(e.productos.nombre)}</td>
+          <td data-label="DISEÑO">${devolverString(e.productos.diseño)}</td>
+          <td data-label="STOCK">${e.talles.length > 0 ? conteoPorTalle(e.talles) : devolverString(e.productos.cantidad)}</td>
+          <td data-label="TALLES">
+          <div class="opcionesDeTalles">
+          <select class="form-control form-control-sm" id="seleccion_talles_${e.productos.id}">
+              <option value="0">${devolverString(e.productos.talles)}</option>
+              
+            </select>
+            </div>
+          </td>
+          <td data-label="TELA">${devolverString(e.productos.tela)}</td>
+          <td data-label="LOCAL">${devolverString(e.productos.local)}</td>
+          <td data-label="PRECIO">$${devolverString(e.productos.precio)}</td>
           <td>
-            <img id="${e.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="previsualizar_producto(this.id)"/>
+            <img id="${e.productos.id}"  class="img_previsualizar" src="https://img.icons8.com/pastel-glyph/64/000000/clipboard-preview.png" width="25px" onclick="previsualizar_producto(this.id)"/>
           </td>
         </tr>
 
    
         `;
-        
-    })
 
-    prueba.innerHTML = historial;
+        prueba.innerHTML = historial;
+
+    }
+    
+    imprimirTallesEnCadaProducto(res)
+    
+
 }
 
+
+// const conteoPorTalle = (res) => {
+//     let cantidadTotal = 0;
+    
+//     res.map((e) =>{
+//         cantidadTotal = e.cantidad  + cantidadTotal
+//     })
+
+//     return cantidadTotal;
+// };
+
+
+
+// function imprimirTallesEnCadaProducto (res){
+    
+//     res.map( e => {
+//         e.talles.map( i => { 
+
+//             document.getElementById(`seleccion_talles_${i.id_producto}`).innerHTML += `<option>Talle:${i.talle}, Stock:${i.cantidad}</option>`;
+
+//         })
+//     })
+
+
+// }
 
 
 //BUSCADOR
@@ -228,6 +272,8 @@ const ordenarProductoTable = (res) => {
 
     let result = ""
 
+   
+
     
 
         result += `
@@ -240,7 +286,7 @@ const ordenarProductoTable = (res) => {
             </tr>
 
             <tr>
-            <td>${devolverString(res.diseño)} : </td>
+            <td>Diseño: ${devolverString(res.diseño)} : </td>
             <td><input type="text" id="producto_diseño" name="diseño"></td>
             <td> 
                 <button  id="diseño_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
@@ -252,6 +298,7 @@ const ordenarProductoTable = (res) => {
             <td><input type="text" id="producto_cantidad" name="cantidad"></td>
             <td> 
                 <button  id="cantidad_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+                <button  id="cantidad_${res.id}" type="button"  class="btn btn-outline-danger btn-sm" onclick="vaciar_cantidad(this.id)">VACIAR</button>
             </td>
             </tr>
             <tr>
@@ -286,6 +333,19 @@ const ordenarProductoTable = (res) => {
 
 
 const talles_datos = document.querySelector(".talles_datos");
+
+
+window.vaciar_cantidad = (id) =>{
+
+    const palabras = id.split('_');
+    fecthNormalPOST_PUT("PUT",`producto/${palabras[1]}?vaciar=true`)
+        .then( res => {
+            salio_todo_bien("se cambio correctamente");
+        })
+        .catch(err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+}
 
 const ordenarPorTalle = (res) => {
     let result = ""
@@ -452,3 +512,80 @@ const nombre_usario = document.querySelector("#nombre_usario");
 
 
 nombre_usario.innerHTML =  nombre;
+
+
+
+
+
+
+const paginacion = (valor, query=undefined) => {
+
+    if(query !== undefined){
+        numeroPaginas = null;
+    }
+
+    let valorNumero = parseInt(valor);
+
+    const pagination = document.querySelector(".pagination");
+
+    let calcularPagina = valorNumero / 10;
+
+    let paginas = Math.ceil(calcularPagina);
+
+    let historial = ""
+
+    for (let i = 1; i <= paginas; i++) {
+        let valor = 0
+
+        if (i == 1){
+            historial += `
+            <li class="page-item active" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+
+            `
+        }else{
+            valor = i - 1;
+            historial += `
+            <li class="page-item" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+    
+            `
+        }
+
+    }
+
+    pagination.innerHTML = historial;
+
+
+}
+
+
+let recargaPaginaIgual
+
+window.pagina_id = (e) => {
+
+    const arrNombresFiltro = ["fecha_de_salida", "fecha_de_entrada", "fecha_de_pago", "id_taller"]
+
+    const cambiarSeleccion = document.getElementById(`${e}`);
+    const active = document.querySelector(`.active`);
+
+
+    let datos = e.split("-")
+
+    if(active.id == e){
+        return
+    }
+
+    cambiarSeleccion.className = "page-item active";
+    active.className = "";
+
+    if(datos[1] == 0){
+        recargaPaginaIgual = "0";
+        historialGet();
+      
+    }else{
+        
+        historialGet(datos[1]+"0") 
+        recargaPaginaIgual = datos[1]+"0";
+    }
+
+    
+}

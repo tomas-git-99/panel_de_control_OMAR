@@ -41,6 +41,10 @@ export const editarProducto = async (req: Request, res: Response) => {
 
         const producto = await Producto.findByPk(id);
 
+        const talles = await Talle.findAll({where:{ id_producto:id}});
+
+
+
         if (!producto){
             return res.status(404).json({
                 ok: false,
@@ -49,8 +53,26 @@ export const editarProducto = async (req: Request, res: Response) => {
             );
         }
 
+        let nombre = Object.keys(body);
 
-        await producto.update(body);
+        if( nombre[0] == "cantidad"){
+            
+            if( talles.length > 0 ){
+                return res.json({
+                    ok: false,
+                    msg:"Este producto ya esta separado por talle, si solo quieres usar el total tienes que ELIMINAR los talles de este producto"
+                })
+            }
+        }
+
+        if( req.query.vaciar == "true"){
+            await producto.update({cantidad:null!});
+
+        }else{
+            await producto.update(body);
+        }
+
+
 
         res.json({
             ok: true,
@@ -66,24 +88,41 @@ export const editarProducto = async (req: Request, res: Response) => {
     }
 }
 
+
 export const buscarProducto = async (req: Request, res: Response) => {
+
+
+    let valor:any = req.query.offset;
+
+    let valorOffset = parseInt(valor)
+
     
-
-    const buscarProducto = req.query;
-
-
-    
-    const producto = await Producto.findAll({ where:{ 
-
-        nombre:{ [Op.like]: '%'+ buscarProducto.nombre +'%'},
+    const productos_rows = await Producto.findAndCountAll({ where:{ 
+        estado:true,
+        nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
         // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
-    }} );
+    }, limit:10, offset:valorOffset} );
 
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
+
+    let contador = productos_rows.count;
+    let ids_productos:any = [];
+    productos_rows.rows.map( e => {
+        ids_productos.push(e.id);
+    });
+    const talles = await Talle.findAll({where:{id_producto:ids_productos}});
+
+    let productos:any = [];
+    productos_rows.rows.forEach( e =>{
+        let tallesNew = talles.filter( i => i.id_producto == e.id ?? i)
+        productos = [...productos, {productos:e, talles:tallesNew}]
+    })
     
     res.json({
         ok:true,
-        producto
+        contador,
+        productos
+
     })
 }
 
@@ -159,14 +198,42 @@ export const quitarStock = async (req: Request, res: Response) => {
 
 
 export const hitorialProductos = async (req: Request, res: Response) => {
+
+
     try {
+
+        let valor:any = req.query.offset;
+
+        let valorOffset = parseInt(valor)
         
-        const productos_rows = await Producto.findAndCountAll({where:{estado:true},order: [['createdAt', 'DESC']]});
+
+        const productos_rows = await Producto.findAndCountAll({where:{estado:true},order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
+
+        let ids_productos:any= [];
+
+        productos_rows.rows.map( e => {
+            ids_productos.push(e.id);
+        });
+
+        const talles = await Talle.findAll({where:{id_producto:ids_productos}});
+
+        let productos:any = [];
+
         const contador = productos_rows.count;
-        const productos = productos_rows.rows;
+        productos_rows.rows.map( e => {
+
+            let tallesNew = talles.filter( i => i.id_producto == e.id ?? i)
+            
+       
+
+            productos = [...productos, { productos:e , talles:tallesNew || '' }]
+                
+            
+        })
 
         res.json({
             ok: true,
+            contador,
             productos
         })
     } catch (error) {
@@ -220,9 +287,13 @@ export const soloLocales = async (req: Request, res: Response) => {
     locales.forEach((item)=>{
     	//pushes only unique element
         if(!result.includes(item.local)){
-    		result.push(item.local);
+            if(item.local.length > 0){
+                result.push(item.local);
+            }
     	}
     })
+
+
 
     
     
@@ -233,18 +304,36 @@ export const soloLocales = async (req: Request, res: Response) => {
 }
 
 export const buscarLocal = async (req: Request, res: Response) => {
-    const query:any = req.query;
 
-    const locales = await Producto.findAll({ where:{ 
+    let valor:any = req.query.offset;
 
-        local:{ [Op.like]: '%'+ query.local +'%'},
+    let valorOffset = parseInt(valor)
+
+    const productos_rows = await Producto.findAndCountAll({ where:{ 
+        estado:true,
+
+        local:{ [Op.like]: '%'+ req.query.local +'%'},
         // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
-    }} );
+    }, limit:10, offset:valorOffset} );
+
+    let contador = productos_rows.count;
+    let ids_productos:any = [];
+    productos_rows.rows.map( e => {
+        ids_productos.push(e.id);
+    });
+    const talles = await Talle.findAll({where:{id_producto:ids_productos}});
+
+    let productos:any = [];
+    productos_rows.rows.forEach( e =>{
+        let tallesNew = talles.filter( i => i.id_producto == e.id ?? i)
+        productos = [...productos, {productos:e, talles:tallesNew}]
+    })
 
 
     res.json({
         ok: true,
-        locales
+        contador,
+        productos,
     })
 }
 

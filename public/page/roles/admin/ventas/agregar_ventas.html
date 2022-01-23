@@ -87,14 +87,28 @@
                             <span>Diseño</span>
                             <input type="text" class="form-control" name="diseño">
                         </div>
+                        
                         <div class="local">
+    
                             <span>Local</span>
-                            <input type="text"class="form-control" name="local">
+                            <input type="text" class="form-control" name="local">
                         </div>
+               
+
                         <div class="cantidad">
                             <span>Cantidad</span>
-                            <input type="text"class="form-control" name="cantidad">
+                            <div class="opcionesDeTalles">
+                                <select class="form-control form-control-sm" id="seleccion_talles" onchange="cambiarCantidad(this)">
+                                    <option value="0">¿Colocar total o por talle?</option>
+                                    <option value="1">Talle</option>
+                                    <option value="2">Total</option>
+                                    
+                                  </select>
+
+                            </div>
+
                         </div>
+                        
                         <div class="talles">
                             <span>Talles</span>
                             <input type="text"class="form-control" name="talles">

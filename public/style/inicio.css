@@ -179,9 +179,14 @@ li{
 }
 
 
-.local{
-    display:none;
-    visibility: hidden;
+
+.paginacion{
+
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  
+  
 }
 @media screen and (max-height: 720px){
 

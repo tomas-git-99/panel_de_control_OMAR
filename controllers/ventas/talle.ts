@@ -18,6 +18,16 @@ export const agregarTalle = async (req: Request, res: Response, next: NextFuncti
 
 
         const talles_unidad = await Talle.findAll({where:{id_producto:id}});
+        const producto = await Producto.findByPk(id);
+
+        if(producto?.cantidad !== null){
+            return res.json({ 
+                ok: false,
+                msg:"Para poder separa por talles este producto tiene que VACIAR la cantidad total de este producto"
+            })
+        }
+
+        
 
         let talle_repetido = talles_unidad.find( e => e.talle == talle ? true : false );
 
@@ -32,7 +42,6 @@ export const agregarTalle = async (req: Request, res: Response, next: NextFuncti
         }
 
     
-        const producto = await Producto.findByPk(id);
 
         if(!producto){
             res.status(505).json({

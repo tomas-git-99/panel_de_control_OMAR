@@ -46,6 +46,8 @@
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
     /* overflow-y: scroll; */
+
+    z-index: 200;
     
 }
 
@@ -213,7 +215,9 @@ table {
     text-align: center;
   }
 
-
+.opcionesDeTalles select{
+    text-align: center;
+}
   @media (max-height: 650px){
     .previsualizar{
         height: 400px;

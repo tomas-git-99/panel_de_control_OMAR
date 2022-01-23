@@ -35,13 +35,28 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const { id } = req.params;
         const { body } = req;
         const producto = yield producto_1.Producto.findByPk(id);
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
         if (!producto) {
             return res.status(404).json({
                 ok: false,
                 msg: `El usuario con el id ${id} no existe`
             });
         }
-        yield producto.update(body);
+        let nombre = Object.keys(body);
+        if (nombre[0] == "cantidad") {
+            if (talles.length > 0) {
+                return res.json({
+                    ok: false,
+                    msg: "Este producto ya esta separado por talle, si solo quieres usar el total tienes que ELIMINAR los talles de este producto"
+                });
+            }
+        }
+        if (req.query.vaciar == "true") {
+            yield producto.update({ cantidad: null });
+        }
+        else {
+            yield producto.update(body);
+        }
         res.json({
             ok: true,
             producto
@@ -56,14 +71,29 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.editarProducto = editarProducto;
 const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const buscarProducto = req.query;
-    const producto = yield producto_1.Producto.findAll({ where: {
-            nombre: { [dist_1.Op.like]: '%' + buscarProducto.nombre + '%' },
-        } });
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
+            estado: true,
+            nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        }, limit: 10, offset: valorOffset });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
+    let contador = productos_rows.count;
+    let ids_productos = [];
+    productos_rows.rows.map(e => {
+        ids_productos.push(e.id);
+    });
+    const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos } });
+    let productos = [];
+    productos_rows.rows.forEach(e => {
+        let tallesNew = talles.filter(i => { var _a; return (_a = i.id_producto == e.id) !== null && _a !== void 0 ? _a : i; });
+        productos = [...productos, { productos: e, talles: tallesNew }];
+    });
     res.json({
         ok: true,
-        producto
+        contador,
+        productos
     });
 });
 exports.buscarProducto = buscarProducto;
@@ -110,11 +140,23 @@ const quitarStock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.quitarStock = quitarStock;
 const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true }, order: [['createdAt', 'DESC']] });
+        let valor = req.query.offset;
+        let valorOffset = parseInt(valor);
+        const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true }, order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
+        let ids_productos = [];
+        productos_rows.rows.map(e => {
+            ids_productos.push(e.id);
+        });
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos } });
+        let productos = [];
         const contador = productos_rows.count;
-        const productos = productos_rows.rows;
+        productos_rows.rows.map(e => {
+            let tallesNew = talles.filter(i => { var _a; return (_a = i.id_producto == e.id) !== null && _a !== void 0 ? _a : i; });
+            productos = [...productos, { productos: e, talles: tallesNew || '' }];
+        });
         res.json({
             ok: true,
+            contador,
             productos
         });
     }
@@ -154,7 +196,9 @@ const soloLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     locales.forEach((item) => {
         //pushes only unique element
         if (!result.includes(item.local)) {
-            result.push(item.local);
+            if (item.local.length > 0) {
+                result.push(item.local);
+            }
         }
     });
     res.json({
@@ -164,13 +208,28 @@ const soloLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.soloLocales = soloLocales;
 const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = req.query;
-    const locales = yield producto_1.Producto.findAll({ where: {
-            local: { [dist_1.Op.like]: '%' + query.local + '%' },
-        } });
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
+            estado: true,
+            local: { [dist_1.Op.like]: '%' + req.query.local + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        }, limit: 10, offset: valorOffset });
+    let contador = productos_rows.count;
+    let ids_productos = [];
+    productos_rows.rows.map(e => {
+        ids_productos.push(e.id);
+    });
+    const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos } });
+    let productos = [];
+    productos_rows.rows.forEach(e => {
+        let tallesNew = talles.filter(i => { var _a; return (_a = i.id_producto == e.id) !== null && _a !== void 0 ? _a : i; });
+        productos = [...productos, { productos: e, talles: tallesNew }];
+    });
     res.json({
         ok: true,
-        locales
+        contador,
+        productos,
     });
 });
 exports.buscarLocal = buscarLocal;
