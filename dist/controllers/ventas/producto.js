@@ -79,7 +79,6 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     let contador = productos_rows.count;
@@ -216,7 +215,6 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             local: { [dist_1.Op.like]: '%' + req.query.local + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     let contador = productos_rows.count;
     let ids_productos = [];
