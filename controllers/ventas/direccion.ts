@@ -33,8 +33,16 @@ export const obtenerDireccion = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        const direccion = await Direccion.findAll({where: { id_cliente:id}});
-    
+        const direccion_ = await Direccion.findAll({where: { id_cliente:id}});
+
+
+    let direccion:any =[]
+    direccion_.map( e =>{
+
+        if(e.direccion.length > 0){
+            direccion.push(e)
+        }
+    })
     
         res.json({
             ok: true,

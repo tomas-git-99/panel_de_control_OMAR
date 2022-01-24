@@ -325,11 +325,36 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             ids.push(e.id_producto);
         });
         const productos = yield producto_1.Producto.findAll({ where: { id: ids } });
+        let ids_productos_total = [];
+        let ids_productos_unidad = [];
+        for (let i of productos) {
+            if (i.cantidad == null) {
+                ids_productos_unidad.push(i.id);
+            }
+            else {
+                ids_productos_total.push(i);
+            }
+        }
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
+        for (let i of talles) {
+            for (let e of ordenDetalle) {
+                if (i.id_producto == e.id_producto) {
+                    if (i.talle == e.talle) {
+                        let nuevoStock = e.cantidad + i.cantidad;
+                        yield i.update({ cantidad: nuevoStock });
+                        yield e.destroy();
+                    }
+                }
+            }
+        }
         for (let i of ordenDetalle) {
-            for (let e of productos) {
-                if (e.id == i.id_producto) {
-                    let nuevoStock = e.cantidad + i.cantidad;
-                    yield e.update({ cantidad: nuevoStock });
+            let valor = ids_productos_total.filter((h) => h.id == i.id_producto);
+            let valor_true = ids_productos_total.some((h) => h.id == i.id_producto);
+            if (valor_true) {
+                let producto = productos.filter(e => e.id == valor[0].id);
+                if (producto.length > 0) {
+                    let nuevoStock = producto[0].cantidad + i.cantidad;
+                    yield producto[0].update({ cantidad: nuevoStock });
                     yield i.destroy();
                 }
             }

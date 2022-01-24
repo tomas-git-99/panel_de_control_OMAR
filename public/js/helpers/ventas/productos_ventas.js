@@ -7,8 +7,9 @@ export const conteoPorTalle = (res) => {
     let cantidadTotal = 0;
     
     res.map((e) =>{
-        cantidadTotal = e.cantidad  + cantidadTotal
-    })
+        
+        cantidadTotal += e.cantidad
+    });
 
     return cantidadTotal;
 };
@@ -20,7 +21,7 @@ export const imprimirTallesEnCadaProducto = (res) => {
     res.map( e => {
         e.talles.map( i => { 
 
-            document.getElementById(`seleccion_talles_${i.id_producto}`).innerHTML += `<option>Talle:${i.talle}, Stock:${i.cantidad}</option>`;
+            document.getElementById(`seleccion_talles_${i.id_producto}`).innerHTML += `<option value="${i.talle}">Talle:${i.talle}, Stock:${i.cantidad}</option>`;
 
         })
     })

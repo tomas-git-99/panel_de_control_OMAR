@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarCarrito, descontarElTotal, descontarPorUnidad, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito } from "../../controllers/ventas/carrito";
+import { agregarCarrito, descontarElTotal, descontarPorUnidad, descontarProductosFull, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito } from "../../controllers/ventas/carrito";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -37,6 +37,9 @@ router.put("/:id/:id_orden", descontarPorUnidad)
 /////////////// QUITAR STOCK EN EL TOTAL DEL PRODUCTO ////////////////////
 
 router.put("/total/:id/:id_orden", descontarElTotal)
+
+
+router.put("/confirmar/compra/:id/:id_orden", descontarProductosFull)
 
 
 export default router;

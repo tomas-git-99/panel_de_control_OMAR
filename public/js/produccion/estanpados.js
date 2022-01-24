@@ -351,7 +351,7 @@ const imprimir_html_datos = (res) => {
         <tr>
         <td><span>ID : </span>${devolverString(res.producto.id_corte)}</td>
         <td><span>NOMBRE : </span>${devolverString(res.producto.nombre)}</td>
-        <td><span>ESTANPADOR : </span>${devolverString(res.estanpador.nombre)}</td>
+        <td><span>ESTAMPADOR : </span>${devolverString(res.estanpador.nombre)}</td>
     </tr>
 
     <tr>

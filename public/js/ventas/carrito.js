@@ -3,7 +3,7 @@ import { agregarAlFormularioCliente, limpiarForm } from "../helpers/ventas/agreg
 import { selecciconCambios_direccion } from "../helpers/ventas/seleccicon_cambios_direccion.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { fecthNormalGET, fecthNormalGET_QUERY, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
-import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { advertencia, algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
@@ -389,24 +389,26 @@ formCliente.addEventListener("submit", async(e) =>{
 const quitar_total_o_individual = document.querySelector(".quitar_total_o_individual");
 
 const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
+
     
     fecthNormalPOST_PUT("POST", `orden/${id_cliente}/${id_usuario}/${id_direccion}`, data)
         .then( res => {
             if(res.ok){
 
                 // ACA COLOCAMOS QUE SE ABRA LA SIGUENTE VENTANA PARA DESCONTAR DEL TOTAL O POR TALLE
-                volverAtras(cartelCliente, quitar_total_o_individual)
-                descontar_total_id.id = res.orden.id;
-                descontar_talle_id.id = res.orden.id;
+                //volverAtras(cartelCliente, quitar_total_o_individual)
+                //descontar_total_id.id = res.orden.id;
+                //descontar_talle_id.id = res.orden.id;
+                descontarTotalOporTalle(id_usuario, res.orden.id);
             }else if (res.error == 10 || res.error == "10"){
                 localStorage.removeItem("x-token");
                 window.location.href = `${window.location.origin}/index.html`
             }else{
-            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ res.msg}`)
-
+                advertencia(`Verifique si lleno bien los campos del formulario...`)
             }
         })
         .catch( err => {
+            
             algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err }`)
         })
                   
@@ -650,10 +652,12 @@ venta_publico_form.addEventListener("submit", async(e) => {
         
             if(res.ok == true){
 
-                volverAtras(venta_publico, quitar_total_o_individual)
+/*                 volverAtras(venta_publico, quitar_total_o_individual)
                 descontar_total_id.id = res.orden.id;
                 descontar_talle_id.id = res.orden.id;
-                ventaPublico = true;
+                ventaPublico = true; */
+
+                descontarTotalOporTalle(id_usuario, res.orden.id)
 
             }else{
                 algo_salio_mal(`Algo salio mal: ${ res }`);
@@ -691,4 +695,58 @@ window.style_menu = () => {
 window.style_menu_salir = () => {
     menu.style.left = "-300px"
     menu.style.transition = ".5s all"
+}
+
+
+
+
+
+/// DESCONTAR EL TOTAL SOLO CON UNA FUNCION
+
+
+
+function descontarTotalOporTalle (id_usuario, id_orden) {
+
+
+
+    fecthNormalPOST_PUT("PUT", `carrito/confirmar/compra/${id_usuario}/${id_orden}`)
+        .then( res => {
+            if(res.ok == true){
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                  }) 
+
+                aca_id_orden.id= id_orden;
+                aca_id_orden_para_mi.id = id_orden;
+                localStorage.removeItem("id_orden");
+
+                //localStorage.setItem('id_orden', id_orden);
+
+                volverAtras(cartelCliente, comprobante);
+                volverAtras(venta_publico, comprobante);
+
+            }else if(res.error == 2 || res.error == "2"){
+                advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
+                volverAtras( cartelCliente, bienvenido);
+                volverAtras(venta_publico, bienvenido);
+            }else{
+            
+                algo_salio_mal(`Algo salio mal`);
+                volverAtras( cartelCliente, bienvenido)
+                volverAtras(venta_publico, bienvenido);
+
+            }
+        }
+        )
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`);
+            volverAtras( cartelCliente, bienvenido)
+            volverAtras(venta_publico, bienvenido);
+
+        })
+
 }

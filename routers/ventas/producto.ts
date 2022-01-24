@@ -17,7 +17,6 @@ const router = Router();
 router.post('/',[
     validarJWT,
     check('nombre', 'El nombre es obligatorio' ).not().isEmpty(),
-    check('cantidad', 'Coloque la cantidad' ).not().isEmpty(),
     check('precio', 'Es obligatorio el precio' ).not().isEmpty(),
     validarCampos,
 ] ,crearProducto)

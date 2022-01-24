@@ -11,6 +11,7 @@ import { devolverString } from "../helpers/para_todos/null.js";
 import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/productos_ventas.js";
 
 
+
 const url = ( window.location.hostname.includes('localhost'))
       ? 'http://localhost:8000/api/'
       : 'https://tiendamilena.com.ar/api/';
@@ -18,6 +19,7 @@ const url = ( window.location.hostname.includes('localhost'))
 //let token = localStorage.getItem('x-token');
 
 const rol = localStorage.getItem('roles');
+let valorGuardado 
 
 usuarioPermisos( rol, "produccion");
 
@@ -117,11 +119,11 @@ formulario_por_talle.addEventListener("submit", (e) => {
 window.previsualizar_producto = (id) => {
     fecthNormalGET("GET",`producto/${id}`)
     .then((res) => {
-        console.log(res)
+      
         if(res.ok){
 
             ordenarPorTalle(res.talles);
-            ordenarProductoTable(res.producto);
+            ordenarProductoTable(res.producto, res.talles);
             producto_id.id = id;
             id_elimanar_producto.id = id;
 
@@ -139,6 +141,7 @@ window.previsualizar_producto = (id) => {
 const leerHistorial = (res) => {
     let historial = ""
     //devolverString(e.productos.cantidad)
+
     for(let e of res) {
         historial += `
    
@@ -208,6 +211,7 @@ const leerHistorial = (res) => {
 const search = document.querySelector("#search");
 
 search.addEventListener("keyup", ({keyCode}) => {
+    numeroPaginas = null;
 
     if( keyCode !== 13){return;}
     if(search.length === 0){return;}
@@ -217,20 +221,25 @@ search.addEventListener("keyup", ({keyCode}) => {
 });
 
 
-const getSearch = (valor) => {
+const getSearch = (valor, offset=0) => {
 
     
     cargaMedio("spinner_load", true);
 
-    fetch(url + "producto/search?" + `nombre=${valor}`,{ 
+    fetch(url + "producto/search?" + `nombre=${valor}&offset=${offset}`,{ 
         method: "GET",
         headers: {'Content-Type': 'application/json'},
     })
     .then(response => response.json())
     .then(res => {
-    cargaMedio("spinner_load", false);
+        cargaMedio("spinner_load", false);
 
-        leerHistorial(res.producto);
+        if(numeroPaginas == null || numeroPaginas == "null" ){
+            paginacion(res.contador, "buscador")
+        }
+        numeroPaginas = res.contador;
+        valorGuardado = valor;
+        leerHistorial(res.productos);
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -268,7 +277,9 @@ const talle_por_ID = (res) => {
 const datos_producto_table = document.querySelector(".datos_producto_table");
 
 
-const ordenarProductoTable = (res) => {
+const ordenarProductoTable = (res, talles) => {
+
+  
 
     let result = ""
 
@@ -294,7 +305,7 @@ const ordenarProductoTable = (res) => {
             </tr>
 
             <tr>
-            <td>Cantidad Total: (${devolverString(res.cantidad)}) : </td>
+            <td>Cantidad Total: (${res.cantidad == null ? conteoPorTalle(talles) : res.cantidad}) : </td>
             <td><input type="text" id="producto_cantidad" name="cantidad"></td>
             <td> 
                 <button  id="cantidad_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
@@ -338,8 +349,13 @@ const talles_datos = document.querySelector(".talles_datos");
 window.vaciar_cantidad = (id) =>{
 
     const palabras = id.split('_');
-    fecthNormalPOST_PUT("PUT",`producto/${palabras[1]}?vaciar=true`)
+
+    const data = {
+        cantidad: null
+    }
+    fecthNormalPOST_PUT("PUT",`producto/${palabras[1]}?vaciar=true`, data)
         .then( res => {
+        
             salio_todo_bien("se cambio correctamente");
         })
         .catch(err => {
@@ -354,7 +370,7 @@ const ordenarPorTalle = (res) => {
         <div class="datos_talle" id="datos_talle_${e.id}">
         <label for="">Talle : <span class="label_talle">${e.talle}</span> <span class="label_stock_${e.id}">(${e.cantidad})</span></label>
 
-        <input type="number" name="talle_${e.id}" id="talle_${e.id}" >
+        <input type="number" name="talle_${e.id}" id="talle_unico_${e.id}" >
         <button  type="button"  class="btn btn-outline-primary  btn-sm" id="${e.id}" onclick="agregar_talle(this.id)">AGREGAR</button>
         <button  type="button"  class="btn btn-outline-warning  btn-sm" id="${e.id}" onclick="restar_talle(this.id)">RESTAR </button>
         <button  type="button" class="btn btn-outline-danger  btn-sm"   id="${e.id}" onclick="eliminar_talle(this.id)">ELIMINAR</button>
@@ -386,27 +402,32 @@ window.cambiar_dato = (id) => {
 
     botonLoad.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     <span class="sr-only"></span>`
-    
+
+    botonLoad.className = "btn btn-outline-success"
+    botonLoad.innerHTML = `OK`
+    input.value = "";
+
     fecthNormalPOST_PUT("PUT",`producto/${palabras[1]}`, dato )
     .then(res => {
         
         if(res.ok) {
-            botonLoad.className = "btn btn-outline-success"
-            botonLoad.innerHTML = `OK`
-            input.value = "";
-
-            setTimeout(function(){
+   
+            
             botonLoad.className = "btn btn-outline-primary  btn-sm"
             botonLoad.innerHTML = `CAMBIAR`
-                
-            }, 1000);
+        
             
         }else {
-            algo_salio_mal(`Algo salio mal`)
+            botonLoad.className = "btn btn-outline-primary  btn-sm"
+            botonLoad.innerHTML = `CAMBIAR`
+            algo_salio_mal(res.msg)
         }
 
     })
     .catch( err =>{
+ 
+        botonLoad.className = "btn btn-outline-primary  btn-sm"
+        botonLoad.innerHTML = `CAMBIAR`
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 }
@@ -442,16 +463,19 @@ window.eliminar_talle = (id) => {
 
 const cambiar_stock_talle = (id, suma_resta) => {
 
-    let input = document.getElementById(`talle_${id}`);
+    let input = document.getElementById(`talle_unico_${id}`);
 
     let cambiarStock = document.querySelector(`.label_stock_${id}`);
 
     const forData = {
         cantidad: input.value
     }
+
+
     fecthNormalPOST_PUT("PUT", `talle/${suma_resta}/${id}`, forData)
         .then(res => {
             if(res.ok) {
+                
                 cambiarStock.innerHTML = `(${res.talle.cantidad})`;
                 salio_todo_bien(`Se quito correctamente la cantidad de: ${ input.value }`);
                 input.value = "";
@@ -576,6 +600,17 @@ window.pagina_id = (e) => {
 
     cambiarSeleccion.className = "page-item active";
     active.className = "";
+
+
+    if(datos[2] == "buscador"){
+
+        if(datos[1] == 0){
+          return getSearch(valorGuardado)
+        }else{
+    
+          return getSearch(valorGuardado, datos[1]+"0")
+        }
+      }
 
     if(datos[1] == 0){
         recargaPaginaIgual = "0";

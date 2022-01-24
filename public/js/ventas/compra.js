@@ -1,4 +1,4 @@
-import { algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { devolverString } from "../helpers/para_todos/null.js";
@@ -8,6 +8,8 @@ import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/
 
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "produccion");
+
+
 
 
 const cantidad    = document.querySelector(".cantidad");
@@ -50,7 +52,6 @@ window.boton_agregar = (event) => {
  cantidad.style.visibility = "visible";
  aca_viene_id_producto.id = event;
 
-
 }
 const boton_para_cargar = document.querySelector(".boton_para_cargar");
 
@@ -68,6 +69,23 @@ window.enviar_datos_producto = (id) => {
   if(checkAgregar.checked){
     data["talle"] = talle_unico.value;
     
+  }
+
+
+  if(document.querySelector(`#seleccion_talles_${id}`).length > 1){
+
+ 
+    if(data.talle == undefined){
+      load_normal(boton_para_cargar, false, "Agregar")
+
+      return advertencia("Seleccione el talle para este producto")
+    }
+  }
+
+  if(cantidad_unica.value.length <= 0 || cantidad_unica.value == 0 || cantidad_unica.value == "0"){
+    load_normal(boton_para_cargar, false, "Agregar")
+
+    return advertencia("Se te olvido colocar la cantidad / Nose acepta el valor 0")
   }
 
   
@@ -143,7 +161,10 @@ const leerHistorial = (res) => {
     })
     tablaCompra.innerHTML = historial;
 
-    imprimirTallesEnCadaProducto(res)
+    imprimirTallesEnCadaProducto(res);
+
+
+
 
 }
 
@@ -190,14 +211,7 @@ search.addEventListener("keyup", ({keyCode}) => {
     if(search.length === 0){return;}
 
     numeroPaginas = null;
-    buscador(search.value)
-    // fecthNormalGET_QUERY("GET", `producto/search`, "?nombre=", search.value)
-    //         .then(res => {
-    //           leerHistorial(res.producto)
-    //         })
-    //         .catch( err =>{
-    //           algo_salio_mal(`Algo salio mal: ${ err }`)
-    //       })
+    buscador(search.value);
     search.value = "";
 });
 
@@ -414,3 +428,6 @@ window.pagina_id = (e) => {
 
   
 }
+
+
+

@@ -17,21 +17,21 @@ const bienvenido = document.querySelector(".bienvenido");
 
 const pregunta_ordenar_por_talle = document.querySelector(".pregunta_ordenar_por_talle");
 const ordenar_por_talle = document.querySelector(".ordenar_por_talle");
-const aca_viene_id_producto = document.getElementById("aca_viene_id_producto")
+const aca_viene_id_producto = document.querySelector(".aca_viene_id_producto")
 const botonSI = document.getElementById("botonSI");
 
 
 
-window.entrar = (id) => {
+/* window.entrar = (id) => {
     aca_viene_id_producto.id = id;
     volverAtras(pregunta_ordenar_por_talle, ordenar_por_talle);
-}
+} */
+
 window.salir = () => {
     
     window.location = "index.html";
 
 }
-
 
 const boton_guardar = document.querySelector(".boton_guardar")
 formProducto.addEventListener("submit", (e) => {
@@ -54,14 +54,24 @@ formProducto.addEventListener("submit", (e) => {
      fecthNormalPOST_PUT("POST", "producto" ,forData)
          .then( (res) => {
              if(res.ok == true) {
-                 botonSI.id = res.producto.id;
+                /*  botonSI.id = res.producto.id; */
+
+                 aca_viene_id_producto.id = res.producto.id
 
                  load_normal(boton_guardar, false, "GUARDAR")
 
+                 for(let el of formProducto.elements){
+                    if(el.name.length > 0)
+                        el.value = "";
+                    } 
+
+                salio_todo_bien("Producto agregado con exito");
+
                  if( cantidadComprobante == true ){
 
-                     volverAtras(bienvenido, pregunta_ordenar_por_talle);
+                     volverAtras(bienvenido, ordenar_por_talle);
                  }
+
              }else if (res.error == 10 || res.error == "10"){
                  localStorage.removeItem("x-token");
                  window.location.href = `${window.location.origin}/index.html`
@@ -75,7 +85,7 @@ formProducto.addEventListener("submit", (e) => {
          })
          .catch(err => {
              load_normal(boton_guardar, false, "GUARDAR")
-
+             console.log(err)
 
              algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
             

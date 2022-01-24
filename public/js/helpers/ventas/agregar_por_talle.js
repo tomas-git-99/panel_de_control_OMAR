@@ -29,11 +29,17 @@ export const agregarPorTalle = (id_producto, forData, carga) =>{
                 if(res.error == 2){
                     document.querySelector(`.${carga}`).innerHTML = "Agregar"
                     return advertencia(res.msg);
+                }else{
+
+                    document.querySelector(`.${carga}`).innerHTML = "Agregar"
+                    return algo_salio_mal(res.msg);
                 }
-                return algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
+            
             }
         })
         .catch(err => {
+            console.log(err)
+            document.querySelector(`.${carga}`).innerHTML = "Agregar"
 
              algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
 

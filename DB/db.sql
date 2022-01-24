@@ -262,3 +262,6 @@ CREATE TABLE rollos(
     FOREIGN KEY fk_id_rollo (id_rollo)
     REFERENCES rollo (id)
 );
+
+
+ALTER TABLE producto CHANGE cantidad cantidad INT;

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
+exports.descontarProductosFull = exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const dist_1 = require("sequelize/dist");
 const carrito_1 = require("../../models/ventas/carrito");
 const orden_1 = require("../../models/ventas/orden");
@@ -30,7 +30,7 @@ const agregarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 });
             }
         }
-        if (req.body.talle == null || req.body.talle === undefined) {
+        if (req.body.talle == null || req.body.talle == undefined) {
             for (let e of verificar) {
                 if (e.talle == null) {
                     let nuevaCantidad = cantidadBody + e.cantidad;
@@ -277,4 +277,167 @@ const mostrarCantidad_Actual_Carrito = (req, res) => __awaiter(void 0, void 0, v
     });
 });
 exports.mostrarCantidad_Actual_Carrito = mostrarCantidad_Actual_Carrito;
+const descontarProductosFull = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        //RECIVIMOS EL ID DEL USUARIO PARA DESCONTAR
+        const { id, id_orden } = req.params;
+        const carrito = yield carrito_1.Carrito.findAll({ where: { id_usuario: id } });
+        let ids_productos = [];
+        let sumaTotal = 0;
+        carrito.map(e => {
+            ids_productos.push(e.id_producto);
+        });
+        const productos = yield producto_1.Producto.findAll({ where: { id: ids_productos } });
+        //VERIFICAMOS SI EL PRODUCTO ES PARA DESCONTAR POR TALLE O EL TOTAL
+        let ids_productos_total = [];
+        let ids_productos_unidad = [];
+        for (let i of productos) {
+            if (i.cantidad == null) {
+                ids_productos_unidad.push(i.id);
+            }
+            else {
+                ids_productos_total.push(i);
+            }
+        }
+        /*         console.log(ids_productos_total);
+                console.log(ids_productos_unidad);
+        
+        
+                let valor = ids_productos_total.some((h:any) => h == 2);
+        
+                console.log(valor);
+         */
+        // VERIFICAR SI TIENE STOCK SUFICIENTE EN LA BASE DE DATOSAAA
+        let productos_sin_stock = [];
+        const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
+        talles.map(e => {
+            carrito.map(p => {
+                if (p.id_producto == e.id_producto) {
+                    if (p.talle == e.talle) {
+                        if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                            //let nombre_producto:any = productos.map( n => n.id == e.id_producto ?? n);
+                            let dato_producto = productos.find(e => e.id == p.id_producto);
+                            productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                        }
+                    }
+                }
+            });
+        });
+        let verificar_si_estaRepetido = [];
+        carrito.map(e => {
+            ids_productos_total.map((i) => {
+                if (e.id_producto == i.id) {
+                    verificar_si_estaRepetido = [...verificar_si_estaRepetido, { id_producto: e.id_producto, cantidad: e.cantidad }];
+                }
+            });
+        });
+        //VERIFICAR SI EN EL CARRIO AHI PRODUCTOS DUPLICADOS PARA LOS PRODUCTOS QUE NO ESTAN ACOMODADOS POR TALLE
+        const miCarritoSinDuplicados = verificar_si_estaRepetido.reduce((acumulador, valorActual) => {
+            const elementoYaExiste = acumulador.find((elemento) => elemento.id_producto === valorActual.id_producto);
+            if (elementoYaExiste) {
+                return acumulador.map((elemento) => {
+                    if (elemento.id_producto === valorActual.id_producto) {
+                        return Object.assign(Object.assign({}, elemento), { cantidad: elemento.cantidad + valorActual.cantidad });
+                    }
+                    return elemento;
+                });
+            }
+            return [...acumulador, valorActual];
+        }, []);
+        productos.map(e => {
+            miCarritoSinDuplicados.map((p) => {
+                if (e.id == p.id_producto) {
+                    if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                        productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                    }
+                }
+            });
+        });
+        //ALERTA DE STOCK
+        if (productos_sin_stock.length > 0) {
+            return res.json({
+                ok: false,
+                error: 2,
+                msg: "No ahi stock suficiente con los productos ...",
+                productos_sin_stock
+            });
+        }
+        for (let e of talles) {
+            for (let n of carrito) {
+                if (e.id_producto == n.id_producto) {
+                    if (e.talle == n.talle) {
+                        console.log(n.id + " soy el id");
+                        let dato_producto = productos.find(e => e.id == n.id_producto);
+                        let orden = {
+                            id_orden,
+                            id_producto: n.id_producto,
+                            nombre_producto: dato_producto.nombre,
+                            talle: n.talle,
+                            cantidad: n.cantidad,
+                            precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        };
+                        let nuevaSuma = n.cantidad * dato_producto.precio;
+                        sumaTotal = sumaTotal + nuevaSuma;
+                        let nuevoStock = e.cantidad - n.cantidad;
+                        yield e.update({ cantidad: nuevoStock })
+                            .catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                        let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                        yield orden_detalle.save()
+                            .catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                        yield n.destroy().catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                    }
+                }
+            }
+        }
+        for (let p of carrito) {
+            let valor = ids_productos_total.filter((h) => h.id == p.id_producto);
+            let valor_true = ids_productos_total.some((h) => h.id == p.id_producto);
+            if (valor_true) {
+                let producto = productos.filter(e => e.id == valor[0].id);
+                if (producto.length > 0) {
+                    let orden = {
+                        id_orden,
+                        id_producto: p.id_producto,
+                        nombre_producto: producto[0].nombre,
+                        talle: p.talle,
+                        cantidad: p.cantidad,
+                        precio: producto[0].precio
+                    };
+                    let nuevaSuma = p.cantidad * producto[0].precio;
+                    sumaTotal = sumaTotal + nuevaSuma;
+                    let nuevoStock = producto[0].cantidad - p.cantidad;
+                    yield producto[0].update({ cantidad: nuevoStock })
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
+                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                    yield orden_detalle.save()
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
+                    yield p.destroy();
+                }
+            }
+        }
+        const orden = yield orden_1.Orden.findByPk(id_orden);
+        yield orden.update({ total: sumaTotal });
+        res.json({
+            ok: true,
+            msg: "Su compra fue exitosa"
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: "Hable con el administrador"
+        });
+    }
+});
+exports.descontarProductosFull = descontarProductosFull;
 //# sourceMappingURL=carrito.js.map

@@ -212,7 +212,7 @@ window.enviar_id = (id) => {
     <option selected>Seleccione que cambiar</option>
 
     <option id="${id}" value="cantidad">Cantidad</option>
-    <option id="${id}" value="estanpado">Estanpado</option>
+    <option id="${id}" value="estanpado">Estampado</option>
     <option id="${id}" value="color">Color</option>
    
   

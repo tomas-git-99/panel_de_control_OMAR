@@ -32,7 +32,13 @@ exports.agregarDirecciones = agregarDirecciones;
 const obtenerDireccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const direccion = yield direccion_1.Direccion.findAll({ where: { id_cliente: id } });
+        const direccion_ = yield direccion_1.Direccion.findAll({ where: { id_cliente: id } });
+        let direccion = [];
+        direccion_.map(e => {
+            if (e.direccion.length > 0) {
+                direccion.push(e);
+            }
+        });
         res.json({
             ok: true,
             direccion

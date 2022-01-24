@@ -53,4 +53,7 @@ router.get('/imprimir/parami/:id', imptimirSoloVentas)
 
 router.get('/publico/orden/completo/:idUsuario/:idCliente', generarOrdenPublico)
 
+
+
+
 export default router;

@@ -43,6 +43,13 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
             });
         }
         let nombre = Object.keys(body);
+        if (req.query.vaciar == "true") {
+            yield producto.update({ cantidad: null });
+            return res.json({
+                ok: true,
+                producto
+            });
+        }
         if (nombre[0] == "cantidad") {
             if (talles.length > 0) {
                 return res.json({
@@ -51,18 +58,14 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 });
             }
         }
-        if (req.query.vaciar == "true") {
-            yield producto.update({ cantidad: null });
-        }
-        else {
-            yield producto.update(body);
-        }
+        yield producto.update(body);
         res.json({
             ok: true,
             producto
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: "Hablar con el administrador"
@@ -76,7 +79,6 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
     let contador = productos_rows.count;
@@ -213,7 +215,6 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             local: { [dist_1.Op.like]: '%' + req.query.local + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     let contador = productos_rows.count;
     let ids_productos = [];

@@ -55,6 +55,18 @@ export const editarProducto = async (req: Request, res: Response) => {
 
         let nombre = Object.keys(body);
 
+        if( req.query.vaciar == "true"){
+
+            await producto.update({cantidad:null!});
+
+            return res.json({
+                ok: true,
+                producto
+            })
+
+        }
+            
+
         if( nombre[0] == "cantidad"){
             
             if( talles.length > 0 ){
@@ -65,12 +77,10 @@ export const editarProducto = async (req: Request, res: Response) => {
             }
         }
 
-        if( req.query.vaciar == "true"){
-            await producto.update({cantidad:null!});
-
-        }else{
-            await producto.update(body);
-        }
+    
+ 
+        await producto.update(body);
+        
 
 
 
@@ -79,6 +89,8 @@ export const editarProducto = async (req: Request, res: Response) => {
             producto
         })
     } catch (error) {
+        console.log(error);
+    
         
         res.status(500).json({
             ok: false,

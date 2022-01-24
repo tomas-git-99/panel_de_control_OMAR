@@ -486,23 +486,63 @@ export const deshacerOrden = async(req: Request, res: Response) => {
         })
         const productos = await Producto.findAll({where:{id:ids}});
 
+        let ids_productos_total:any =  []; 
+        let ids_productos_unidad = [];
+
+        for (let i of productos){
+
+            if( i.cantidad == null){
+
+                ids_productos_unidad.push(i.id);
+
+            }else{
+
+                ids_productos_total.push(i)
+            }
+        }
+
+        const talles = await Talle.findAll({where:{id_producto:ids_productos_unidad}});
+
+        for (let i  of talles){
+            for ( let e of ordenDetalle ){
+                if(i.id_producto == e.id_producto){
+                    if(i.talle == e.talle){
+                        
+                        let nuevoStock:number = e.cantidad + i.cantidad;
+                        await i.update({cantidad:nuevoStock});
+                        await e.destroy();
+                    }
+                }
+
+            }
+
+        }
 
         for ( let i of ordenDetalle ){
 
 
-            for ( let e of productos ){
+            let valor = ids_productos_total.filter((h:any) => h.id ==    i.id_producto);
+            let valor_true = ids_productos_total.some((h:any) => h.id == i.id_producto);
+
+
+          
+            if( valor_true ){
+                let producto = productos.filter( e => e.id == valor[0].id);
+                if(producto.length > 0){
+
+                    let nuevoStock:number = producto[0].cantidad + i.cantidad;
+        
+                    await producto[0].update({cantidad:nuevoStock});
+        
+                    await i.destroy();
+
+                }
+            }
+               
 
                 
-                if(e.id == i.id_producto){
 
-                    let nuevoStock:number = e.cantidad + i.cantidad;
-
-                    await e.update({cantidad:nuevoStock});
-
-                    await i.destroy();
-                }
-
-            }
+            
             
          
 
