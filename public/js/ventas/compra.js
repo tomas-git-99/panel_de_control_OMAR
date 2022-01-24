@@ -72,15 +72,15 @@ window.enviar_datos_producto = (id) => {
   }
 
 
-  if(document.querySelector(`#seleccion_talles_${id}`).length > 1){
+  // if(document.querySelector(`#seleccion_talles_${id}`).length > 1){
 
  
-    if(data.talle == undefined){
-      load_normal(boton_para_cargar, false, "Agregar")
+  //   if(data.talle == undefined){
+  //     load_normal(boton_para_cargar, false, "Agregar")
 
-      return advertencia("Seleccione el talle para este producto")
-    }
-  }
+  //     return advertencia("Seleccione el talle para este producto")
+  //   }
+  // }
 
   if(cantidad_unica.value.length <= 0 || cantidad_unica.value == 0 || cantidad_unica.value == "0"){
     load_normal(boton_para_cargar, false, "Agregar")

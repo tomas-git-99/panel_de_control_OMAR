@@ -564,7 +564,6 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
 
                     if(e.talle == n.talle){
 
-                        console.log(n.id + " soy el id")
 
                         let dato_producto:any = productos.find( e => e.id == n.id_producto);
 
@@ -579,7 +578,7 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
 
                         let nuevaSuma = n.cantidad * dato_producto.precio;
                         sumaTotal = sumaTotal + nuevaSuma;
-                        let nuevoStock = e.cantidad -n.cantidad ;
+                        let nuevoStock = e.cantidad -n.cantidad;
 
                         await e.update({cantidad:nuevoStock})
                                     .catch(err => {
@@ -595,6 +594,48 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
                         await n.destroy().catch( err => {
                             return res.json({ok: false, msg: err})
                         })
+                    }else if(n.talle == null){
+
+                        let filtroDeTalles = talles.filter(p => p.id_producto == n.id_producto);
+                        let dato_producto:any = productos.find( j => j.id == n.id_producto);
+
+                        let canitdadTotalTalle = 0;
+
+                        for(let f of filtroDeTalles){
+
+                            canitdadTotalTalle += n.cantidad;
+
+                            let nuevaSuma = n.cantidad * dato_producto.precio;
+                            sumaTotal = sumaTotal + nuevaSuma;
+                            let nuevoStock = e.cantidad - n.cantidad;
+
+                            await f.update({cantidad:nuevoStock})
+                            .catch(err => {
+                                return res.json({ok: false, msg: err})
+                            });
+                        }
+
+                        let orden:any = {
+                            id_orden,
+                            id_producto:n.id_producto, 
+                            nombre_producto:dato_producto.nombre,
+                            talle: dato_producto.talles, 
+                            cantidad: canitdadTotalTalle,
+                            precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        }
+
+                        let orden_detalle = new OrdenDetalle(orden);
+
+                        await orden_detalle.save()
+                                .catch(err => {
+                                    return res.json({ok: false, msg: err})
+                                });
+    
+                        await n.destroy().catch( err => {
+                            return res.json({ok: false, msg: err})
+                        })
+
+
                     }
                 }
             }
