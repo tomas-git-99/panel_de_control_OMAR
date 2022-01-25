@@ -36,8 +36,10 @@ const carritoActualizar = () => {
     .then( res => {
         cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);
+        
         })
     .catch( err => {
+       
         algo_salio_mal(`Algo salio mal: ${ err.message }`)
     })
 
@@ -49,6 +51,7 @@ const final_precio = document.querySelector(".final_precio");
 
 const leerCarrito = (res) => {
 
+
     let historial = ""
     let final = 0;
 
@@ -57,10 +60,10 @@ const leerCarrito = (res) => {
     
         <tr>
           <td data-label="MODELO" >${e.productos.nombre}</td>
-          <td data-label="CANTIDAD" > ${e.carritos.cantidad}</td>
-          <td data-label="TALLE" > ${e.carritos.talle == null || e.carritos.talle == undefined ? "- -" : e.carritos.talle}</td>
+          <td data-label="CANTIDAD" > ${sumaDetalleTotal(e.talles, e.productos, e.carritos)}</td>
+          <td data-label="TALLE" > ${e.carritos.talle == null ? e.productos.talles : e.carritos.talle}</td>
           <td data-label="PRECIO UD" >$${e.productos.precio}</td>
-          <td data-label="TOTAL" >$${e.carritos.cantidad * e.productos.precio}</td>
+          <td data-label="TOTAL" >$${contarCurvaTotal(e.talles, e.productos ,e.productos.precio, e.carritos.cantidad, e.carritos)}</td>
           <td data-label="Ajustes" >
           <div class="boton rueda" id="${e.carritos.id}" onclick="configurar(this.id)">
           <img src="/img/rueda.svg" alt="" width="23px">
@@ -76,8 +79,11 @@ const leerCarrito = (res) => {
 
    
         `;
-        final += e.carritos.cantidad * e.productos.precio;
 
+    
+        final += sumaDetalleTotal(e.talles, e.productos, e.carritos) * e.productos.precio;
+
+      
         carrito_datos.innerHTML = historial;
 
         
@@ -87,6 +93,54 @@ const leerCarrito = (res) => {
     final_precio.innerHTML = cambio_de_moneda;
 
 }
+
+
+
+const sumaDetalleTotal = ( talles, producto, carrito) => {
+    
+    if(talles.length == 0  && carrito.talle == null ){
+        
+        let cantidadDeTalle = producto.talles.split(",");
+        let contador = cantidadDeTalle.length * carrito.cantidad;
+    
+        return contador;
+
+    }else if(talles.length > 0  && carrito.talle == null){
+
+        let countTalles = talles.length;
+    
+        let contador = countTalles * carrito.cantidad;
+    
+        return contador;
+    }else{
+        return carrito.cantidad;
+    }
+
+
+}
+
+const contarCurvaTotal = (talle, producto , precio, cantidad, carrito) => {
+
+    let cantidadDeTalle = producto.talles.split(",");
+
+    
+    if(talle.length == 0 && carrito.talle == null){ // solo si el producto tienen el total
+        let count = cantidadDeTalle.length * cantidad;
+        return count * precio;
+
+    }else if(talle.length > 0 && carrito.talle == null){ // solo si el producto tiene talles por individual    
+
+        let countTalles = talle.length;
+
+        let contador = countTalles * cantidad;
+    
+        return contador * precio;
+   
+    }else{
+        return cantidad * precio;
+    }
+}
+
 
  ////////////////FIN ACTUALIZAR CARRITO APENAS ENTRA////////////////////////////////
 
