@@ -515,7 +515,55 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                 }
             });
         });
-        console.log();
+        let verificar_si_estaRepetido = [];
+        carrito.map(e => {
+            ids_productos_total.map((i) => {
+                if (e.id_producto == i.id) {
+                    verificar_si_estaRepetido = [...verificar_si_estaRepetido, { id_producto: e.id_producto, cantidad: e.cantidad, talle: e.talle }];
+                }
+            });
+        });
+        const miCarritoSinDuplicados = verificar_si_estaRepetido.reduce((acumulador, valorActual) => {
+            const elementoYaExiste = acumulador.find((elemento) => elemento.id_producto === valorActual.id_producto && elemento.talle !== null);
+            if (elementoYaExiste) {
+                return acumulador.map((elemento) => {
+                    if (elemento.id_producto === valorActual.id_producto && elemento.talle !== null) {
+                        return Object.assign(Object.assign({}, elemento), { cantidad: elemento.cantidad + valorActual.cantidad });
+                    }
+                    return elemento;
+                });
+            }
+            return [...acumulador, valorActual];
+        }, []);
+        productos.map(e => {
+            miCarritoSinDuplicados.map((p) => {
+                if (e.id == p.id_producto) {
+                    if (p.talle == null) {
+                        let cantidadDeTalle = e.talles.split(",");
+                        let contador = 0;
+                        for (let count of cantidadDeTalle) {
+                            contador += p.cantidad;
+                        }
+                        if (e.cantidad < contador || e.cantidad == 0) {
+                            productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito(curva): ${contador} `);
+                        }
+                    }
+                    else {
+                        if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                            productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                        }
+                    }
+                }
+            });
+        });
+        if (productos_sin_stock.length > 0) {
+            return res.json({
+                ok: false,
+                error: 2,
+                msg: "No ahi stock suficiente con los productos ...",
+                productos_sin_stock
+            });
+        }
         //DESCONTAR POR TALLES Y CANTIDAD INDIVIDUAL
         /*      for( let i of productos){
      
