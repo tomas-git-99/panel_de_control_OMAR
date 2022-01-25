@@ -26,6 +26,9 @@ Carrito.init({
     },
     cantidad: {
         type: sequelize_1.DataTypes.NUMBER
+    },
+    precio_nuevo: {
+        type: sequelize_1.DataTypes.NUMBER
     }
 }, {
     sequelize: conectarDB_1.default,

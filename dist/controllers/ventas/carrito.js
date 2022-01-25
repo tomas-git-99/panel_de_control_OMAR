@@ -259,10 +259,9 @@ const modificarCarrito = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const { id } = req.params;
     const carrito = yield carrito_1.Carrito.findByPk(id);
     yield (carrito === null || carrito === void 0 ? void 0 : carrito.update(req.body));
-    const cantidad = carrito === null || carrito === void 0 ? void 0 : carrito.cantidad;
     res.json({
         ok: true,
-        cantidad
+        carrito
     });
 });
 exports.modificarCarrito = modificarCarrito;
@@ -270,12 +269,29 @@ const mostrarCantidad_Actual_Carrito = (req, res) => __awaiter(void 0, void 0, v
     const { id } = req.params;
     const carrito = yield carrito_1.Carrito.findByPk(id);
     const producto = yield producto_1.Producto.findByPk(carrito === null || carrito === void 0 ? void 0 : carrito.id_producto);
-    const cantidadActual = producto === null || producto === void 0 ? void 0 : producto.cantidad;
-    const cantidadCarrito = carrito === null || carrito === void 0 ? void 0 : carrito.cantidad;
+    const talle = yield talles_1.Talle.findAll({ where: { id_producto: producto === null || producto === void 0 ? void 0 : producto.id } });
+    let cantidadActual = 0;
+    if ((producto === null || producto === void 0 ? void 0 : producto.cantidad) == null) {
+        for (let i of talle) {
+            cantidadActual += i.cantidad;
+        }
+    }
+    else {
+        cantidadActual = producto === null || producto === void 0 ? void 0 : producto.cantidad;
+    }
+    const precio = (carrito === null || carrito === void 0 ? void 0 : carrito.precio_nuevo) == null ? producto === null || producto === void 0 ? void 0 : producto.precio : carrito.precio_nuevo;
+    let cantidadCarrito;
+    if ((carrito === null || carrito === void 0 ? void 0 : carrito.talle) == null) {
+        cantidadCarrito = (carrito === null || carrito === void 0 ? void 0 : carrito.cantidad) + " (Por talle)";
+    }
+    else {
+        cantidadCarrito = carrito === null || carrito === void 0 ? void 0 : carrito.cantidad;
+    }
     res.json({
         ok: true,
         cantidadActual,
-        cantidadCarrito
+        cantidadCarrito,
+        precio
     });
 });
 exports.mostrarCantidad_Actual_Carrito = mostrarCantidad_Actual_Carrito;
@@ -586,23 +602,19 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                                 nombre_producto: dato_producto.nombre,
                                 talle: ca.talle,
                                 cantidad: ca.cantidad,
-                                precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                                precio: ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                             };
-                            let nuevaSuma = ca.cantidad * dato_producto.precio;
+                            let precioNuevo = ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo;
+                            let nuevaSuma = ca.cantidad * precioNuevo;
                             sumaTotal = sumaTotal + nuevaSuma;
                             let nuevoStock = t.cantidad - ca.cantidad;
-                            console.log(orden);
-                            /*          await t.update({cantidad: nuevoStock});
-         
-                                     let orden_detalle = new OrdenDetalle(orden);
-         
-                                     await orden_detalle.save()
-                                             .catch(err => {
-                                                 return res.json({ok: false, msg: err})
-                                             });
-                                     
-         
-                                     await ca.destroy(); */
+                            yield t.update({ cantidad: nuevoStock });
+                            let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                            yield orden_detalle.save()
+                                .catch(err => {
+                                return res.json({ ok: false, msg: err });
+                            });
+                            yield ca.destroy();
                         }
                     }
                 }
@@ -614,9 +626,10 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                     let carritoCurva = carrito.find(t => t.id_producto == i.id);
                     let conteo = 0;
                     for (let o of tallesUnicoCurva) {
-                        let nuevaSuma = carritoCurva.cantidad * i.precio;
+                        let precioNuevo = carritoCurva.precio_nuevo == null ? i.precio : carritoCurva.precio_nuevo;
+                        let nuevaSuma = carritoCurva.cantidad * precioNuevo;
                         sumaTotal = sumaTotal + nuevaSuma;
-                        /*  await o.update({cantidad:o.cantidad - carritoCurva!.cantidad}); */
+                        yield o.update({ cantidad: o.cantidad - carritoCurva.cantidad });
                         conteo += carritoCurva.cantidad;
                     }
                     let orden = {
@@ -625,17 +638,16 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: i.nombre,
                         talle: i.talles,
                         cantidad: conteo,
-                        precio: i.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        precio: carritoCurva.precio_nuevo == null ? i.precio : carritoCurva.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                     };
                     console.log(orden);
+                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                    yield orden_detalle.save()
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
+                    yield (carritoCurva === null || carritoCurva === void 0 ? void 0 : carritoCurva.destroy());
                 }
-                /*          let orden_detalle = new OrdenDetalle(orden);
-         
-                         await orden_detalle.save()
-                                 .catch(err => {
-                                     return res.json({ok: false, msg: err})
-                                 });
-                         await carritoCurva?.destroy() */
             }
         }
         //FILTRAR LOS PRODUCTOS DE SOLO POR CANTIDAD TOTAL 
@@ -655,23 +667,19 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.nombre,
                         talle: productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.talles,
                         cantidad: contadorTotal,
-                        precio: productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio
+                        precio: i.precio_nuevo == null ? productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio : i.precio_nuevo
                     };
-                    let nuevaSuma = contadorTotal * productoCurva.precio;
+                    let precioNuevo = i.precio_nuevo == null ? productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio : i.precio_nuevo;
+                    let nuevaSuma = contadorTotal * precioNuevo;
                     sumaTotal = sumaTotal + nuevaSuma;
                     let nuevoStock = productoCurva.cantidad - contadorTotal;
-                    console.log(orden);
-                    /*                 await productoCurva?.update({cantidad:nuevoStock});
-                    
-                                    let orden_detalle = new OrdenDetalle(orden);
-                    
-                                    await orden_detalle.save()
-                                            .catch(err => {
-                                                return res.json({ok: false, msg: err})
-                                            });
-                    
-                    
-                                    await i.destroy(); */
+                    yield (productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.update({ cantidad: nuevoStock }));
+                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                    yield orden_detalle.save()
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
+                    yield i.destroy();
                 }
                 else {
                     let productoCurva = productos.find(o => o.id == i.id_producto ? o : undefined);
@@ -681,32 +689,28 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.nombre,
                         talle: i.talle,
                         cantidad: i.cantidad,
-                        precio: productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio
+                        precio: i.precio_nuevo == null ? productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio : i.precio_nuevo
                     };
-                    let nuevaSuma = i.cantidad * productoCurva.precio;
+                    let precioNuevo = i.precio_nuevo == null ? productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.precio : i.precio_nuevo;
+                    let nuevaSuma = i.cantidad * precioNuevo;
                     sumaTotal = sumaTotal + nuevaSuma;
                     let nuevoStock = productoCurva.cantidad - i.cantidad;
-                    console.log(orden);
-                    /*                 await productoCurva?.update({cantidad:nuevoStock});
-                    
-                    
-                                    let orden_detalle = new OrdenDetalle(orden);
-                    
-                                    await orden_detalle.save()
-                                            .catch(err => {
-                                                return res.json({ok: false, msg: err})
-                                            });
-                    
-                                    await i.destroy(); */
+                    yield (productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.update({ cantidad: nuevoStock }));
+                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                    yield orden_detalle.save()
+                        .catch(err => {
+                        return res.json({ ok: false, msg: err });
+                    });
+                    yield i.destroy();
                 }
             }
         }
-        /*   console.log(sumaTotal);
-          const orden = await Orden.findByPk(id_orden);
-          await orden!.update({total:sumaTotal}); */
+        const orden = yield orden_1.Orden.findByPk(id_orden);
+        yield orden.update({ total: sumaTotal });
         res.json({
             ok: true,
-            msg: "Su compra fue exitosa"
+            msg: "Su compra fue exitosa",
+            suma: sumaTotal
         });
     }
     catch (error) {

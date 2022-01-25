@@ -395,11 +395,11 @@ export const modificarCarrito = async(req: Request, res: Response) => {
 
     await carrito?.update(req.body);
 
-    const cantidad = carrito?.cantidad;
+
 
     res.json({
         ok: true,
-        cantidad
+        carrito
     })
 }
 export const mostrarCantidad_Actual_Carrito = async(req: Request, res: Response) => {
@@ -409,16 +409,38 @@ export const mostrarCantidad_Actual_Carrito = async(req: Request, res: Response)
     const carrito = await Carrito.findByPk(id);
 
     const producto = await Producto.findByPk(carrito?.id_producto);
+    const talle = await Talle.findAll({where:{id_producto:producto?.id}});
 
-    const cantidadActual = producto?.cantidad;
+    let cantidadActual = 0;
 
-    const cantidadCarrito = carrito?.cantidad;
+    if(producto?.cantidad == null){
+
+        for ( let i of talle){
+            cantidadActual += i.cantidad
+        }
+    }else{
+        cantidadActual = producto?.cantidad;
+    }
+
+
+    const precio = carrito?.precio_nuevo == null ? producto?.precio : carrito!.precio_nuevo;
+
+
+    let cantidadCarrito 
+
+    if( carrito?.talle == null){
+
+        cantidadCarrito = carrito?.cantidad + " (Por talle)"
+    }else{
+        cantidadCarrito = carrito?.cantidad;
+    }
 
 
     res.json({ 
         ok: true,
         cantidadActual,
-        cantidadCarrito
+        cantidadCarrito,
+        precio
     })
 
 
@@ -937,15 +959,16 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                                 nombre_producto:dato_producto.nombre,
                                 talle: ca.talle, 
                                 cantidad: ca.cantidad,
-                                precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                                precio: ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo  //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                             }
-    
-                            let nuevaSuma = ca.cantidad * dato_producto.precio;
+                            let precioNuevo:any = ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo;
+                            let nuevaSuma = ca.cantidad * precioNuevo;
+
                             sumaTotal = sumaTotal + nuevaSuma;
                             let nuevoStock = t.cantidad - ca.cantidad;
-                            console.log(orden)
+                         
 
-                   /*          await t.update({cantidad: nuevoStock});
+                            await t.update({cantidad: nuevoStock});
 
                             let orden_detalle = new OrdenDetalle(orden);
 
@@ -955,7 +978,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                                     });
                             
 
-                            await ca.destroy(); */
+                            await ca.destroy();
 
                         }
                         
@@ -976,15 +999,19 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                
     
                     for(let o of tallesUnicoCurva){
-                        let nuevaSuma = carritoCurva!.cantidad * i.precio;
+                        let precioNuevo:any = carritoCurva!.precio_nuevo == null ? i.precio : carritoCurva!.precio_nuevo;
+
+                        let nuevaSuma = carritoCurva!.cantidad * precioNuevo;
     
                         sumaTotal = sumaTotal + nuevaSuma;
     
-                       /*  await o.update({cantidad:o.cantidad - carritoCurva!.cantidad}); */
+                        await o.update({cantidad:o.cantidad - carritoCurva!.cantidad});
     
                         conteo += carritoCurva!.cantidad;
                     }
-    
+
+
+                    
     
                     let orden:any = {
                         id_orden,
@@ -992,20 +1019,22 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                         nombre_producto:i.nombre,
                         talle: i.talles, 
                         cantidad: conteo,
-                        precio: i.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        precio: carritoCurva!.precio_nuevo == null ? i.precio : carritoCurva!.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                     };
                     console.log(orden)
+                    
+                    
+                    let orden_detalle = new OrdenDetalle(orden);
+    
+                    await orden_detalle.save()
+                            .catch(err => {
+                                return res.json({ok: false, msg: err})
+                            });
+                    await carritoCurva?.destroy()
+
                 }
                 
 
-
-       /*          let orden_detalle = new OrdenDetalle(orden);
-
-                await orden_detalle.save()
-                        .catch(err => {
-                            return res.json({ok: false, msg: err})
-                        });
-                await carritoCurva?.destroy() */
                                 
             }
             
@@ -1037,16 +1066,18 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                     nombre_producto:productoCurva?.nombre,
                     talle:productoCurva?.talles,
                     cantidad:contadorTotal,
-                    precio: productoCurva?.precio
+                    precio: i.precio_nuevo == null ? productoCurva?.precio : i.precio_nuevo
                 }
+                let precioNuevo:any = i.precio_nuevo == null ? productoCurva?.precio : i.precio_nuevo
 
-                let nuevaSuma = contadorTotal * productoCurva!.precio;
+                let nuevaSuma:any = contadorTotal * precioNuevo;
                 sumaTotal = sumaTotal + nuevaSuma;
 
                 let nuevoStock = productoCurva!.cantidad - contadorTotal;
-                    console.log(orden)
+              
 
-/*                 await productoCurva?.update({cantidad:nuevoStock});
+
+                await productoCurva?.update({cantidad:nuevoStock});
 
                 let orden_detalle = new OrdenDetalle(orden);
 
@@ -1056,7 +1087,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                         });
 
 
-                await i.destroy(); */
+                await i.destroy();
 
                }else{
                 let productoCurva = productos.find( o => o.id == i.id_producto ? o : undefined);
@@ -1067,18 +1098,20 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                     nombre_producto:productoCurva?.nombre,
                     talle:i.talle,
                     cantidad:i.cantidad,
-                    precio: productoCurva?.precio
+                    precio: i.precio_nuevo == null ? productoCurva?.precio : i.precio_nuevo
                 }
 
+                let precioNuevo:any = i.precio_nuevo == null ? productoCurva?.precio : i.precio_nuevo
+                let nuevaSuma:any = i.cantidad * precioNuevo;
 
-                let nuevaSuma = i.cantidad * productoCurva!.precio;
                 sumaTotal = sumaTotal + nuevaSuma;
 
                 let nuevoStock = productoCurva!.cantidad - i.cantidad;
-                console.log(orden)
+                
+              
 
 
-/*                 await productoCurva?.update({cantidad:nuevoStock});
+                await productoCurva?.update({cantidad:nuevoStock});
 
 
                 let orden_detalle = new OrdenDetalle(orden);
@@ -1088,21 +1121,22 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                             return res.json({ok: false, msg: err})
                         });
 
-                await i.destroy(); */
+                await i.destroy();
 
                 
                }
            }
         }
 
-      /*   console.log(sumaTotal);
+    
         const orden = await Orden.findByPk(id_orden);
-        await orden!.update({total:sumaTotal}); */
+        await orden!.update({total:sumaTotal});
 
 
         res.json({
             ok: true,
-            msg: "Su compra fue exitosa"
+            msg: "Su compra fue exitosa",
+            suma:sumaTotal
          })
 
 

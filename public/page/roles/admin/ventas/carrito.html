@@ -279,9 +279,11 @@
 
                 <div class="modificador">
 
-                    <div class="titulo_modificador">
-                        <img src="/img/close.svg" alt="" class="salir_modificador" id="salir_modificador_ID" onclick="salir_actualizar_carrito(this.id)">
+                    <button type="button" class="btn-close" aria-label="Close" id="salir_modificador_ID" onclick="salir_actualizar_carrito(this.id)"></button>
 
+                    <div class="titulo_modificador">
+                        <!-- <img src="/img/close.svg" alt="" class="salir_modificador" id="salir_modificador_ID" onclick="salir_actualizar_carrito(this.id)">
+ -->
                         <h3>Modificar</h3>
                         <hr width="100%">
                     </div>
@@ -297,11 +299,38 @@
                     <hr>
                     <div class="nueva_cantidad">
                         <span>Cantidad Nueva : <input type="number" id="valor_de_cantidad_nueva"></span>
+
+                        <div id="boton_id_producto" onclick="enviar_cambio(this.id)">
+                            <button type="button" class="btn btn-primary btn-sm">Cambiar</button>
+
+                        </div>
+    <!--                     <div class="boton_modificar" id="boton_id_producto" onclick="enviar_cambio(this.id)">
+                            <button>Modificar</button>
+                        </div> -->
+
+                    </div>
+
+
+                    <hr>
+                    <div class="titulo_modificador">
+                        <h5>Cambiar Precio</h5>
+                        <hr width="100%">
+                    </div>
+                    <div class="cantidad_anterior">
+                        <label>Precio actual del producto : <span class="span_precio_carrito"> 80</span> </label>
                     </div>
                     <hr>
-                    <div class="boton_modificar" id="boton_id_producto" onclick="enviar_cambio(this.id)">
-                        <button>Modificar</button>
+
+                    <div class="nueva_cantidad">
+                        <span>Precio Nueva : <input type="precio_nuevo" id="valor_de_precio_nueva"></span>
+                        <div class = "boton_doble_modificar" id="boton_id_producto" >
+                            <button type="button" class="btn btn-primary btn-sm boton_para_id_solo" onclick="enviar_cambio_precio(this.id)">Cambiar</button>
+                            <button type="button" class="btn btn-warning btn-sm boton_para_id_solo_1" onclick="enviar_cambio_precio(this.id, 'true')">Reset</button>
+
+                        </div>
                     </div>
+
+              
                 </div>
             </div>
 

@@ -338,8 +338,8 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     display: none;
     visibility: hidden;
 /*      display: grid;
-    visibility: visible;  */ 
-
+    visibility: visible;  
+ */
     place-self: center;
 
     position: fixed;
@@ -350,11 +350,27 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
   
 
 }
-
+.nueva_cantidad{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.boton_doble_modificar{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+.boton_doble_modificar button{
+    height: 40px;
+}
 .modificador{
  
     width: 400px;
-    height: 300px;
+    height: auto;
 
     display: grid;
 
@@ -365,13 +381,19 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     font-weight:400; 
 
     align-content: center;
-    background: rgba( 255, 255, 255, 0.25 );
+    /* background: rgba( 255, 255, 255, 0.25 );
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
     border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid rgba( 255, 255, 255, 0.18 ); */
+    background: white;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    border-radius: 10px;
+}
 
+.modificador button{
+    margin: 5px;
 }
 .titulo_modificador{
     place-self: center;
@@ -423,7 +445,7 @@ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     font-size: 20px;
     border-radius:25px;
     color: white;
-    width: 130px;
+    width: 110px;
     background: #00B5EE;
 }
 

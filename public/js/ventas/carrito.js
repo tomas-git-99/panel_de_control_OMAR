@@ -62,8 +62,8 @@ const leerCarrito = (res) => {
           <td data-label="MODELO" >${e.productos.nombre}</td>
           <td data-label="CANTIDAD" > ${sumaDetalleTotal(e.talles, e.productos, e.carritos)}</td>
           <td data-label="TALLE" > ${e.carritos.talle == null ? e.productos.talles : e.carritos.talle}</td>
-          <td data-label="PRECIO UD" >$${e.productos.precio}</td>
-          <td data-label="TOTAL" >$${contarCurvaTotal(e.talles, e.productos ,e.productos.precio, e.carritos.cantidad, e.carritos)}</td>
+          <td data-label="PRECIO UD" >$${e.carritos.precio_nuevo == null ? e.productos.precio : e.carritos.precio_nuevo}</td>
+          <td data-label="TOTAL" >$${contarCurvaTotal(e.talles, e.productos ,e.carritos.precio_nuevo == null ? e.productos.precio : e.carritos.precio_nuevo, e.carritos.cantidad, e.carritos)}</td>
           <td data-label="Ajustes" >
           <div class="boton rueda" id="${e.carritos.id}" onclick="configurar(this.id)">
           <img src="/img/rueda.svg" alt="" width="23px">
@@ -80,8 +80,9 @@ const leerCarrito = (res) => {
    
         `;
 
+        let precio = e.carritos.precio_nuevo == null ? e.productos.precio : e.carritos.precio_nuevo 
     
-        final += sumaDetalleTotal(e.talles, e.productos, e.carritos) * e.productos.precio;
+        final += sumaDetalleTotal(e.talles, e.productos, e.carritos) * precio;
 
       
         carrito_datos.innerHTML = historial;
@@ -573,10 +574,15 @@ const descontar_por_talle = (id_usuario, id_orden) => {
 const modificarCarrito = document.querySelector(".modificarCarrito")
 const boton_id_producto = document.getElementById("boton_id_producto")
 const salir_modificador_ID = document.getElementById("salir_modificador_ID")
+const boton_para_id_solo = document.querySelector(".boton_para_id_solo")
+const boton_para_id_solo_1 = document.querySelector(".boton_para_id_solo_1")
 
 const span_cantidad_actual = document.querySelector(".span_cantidad_actual");
 const span_cantidad_carrito = document.querySelector(".span_cantidad_carrito");
+const span_precio_carrito = document.querySelector(".span_precio_carrito");
+
 const valor_de_cantidad_nueva = document.querySelector("#valor_de_cantidad_nueva");
+const valor_de_precio_nueva = document.querySelector("#valor_de_precio_nueva");
 
 
 // BOTON PARA ELIMINAR PRODUCTO DE CARRITO
@@ -601,8 +607,11 @@ window.configurar = (id) => {
     configuracion_view(id);
     boton_id_producto.id = id;
     salir_modificador_ID.id = id;
+    boton_para_id_solo.id = id;
+    boton_para_id_solo_1.id = id;
     modificarCarrito.style.display = "grid";
     modificarCarrito.style.visibility = "visible";
+   
 
 }
 
@@ -622,7 +631,7 @@ window.enviar_cambio = (id) => {
     }
     fecthNormalPOST_PUT("PUT", `carrito/${id}`, dato)
         .then(res => {
-            span_cantidad_carrito.innerHTML = res.cantidad;
+            span_cantidad_carrito.innerHTML = res.carrito.cantidad;
             valor_de_cantidad_nueva.value = "";
         })
         .catch(err => {
@@ -630,11 +639,39 @@ window.enviar_cambio = (id) => {
         })
 }
 
+window.enviar_cambio_precio = (id, valor) => {
+    let dato = {}
+
+    if(valor == true || valor == "true"){
+        dato = {precio_nuevo:null}
+    }else{
+        dato = {precio_nuevo:valor_de_precio_nueva.value}
+    }
+
+
+
+    if( valor_de_precio_nueva.value.length == 0 && valor == undefined){
+        return advertencia("Tienens que llenar los campos")
+    }
+
+    fecthNormalPOST_PUT("PUT", `carrito/${id}`, dato)
+    .then(res => {
+        span_precio_carrito.innerHTML = "$ " + res.carrito.precio_nuevo;
+        valor_de_precio_nueva.value = "";
+    })
+    .catch(err => {
+        valor_de_precio_nueva.value = "";
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
 const configuracion_view = (id) => {
     fecthNormalGET("GET", `carrito/mostrar/${id}`)
          .then( res => {
+            
             span_cantidad_actual.innerHTML = res.cantidadActual;
             span_cantidad_carrito.innerHTML = res.cantidadCarrito;
+            span_precio_carrito.innerHTML = "$ " + res.precio
          })
          .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
