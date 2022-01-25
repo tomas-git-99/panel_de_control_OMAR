@@ -495,64 +495,219 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                 ids_productos_total.push(i);
             }
         }
+        let productos_sin_stock = [];
         const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
-        //DESCONTAR POR TALLES Y CANTIDAD INDIVIDUAL
-        for (let i of productos) {
-            let carritoComprobar = carrito.some(h => {
-                if (h.id_producto == i.id)
-                    return h.talle == null ? false : true;
-            });
-            /*             console.log(carritoComprobar);
-             */
-            //DESCONTAR POR TALLE
-            if (carritoComprobar == true) {
-                let tallesPrueba = talles.filter(p => p.id_producto == i.id ? p : undefined);
-                for (let t of tallesPrueba) {
-                    let carritoNoCurva = carrito.filter(h => { var _a; return (_a = h.id_producto == i.id) !== null && _a !== void 0 ? _a : h; });
-                    for (let ca of carritoNoCurva) {
-                        if (ca.talle == t.talle) {
-                            let dato_producto = productos.find(e => e.id == i.id);
-                            let orden = {
-                                id_orden,
-                                id_producto: ca.id_producto,
-                                nombre_producto: dato_producto.nombre,
-                                talle: ca.talle,
-                                cantidad: ca.cantidad,
-                                precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
-                            };
-                            let nuevaSuma = ca.cantidad * dato_producto.precio;
-                            sumaTotal = sumaTotal + nuevaSuma;
-                            let nuevoStock = t.cantidad - ca.cantidad;
+        talles.map(e => {
+            carrito.map(p => {
+                if (p.id_producto == e.id_producto) {
+                    if (p.talle == e.talle) {
+                        if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                            let dato_producto = productos.find(e => e.id == p.id_producto);
+                            productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
+                        }
+                    }
+                    else if (p.talle == null) {
+                        if (e.cantidad < p.cantidad || e.cantidad == 0) {
+                            let dato_producto = productos.find(e => e.id == p.id_producto);
+                            productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} `);
                         }
                     }
                 }
-            }
-            else {
-                let tallesUnicoCurva = talles.filter(t => t.id_producto == i.id);
-                let carritoCurva = carrito.find(t => t.id_producto == i.id);
-                let conteo = 0;
-                for (let o of tallesUnicoCurva) {
-                    let nuevaSuma = carritoCurva.cantidad * i.precio;
-                    sumaTotal = sumaTotal + nuevaSuma;
-                    /* console.log( o.cantidad - carritoCurva?.cantidad); */
-                    /*                     await o.update({cantidad:o.cantidad - carritoCurva?.cantidad});
-                     */
-                    conteo += carritoCurva.cantidad;
+            });
+        });
+        console.log();
+        //DESCONTAR POR TALLES Y CANTIDAD INDIVIDUAL
+        /*      for( let i of productos){
+     
+                 
+              
+                 let carritoComprobar = carrito.some( h => {
+                     if(h.id_producto == i.id) return h.talle == null ? false : true;
+                 });
+     
+                 //DESCONTAR POR TALLE
+                 if(carritoComprobar == true){
+     
+                     let tallesPrueba = talles.filter( p => p.id_producto == i.id ? p : undefined)
+                   
+                     
+                      for (let t of tallesPrueba ){
+                        
+                         let carritoNoCurva = carrito.filter( h => h.id_producto == i.id ?? h);
+     
+                         for( let ca of carritoNoCurva){
+     
+                             if(ca.talle == t.talle ){
+     
+                                 let dato_producto:any = productos.find( e => e.id == i.id);
+     
+                                 let orden:any = {
+                                     id_orden,
+                                     id_producto:ca.id_producto,
+                                     nombre_producto:dato_producto.nombre,
+                                     talle: ca.talle,
+                                     cantidad: ca.cantidad,
+                                     precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                                 }
+         
+                                 let nuevaSuma = ca.cantidad * dato_producto.precio;
+                                 sumaTotal = sumaTotal + nuevaSuma;
+                                 let nuevoStock = t.cantidad - ca.cantidad;
+     
+                                 await t.update({cantidad: nuevoStock});
+     
+                                 let orden_detalle = new OrdenDetalle(orden);
+     
+                                 await orden_detalle.save()
+                                         .catch(err => {
+                                             return res.json({ok: false, msg: err})
+                                         });
+                                 
+     
+                                 await ca.destroy();
+     
+                             }
+                             
+                         }
+                         
+                      }
+     
+                 }else{
+                     let tallesUnicoCurva = talles.filter( t => t.id_producto == i.id);
+     
+                     let carritoCurva = carrito.find( t => t.id_producto == i.id);
+     
+                     let conteo = 0;
+                
+     
+                     for(let o of tallesUnicoCurva){
+                         let nuevaSuma = carritoCurva!.cantidad * i.precio;
+     
+                         sumaTotal = sumaTotal + nuevaSuma;
+     
+                         await o.update({cantidad:o.cantidad - carritoCurva!.cantidad});
+     
+                         conteo += carritoCurva!.cantidad;
+                     }
+     
+     
+                     let orden:any = {
+                         id_orden,
+                         id_producto:i.id,
+                         nombre_producto:i.nombre,
+                         talle: i.talles,
+                         cantidad: conteo,
+                         precio: i.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                     };
+     
+                     let orden_detalle = new OrdenDetalle(orden);
+     
+                     await orden_detalle.save()
+                             .catch(err => {
+                                 return res.json({ok: false, msg: err})
+                             });
+                     await carritoCurva?.destroy()
+                                     
+                 }
+                 
+             }
+             
+             
+             //FILTRAR LOS PRODUCTOS DE SOLO POR CANTIDAD TOTAL
+     
+     
+             for ( let c of ids_productos_total){
+     
+                let carritoCurva = carrito.filter( e => e.id_producto == c.id ? e : undefined);
+     
+                for ( let i of carritoCurva){
+     
+                    if(i.talle == null) {
+                        let productoCurva = productos.find( o => o.id == i.id_producto ? o : undefined);
+                        let cantidadDeTalle:any = productoCurva?.talles.split(",");
+                        let contadorTotal = 0;
+     
+                        for (let count of cantidadDeTalle){
+                            contadorTotal += i.cantidad;
+                        }
+     
+                        let orden:any = {
+         
+                         id_orden,
+                         id_producto:productoCurva?.id,
+                         nombre_producto:productoCurva?.nombre,
+                         talle:productoCurva?.talles,
+                         cantidad:contadorTotal,
+                         precio: productoCurva?.precio
+                     }
+     
+                     let nuevaSuma = contadorTotal * productoCurva!.precio;
+                     sumaTotal = sumaTotal + nuevaSuma;
+     
+                     let nuevoStock = productoCurva!.cantidad - contadorTotal;
+     
+                     await productoCurva?.update({cantidad:nuevoStock});
+     
+                     let orden_detalle = new OrdenDetalle(orden);
+     
+                     await orden_detalle.save()
+                             .catch(err => {
+                                 return res.json({ok: false, msg: err})
+                             });
+     
+     
+                     await i.destroy();
+     
+                    }else{
+                     let productoCurva = productos.find( o => o.id == i.id_producto ? o : undefined);
+                     let orden:any = {
+         
+                         id_orden,
+                         id_producto:i.id_producto,
+                         nombre_producto:productoCurva?.nombre,
+                         talle:i.talle,
+                         cantidad:i.cantidad,
+                         precio: productoCurva?.precio
+                     }
+     
+     
+                     let nuevaSuma = i.cantidad * productoCurva!.precio;
+                     sumaTotal = sumaTotal + nuevaSuma;
+     
+                     let nuevoStock = productoCurva!.cantidad - i.cantidad;
+     
+                     await productoCurva?.update({cantidad:nuevoStock});
+     
+     
+                     let orden_detalle = new OrdenDetalle(orden);
+     
+                     await orden_detalle.save()
+                             .catch(err => {
+                                 return res.json({ok: false, msg: err})
+                             });
+     
+                     await i.destroy();
+     
+                     
+                    }
                 }
-                let orden = {
-                    id_orden,
-                    id_producto: i.id,
-                    nombre_producto: i.nombre,
-                    talle: i.talles,
-                    cantidad: conteo,
-                    precio: i.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
-                };
-            }
-        }
-        //FILTRAR LOS PRODUCTOS DE SOLO POR CANTIDAD TOTAL 
-        ids_productos_total;
+             }
+     
+             console.log(sumaTotal);
+             const orden = await Orden.findByPk(id_orden);
+             await orden!.update({total:sumaTotal});
+     
+     
+             res.json({
+                 ok: true,
+                 msg: "Su compra fue exitosa"
+              }) */
     }
     catch (error) {
+        res.json({
+            ok: false,
+            msg: "Hable con el administrador"
+        });
     }
 });
 exports.pruebaParaDescontar = pruebaParaDescontar;

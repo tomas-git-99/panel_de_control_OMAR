@@ -45,6 +45,8 @@ export const editarProducto = async (req: Request, res: Response) => {
 
 
 
+
+
         if (!producto){
             return res.status(404).json({
                 ok: false,
@@ -53,9 +55,12 @@ export const editarProducto = async (req: Request, res: Response) => {
             );
         }
 
+
         let nombre = Object.keys(body);
 
         if( req.query.vaciar == "true"){
+
+
 
             await producto.update({cantidad:null!});
 
@@ -65,7 +70,7 @@ export const editarProducto = async (req: Request, res: Response) => {
             })
 
         }
-            
+
 
         if( nombre[0] == "cantidad"){
             
@@ -77,7 +82,7 @@ export const editarProducto = async (req: Request, res: Response) => {
             }
         }
 
-    
+
  
         await producto.update(body);
         

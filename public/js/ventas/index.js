@@ -314,7 +314,7 @@ const ordenarProductoTable = (res, talles) => {
             </tr>
             <tr>
             <td>Talles: (${devolverString(res.talles)}) : </td>
-            <td><input type="text" id="producto_talle" name="talle"></td>
+            <td><input type="text" id="producto_talle" name="talles"></td>
             <td> 
                 <button  id="talle_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
             </td>
