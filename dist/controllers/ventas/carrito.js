@@ -640,7 +640,6 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                         cantidad: conteo,
                         precio: carritoCurva.precio_nuevo == null ? i.precio : carritoCurva.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                     };
-                    console.log(orden);
                     let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
                     yield orden_detalle.save()
                         .catch(err => {

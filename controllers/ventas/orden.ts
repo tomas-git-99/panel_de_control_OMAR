@@ -486,7 +486,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
         })
         const productos = await Producto.findAll({where:{id:ids}});
 
-        let ids_productos_total:any =  []; 
+        let ids_productos_total =  []; 
         let ids_productos_unidad = [];
 
         for (let i of productos){
@@ -501,54 +501,80 @@ export const deshacerOrden = async(req: Request, res: Response) => {
             }
         }
 
+
+     
+
         const talles = await Talle.findAll({where:{id_producto:ids_productos_unidad}});
 
-        for (let i  of talles){
-            for ( let e of ordenDetalle ){
-                if(i.id_producto == e.id_producto){
-                    if(i.talle == e.talle){
+
+        for( let i of ordenDetalle){
+
+            let tallesFilter = talles.filter( h => h.id_producto == i.id_producto);
+
+
+            for(let h of tallesFilter){
+
+                let largo:any = i.talle;
+                let largoDetalle = largo.length;
+
+
+                if(largo.length == 1){
+
+                    if(h.talle == i.talle){
+
+                        let nuevaCantidad = h.cantidad + i.cantidad;
+
+                        await h.update({cantidad:nuevaCantidad});
+                    
+                        await i.destroy();
                         
-                        let nuevoStock:number = e.cantidad + i.cantidad;
-                        await i.update({cantidad:nuevoStock});
-                        await e.destroy();
                     }
-                }
 
-            }
+                }else if(largo.length > 1){
 
-        }
+                    let filtrarTalles = talles.filter( h => h.id_producto == i.id_producto);
 
-        for ( let i of ordenDetalle ){
+                    let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
 
+                    let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
 
-            let valor = ids_productos_total.filter((h:any) => h.id ==    i.id_producto);
-            let valor_true = ids_productos_total.some((h:any) => h.id == i.id_producto);
+                    await h.update({cantidad:nuevaCantidad});
 
-
-          
-            if( valor_true ){
-                let producto = productos.filter( e => e.id == valor[0].id);
-                if(producto.length > 0){
-
-                    let nuevoStock:number = producto[0].cantidad + i.cantidad;
-        
-                    await producto[0].update({cantidad:nuevoStock});
-        
                     await i.destroy();
 
-                }
-            }
                
+                    
+                }else{
+                   
+                    return res.json({
+                        ok: false,
+                        msg: "Hablar con el administrador"
+                    })
+                }
 
-                
+
+            }
+
+            let verdad = ids_productos_total.some( e => e.id == i.id_producto);
+
+            if(verdad == true){
+               let largoTalle:any = i.talle;
+
+               let productoTotal = productos.find( p => p.id == i.id_producto);
+
+               let nuevaCantidad = productoTotal!.cantidad + i.cantidad;
+
+               await productoTotal?.update( {cantidad:nuevaCantidad});
+               
+               await i.destroy();
+
+            }
 
             
-            
-         
 
-           
-            
         }
+
+   
 
         const orden = await Orden.findByPk(idOrden);
 
@@ -556,7 +582,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
         res.json({
             ok:true
-        })
+        }) 
 
 
     } catch (error) {

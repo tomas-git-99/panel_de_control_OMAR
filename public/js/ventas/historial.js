@@ -56,7 +56,9 @@ const imprimirEnPantalla = (res) => {
              <div class="botones_historial">
 
  
-
+             <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
+             <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+             </div>
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
                  </div>
@@ -73,9 +75,8 @@ const imprimirEnPantalla = (res) => {
 }
 
 
-{/* <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
-<img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
-</div> */}
+
+
 const prueba = (e) => {
 
     try {

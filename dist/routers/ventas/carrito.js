@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const carrito_1 = require("../../controllers/ventas/carrito");
 const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = (0, express_1.Router)();
+const router = express_1.Router();
 //AGREGAR A CARRITO
 router.post("/", [
     validar_JWT_1.validarJWT,

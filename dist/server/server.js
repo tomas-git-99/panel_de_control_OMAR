@@ -23,6 +23,7 @@ const carrito_1 = __importDefault(require("../routers/ventas/carrito"));
 const direccion_1 = __importDefault(require("../routers/ventas/direccion"));
 const talle_1 = __importDefault(require("../routers/ventas/talle"));
 const historial_1 = __importDefault(require("../routers/ventas/historial"));
+const orden_detalle_1 = __importDefault(require("../routers/ventas/orden_detalle"));
 //PRODUCION
 const producto_produccion_1 = __importDefault(require("../routers/produccion/producto_produccion"));
 const historial_2 = __importDefault(require("../routers/produccion/historial"));
@@ -42,6 +43,7 @@ class ServerApp {
             direccion: '/api/direccion',
             talle: '/api/talle',
             historial: '/api/historial',
+            ordenDetalle: '/api/ordenDetalle',
             //PRODUCCION
             producto_producto: '/api/produccion/producto_produccion',
             taller: '/api/produccion/taller',
@@ -49,7 +51,7 @@ class ServerApp {
             estanpado: '/api/produccion/estanpado',
             rollos: '/api/produccion/rollos',
         };
-        this.app = (0, express_1.default)();
+        this.app = express_1.default();
         this.port = '8000';
         /* middleware */
         this.middlewares();
@@ -70,7 +72,7 @@ class ServerApp {
         });
     }
     middlewares() {
-        this.app.use((0, cors_1.default)());
+        this.app.use(cors_1.default());
         this.app.use((req, res, next) => {
             // Dominio que tengan acceso (ej. 'http://example.com')
             res.header('Access-Control-Allow-Origin', '*');
@@ -89,6 +91,7 @@ class ServerApp {
         this.app.use(this.apiPaths.direccion, direccion_1.default);
         this.app.use(this.apiPaths.talle, talle_1.default);
         this.app.use(this.apiPaths.historial, historial_1.default);
+        this.app.use(this.apiPaths.ordenDetalle, orden_detalle_1.default);
         //PRODUCCION
         this.app.use(this.apiPaths.producto_producto, producto_produccion_1.default);
         this.app.use(this.apiPaths.taller, taller_1.default);

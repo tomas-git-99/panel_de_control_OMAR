@@ -336,27 +336,39 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             }
         }
         const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
-        for (let i of talles) {
-            for (let e of ordenDetalle) {
-                if (i.id_producto == e.id_producto) {
-                    if (i.talle == e.talle) {
-                        let nuevoStock = e.cantidad + i.cantidad;
-                        yield i.update({ cantidad: nuevoStock });
-                        yield e.destroy();
+        for (let i of ordenDetalle) {
+            let tallesFilter = talles.filter(h => h.id_producto == i.id_producto);
+            for (let h of tallesFilter) {
+                let largo = i.talle;
+                let largoDetalle = largo.length;
+                if (largo.length == 1) {
+                    if (h.talle == i.talle) {
+                        let nuevaCantidad = h.cantidad + i.cantidad;
+                        yield h.update({ cantidad: nuevaCantidad });
+                        yield i.destroy();
                     }
                 }
-            }
-        }
-        for (let i of ordenDetalle) {
-            let valor = ids_productos_total.filter((h) => h.id == i.id_producto);
-            let valor_true = ids_productos_total.some((h) => h.id == i.id_producto);
-            if (valor_true) {
-                let producto = productos.filter(e => e.id == valor[0].id);
-                if (producto.length > 0) {
-                    let nuevoStock = producto[0].cantidad + i.cantidad;
-                    yield producto[0].update({ cantidad: nuevoStock });
+                else if (largo.length > 1) {
+                    let filtrarTalles = talles.filter(h => h.id_producto == i.id_producto);
+                    let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
+                    let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
+                    yield h.update({ cantidad: nuevaCantidad });
                     yield i.destroy();
                 }
+                else {
+                    return res.json({
+                        ok: false,
+                        msg: "Hablar con el administrador"
+                    });
+                }
+            }
+            let verdad = ids_productos_total.some(e => e.id == i.id_producto);
+            if (verdad == true) {
+                let largoTalle = i.talle;
+                let productoTotal = productos.find(p => p.id == i.id_producto);
+                let nuevaCantidad = productoTotal.cantidad + i.cantidad;
+                yield (productoTotal === null || productoTotal === void 0 ? void 0 : productoTotal.update({ cantidad: nuevaCantidad }));
+                yield i.destroy();
             }
         }
         const orden = yield orden_1.Orden.findByPk(idOrden);

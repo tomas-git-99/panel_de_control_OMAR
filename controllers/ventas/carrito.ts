@@ -1021,7 +1021,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                         cantidad: conteo,
                         precio: carritoCurva!.precio_nuevo == null ? i.precio : carritoCurva!.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                     };
-                    console.log(orden)
+                   
                     
                     
                     let orden_detalle = new OrdenDetalle(orden);
