@@ -3,6 +3,8 @@ import { Op, where } from "sequelize/dist";
 import db from "../../DB/conectarDB";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
+import { Usuario } from "../../models/ventas/usuario";
+import usuario from "../../routers/ventas/usuario";
 
 
 
@@ -222,9 +224,28 @@ export const hitorialProductos = async (req: Request, res: Response) => {
         let valor:any = req.query.offset;
 
         let valorOffset = parseInt(valor)
-        
 
-        const productos_rows = await Producto.findAndCountAll({where:{estado:true},order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
+        let valorID:any = req.query.usuario
+
+
+        const usuario = await Usuario.findByPk(parseInt(valorID));
+
+        let valorBusqueda
+
+        if(usuario?.local == null){
+            if(usuario?.rol == "ADMIN"){
+                valorBusqueda = "";
+            }
+            
+        }else if(usuario.venta == "ONLINE"){
+            if(usuario.local) valorBusqueda = usuario.local;
+            valorBusqueda = ""
+        }else{
+            valorBusqueda = usuario.local;
+
+        }
+    
+        const productos_rows = await Producto.findAndCountAll({where:{estado:true, local:{ [Op.like]: '%'+ valorBusqueda +'%'}  },order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
 
         let ids_productos:any= [];
 

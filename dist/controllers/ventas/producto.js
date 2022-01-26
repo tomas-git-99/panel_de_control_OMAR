@@ -13,6 +13,7 @@ exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
+const usuario_1 = require("../../models/ventas/usuario");
 const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const producto = new producto_1.Producto(req.body);
@@ -144,7 +145,23 @@ const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         let valor = req.query.offset;
         let valorOffset = parseInt(valor);
-        const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true }, order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
+        let valorID = req.query.usuario;
+        const usuario = yield usuario_1.Usuario.findByPk(parseInt(valorID));
+        let valorBusqueda;
+        if ((usuario === null || usuario === void 0 ? void 0 : usuario.local) == null) {
+            if ((usuario === null || usuario === void 0 ? void 0 : usuario.rol) == "ADMIN") {
+                valorBusqueda = "";
+            }
+        }
+        else if (usuario.venta == "ONLINE") {
+            if (usuario.local)
+                valorBusqueda = usuario.local;
+            valorBusqueda = "";
+        }
+        else {
+            valorBusqueda = usuario.local;
+        }
+        const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true, local: { [dist_1.Op.like]: '%' + valorBusqueda + '%' } }, order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
         let ids_productos = [];
         productos_rows.rows.map(e => {
             ids_productos.push(e.id);

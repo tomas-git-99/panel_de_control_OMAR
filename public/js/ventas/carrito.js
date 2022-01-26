@@ -103,6 +103,7 @@ const sumaDetalleTotal = ( talles, producto, carrito) => {
         
         let cantidadDeTalle = producto.talles.split(",");
         let contador = cantidadDeTalle.length * carrito.cantidad;
+        console.log(cantidadDeTalle)
     
         return contador;
 
