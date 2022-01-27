@@ -50,6 +50,7 @@ const talle_unico = document.getElementById("talle_unico");
 const cantidad_unica = document.getElementById("cantidad_unica");
 
 window.boton_agregar = (event) => {
+  console.log(event.value);
  /*  cantidad.style.opacity = 1; */
  cantidad.style.display = "grid";
  cantidad.style.visibility = "visible";
@@ -152,7 +153,7 @@ const leerHistorial = (res) => {
         <td data-label="PRECIO">$${devolverString(e.productos.precio)}</td>
         <td>
         <div class="boton preview">
-            <button class="eliminar" id="${e.productos.id}" onclick="boton_agregar(this.id)" >
+            <button class="eliminar" value="hola" id="${e.productos.id}" onclick="boton_agregar(this)" >
                 Agregar
             </button>
         </div>
