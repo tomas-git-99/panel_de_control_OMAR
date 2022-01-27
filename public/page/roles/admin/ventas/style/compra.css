@@ -23,6 +23,22 @@
     left: 200px;
 }
 
+.talles_del_producto{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+}
+
+.form-group input{
+    width: 10px;
+}
+
+.boton_para_curva{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 .cantidad{
 
     /* con opacidad cambia la vista para agregar los productos en stock */
@@ -33,10 +49,10 @@
     position: fixed;
 
     place-self: center;
-    width: 280PX;
+    width: auto;
     height: auto;
 
-    background: rgba( 255, 255, 255, 0.25 );
+    background: white;
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
@@ -79,12 +95,12 @@
 
 .talleUnica{
 
-    display: none;
-    visibility: hidden;
+  /*   display: none;
+    visibility: hidden; */
     justify-content: center;
     margin-bottom: 10px;
-/*      display: block;
-    visibility: visible;   */  
+     display: grid;
+    visibility: visible;    
 }
 .nombreDeProducto{
     display: grid;
@@ -113,19 +129,23 @@
     bottom: 5px;
     cursor: pointer;
 }
+
 .boton2{
     display: grid;
     justify-content: center;
-    margin-bottom: 10px;
+    align-content: center;
+    
 }
+
+
 
 .boton2 button{
 
     background: #00B5EE;
     color: #fff;
-    width: 120px;
-    font-size: 20px;
-    height: 35px;
+    width: 80px;
+    font-size: 16px;
+    height: 30px;
     border: none;
     border-radius: 25px;
 }

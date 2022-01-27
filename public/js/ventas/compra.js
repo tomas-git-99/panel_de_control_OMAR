@@ -1,4 +1,5 @@
-import { advertencia, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+
+import { advertencia, algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { devolverString } from "../helpers/para_todos/null.js";
@@ -35,10 +36,11 @@ const main_historial = (offset=0) => {
           if(numeroPaginas == null || numeroPaginas == "null" ){
             paginacion(res.contador)
           }
-        numeroPaginas = res.contador;
+          numeroPaginas = res.contador;
           leerHistorial(res.productos)
         })
         .catch( err =>{
+          
           algo_salio_mal(`Algo salio mal: ${ err }`)
       })
 }
@@ -49,15 +51,81 @@ const aca_viene_id_producto = document.getElementById("aca_viene_id_producto");
 const talle_unico = document.getElementById("talle_unico");
 const cantidad_unica = document.getElementById("cantidad_unica");
 
+const talles_del_producto = document.querySelector(".talles_del_producto");
+
+let arrayTalle;
 window.boton_agregar = (event) => {
-  console.log(event.value);
+
+  let array = event.value.split(",");
+  arrayTalle = array;
+  let historial = "";
+
+  for(let i of array) {
+
+    historial += `
+    <div class="form-group">
+    <label for="exampleFormControlInput1">${i}</label>
+    <input type="number" class="form-control" id="talle_unico_${i}" style="width:50px">
+    </div>
+    `
+  }
+
+  talles_del_producto.innerHTML = historial;
+
+  
  /*  cantidad.style.opacity = 1; */
  cantidad.style.display = "grid";
  cantidad.style.visibility = "visible";
- aca_viene_id_producto.id = event;
+ aca_viene_id_producto.id = event.id;
 
 }
 const boton_para_cargar = document.querySelector(".boton_para_cargar");
+
+talles_del_producto.addEventListener("keyup", (keyCode) => {
+  const id_usuario = localStorage.getItem("id");
+
+/*   console.log(keyCode.keyCode); */
+  if(keyCode.keyCode == 13) {
+ /*    console.log(keyCode.path[0].value); */
+    let separador = keyCode.path[0].id; 
+    if(keyCode.path[0].value.length == 0){
+      return advertencia("Se te olvido colocar un valor")
+    }
+    
+    let talles = separador.split("_")[2];
+    let data = {
+      id_usuario:id_usuario,
+      id_producto: aca_viene_id_producto.id,
+      cantidad: keyCode.path[0].value,
+      talle:talles
+    }
+
+    
+
+    enviarFormCarrito(data, keyCode.path[0].id)
+    
+    
+  }
+})
+
+cantidad_unica.addEventListener("input", (valor) => {
+ 
+  for(let e of arrayTalle) {
+    let talle_unico = document.getElementById(`talle_unico_${e}`);
+    talle_unico.value = valor.target.value;
+    talle_unico.disabled = true;
+    
+  }
+
+  if(valor.target.value.length == 0 || valor.target.value == ''){
+    for(let e of arrayTalle) {
+      let talle_unico = document.getElementById(`talle_unico_${e}`);
+      talle_unico.disabled = false;
+      
+    }
+  }
+
+})
 
 window.enviar_datos_producto = (id) => {
 
@@ -70,12 +138,12 @@ window.enviar_datos_producto = (id) => {
     cantidad: cantidad_unica.value
   }
 
-  if(checkAgregar.checked){
+  /* if(checkAgregar.checked){
     data["talle"] = talle_unico.value;
     
   }
 
-
+ */
   // if(document.querySelector(`#seleccion_talles_${id}`).length > 1){
 
  
@@ -92,23 +160,35 @@ window.enviar_datos_producto = (id) => {
     return advertencia("Se te olvido colocar la cantidad / Nose acepta el valor 0")
   }
 
-  
 
+  enviarFormCarrito(data)
+
+      
+}
+
+const enviarFormCarrito = (data , limpiar="") => {
   fecthNormalPOST_PUT("POST", "carrito", data)
   .then( res => {
     if(res.ok == true){
       cantidad_unica.value = "";
       talle_unico.value = "";
+      //if(limpiar !== "")document.getElementById(`${limpiar}`).value = "";
+      for(let e of arrayTalle) {
+        let talle_unico = document.getElementById(`talle_unico_${e}`);
+        talle_unico.disabled = false;
+        talle_unico.value = "";
+        
+      }
       load_normal(boton_para_cargar, false, "Agregar");
-      
 
+      return salio_todo_bien()
     }else if (res.error == 10 || res.error == "10"){
       localStorage.removeItem("x-token");
       window.location.href = `${window.location.origin}/index.html`
     }else{
       
       load_normal(boton_para_cargar, false, "Agregar")
-      Swal.fire({
+      return Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
@@ -118,15 +198,13 @@ window.enviar_datos_producto = (id) => {
   .catch(err => {
     load_normal(boton_para_cargar, false, "Agregar")
 
-    Swal.fire({
+    return Swal.fire({
       icon: 'error',
       title: 'Oops...',
       text: 'Algo salio mal, vuelva intentarlo en unos minutos, si el error sigue comuniquese con servicio',
     })
   })
-      
 }
-
 const tablaCompra = document.querySelector(".tablaCompra")
 
 
@@ -153,7 +231,7 @@ const leerHistorial = (res) => {
         <td data-label="PRECIO">$${devolverString(e.productos.precio)}</td>
         <td>
         <div class="boton preview">
-            <button class="eliminar" value="hola" id="${e.productos.id}" onclick="boton_agregar(this)" >
+            <button class="eliminar" value="${e.productos.talles}" id="${e.productos.id}" onclick="boton_agregar(this)" >
                 Agregar
             </button>
         </div>
@@ -187,7 +265,7 @@ carrito.addEventListener("click", () => {
 
 
 
-
+/* 
 checkAgregar.addEventListener("change", (e) => {
   e.preventDefault();
 
@@ -202,7 +280,7 @@ checkAgregar.addEventListener("change", (e) => {
     talle_unico.value = "";
   }
 
-});
+}); */
 
 
 /////BUSCADOR//////
