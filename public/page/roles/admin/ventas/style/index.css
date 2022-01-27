@@ -16,6 +16,9 @@
 .search{
     width: 600px;
     place-self: center;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }
 .search input{
     border-radius: 20px 0px 0px 20px;
@@ -195,6 +198,14 @@ margin-left: 33px;
    /*  width: 100%; */
    height: auto;
    overflow-y: scroll;
+}
+.volver_Atras_buscar{
+    display: none;
+    visibility: hidden;
+    display: grid;
+    align-items: start;
+    cursor: pointer;
+   
 }
 table {
 

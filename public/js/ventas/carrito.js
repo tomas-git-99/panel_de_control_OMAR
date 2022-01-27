@@ -8,6 +8,7 @@ import { imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
+import { devolverString } from "../helpers/para_todos/null.js";
 
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "produccion");
@@ -56,11 +57,13 @@ const leerCarrito = (res) => {
     let final = 0;
 
     res.map( e => {
+      
         historial += `
     
         <tr>
           <td data-label="MODELO" >${e.productos.nombre}</td>
           <td data-label="CANTIDAD" > ${sumaDetalleTotal(e.talles, e.productos, e.carritos)}</td>
+          <td data-label="DISEÑO" > ${devolverString(e.productos.diseño)}</td>
           <td data-label="TALLE" > ${e.carritos.talle == null ? e.productos.talles : e.carritos.talle}</td>
           <td data-label="PRECIO UD" >$${e.carritos.precio_nuevo == null ? e.productos.precio : e.carritos.precio_nuevo}</td>
           <td data-label="TOTAL" >$${contarCurvaTotal(e.talles, e.productos ,e.carritos.precio_nuevo == null ? e.productos.precio : e.carritos.precio_nuevo, e.carritos.cantidad, e.carritos)}</td>

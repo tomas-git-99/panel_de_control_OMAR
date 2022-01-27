@@ -77,11 +77,43 @@ exports.editarProducto = editarProducto;
 const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let valor = req.query.offset;
     let valorOffset = parseInt(valor);
+    let valorID = req.query.usuario;
+    let valorBusqueda = "";
+    if (valorID !== undefined) {
+        const usuario = yield usuario_1.Usuario.findByPk(parseInt(valorID));
+        if ((usuario === null || usuario === void 0 ? void 0 : usuario.local) == null) {
+            if ((usuario === null || usuario === void 0 ? void 0 : usuario.rol) == "ADMIN") {
+                valorBusqueda = "";
+            }
+        }
+        else if (usuario.venta == "ONLINE") {
+            if (usuario.local)
+                valorBusqueda = usuario.local;
+            valorBusqueda = "";
+        }
+        else {
+            valorBusqueda = usuario.local;
+        }
+    }
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
-            nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
+            local: { [dist_1.Op.like]: '%' + valorBusqueda + '%' },
+            [dist_1.Op.or]: [
+                {
+                    nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' }
+                },
+                {
+                    id: { [dist_1.Op.like]: '%' + req.query.nombre + '%' }
+                }
+            ]
         }, limit: 10, offset: valorOffset });
-    /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
+    /*   const productos_rows = await Producto.findAndCountAll({ where:{
+          estado:true,
+          nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
+          id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+          
+      }, limit:10, offset:valorOffset} );
+     */
     let contador = productos_rows.count;
     let ids_productos = [];
     productos_rows.rows.map(e => {
@@ -146,20 +178,22 @@ const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, functi
         let valor = req.query.offset;
         let valorOffset = parseInt(valor);
         let valorID = req.query.usuario;
-        const usuario = yield usuario_1.Usuario.findByPk(parseInt(valorID));
-        let valorBusqueda;
-        if ((usuario === null || usuario === void 0 ? void 0 : usuario.local) == null) {
-            if ((usuario === null || usuario === void 0 ? void 0 : usuario.rol) == "ADMIN") {
+        let valorBusqueda = "";
+        if (valorID !== undefined) {
+            const usuario = yield usuario_1.Usuario.findByPk(parseInt(valorID));
+            if ((usuario === null || usuario === void 0 ? void 0 : usuario.local) == null) {
+                if ((usuario === null || usuario === void 0 ? void 0 : usuario.rol) == "ADMIN") {
+                    valorBusqueda = "";
+                }
+            }
+            else if (usuario.venta == "ONLINE") {
+                if (usuario.local)
+                    valorBusqueda = usuario.local;
                 valorBusqueda = "";
             }
-        }
-        else if (usuario.venta == "ONLINE") {
-            if (usuario.local)
+            else {
                 valorBusqueda = usuario.local;
-            valorBusqueda = "";
-        }
-        else {
-            valorBusqueda = usuario.local;
+            }
         }
         const productos_rows = yield producto_1.Producto.findAndCountAll({ where: { estado: true, local: { [dist_1.Op.like]: '%' + valorBusqueda + '%' } }, order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
         let ids_productos = [];
@@ -232,6 +266,7 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             local: { [dist_1.Op.like]: '%' + req.query.local + '%' },
+            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     let contador = productos_rows.count;
     let ids_productos = [];

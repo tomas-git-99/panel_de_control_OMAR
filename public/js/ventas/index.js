@@ -220,6 +220,7 @@ search.addEventListener("keyup", ({keyCode}) => {
     search.value = "";
 });
 
+const volver_Atras_buscar = document.querySelector(".volver_Atras_buscar");
 
 const getSearch = (valor, offset=0) => {
 
@@ -239,6 +240,8 @@ const getSearch = (valor, offset=0) => {
         }
         numeroPaginas = res.contador;
         valorGuardado = valor;
+        volver_Atras_buscar.style.display = "grid";
+        volver_Atras_buscar.style.visibility = "visible";
         leerHistorial(res.productos);
     })
     .catch( err =>{
@@ -248,7 +251,12 @@ const getSearch = (valor, offset=0) => {
 
 
 
-
+window.volver_inicio = () => {
+    numeroPaginas = null;
+    volver_Atras_buscar.style.display = "none";
+    volver_Atras_buscar.style.visibility = "hidden";
+    historialGet();
+  }
 
 
 //CARGAR EL HISTORIAL CADA VEZ QUE ENTREN A ESTE HTML

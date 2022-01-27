@@ -42,7 +42,11 @@ formProducto.addEventListener("submit", (e) => {
     
     for(let el of formProducto.elements){
         if(el.name.length > 0)
-            forData[el.name] = el.value.replace(/\s*$/,"");    
+            forData[el.name] = el.value.replace(/\s*$/,"");
+            if(el.name == "talle"){
+                verificarSiEstaBien(el.value)
+
+            }
         } 
 
 
@@ -54,7 +58,7 @@ formProducto.addEventListener("submit", (e) => {
      fecthNormalPOST_PUT("POST", "producto" ,forData)
          .then( (res) => {
              if(res.ok == true) {
-                /*  botonSI.id = res.producto.id; */
+             
 
                  aca_viene_id_producto.id = res.producto.id
 
@@ -94,6 +98,36 @@ formProducto.addEventListener("submit", (e) => {
 });
 
 
+const verificarSiEstaBien = ( palabra )=>{
+    let mensaje_error = document.querySelector(".mensaje_error")
+    
+    let array = palabra.split("");
+ /*    if(array[0] == " " || array[0] == "," || array[0] == "."){
+        return false;
+    }  */
+
+    for( let i of palabra.split("")){
+        var valoresAceptados = /^[0-9]+$/;
+    if(i.match(valoresAceptados)){
+       
+
+   
+    }else{
+
+        if(i == ","){
+        
+         
+
+        }else{
+
+            return advertencia("No se permiten eso caracteres en talles")
+            // talles.className = "form-control is-invalid";
+
+            // mensaje_error.innerHTML = "No se permite ese caracter";
+        }
+    }
+}
+}
 
 const formulario_por_talle = document.querySelector(".formulario");
 

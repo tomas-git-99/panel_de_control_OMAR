@@ -63,7 +63,7 @@
 
 
             <div class="crear_nuevo_usuario">
-                <h5> <a href="/agregar_usuario.html">Crear Usuario</a></h5>
+                <h5 class="crear_usuario"> <a href="/agregar_usuario.html">Crear Usuario</a></h5>
                 <div class="cerrar_seccion" onclick="cerrar_seccion()">
                     <h4>SALIR</h4>
                 </div>
@@ -78,8 +78,15 @@
 
             <div class="search">
                 
+                <div class="volver_Atras_buscar" onclick="volver_inicio()">
+    
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                      </svg>
+                </div>
+
                 <div class="input-group mb-3">
-                    <input type="text" id="search" class="form-control" placeholder="Buscar producto ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" id="search" class="form-control" placeholder="Buscar modelo/articulo ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
                     </div>
@@ -91,12 +98,12 @@
             </div>
                 <div class="cartel">
       
-                    <div class="opcionesDeLocal">
+     <!--                <div class="opcionesDeLocal">
                         <select class="custom-select custom-select-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
                             <option value="0">Ordenar por local</option>
 
                           </select>
-                    </div>
+                    </div> -->
                     <div class="table-responsive">
 
                         <table class="table">

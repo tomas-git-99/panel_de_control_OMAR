@@ -113,16 +113,56 @@ export const buscarProducto = async (req: Request, res: Response) => {
 
     let valor:any = req.query.offset;
 
-    let valorOffset = parseInt(valor)
+    let valorOffset = parseInt(valor);
 
-    
+
+    let valorID:any = req.query.usuario;
+    let valorBusqueda = "";
+
+
+    if(valorID !== undefined) {
+
+        const usuario = await Usuario.findByPk(parseInt(valorID));
+        
+        if(usuario?.local == null){
+            if(usuario?.rol == "ADMIN"){
+                valorBusqueda = "";
+            }
+                
+        }else if(usuario.venta == "ONLINE"){
+            if(usuario.local) valorBusqueda = usuario.local;
+                valorBusqueda = ""
+        }else{
+            valorBusqueda = usuario.local;
+        }
+            
+    }
+
+
+
+ 
     const productos_rows = await Producto.findAndCountAll({ where:{ 
         estado:true,
-        nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
-        // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
+        local:{ [Op.like]: '%'+ valorBusqueda +'%'} ,
+       [Op.or]:[
+           {
+               nombre:{ [Op.like]: '%'+ req.query.nombre +'%'}
+           },
+           {
+               id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+           }
+       ]
+
     }, limit:10, offset:valorOffset} );
 
-    /* [Op.or]:[{nombre}, {tela}]:{ [Op.like]: '%'+ buscarProducto.nombre +'%'} */
+
+  /*   const productos_rows = await Producto.findAndCountAll({ where:{ 
+        estado:true,
+        nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
+        id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+        
+    }, limit:10, offset:valorOffset} );
+   */
 
     let contador = productos_rows.count;
     let ids_productos:any = [];
@@ -228,22 +268,29 @@ export const hitorialProductos = async (req: Request, res: Response) => {
         let valorID:any = req.query.usuario
 
 
-        const usuario = await Usuario.findByPk(parseInt(valorID));
+        
+        let valorBusqueda ="";
 
-        let valorBusqueda
+        
+        
+        if(valorID !== undefined) {
+            const usuario = await Usuario.findByPk(parseInt(valorID));
 
-        if(usuario?.local == null){
-            if(usuario?.rol == "ADMIN"){
-                valorBusqueda = "";
+            if(usuario?.local == null){
+                if(usuario?.rol == "ADMIN"){
+                    valorBusqueda = "";
+                }
+                
+            }else if(usuario.venta == "ONLINE"){
+                if(usuario.local) valorBusqueda = usuario.local;
+                valorBusqueda = ""
+            }else{
+                valorBusqueda = usuario.local;
+    
             }
-            
-        }else if(usuario.venta == "ONLINE"){
-            if(usuario.local) valorBusqueda = usuario.local;
-            valorBusqueda = ""
-        }else{
-            valorBusqueda = usuario.local;
-
         }
+
+     
     
         const productos_rows = await Producto.findAndCountAll({where:{estado:true, local:{ [Op.like]: '%'+ valorBusqueda +'%'}  },order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
 

@@ -11,6 +11,7 @@ export const usuarioPermisos = (rol, tag) => {
     let cerrarVentanas = document.querySelector(`.${tag}`);
     let historial_borrar = document.querySelector(`.historial_borrar`);
 
+    let crear_usuario = document.querySelector(".crear_usuario")
     if(rol == "VENTAS"){
 
         if(dondeEsta[4] === "produccion"){
@@ -26,6 +27,10 @@ export const usuarioPermisos = (rol, tag) => {
 
         historial_borrar.style.display = "none";
         historial_borrar.style.visibility = "hidden";
+
+        crear_usuario.style.display = "none";
+        crear_usuario.style.visibility = "hidden";
+        
         
     }else if( rol == "PRODUCCION"){
 
@@ -34,6 +39,10 @@ export const usuarioPermisos = (rol, tag) => {
         }
         cerrarVentanas.style.display = "none";
         cerrarVentanas.style.visibility = "hidden";
+
+
+        crear_usuario.style.display = "none";
+        crear_usuario.style.visibility = "hidden";
     }else{
         return true;
     }

@@ -24,9 +24,12 @@ const bienvenido = document.getElementsByClassName("cartel");
 let numeroPaginas = null;
 let valorGuardado 
 const main_historial = (offset=0) => {
-  cargaMedio("spinner_load", true);
 
-  fecthNormalGET("GET", "producto?offset="+offset)
+  cargaMedio("spinner_load", true);
+  let usuario = localStorage.getItem("id")
+
+
+  fecthNormalGET("GET", "producto?offset="+offset+"&usuario="+usuario)
         .then(res => {
           cargaMedio("spinner_load", false);
           if(numeroPaginas == null || numeroPaginas == "null" ){
@@ -214,11 +217,13 @@ search.addEventListener("keyup", ({keyCode}) => {
     buscador(search.value);
     search.value = "";
 });
+const volver_Atras_buscar = document.querySelector(".volver_Atras_buscar");
 
 const buscador = (valor, offset=0) => {
-  cargaMedio("spinner_load", true);
+  let usuario = localStorage.getItem("id")
 
-  fecthNormalPOST_PUT("GET", `producto/search?nombre=${valor}&offset=${offset}}`)
+  cargaMedio("spinner_load", true);
+  fecthNormalPOST_PUT("GET", `producto/search?nombre=${valor}&offset=${offset}&usuario=${usuario}`)
   .then(res => {
     if(numeroPaginas == null || numeroPaginas == "null" ){
       paginacion(res.contador, "buscador")
@@ -227,11 +232,22 @@ const buscador = (valor, offset=0) => {
 
     numeroPaginas = res.contador;
     valorGuardado = valor;
+    volver_Atras_buscar.style.display = "grid";
+    volver_Atras_buscar.style.visibility = "visible";
     leerHistorial(res.productos)
   })
   .catch( err =>{
     algo_salio_mal(`Algo salio mal: ${ err }`)
 })
+}
+
+
+window.volver_inicio = () => {
+  numeroPaginas = null;
+  volver_Atras_buscar.style.display = "none";
+  volver_Atras_buscar.style.visibility = "hidden";
+
+  main_historial();
 }
 ////BUSCADOR FIN/////
 
@@ -272,7 +288,7 @@ const opcionesDeLocales = () => {
     })
 }
 
-opcionesDeLocales();
+//opcionesDeLocales();
 
 window.cambioDeLocal = (dato) => {
 
