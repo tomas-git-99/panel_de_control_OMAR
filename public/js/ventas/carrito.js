@@ -382,6 +382,21 @@ const descontar_talle_id = document.getElementById("descontar_talle_id")
 const btnCliente = document.querySelector(".btnCliente")
 
 
+const crearCliente = ( data ) => {
+
+    fecthNormalPOST_PUT("POST", "cliente", data)
+    .then( res => {
+        if(res.ok == true){
+
+            return res.cliente
+        }
+
+    })
+
+   .catch ( err => {
+       algo_salio_mal(`Algo salio mal: ${err}`)
+   })
+}
 formCliente.addEventListener("submit", async(e) =>{
 
     e.preventDefault();
@@ -406,22 +421,21 @@ formCliente.addEventListener("submit", async(e) =>{
     }
 
 
- 
-
     //const id_cliente = localStorage.getItem("id_cliente");
     let id_cliente = botonCliente.id;
     const id_direccion = aca_id_direccion.id;
     const id_usuario = localStorage.getItem("id");
+
     
     if(id_cliente == null || id_cliente == undefined || id_cliente == "id_del_cliente"){
 
-        let id = await fecthNormalPOST_PUT("POST", "cliente", forData);
-    
+        let id = await fecthNormalPOST_PUT("POST", "cliente", forData)
+                
         id_cliente = id.cliente.id;
     }
 
 
-    
+
     //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
     if(id_direccion == 0 || id_direccion == "0" || id_direccion == ""){
         
