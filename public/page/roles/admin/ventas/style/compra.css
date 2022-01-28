@@ -26,6 +26,7 @@
 .talles_del_producto{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     gap: 10px;
     padding: 10px;
 }
