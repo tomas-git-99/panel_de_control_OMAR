@@ -46,8 +46,8 @@ form.addEventListener('submit', (e) => {
             localStorage.setItem("x-token", res.token)
             localStorage.setItem("id", res.usuario[0].id)
             localStorage.setItem("nombre", res.usuario[0].nombre);
-
             localStorage.setItem("roles", res.usuario[0].rol);
+            localStorage.setItem("local", res.usuario[0].local);
             
             PERMISOS[res.usuario[0].rol]
                 ? PERMISOS[res.usuario[0].rol]()
