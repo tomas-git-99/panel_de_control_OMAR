@@ -12,21 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.obtenerDireccion = exports.agregarDirecciones = void 0;
 const direccion_1 = require("../../models/ventas/direccion");
 const agregarDirecciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const { direccion, cp, provincia, localidad } = req.body;
-    const data = {
-        id_cliente: id,
-        direccion,
-        cp,
-        provincia,
-        localidad
-    };
-    const direcciones = new direccion_1.Direccion(data);
-    yield direcciones.save();
-    res.json({
-        ok: true,
-        direcciones
-    });
+    try {
+        const { id } = req.params;
+        const { direccion, cp, provincia, localidad } = req.body;
+        const data = {
+            id_cliente: id,
+            direccion,
+            cp,
+            provincia,
+            localidad
+        };
+        const direcciones = new direccion_1.Direccion(data);
+        yield direcciones.save();
+        res.json({
+            ok: true,
+            direcciones
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
 });
 exports.agregarDirecciones = agregarDirecciones;
 const obtenerDireccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

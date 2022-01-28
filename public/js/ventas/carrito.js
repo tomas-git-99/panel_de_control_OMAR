@@ -106,7 +106,6 @@ const sumaDetalleTotal = ( talles, producto, carrito) => {
         
         let cantidadDeTalle = producto.talles.split(",");
         let contador = cantidadDeTalle.length * carrito.cantidad;
-        console.log(cantidadDeTalle)
     
         return contador;
 
@@ -399,60 +398,70 @@ const crearCliente = ( data ) => {
 }
 formCliente.addEventListener("submit", async(e) =>{
 
-    e.preventDefault();
-
-    const forData = {};          // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
-    const forDataDireccion = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
-    const forDataConfirmar = {}  // 2 DATOS PARA GENERAR NUEVA ORDEN
-    
-    load_normal(btnCliente, true)
-    for(let el of formCliente.elements){
-        if(el.name.length > 0){
-
-            if(el.name === "fecha"  || el.name === "transporte"){
-                forDataConfirmar[el.name] = el.value;
-            }else if(el.name == "provincia" || el.name == "localidad" || el.name == "cp" || el.name == "direccion"){
-                forDataDireccion[el.name] = el.value;
-            }else{
-                forData[el.name] = el.value;
-            }
-
-        }
-    }
-
-
-    //const id_cliente = localStorage.getItem("id_cliente");
-    let id_cliente = botonCliente.id;
-    const id_direccion = aca_id_direccion.id;
-    const id_usuario = localStorage.getItem("id");
-
-    
-    if(id_cliente == null || id_cliente == undefined || id_cliente == "id_del_cliente"){
-
-        let id = await fecthNormalPOST_PUT("POST", "cliente", forData)
-                
-        id_cliente = id.cliente.id;
-    }
-
-
-
-    //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
-    if(id_direccion == 0 || id_direccion == "0" || id_direccion == ""){
+    try {
         
-        fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
-            .then( (res) => {
+        e.preventDefault();
+    
+        const forData = {};          // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+        const forDataDireccion = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+        const forDataConfirmar = {}  // 2 DATOS PARA GENERAR NUEVA ORDEN
+        
+        load_normal(btnCliente, true)
+        for(let el of formCliente.elements){
+            if(el.name.length > 0){
+    
+                if(el.name === "fecha"  || el.name === "transporte"){
+                    forDataConfirmar[el.name] = el.value;
+                }else if(el.name == "provincia" || el.name == "localidad" || el.name == "cp" || el.name == "direccion"){
+                    forDataDireccion[el.name] = el.value;
+                }else{
+                    forData[el.name] = el.value;
+                }
+    
+            }
+        }
+    
+    
+        //const id_cliente = localStorage.getItem("id_cliente");
+        let id_cliente = botonCliente.id;
+        const id_direccion = aca_id_direccion.id;
+        const id_usuario = localStorage.getItem("id");
+    
+        
+        if(id_cliente == null || id_cliente == undefined || id_cliente == "id_del_cliente"){
+    
+            let id = await fecthNormalPOST_PUT("POST", "cliente", forData)
+                    
+            id_cliente = id.cliente.id;
+        }
+    
+    
+    
+        //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
+        if(id_direccion == 0 || id_direccion == "0" || id_direccion == ""){
+            
+            fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
+                .then( (res) => {
+    
+                    load_normal(btnCliente, false, "CONFIRMAR")
+                    generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
+                })
+                .catch(err =>{
+                    load_normal(btnCliente, false, "CONFIRMAR")
+                    algo_salio_mal(`Algo salio mal: ${ err }`)
+                })
+    
+        }else{
+            generarOrden(id_cliente, id_usuario, id_direccion, forDataConfirmar);
+            load_normal(btnCliente, false, "CONFIRMAR");
+        }
+    } catch (error) {
+        load_normal(btnCliente, false, "CONFIRMAR")
 
-                load_normal(btnCliente, false, "CONFIRMAR")
-                generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
-            })
-            .catch(err =>{
-                load_normal(btnCliente, false, "CONFIRMAR")
-                algo_salio_mal(`Algo salio mal: ${ err }`)
-            })
-
-    }else{
-        generarOrden(id_cliente, id_usuario, id_direccion, forDataConfirmar);
+        return  algo_salio_mal(`Algo salio mal: ${ error }, error al Generar Orden`)
+        
     }
+
 
 
 })
@@ -463,28 +472,34 @@ const quitar_total_o_individual = document.querySelector(".quitar_total_o_indivi
 
 const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
 
+    try {
+        
+        fecthNormalPOST_PUT("POST", `orden/${id_cliente}/${id_usuario}/${id_direccion}`, data)
+            .then( res => {
+               
+                if(res.ok){
     
-    fecthNormalPOST_PUT("POST", `orden/${id_cliente}/${id_usuario}/${id_direccion}`, data)
-        .then( res => {
-            if(res.ok){
+                    // ACA COLOCAMOS QUE SE ABRA LA SIGUENTE VENTANA PARA DESCONTAR DEL TOTAL O POR TALLE
+                    //volverAtras(cartelCliente, quitar_total_o_individual)
+                    //descontar_total_id.id = res.orden.id;
+                    //descontar_talle_id.id = res.orden.id;
+                    descontarTotalOporTalle(id_usuario, res.orden.id);
+                }else if (res.error == 10 || res.error == "10"){
+                    localStorage.removeItem("x-token");
+                    window.location.href = `${window.location.origin}/index.html`
+                }else{
+                    advertencia(`Verifique si lleno bien los campos del formulario...`)
+                }
+            })
+            .catch( err => {
+                algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err }`)
+            })
+                      
+    } catch (error) {
+        return algo_salio_mal(`Algo salio mal: ${error}, error al Generar Orden`)
+    }
 
-                // ACA COLOCAMOS QUE SE ABRA LA SIGUENTE VENTANA PARA DESCONTAR DEL TOTAL O POR TALLE
-                //volverAtras(cartelCliente, quitar_total_o_individual)
-                //descontar_total_id.id = res.orden.id;
-                //descontar_talle_id.id = res.orden.id;
-                descontarTotalOporTalle(id_usuario, res.orden.id);
-            }else if (res.error == 10 || res.error == "10"){
-                localStorage.removeItem("x-token");
-                window.location.href = `${window.location.origin}/index.html`
-            }else{
-                advertencia(`Verifique si lleno bien los campos del formulario...`)
-            }
-        })
-        .catch( err => {
-            
-            algo_salio_mal(`Algo salio mal no se pudo generar la orden: ${ err }`)
-        })
-                  
+    
 }
 
 ////DESCONTAR LOS PRODUCTOS DE LA BASE DE DATOS

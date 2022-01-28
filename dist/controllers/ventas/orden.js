@@ -21,7 +21,13 @@ const talles_1 = require("../../models/ventas/talles");
 const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idCliente, idUsuario, idDireccion } = req.params;
-        const { fecha, transporte } = req.body;
+        let { fecha, transporte } = req.body;
+        if (fecha == '') {
+            fecha = null;
+        }
+        if (transporte == '' || transporte == undefined) {
+            transporte = null;
+        }
         const datos = {
             id_cliente: idCliente,
             id_usuario: idUsuario,
@@ -37,8 +43,7 @@ const generarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({
+        res.json({
             ok: false,
             msg: "Hablar con el administrador",
         });

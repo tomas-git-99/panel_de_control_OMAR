@@ -6,25 +6,38 @@ import { Direccion } from "../../models/ventas/direccion";
 
 export const agregarDirecciones = async (req: Request, res: Response) => {
 
-    const { id } = req.params;
-    const { direccion, cp, provincia, localidad} = req.body;
 
-    const data:any = {
-        id_cliente: id,
-        direccion,
-        cp,
-        provincia,
-        localidad
+    try {
+        
+        const { id } = req.params;
+        const { direccion, cp, provincia, localidad} = req.body;
+    
+        const data:any = {
+            id_cliente: id,
+            direccion,
+            cp,
+            provincia,
+            localidad
+        }
+    
+        const direcciones = new Direccion(data);
+    
+        await direcciones.save();
+    
+        res.json({
+            ok: true,
+            direcciones
+        })
+    } catch (error) {
+
+        res.json({
+            ok: false,
+            msg: error
+        })
     }
 
-    const direcciones = new Direccion(data);
 
-    await direcciones.save();
 
-    res.json({
-        ok: true,
-        direcciones
-    })
 }
 
 

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import fecha from "fecha";
 import { Op, where } from "sequelize/dist";
 import { Carrito } from "../../models/ventas/carrito";
 import { Cliente } from "../../models/ventas/cliente";
@@ -18,16 +19,25 @@ export const generarOrden = async(req: Request, res: Response) => {
     try {
         const { idCliente, idUsuario, idDireccion} = req.params;
 
-        const { fecha, transporte} = req.body;
+        let { fecha, transporte} = req.body;
+
+
+
+        if(fecha == ''){
+            fecha = null
+        }
+
+        if(transporte == '' || transporte == undefined){
+            transporte = null;
+        }
 
         const datos:any = {
-            id_cliente:idCliente,
-            id_usuario:idUsuario,
+            id_cliente:  idCliente,
+            id_usuario:  idUsuario,
             id_direccion:idDireccion,
             fecha,
             transporte
         }
-
 
         const orden = new Orden(datos);
 
@@ -40,8 +50,8 @@ export const generarOrden = async(req: Request, res: Response) => {
         });
         
     } catch (error) {
-        console.log(error);
-            res.status(500).json({
+
+            res.json({
             ok: false,
             msg: "Hablar con el administrador",
 
