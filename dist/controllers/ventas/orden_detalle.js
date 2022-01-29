@@ -143,14 +143,32 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 else if (largoDeTalle.split(',').length > 1) {
                     let cantidadAntigua = ordenDetalle.cantidad / largoDeTalle.split(',').length;
                     if (cantidadAntigua > cantidad) {
-                        console.log("sumar");
+                        let nuevaCurva = cantidadAntigua - cantidad;
+                        let descontarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+                        console.log(nuevaCurva);
+                        console.log(descontarNuevo);
+                        console.log("descontar");
                     }
                     else {
                         let curvaNueva = cantidad - cantidadAntigua;
+                        let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
                         console.log(curvaNueva);
-                        console.log("descontar");
+                        console.log(descontarNuevo);
+                        console.log("sumar");
                     }
                 }
+            }
+        }
+        else {
+            if ((productos === null || productos === void 0 ? void 0 : productos.cantidad) == null) {
+                let talleCurvaoTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
+                //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
+                if (talleCurvaoTalle.split(',').length == 1) {
+                }
+                else {
+                }
+            }
+            else {
             }
         }
         res.json({

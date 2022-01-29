@@ -11,17 +11,15 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
         const { id } = req.params;
 
+       
         const { cantidad, talle } = req.body;
 
         const ordenDetalle = await OrdenDetalle.findByPk(id);
-
         const productos = await Producto.findByPk(ordenDetalle?.id_producto);
 
         const talles = await Talle.findAndCountAll({where:{id_producto:ordenDetalle?.id_producto}});
         let productos_sin_stock:any = [];
 
-        
-        
         
         //ACA SI LO QUIERE MODIFICAR A CURVO
         if(talle == null) {
@@ -232,12 +230,11 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
             }else{
 
-                
                 let largoDeTalle:any = ordenDetalle?.talle;
                 
                 if(largoDeTalle.split(',').length == 1) {
                     
-                    
+                   
                 }else if(largoDeTalle.split(',').length > 1){
                     
 
@@ -245,12 +242,26 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
                    
                     if(cantidadAntigua > cantidad){
-                        console.log("sumar")
-                    }else{
-                        let curvaNueva = cantidad - cantidadAntigua
 
-                        console.log(curvaNueva)
+                        let nuevaCurva = cantidadAntigua - cantidad;
+
+                        let descontarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+
+                        console.log(nuevaCurva);
+                        console.log(descontarNuevo);
+
                         console.log("descontar")
+
+
+                    }else{
+
+                        let curvaNueva = cantidad - cantidadAntigua;
+                        let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
+
+                        console.log(curvaNueva);
+                        console.log(descontarNuevo);
+                        console.log("sumar")
+
                     }
 
                 }
@@ -259,6 +270,29 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
             }
             
+        }else{
+
+            if(productos?.cantidad == null) {
+
+                let talleCurvaoTalle:any = ordenDetalle?.talle;
+
+                //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
+                if(talleCurvaoTalle.split(',').length == 1) {
+
+                    if(talle == ordenDetalle?.talle){
+                         
+                    }
+
+                }else{
+
+
+                }
+
+
+            }else{
+
+
+            }
         }
         
         res.json({
