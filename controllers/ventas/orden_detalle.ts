@@ -271,16 +271,53 @@ export const modificarOrden = async (req: Request, res: Response) => {
             }
             
         }else{
+            //ACA ES CUANDO EL USUARIO MANDA EL TALLE Y LA CANTIDAD
 
+            
+            
             if(productos?.cantidad == null) {
-
+                
                 let talleCurvaoTalle:any = ordenDetalle?.talle;
-
+                
                 //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
                 if(talleCurvaoTalle.split(',').length == 1) {
-
+                    
                     if(talle == ordenDetalle?.talle){
-                         
+                        
+                        if(ordenDetalle!.cantidad > cantidad){
+                            
+                            let nuevaCantidad = ordenDetalle!.cantidad - cantidad;
+
+                            console.log(nuevaCantidad)
+                            console.log(ordenDetalle!.cantidad + ' cantidad antigua')
+                            console.log(cantidad + ' antigua para restar')
+                            console.log('descontar')
+
+
+                        }else{
+
+                            let nuevaCantidad = cantidad - ordenDetalle!.cantidad;
+
+                            console.log(nuevaCantidad)
+                            console.log(ordenDetalle!.cantidad + ' cantidad antigua')
+                            console.log(cantidad + ' antigua para restar')
+                            console.log('sumar')
+                        }
+                    }else{
+
+                        
+                        for ( let t of talles.rows){
+
+                            if(t.talle == talle){
+                                console.log('hola')
+                                //aca aumentar la cantidad de la cantidad antigua.
+                            }else if(t.talle == ordenDetalle?.talle){
+                                console.log('perrin')
+                                let nuevaCantidad = t.cantidad - cantidad;
+
+                            }
+
+                        }
                     }
 
                 }else{

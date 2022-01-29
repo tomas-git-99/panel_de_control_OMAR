@@ -160,10 +160,39 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
         }
         else {
+            //ACA ES CUANDO EL USUARIO MANDA EL TALLE Y LA CANTIDAD
             if ((productos === null || productos === void 0 ? void 0 : productos.cantidad) == null) {
                 let talleCurvaoTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
                 //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
                 if (talleCurvaoTalle.split(',').length == 1) {
+                    if (talle == (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle)) {
+                        if (ordenDetalle.cantidad > cantidad) {
+                            let nuevaCantidad = ordenDetalle.cantidad - cantidad;
+                            console.log(nuevaCantidad);
+                            console.log(ordenDetalle.cantidad + ' cantidad antigua');
+                            console.log(cantidad + ' antigua para restar');
+                            console.log('descontar');
+                        }
+                        else {
+                            let nuevaCantidad = cantidad - ordenDetalle.cantidad;
+                            console.log(nuevaCantidad);
+                            console.log(ordenDetalle.cantidad + ' cantidad antigua');
+                            console.log(cantidad + ' antigua para restar');
+                            console.log('sumar');
+                        }
+                    }
+                    else {
+                        for (let t of talles.rows) {
+                            if (t.talle == talle) {
+                                console.log('hola');
+                                //aca aumentar la cantidad de la cantidad antigua.
+                            }
+                            else if (t.talle == (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle)) {
+                                console.log('perrin');
+                                let nuevaCantidad = t.cantidad - cantidad;
+                            }
+                        }
+                    }
                 }
                 else {
                 }
