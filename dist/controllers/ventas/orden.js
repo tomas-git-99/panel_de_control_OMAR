@@ -378,6 +378,14 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         const orden = yield orden_1.Orden.findByPk(idOrden);
         yield (orden === null || orden === void 0 ? void 0 : orden.destroy());
+        direccion_1.Direccion.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_direccion)
+            .then((resp) => __awaiter(void 0, void 0, void 0, function* () {
+            if (resp) {
+                yield resp.destroy();
+            }
+        }));
+        const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
+        yield (cliente === null || cliente === void 0 ? void 0 : cliente.destroy());
         res.json({
             ok: true
         });

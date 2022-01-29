@@ -587,8 +587,20 @@ export const deshacerOrden = async(req: Request, res: Response) => {
    
 
         const orden = await Orden.findByPk(idOrden);
-
         await orden?.destroy();
+
+
+        Direccion.findByPk(orden?.id_direccion)
+                .then( async(resp) => {
+                    if(resp){
+                        await resp.destroy();
+                    }
+                })
+
+        const cliente = await Cliente.findByPk(orden?.id_cliente);
+
+        await cliente?.destroy();
+        
 
         res.json({
             ok:true

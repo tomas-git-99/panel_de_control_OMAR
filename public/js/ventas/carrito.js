@@ -750,50 +750,58 @@ const venta_publico_form = document.querySelector(".venta_publico_form");
 
 
 venta_publico_form.addEventListener("submit", async(e) => {
-    e.preventDefault();
 
-
-    const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
-
+    try {
+        e.preventDefault();
     
-    for(let el of venta_publico_form.elements){
-        if(el.name.length > 0){
-
-            forData[el.name] = el.value;
-          
-
-        }
-    }
-
-    const id_usuario = localStorage.getItem("id");
-
-    let data = await fecthNormalPOST_PUT("POST", "cliente", forData);
-
- 
-
-    fecthNormalGET("GET",`orden/publico/orden/completo/${id_usuario}/${data.cliente.id}?publico=true`)
-        .then( res => {
+    
+        const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
+    
         
-            if(res.ok == true){
-
-/*                 volverAtras(venta_publico, quitar_total_o_individual)
-                descontar_total_id.id = res.orden.id;
-                descontar_talle_id.id = res.orden.id;
-                ventaPublico = true; */
-
-                descontarTotalOporTalle(id_usuario, res.orden.id)
-
-            }else{
-                algo_salio_mal(`Algo salio mal: ${ res }`);
-                volverAtras(venta_publico, bienvenido)
+        for(let el of venta_publico_form.elements){
+            if(el.name.length > 0){
+    
+                forData[el.name] = el.value;
+              
+    
             }
-        })
-        .catch ( err => {
-        
-            algo_salio_mal(`Algo salio mal: ${ err }`);
-            volverAtras(venta_publico, bienvenido)
-        })
+        }
     
+        const id_usuario = localStorage.getItem("id");
+    
+        let data = await fecthNormalPOST_PUT("POST", "cliente", forData);
+
+        console.log(data)
+    
+     
+    
+        fecthNormalGET("GET",`orden/publico/orden/completo/${id_usuario}/${data.cliente.id}?publico=true`)
+            .then( res => {
+                console.log(res)
+                if(res.ok == true){
+    
+    /*                 volverAtras(venta_publico, quitar_total_o_individual)
+                    descontar_total_id.id = res.orden.id;
+                    descontar_talle_id.id = res.orden.id;
+                    ventaPublico = true; */
+    
+                    descontarTotalOporTalle(id_usuario, res.orden.id)
+    
+                }else{
+                    algo_salio_mal(`Algo salio mal: ${ res }`);
+                    volverAtras(venta_publico, bienvenido)
+                }
+            })
+            .catch ( err => {
+            
+                algo_salio_mal(`Algo salio mal: ${ err }`);
+                volverAtras(venta_publico, bienvenido)
+            })
+        
+        
+    } catch (error) {
+        algo_salio_mal(`Algo salio mal: error: ${ error } al generar cliente`);
+    }
 })
 
 window.salir_publico = () => {

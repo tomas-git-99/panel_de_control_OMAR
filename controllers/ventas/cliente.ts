@@ -13,6 +13,7 @@ export const crearCliente = async (req: Request, res: Response) => {
 
         const cliente = new Cliente(req.body);
 
+
         await cliente.save();
 
 
@@ -23,7 +24,7 @@ export const crearCliente = async (req: Request, res: Response) => {
 
 
 
-    } catch (error) {
+    } catch (error:any) {
         res.json({
             ok: false,
             msg: "Hablar con el administrador"
