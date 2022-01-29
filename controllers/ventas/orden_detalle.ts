@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { descontarCurvas } from "../../helpers/descontar_orden";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
@@ -298,8 +299,13 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
                     let cantidadAntigua = ordenDetalle!.cantidad / largoDeTalle.split(',').length;
 
-                   
-                    if(cantidadAntigua > cantidad){
+                    let data = descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
+
+                    console.log(data);
+                    console.log('gato')
+
+              
+/*                     if(cantidadAntigua > cantidad){
 
                         let nuevaCurva = cantidadAntigua - cantidad;
 
@@ -349,7 +355,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                         console.log(descontarNuevo);
                         console.log("descontar")
 
-                    }
+                    } */
 
                 }
 

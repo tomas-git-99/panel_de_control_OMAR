@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.modificarOrden = void 0;
+const descontar_orden_1 = require("../../helpers/descontar_orden");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
 const producto_1 = require("../../models/ventas/producto");
@@ -158,35 +159,60 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 }
                 else if (largoDeTalle.split(',').length > 1) {
                     let cantidadAntigua = ordenDetalle.cantidad / largoDeTalle.split(',').length;
-                    if (cantidadAntigua > cantidad) {
-                        let nuevaCurva = cantidadAntigua - cantidad;
-                        let sumarNuevo = nuevaCurva * largoDeTalle.split(',').length;
-                        //console.log(cantidad * largoDeTalle.split(',').length);
-                        let sumaAntigua = ordenDetalle.cantidad * ordenDetalle.precio;
-                        let cantidadTotal = largoDeTalle.split(',').length * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
-                        //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
-                        let nuevaTotalOrden = orden.total - sumaAntigua; // RESTAMOS LA CANTIDAD ANTIGUA 
-                        let precioNuevo = ordenDetalle.precio * cantidadTotal;
-                        //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
-                        let totalSumar = cantidad * largoDeTalle.split(',').length;
-                        //await ordenDetalle?.update({cantidad: totalSumar})
-                        console.log(nuevaCurva);
-                        console.log(sumarNuevo);
-                        console.log("sumar");
-                    }
-                    else {
-                        let curvaNueva = cantidad - cantidadAntigua;
-                        let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
-                        if (productos.cantidad < descontarNuevo || productos.cantidad == 0) {
-                            productos_sin_stock.push(`El producto: "${productos === null || productos === void 0 ? void 0 : productos.nombre}" con stock de actual: ${productos.cantidad}, cantidad que quieres colocar: ${descontarNuevo} `);
-                        }
-                        let totalProducto = productos.cantidad - descontarNuevo;
-                        //await productos.update({cantidad: totalProducto});
-                        //await ordenDetalle?.update({cantidad: cantidad * largoDeTalle.split(',').length})
-                        console.log(curvaNueva);
-                        console.log(descontarNuevo);
-                        console.log("descontar");
-                    }
+                    let data = descontar_orden_1.descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
+                    console.log(data);
+                    console.log('gato');
+                    /*                     if(cantidadAntigua > cantidad){
+                    
+                                            let nuevaCurva = cantidadAntigua - cantidad;
+                    
+                                            let sumarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+                    
+                                            //console.log(cantidad * largoDeTalle.split(',').length);
+                    
+                                            let sumaAntigua = ordenDetalle!.cantidad * ordenDetalle!.precio;
+                    
+                                            let cantidadTotal = largoDeTalle.split(',').length * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
+                    
+                                            //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
+                    
+                    
+                                            let nuevaTotalOrden = orden!.total - sumaAntigua;  // RESTAMOS LA CANTIDAD ANTIGUA
+                        
+                                            let precioNuevo = ordenDetalle!.precio * cantidadTotal;
+                        
+                                            //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
+                    
+                                            let totalSumar = cantidad * largoDeTalle.split(',').length
+                    
+                                            //await ordenDetalle?.update({cantidad: totalSumar})
+                    
+                                            console.log(nuevaCurva);
+                                            console.log(sumarNuevo);
+                    
+                                            console.log("sumar")
+                    
+                    
+                                        }else{
+                    
+                                            let curvaNueva = cantidad - cantidadAntigua;
+                                            let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
+                    
+                    
+                                            if(productos.cantidad < descontarNuevo || productos.cantidad == 0){
+                                                productos_sin_stock.push(`El producto: "${productos?.nombre}" con stock de actual: ${productos.cantidad}, cantidad que quieres colocar: ${descontarNuevo} ` );
+                                            }
+                    
+                                            let totalProducto = productos.cantidad - descontarNuevo;
+                                            //await productos.update({cantidad: totalProducto});
+                    
+                                            //await ordenDetalle?.update({cantidad: cantidad * largoDeTalle.split(',').length})
+                    
+                                            console.log(curvaNueva);
+                                            console.log(descontarNuevo);
+                                            console.log("descontar")
+                    
+                                        } */
                 }
             }
         }

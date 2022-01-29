@@ -1,14 +1,33 @@
 
+//CURVAS PARA PRODUCTOS QUE NO TIENE TALLES
+export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle:any, orden:any, producto:any) =>{
 
-export const descontarCurvas = (cantidad:any, cantidad_anterior:any, talles:any, precio:any) =>{
+    let cantidadDescontarOsumar
 
-    if(cantidad_anterior > cantidad){
+    let cantidadTotalProducto 
 
-        let cantidadDescontar = cantidad_anterior - cantidad // LO QUE SE VA DESCONTAR DEL PRODUCTO DEL PRODUCTO
+    let cantidadTotalOrden
 
-        let cantidadTotal = talles * cantidad;
+    let largoDeTalle = ordenDetalle.talle.split(',').length;
+
+    let data
 
 
+    if(cantidad_antigua > cantidad){
+
+        cantidadDescontarOsumar = cantidad_antigua - cantidad;
+
+        cantidadTotalProducto   = largoDeTalle * cantidad;
+
+        let descontarOrden = orden!.total - (ordenDetalle!.cantidad * ordenDetalle!.precio);
+        cantidadTotalOrden = descontarOrden + (ordenDetalle!.precio *cantidadTotalProducto);
+
+        return data = { 
+            cantidadTotal: cantidadTotalProducto,
+            cantidadTotalOrden: cantidadTotalOrden,
+        }
     }
+
+
 
 }
