@@ -347,7 +347,7 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 let largo = i.talle;
                 let largoDetalle = largo.length;
                 if (largo.length == 1) {
-                    if (h.talle == i.talle) {
+                    if (h.talle == parseInt(i.talle)) {
                         let nuevaCantidad = h.cantidad + i.cantidad;
                         yield h.update({ cantidad: nuevaCantidad });
                         yield i.destroy();

@@ -530,7 +530,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
                 if(largo.length == 1){
 
-                    if(h.talle == i.talle){
+                    if(h.talle == parseInt(i.talle)){
 
                         let nuevaCantidad = h.cantidad + i.cantidad;
 

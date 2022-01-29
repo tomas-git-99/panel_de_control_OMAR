@@ -77,20 +77,20 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         });
                     }
                     /*
-                                        console.log(cantidad + " cantidad para descontar  o sumar")
-                                        console.log(ordenDetalle?.cantidad+ " cantidad anterior")
-                                        
-                    
-                                        console.log(tallesDescontar)
-                                        console.log(tallesDb) */
+                     console.log(cantidad + " cantidad para descontar  o sumar")
+                     console.log(ordenDetalle?.cantidad+ " cantidad anterior")
+                     
+ 
+                     console.log(tallesDescontar)
+                     console.log(tallesDb) */
                     let cantidadTotal = talles.count * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
                     //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
                     let sumaAntigua = ordenDetalle.cantidad * ordenDetalle.precio;
                     let nuevaTotalOrden = orden.total - sumaAntigua; // RESTAMOS LA CANTIDAD ANTIGUA 
                     let precioNuevo = ordenDetalle.precio * cantidadTotal;
                     //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
-                    console.log('NUEVO TOTAL : ' + (nuevaTotalOrden + precioNuevo));
-                    console.log('total: ' + orden.total);
+                    //console.log('NUEVO TOTAL : ' + (nuevaTotalOrden + precioNuevo) )
+                    //console.log('total: ' + orden!.total);
                     for (let t of talles.rows) {
                         for (let d of tallesDescontar) {
                             if (d.talle == t.talle) {
@@ -101,7 +101,6 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     }
                 }
                 else if (talleCurvaoTalle.split(',').length > 1) { // ACA ENTRAR SI ES CURVO EL ANTERIOR DATO
-                    console.log('gatin');
                     let cantidadDescontarPorTalle = ordenDetalle.cantidad / talles.count;
                     let tallesDescontar = [];
                     if (cantidadDescontarPorTalle > cantidad) {
@@ -109,12 +108,15 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         // en esta parte dentri que descontar solo lo que esta en "newCantidadCurva" nada mas
                         for (let t of talles.rows) {
                             let nuevoCantidadTalle = t.cantidad + newCantidadCurva;
+                            //await t.update({cantidad:nuevoCantidadTalle});
                             //ahora solo tenes que hacer update a talle correspondiente
                         }
                     }
                     else {
                         let newCantidadCurvaMayor = cantidad - cantidadDescontarPorTalle; // la cantidad es 10 por talle
+                        let tallesDb = [];
                         for (let t of talles.rows) {
+                            tallesDb = [...tallesDb, { talle: t.talle, cantidad: t.cantidad }];
                             if (t.cantidad < newCantidadCurvaMayor || t.cantidad == 0) {
                                 productos_sin_stock.push(`El producto: "${productos === null || productos === void 0 ? void 0 : productos.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, cantidad que quieres colocar: ${newCantidadCurvaMayor} `);
                             }
@@ -129,48 +131,61 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                                 productos_sin_stock
                             });
                         }
+                        let cantidadTotal = talles.count * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
+                        //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
+                        let sumaAntigua = ordenDetalle.cantidad * ordenDetalle.precio;
+                        let nuevaTotalOrden = orden.total - sumaAntigua; // RESTAMOS LA CANTIDAD ANTIGUA 
+                        let precioNuevo = ordenDetalle.precio * cantidadTotal;
+                        //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
+                        for (let t of talles.rows) {
+                            for (let d of tallesDescontar) {
+                                if (d.talle == t.talle) {
+                                    //aca hacemo el update de las nuevas cantidades
+                                    //await t.update({cantidad:d.cantidad});
+                                }
+                            }
+                        }
+                        console.log(tallesDescontar);
+                        console.log(tallesDb);
                         //aca hacer el update de las nuevas cantidades
                     }
                 }
-                //VERIFICAR BIEN SI ES NECESARIO PONER ESTO ACA O DEBERIA PONERLO ABAJO DONDE CALCULAMOS LAS CANTIDADES QUE SE VAN DESCONTAR CON LA SUMAS HECHAS !!!!
-                /*                 for( let t of talles.rows) {
-                
-                                    if(t.cantidad < cantidad || t.cantidad == 0){
-                
-                                        productos_sin_stock.push(`El producto: "${productos?.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, cantidad que quieres colocar: ${cantidad} ` );
-                
-                                    }
-                                }
-                
-                                if(productos_sin_stock.length > 0){
-                                    return res.json({
-                                        ok: false,
-                                        error:2,
-                                        msg: "No ahi stock suficiente con los productos ...",
-                                        productos_sin_stock
-                                    })
-                                } */
-                //VERIFICAR BIEN SI ES NECESARIO PONER ESTO ACA O DEBERIA PONERLO ABAJO DONDE CALCULAMOS LAS CANTIDADES QUE SE VAN DESCONTAR CON LA SUMAS HECHAS !!!! FINAL
             }
             else {
                 let largoDeTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
                 if (largoDeTalle.split(',').length == 1) {
+                    console.log("prueba perrona");
                 }
                 else if (largoDeTalle.split(',').length > 1) {
                     let cantidadAntigua = ordenDetalle.cantidad / largoDeTalle.split(',').length;
                     if (cantidadAntigua > cantidad) {
                         let nuevaCurva = cantidadAntigua - cantidad;
-                        let descontarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+                        let sumarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+                        //console.log(cantidad * largoDeTalle.split(',').length);
+                        let sumaAntigua = ordenDetalle.cantidad * ordenDetalle.precio;
+                        let cantidadTotal = largoDeTalle.split(',').length * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
+                        //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
+                        let nuevaTotalOrden = orden.total - sumaAntigua; // RESTAMOS LA CANTIDAD ANTIGUA 
+                        let precioNuevo = ordenDetalle.precio * cantidadTotal;
+                        //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
+                        let totalSumar = cantidad * largoDeTalle.split(',').length;
+                        //await ordenDetalle?.update({cantidad: totalSumar})
                         console.log(nuevaCurva);
-                        console.log(descontarNuevo);
-                        console.log("descontar");
+                        console.log(sumarNuevo);
+                        console.log("sumar");
                     }
                     else {
                         let curvaNueva = cantidad - cantidadAntigua;
                         let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
+                        if (productos.cantidad < descontarNuevo || productos.cantidad == 0) {
+                            productos_sin_stock.push(`El producto: "${productos === null || productos === void 0 ? void 0 : productos.nombre}" con stock de actual: ${productos.cantidad}, cantidad que quieres colocar: ${descontarNuevo} `);
+                        }
+                        let totalProducto = productos.cantidad - descontarNuevo;
+                        //await productos.update({cantidad: totalProducto});
+                        //await ordenDetalle?.update({cantidad: cantidad * largoDeTalle.split(',').length})
                         console.log(curvaNueva);
                         console.log(descontarNuevo);
-                        console.log("sumar");
+                        console.log("descontar");
                     }
                 }
             }
