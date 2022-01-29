@@ -159,7 +159,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 }
                 else if (largoDeTalle.split(',').length > 1) {
                     let cantidadAntigua = ordenDetalle.cantidad / largoDeTalle.split(',').length;
-                    let data = descontar_orden_1.descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
+                    let data = (0, descontar_orden_1.descontarCurvas)(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
                     console.log(data);
                     console.log('gato');
                     /*                     if(cantidadAntigua > cantidad){

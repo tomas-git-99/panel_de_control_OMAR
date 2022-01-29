@@ -26,6 +26,22 @@ export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle
             cantidadTotal: cantidadTotalProducto,
             cantidadTotalOrden: cantidadTotalOrden,
         }
+    }else{
+
+        cantidadDescontarOsumar = cantidad - cantidad_antigua;
+        cantidadTotalProducto   = largoDeTalle * cantidad;
+
+        if(producto.cantidad < cantidadDescontarOsumar || producto.cantidad == 0 ){
+            return data = {
+                error : `El producto: "${producto.nombre}" con stock de actual: ${producto.cantidad}, cantidad que quieres colocar: ${cantidadDescontarOsumar} `
+            }
+        }
+
+        let descontarOrden = orden!.total - (ordenDetalle!.cantidad * ordenDetalle!.precio);
+        cantidadTotalOrden = descontarOrden + (ordenDetalle!.precio *cantidadTotalProducto);
+
+        
+
     }
 
 
