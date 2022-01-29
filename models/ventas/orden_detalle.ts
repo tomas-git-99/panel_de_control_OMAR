@@ -7,7 +7,7 @@ export interface TodoAtributos {
     id_producto: number;
     nombre_producto:string;
     cantidad:number;
-    talle:number;
+    talle:string;
     precio:number;
 }
 
@@ -18,7 +18,7 @@ export class OrdenDetalle extends Model <TodoAtributos>{
     public id_producto!: number;
     public nombre_producto!: string;
     public cantidad!:number;
-    public talle!:number;
+    public talle!:string;
     public precio!:number;
 
 }

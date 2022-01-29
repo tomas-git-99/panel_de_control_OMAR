@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
@@ -18,6 +19,9 @@ export const modificarOrden = async (req: Request, res: Response) => {
         const productos = await Producto.findByPk(ordenDetalle?.id_producto);
 
         const talles = await Talle.findAndCountAll({where:{id_producto:ordenDetalle?.id_producto}});
+
+        const orden = await Orden.findByPk(ordenDetalle?.id_orden);
+
         let productos_sin_stock:any = [];
 
         
@@ -44,24 +48,25 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
 
                         tallesDb = [...tallesDb, { talle:t.talle, cantidad:t.cantidad}]
-                        if(ordenDetalle?.talle == t.talle){
+
+                        if(parseInt(ordenDetalle!.talle) == t.talle){
 
                         
 
-                            if(ordenDetalle?.cantidad > cantidad){
+                            if(ordenDetalle!.cantidad > cantidad){
 
                                 //aca suma a la talle que falta
-                                let nuevaCantidad = ordenDetalle?.cantidad - cantidad;
+                                let nuevaCantidad = ordenDetalle!.cantidad - cantidad;
                                 let nuevaCantidadTalle = t.cantidad + nuevaCantidad;
 
-                                tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}]
+                                tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}];
+                                console.log('hola')
 
 
-                            }else {
+                            }else{
                                 //aca restamos el talle que falta
-                                let nuevaCantidad = cantidad - ordenDetalle?.cantidad;
 
-                      
+                                let nuevaCantidad = cantidad - ordenDetalle!.cantidad;
 
                                 if(t.cantidad < nuevaCantidad || t.cantidad == 0){
 
@@ -72,15 +77,14 @@ export const modificarOrden = async (req: Request, res: Response) => {
                         
                                 let nuevaCantidadTalle = t.cantidad - nuevaCantidad;
 
-                                tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}]
+                                tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}];
 
                 
-
                             }
 
 
 
-                        } else{
+                        }else{
 
                       
                             if(t.cantidad < cantidad || t.cantidad == 0){
@@ -94,7 +98,18 @@ export const modificarOrden = async (req: Request, res: Response) => {
                             let nuevaCantidad = t.cantidad - cantidad;
                         
 
-                            tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidad}]
+                            tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidad}];
+
+
+
+                            // nuevo 10400
+                            // antiguo 40000
+
+                           
+
+
+                            console.log(tallesDescontar)
+                            console.log(tallesDb)
                                                         
                         }
 
@@ -120,6 +135,28 @@ export const modificarOrden = async (req: Request, res: Response) => {
                     console.log(tallesDescontar)
                     console.log(tallesDb) */
 
+                    let cantidadTotal = talles.count * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
+
+                    //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
+
+
+
+
+                    let sumaAntigua = ordenDetalle!.cantidad * ordenDetalle!.precio;
+
+
+                    let nuevaTotalOrden = orden!.total - sumaAntigua;  // RESTAMOS LA CANTIDAD ANTIGUA 
+
+                    let precioNuevo = ordenDetalle!.precio * cantidadTotal;
+
+                    //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
+                    
+                    console.log('NUEVO TOTAL : ' + (nuevaTotalOrden + precioNuevo) )
+                    console.log('total: ' + orden!.total);
+
+
+
+
                     for (let t of talles.rows){
 
                         for( let d of tallesDescontar){
@@ -128,6 +165,8 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
 
                                 //aca hacemo el update de las nuevas cantidades
+
+                                //await t.update({cantidad:d.cantidad});
                             }
                         }
                     }
@@ -136,6 +175,8 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
 
                 }else if ( talleCurvaoTalle.split(',').length > 1){ // ACA ENTRAR SI ES CURVO EL ANTERIOR DATO
+
+                    console.log('gatin')
 
                     
                     let cantidadDescontarPorTalle = ordenDetalle!.cantidad / talles.count;
@@ -176,7 +217,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                                 productos_sin_stock.push(`El producto: "${productos?.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, cantidad que quieres colocar: ${newCantidadCurvaMayor} ` );
                                 
                             }
-                            console.log(t.cantidad)
+                       
 
                             
                             let nuevoCantidadTalle = t.cantidad - newCantidadCurvaMayor;
@@ -311,16 +352,77 @@ export const modificarOrden = async (req: Request, res: Response) => {
                             if(t.talle == talle){
                                 console.log('hola')
                                 //aca aumentar la cantidad de la cantidad antigua.
-                            }else if(t.talle == ordenDetalle?.talle){
+                            }else if(t.talle == parseInt(ordenDetalle!.talle)){
                                 console.log('perrin')
                                 let nuevaCantidad = t.cantidad - cantidad;
 
                             }
 
                         }
+
+
+                        let talleProducto = talles.rows.find( p => p.talle == talle)
+
+                        if(talleProducto!.cantidad < cantidad || talleProducto?.cantidad == 0 ){
+
+                            return res.json({ 
+                                ok: false,
+                                error:2,
+                                msg: "No ahi stock suficiente con los productos ...",
+                                productos_sin_stock : `El producto: "${productos?.nombre} y talle: ${talleProducto!.talle}" con stock de actual: ${talleProducto?.cantidad}, cantidad que quieres colocar: ${cantidad}`
+                            })
+                        }
+
+                        let newCantidad = talleProducto!.cantidad - cantidad;
+
+                        console.log(newCantidad)
+                        console.log(talleProducto?.cantidad + ' antigua')
+                        console.log(cantidad)
+
+                        let talleProductoSumar = talles.rows.find( p => p.talle == parseInt(ordenDetalle!.talle));
+
+                        let newCantidadSumar = talleProductoSumar!.cantidad + ordenDetalle!.cantidad;
+
+                        console.log(newCantidadSumar)
+                        console.log(talleProductoSumar?.cantidad + ' antigua, talle : ' + talleProductoSumar?.talle)
+                        console.log(ordenDetalle?.cantidad)
+
                     }
 
-                }else{
+                }else if(talleCurvaoTalle.split(',').length > 1){
+
+
+                    let talleProducto = talles.rows.find( p => p.talle == talle);
+
+                    if(talleProducto!.cantidad < cantidad || talleProducto?.cantidad == 0 ){
+
+                        return res.json({ 
+                            ok: false,
+                            error:2,
+                            msg: "No ahi stock suficiente con los productos ...",
+                            productos_sin_stock : `El producto: "${productos?.nombre} y talle: ${talleProducto!.talle}" con stock de actual: ${talleProducto?.cantidad}, cantidad que quieres colocar: ${cantidad}`
+                        })
+                    }
+
+                    for( let t of talles.rows) {
+
+                        if(t.talle == talle){
+
+                            if(ordenDetalle!.cantidad > cantidad){
+                                
+                                let nuevaCantidad = ordenDetalle!.cantidad - cantidad;
+
+
+                            }else{
+
+                                let nuevaCantidad = cantidad - ordenDetalle!.cantidad;
+
+                            }
+                        }else{
+                            let retaurarCantida = t.cantidad + ordenDetalle!.cantidad;
+                        }
+                    }
+
 
 
                 }
@@ -328,6 +430,48 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
             }else{
 
+                let largoDeTalle:any = ordenDetalle?.talle;
+                
+                if(largoDeTalle.split(',').length == 1) {
+
+                    if(ordenDetalle!.cantidad > cantidad){
+
+                        const newCantidad = ordenDetalle!.cantidad - cantidad;
+
+
+                    }else{
+
+                        const newCantidad = cantidad - ordenDetalle!.cantidad;
+
+                    }
+                }else if(largoDeTalle.split(',').length > 1){
+
+                    let cantidadAntigua = ordenDetalle!.cantidad / largoDeTalle.split(',').length;
+
+                   
+                    if(cantidadAntigua > cantidad){
+
+                        let nuevaCurva = cantidadAntigua - cantidad;
+
+                        let descontarNuevo = nuevaCurva * largoDeTalle.split(',').length;
+
+                        console.log(nuevaCurva);
+                        console.log(descontarNuevo);
+
+                        console.log("descontar")
+
+
+                    }else{
+
+                        let curvaNueva = cantidad - cantidadAntigua;
+                        let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
+
+                        console.log(curvaNueva);
+                        console.log(descontarNuevo);
+                        console.log("sumar")
+
+                    }
+                }
 
             }
         }
