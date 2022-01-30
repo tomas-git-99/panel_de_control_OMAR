@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.descontarCurvaTalle_talleManda = exports.descontarCurvaTalle = exports.descontarCurvas = void 0;
+exports.descontarCurva_talleManda = exports.descontarCurvaTalle_talleManda = exports.descontarCurvaTalle = exports.descontarCurvas = void 0;
 //CURVAS PARA PRODUCTOS QUE NO TIENE TALLES
 const descontarCurvas = (cantidad, cantidad_antigua, ordenDetalle, orden, producto) => {
     let cantidadDescontarOsumar;
@@ -138,11 +138,14 @@ const descontarCurvaTalle_talleManda = (cantidad, talle, talles, ordenDetalle, o
     if (talleEnProducto == 1) {
         if (talle == parseInt(ordenDetalle.talle)) {
             let nuevaCantidad;
-            if (ordenDetalle.cantidad > cantidad) {
+            let cantidadTotalTalle = talles.find(t => t.talle == talle);
+            if (ordenDetalle.cantidad > cantidad || ordenDetalle.cantidad == cantidad) {
                 nuevaCantidad = ordenDetalle.cantidad - cantidad;
+                tallesDescontar = [...tallesDescontar, { talle: talle, cantidad: (cantidadTotalTalle.cantidad + nuevaCantidad) }];
             }
             else {
-                nuevaCantidad = cantidad - ordenDetalle.cantidad;
+                nuevaCantidad = cantidadTotalTalle.cantidad - cantidad;
+                tallesDescontar = [...tallesDescontar, { talle: talle, cantidad: nuevaCantidad }];
             }
         }
         else {
@@ -161,31 +164,28 @@ const descontarCurvaTalle_talleManda = (cantidad, talle, talles, ordenDetalle, o
                 }
             }
         }
+        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle.cantidad * ordenDetalle.precio));
         return data = {
             productosSinStock: productos_sin_stock,
+            cantidadTotalOrden: cantidadTotalOrden,
             tallesDescontar: tallesDescontar,
         };
     }
     else if (talleEnProducto > 1) {
-        talles.find(t => {
-            if (t.talle == talle) {
-                if (t.cantidad < cantidad || t.cantidad == 0) {
-                    productos_sin_stock.push(`El producto: "${producto.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, cantidad que quieres colocar: ${cantidad} `);
-                }
-            }
-        });
         for (let t of talles) {
             let nuevaCantidad;
             if (t.talle == talle) {
-                if (ordenDetalle.cantidad > cantidad) {
+                if ((ordenDetalle.cantidad / largoDeTalle) > cantidad || (ordenDetalle.cantidad / largoDeTalle) == cantidad) {
                     nuevaCantidad = (ordenDetalle.cantidad / largoDeTalle) - cantidad;
                     let nuevaCantidadTalle = t.cantidad - nuevaCantidad;
-                    console.log(nuevaCantidad);
                     tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: nuevaCantidadTalle }];
                 }
                 else {
                     nuevaCantidad = cantidad - (ordenDetalle.cantidad / largoDeTalle);
-                    tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: nuevaCantidad }];
+                    if (t.cantidad < nuevaCantidad || t.cantidad == 0) {
+                        productos_sin_stock.push(`El producto: "${producto.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, cantidad que quieres colocar: ${nuevaCantidad} `);
+                    }
+                    tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: (t.cantidad - nuevaCantidad) }];
                 }
             }
             else {
@@ -193,11 +193,42 @@ const descontarCurvaTalle_talleManda = (cantidad, talle, talles, ordenDetalle, o
                 tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: nuevaCantidad }];
             }
         }
+        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle.cantidad * ordenDetalle.precio));
         return data = {
             productosSinStock: productos_sin_stock,
+            cantidadTotalOrden: cantidadTotalOrden,
             tallesDescontar: tallesDescontar,
         };
     }
 };
 exports.descontarCurvaTalle_talleManda = descontarCurvaTalle_talleManda;
+const descontarCurva_talleManda = (cantidad, talle, ordenDetalle, orden, producto) => {
+    let talleEnProducto = ordenDetalle.talle.split(',').length;
+    let tallesDescontar = [];
+    let productos_sin_stock = [];
+    let cantidaTotalDetalle;
+    let cantidadTotalOrden;
+    let cantidaDeProducto;
+    let data;
+    if (talleEnProducto == 1 || talleEnProducto > 1) {
+        if (ordenDetalle.cantidad > cantidad) {
+            cantidaTotalDetalle = ordenDetalle.cantidad - cantidad;
+            cantidaDeProducto = producto.cantidad + cantidaTotalDetalle;
+        }
+        else {
+            cantidaTotalDetalle = cantidad - ordenDetalle.cantidad;
+            cantidaDeProducto = producto.cantidad - cantidaTotalDetalle;
+            if (producto.cantidad < cantidaTotalDetalle || producto.cantidad == 0) {
+                productos_sin_stock.push(`El producto: "${producto.nombre}" con stock de actual: ${producto.cantidad}, cantidad que quieres colocar: ${cantidaTotalDetalle} `);
+            }
+        }
+        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle.cantidad * ordenDetalle.precio));
+        return data = {
+            productosSinStock: productos_sin_stock,
+            cantidadTotalOrden: cantidadTotalOrden,
+            cantidaDeProducto: cantidaDeProducto
+        };
+    }
+};
+exports.descontarCurva_talleManda = descontarCurva_talleManda;
 //# sourceMappingURL=descontar_orden.js.map
