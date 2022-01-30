@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { descontarCurvas } from "../../helpers/descontar_orden";
+import { descontarCurvas, descontarCurvaTalle_talleManda } from "../../helpers/descontar_orden";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Producto } from "../../models/ventas/producto";
@@ -285,81 +285,25 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
             }else{
 
+
+
                 let largoDeTalle:any = ordenDetalle?.talle;
-                
-                if(largoDeTalle.split(',').length == 1) {
+                let cantidadAntigua = ordenDetalle!.cantidad / largoDeTalle.split(',').length;
+                let data:any = descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
 
-                    console.log("prueba perrona")
-
-                    
-                    
-                   
-                }else if(largoDeTalle.split(',').length > 1){
-                    
-
-                    let cantidadAntigua = ordenDetalle!.cantidad / largoDeTalle.split(',').length;
-
-                    let data = descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
-
-                    console.log(data);
-                    console.log('gato')
-
-              
-/*                     if(cantidadAntigua > cantidad){
-
-                        let nuevaCurva = cantidadAntigua - cantidad;
-
-                        let sumarNuevo = nuevaCurva * largoDeTalle.split(',').length;
-
-                        //console.log(cantidad * largoDeTalle.split(',').length);
-
-                        let sumaAntigua = ordenDetalle!.cantidad * ordenDetalle!.precio;
-
-                        let cantidadTotal = largoDeTalle.split(',').length * cantidad; //UPDATE A CANTIDAD DE ORDEN DETALLE;
-
-                        //await ordenDetalle?.update({cantidad:cantidadTotal, talle: productos?.talles});
-
-
-                        let nuevaTotalOrden = orden!.total - sumaAntigua;  // RESTAMOS LA CANTIDAD ANTIGUA 
-    
-                        let precioNuevo = ordenDetalle!.precio * cantidadTotal;
-    
-                        //await orden?.update({total: nuevaTotalOrden + precioNuevo}) //MODIFICAR EL TOTAL DEL ORDEN
-
-                        let totalSumar = cantidad * largoDeTalle.split(',').length
-
-                        //await ordenDetalle?.update({cantidad: totalSumar})
-
-                        console.log(nuevaCurva);
-                        console.log(sumarNuevo);
-
-                        console.log("sumar")
-
-
-                    }else{
-
-                        let curvaNueva = cantidad - cantidadAntigua;
-                        let descontarNuevo = curvaNueva * largoDeTalle.split(',').length;
-
-
-                        if(productos.cantidad < descontarNuevo || productos.cantidad == 0){
-                            productos_sin_stock.push(`El producto: "${productos?.nombre}" con stock de actual: ${productos.cantidad}, cantidad que quieres colocar: ${descontarNuevo} ` );
-                        }
-
-                        let totalProducto = productos.cantidad - descontarNuevo;
-                        //await productos.update({cantidad: totalProducto});
-
-                        //await ordenDetalle?.update({cantidad: cantidad * largoDeTalle.split(',').length})
-
-                        console.log(curvaNueva);
-                        console.log(descontarNuevo);
-                        console.log("descontar")
-
-                    } */
-
+                if(data?.err?.length > 0){
+                    return res.json({
+                        ok: false,
+                        error:2,
+                        msg: "No ahi stock suficiente con los productos ...",
+                        productos_sin_stock: data?.err
+                    })
                 }
+                    
 
-
+              //await ordenDetalle?.update({cantidad:data.cantidadTotalDetalle, talle:productos.talles})
+              //await productos?.update({cantidad:data.productoStock})
+              //await orden?.update({total:data.cantidadTotalOrden})
 
             }
             
@@ -369,8 +313,11 @@ export const modificarOrden = async (req: Request, res: Response) => {
             if(productos?.cantidad == null) {
                 
                 let talleCurvaoTalle:any = ordenDetalle?.talle;
-                
-                //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
+
+
+                const data = descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle!, orden!, productos!)
+                console.log(data)
+/*                 //ENTRAN SI ES TALLE UNICO EL ANTERIOR DATO
                 if(talleCurvaoTalle.split(',').length == 1) {
                     
                     if(talle == ordenDetalle?.talle){
@@ -475,7 +422,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
 
 
-                }
+                } */
 
 
             }else{
@@ -532,6 +479,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
         
     } catch (error) {
+        console.log(error);
         res.json({
             ok: false,
             msg: error
