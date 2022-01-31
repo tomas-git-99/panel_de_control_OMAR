@@ -59,9 +59,7 @@ const imprimirEnPantalla = (res) => {
              <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
              <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
              </div>
-             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
-             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
-             </div> 
+    
       
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
