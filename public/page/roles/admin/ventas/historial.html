@@ -472,9 +472,14 @@
                     </table>
 
                     </div>
+
+                    <div class="agregarProducto">
+
+                        <button type="button" class="btn btn-success" onclick="agregarProductoID()">Agregar Producto</button>
+                    </div>
                     <div class="totalOrden">
                         <h4>
-                           TOTAL: <span>$80909</span>
+                           TOTAL: <span>$8009</span>
                         </h4>
                     </div>
                 </div>
@@ -487,19 +492,20 @@
                             <button type="button" class="btn-close" id="cantidadTalle" aria-label="Close" onclick="close_ventana(this.id)"></button>
     
                         </div>
-                        <form action="">
+                        <form action="" class="modificador_producto_orden">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">CANTIDAD</label>
-                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="CANTIDAD">
+                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="CANTIDAD" name="cantidad">
                                 <small id="emailHelp" class="form-text text-muted" style="font-size: 10px;">*Recuerda que si quieres cambiar a curva, <br> unicamente tienes que poner la cantidad</small>
                               </div>
+
                               <div class="form-group">
                                 <label for="exampleInputEmail1">TALLE</label>
-                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="TALLE">
+                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="TALLE" name="talle">
                               </div>
 
 
-                              <button type="button" class="btn btn-primary">AGREGAR</button>
+                              <button type="submit" class="btn btn-primary">AGREGAR</button>
                         </form>
                     </div>
                 </div>
@@ -512,10 +518,10 @@
                     </div>
                     <div class="buscadorProductos">
                      
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3 inputBuscador">
     
     
-                            <input type="text" class="form-control" placeholder="Buscar por DNI ..." aria-label="Recipient's username" aria-describedby="basic-addon2" id="buscar_producto">
+                            <input type="text" class="form-control" placeholder="Articulo / Modelo ..." aria-label="Recipient's username" aria-describedby="basic-addon2" id="search2">
                             <div class="input-group-append">
                               <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
                             </div>
@@ -528,42 +534,17 @@
                                 <tr>
                                 <th scope="col">ARTICULO</th>
                                 <th scope="col">MODELO</th>
+                                <th scope="col">DISEÑO</th>
+                                <th scope="col">STOCK</th>
+                                <th scope="col">TALLES</th>
                                 <th scope="col">TELA</th>
                                 <th scope="col">LOCAL</th>
-                                <th scope="col">TALLE</th>
-                                <th scope="col">CANTIDAD</th>
                                 <th scope="col">PRECIO</th>
                                 <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody >
-                                <tr>
-                                    <td>Mark</td>
-                    
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Mark</td>
-                             
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>Mark</td>
-        
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                                <td>@twitter</td>
-                                </tr>
+                            <tbody class="tbody_productos">
+                     
                             </tbody>
                             </table>
         

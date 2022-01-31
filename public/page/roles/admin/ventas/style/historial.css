@@ -302,6 +302,10 @@
     border-radius:10px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
+.agregarProducto{
+    display:grid;
+    justify-content: center;
+}
 
 .totalOrden{
     display:grid;
@@ -312,8 +316,8 @@
 
 
 .cantidadTalle{
-/*     display: none;
-    visibility: hidden; */
+    display: none;
+    visibility: hidden;
     position:fixed;
     place-self: center;
     background: white;
@@ -333,9 +337,7 @@
     text-align: center;
 }
 
-.form-group input{
-    width: 100px;
-}
+
 
 .agregarNuevoProducto{
     display: none;
@@ -344,14 +346,24 @@
     place-self: center;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    width: 700px;
-    display: grid;
-    justify-items: center;
+    width: 900px;
+  /*   display: grid;
+    justify-items: center; */
 }
 
 .buscadorProductos{
-    width: 300px
+    display: grid;
+    justify-content: center;
+    width: 100%;
+   
     
+}
+.buscadorProductos input{
+   
+    border-radius: 20px 0px 0px 20px;
+}
+.inputBuscador{
+    width:400px;
 }
 
 .tableParaProductosBuscados{
@@ -374,3 +386,6 @@
 }
 
 
+.boton_salir{
+    padding:5px;
+}

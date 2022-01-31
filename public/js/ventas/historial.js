@@ -6,6 +6,7 @@ import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
+import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/productos_ventas.js";
 
 
 const rol = localStorage.getItem('roles');
@@ -60,9 +61,7 @@ const imprimirEnPantalla = (res) => {
              <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
              </div>
          
-             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
-             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
-             </div>
+      
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
@@ -81,7 +80,9 @@ const imprimirEnPantalla = (res) => {
 
 
 
-
+{/* <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+<img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+</div> */}
 const prueba = (e) => {
 
     try {
@@ -281,10 +282,14 @@ const productos_orden = document.querySelector('.productos_orden')
 const modificarCarrito = document.querySelector('.modificarCarrito')
 const cantidadTalle = document.querySelector('.cantidadTalle')
 
+let idORDEN
+
 window.modificar_orden = (id) => {
 
+    idORDEN = id;
+ 
 
-    fecthNormalGET("GET","orden/ordenDetalle/"+id)
+    fecthNormalGET("GET","ordenDetalle/"+id)
         .then( res => {
 
             imprimirProductosOrden(res.ordenDetalle);
@@ -304,6 +309,7 @@ const imprimirProductosOrden = (res) => {
     res.map( e => {
 
         historial += `
+        <tr>
         <td>${devolverString(e.id)}</td>
         <td>${devolverString(e.nombre_producto)}</td>
         <td>${devolverString(e.talle)}</td>
@@ -315,6 +321,7 @@ const imprimirProductosOrden = (res) => {
         </div>
         
         </td>
+        </tr>
         `
     })
 
@@ -324,14 +331,17 @@ const imprimirProductosOrden = (res) => {
 
 {/* <td>${devolverString()}</td> */}
 
-
+let idProductoModificar 
 window.moificar_producto = (id) => {
-
     cerrar_abrir("cantidadTalle", true);
+    idProductoModificar = id;
 }
 
 
-
+window.close_ventana = (id) => {
+    document.querySelector(`.${id}`).style.display = 'none';
+    document.querySelector(`.${id}`).style.visibility = 'hidden';
+}
 const cerrar_abrir = (tag, estado) => {
 
     if(estado == true){
@@ -341,4 +351,113 @@ const cerrar_abrir = (tag, estado) => {
         document.querySelector(`.${tag}`).style.display = 'none';
         document.querySelector(`.${tag}`).style.visibility = 'hidden';
     }
+}
+
+const modificador_producto_orden = document.querySelector('.modificador_producto_orden');
+
+
+modificador_producto_orden.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const forData = {};
+    for(let el of modificador_producto_orden.elements){
+        if(el.name.length > 0)
+      
+            forData[el.name] = el.value;
+        
+    } 
+
+    if(forData.talle == ''){
+        forData.talle = null
+    }
+
+    console.log(forData)
+
+  /*   fecthNormalPOST_PUT("PUT", "ordenDetalle/" + idProductoModificar, forData)
+            .then( res => {
+                if(res.ok == true){
+                    salio_todo_bien("se cambio todo con exito")
+                }else{
+                    algo_salio_mal(`Algo salio mal`)
+                }
+            }) 
+            .catch(err => {
+                algo_salio_mal(`Algo salio mal: ${ err }`)
+            }) */
+})
+
+window.agregarProductoID = () => {
+    cerrar_abrir("agregarNuevoProducto", true);
+}
+
+
+
+const search2 = document.querySelector("#search2");
+
+search2.addEventListener("keyup", ({keyCode}) => {
+   
+
+    if( keyCode !== 13){return;}
+    if(search2.length === 0){return;}
+
+    getSearch2(search2.value);
+    search2.value = "";
+});
+
+
+const getSearch2 = (valor, offset=0) => {
+
+    fecthNormalGET("GET", "producto/search?" + `nombre=${valor}&offset=${offset}`)
+    .then(res => {
+
+        imprimirHistorial(res.productos)
+    })
+    .catch( err =>{
+        console.log(err)
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+const imprimirHistorial = (res) => {
+    let historial  = ""
+
+for(let e of res){
+
+    historial += `
+   
+    <tr>
+      <td data-label="ARTICULO">${devolverString(e.productos.id)}</td>
+      <td data-label="MODELO">${devolverString(e.productos.nombre)}</td>
+      <td data-label="DISEÑO">${devolverString(e.productos.diseño)}</td>
+      <td data-label="STOCK">${e.talles.length > 0 ? conteoPorTalle(e.talles) : devolverString(e.productos.cantidad)}</td>
+      <td data-label="TALLES">
+      <div class="opcionesDeTalles">
+      <select class="form-control form-control-sm" id="seleccion_talles_${e.productos.id}">
+          <option value="0">${devolverString(e.productos.talles)}</option>
+          
+        </select>
+        </div>
+      </td>
+      <td data-label="TELA">${devolverString(e.productos.tela)}</td>
+      <td data-label="LOCAL">${devolverString(e.productos.local)}</td>
+      <td data-label="PRECIO">$${devolverString(e.productos.precio)}</td>
+      <td>
+      <button type="button" class="btn btn-primary btn-sm" id="${e.productos.id}" onclick="agrgarProductoNEW(this.id)">AGREGAR</button>
+      </td>
+    </tr>
+
+
+    `;
+
+    document.querySelector('.tbody_productos').innerHTML = historial;
+}
+imprimirTallesEnCadaProducto(res)
+
+}
+
+
+window.agrgarProductoNEW = (id) => {
+
+    cerrar_abrir("cantidad2", true);
+
+    
 }

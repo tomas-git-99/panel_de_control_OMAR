@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modificarOrden = void 0;
+exports.ordenDetalleGet = exports.modificarOrden = void 0;
 const descontar_orden_1 = require("../../helpers/descontar_orden");
 const orden_1 = require("../../models/ventas/orden");
 const orden_detalle_1 = require("../../models/ventas/orden_detalle");
@@ -118,4 +118,17 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.modificarOrden = modificarOrden;
+const ordenDetalleGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: id } });
+        res.json({
+            ok: true,
+            ordenDetalle
+        });
+    }
+    catch (error) {
+    }
+});
+exports.ordenDetalleGet = ordenDetalleGet;
 //# sourceMappingURL=orden_detalle.js.map

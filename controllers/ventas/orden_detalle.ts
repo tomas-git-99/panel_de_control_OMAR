@@ -160,3 +160,22 @@ export const modificarOrden = async (req: Request, res: Response) => {
     }
 
 }
+
+
+export const ordenDetalleGet = async (req: Request, res: Response) => {
+
+
+    try {
+        const { id } = req.params;
+
+        const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden: id } });
+
+        res.json({
+            ok:true,
+            ordenDetalle
+        })
+        
+    } catch (error) {
+        
+    }
+}
