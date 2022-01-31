@@ -66,7 +66,6 @@ const editarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             msg: "Hablar con el administrador"
@@ -214,7 +213,10 @@ const hitorialProductos = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
     catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        });
     }
 });
 exports.hitorialProductos = hitorialProductos;

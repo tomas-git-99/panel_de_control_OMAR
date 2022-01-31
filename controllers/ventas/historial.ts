@@ -84,7 +84,6 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
     
         }
 
-console.log(datos)
         res.json({
             ok: true,
             contador,
@@ -93,6 +92,9 @@ console.log(datos)
 
 
     } catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        })
     }
 }

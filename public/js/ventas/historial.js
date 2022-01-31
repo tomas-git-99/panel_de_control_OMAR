@@ -24,7 +24,6 @@ const main_historial = () => {
             imprimirEnPantalla(res.datos);
         })
         .catch( err =>{
-            console.log(err)
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
@@ -41,7 +40,6 @@ const imprimirEnPantalla = (res) => {
     res.map ( e => {
         let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(e.orden.total)
 
-      console.log(e)
         result += `
              <tr>
              <th scope="row">${e.orden.id}</th>
@@ -202,8 +200,7 @@ window.eliminar_orden = (e) => {
 
             fecthNormalPOST_PUT("DELETE", `orden/${e}`)
               .then( res =>{
-                console.log(res)
-
+            
 
                   if(res.ok == true){
                       salio_todo_bien("Se elimino correctamente");
@@ -271,7 +268,7 @@ window.cambioDeLocal = (e) => {
         imprimirEnPantalla(res.datos)
     })
     .catch( err => {
-        console.log(err)
+        
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 }
@@ -415,7 +412,7 @@ const getSearch2 = (valor, offset=0) => {
         imprimirHistorial(res.productos)
     })
     .catch( err =>{
-        console.log(err)
+        
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
 }

@@ -97,7 +97,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
                 
                 const data = descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle!, orden!, productos!)
-                console.log(data);
+            ;
 
                 if(data!.productosSinStock!.length > 0){
                     return res.json({ 
@@ -152,7 +152,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
         
     } catch (error) {
-        console.log(error);
+   
         res.json({
             ok: false,
             msg: error

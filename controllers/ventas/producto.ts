@@ -96,9 +96,8 @@ export const editarProducto = async (req: Request, res: Response) => {
             producto
         })
     } catch (error) {
-        console.log(error);
+   
     
-        
         res.status(500).json({
             ok: false,
             msg: "Hablar con el administrador"
@@ -322,7 +321,10 @@ export const hitorialProductos = async (req: Request, res: Response) => {
             productos
         })
     } catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        })
     }
 }
 

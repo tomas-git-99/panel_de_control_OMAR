@@ -24,7 +24,7 @@ export const crearCliente = async (req: Request, res: Response) => {
 
 
 
-    } catch (error:any) {
+    } catch (error) {
         res.json({
             ok: false,
             msg: "Hablar con el administrador"

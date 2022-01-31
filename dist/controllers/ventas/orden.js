@@ -190,7 +190,6 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
         let data = detalles_producto.find(h => h.id == e.id_producto);
         para_mi = [...para_mi, { producto: data, detalles: e }];
     });
-    console.log(id);
     res.json({
         ok: true,
         orden,
@@ -204,7 +203,7 @@ exports.ordenParaImprimir = ordenParaImprimir;
 const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     try {
-        const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, limit: 10, order: [['updatedAt', 'DESC']] });
+        const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
         let id_cliente = [];
         let id_direccion = [];
@@ -236,7 +235,6 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             msg: error

@@ -381,7 +381,7 @@ const descontar_talle_id = document.getElementById("descontar_talle_id")
 const btnCliente = document.querySelector(".btnCliente")
 
 
-const crearCliente = ( data ) => {
+/* const crearCliente = ( data ) => {
 
     fecthNormalPOST_PUT("POST", "cliente", data)
     .then( res => {
@@ -395,6 +395,20 @@ const crearCliente = ( data ) => {
    .catch ( err => {
        algo_salio_mal(`Algo salio mal: ${err}`)
    })
+} */
+
+
+
+const crearCliente = (forData) => {
+
+    fecthNormalPOST_PUT("POST", "cliente", forData)
+    .then(res => {
+        return res.cliente.id;
+    })
+    .catch(err => {
+        return algo_salio_mal(`Algo salio mal: ${ error }, error al crear cliente`)
+    })
+
 }
 formCliente.addEventListener("submit", async(e) =>{
 
@@ -430,11 +444,14 @@ formCliente.addEventListener("submit", async(e) =>{
         
         if(id_cliente == null || id_cliente == undefined || id_cliente == "id_del_cliente"){
     
-            let id = await fecthNormalPOST_PUT("POST", "cliente", forData)
+            const clienteCreado = await fecthNormalPOST_PUT("POST", "cliente", forData);
+                          
                     
-            id_cliente = id.cliente.id;
+            id_cliente = clienteCreado.cliente.id;
+
         }
-    
+
+       
     
     
         //SI ESTA AGREGANDO UNA NUEVA DIRECCION PARA ESTE CLIENTE
@@ -458,13 +475,14 @@ formCliente.addEventListener("submit", async(e) =>{
     } catch (error) {
         load_normal(btnCliente, false, "CONFIRMAR")
 
-        return  algo_salio_mal(`Algo salio mal: ${ error }, error al Generar Orden`)
+        return  algo_salio_mal(`Algo salio mal: ${ error }, error al Generar Orden 1`)
         
     }
 
 
 
 })
+
 
 /////// FIN RELLENAR DATOS PARA CONFIRMAR COMPRA //////////////////
 
@@ -496,7 +514,7 @@ const generarOrden = (id_cliente, id_usuario, id_direccion, data) => {
             })
                       
     } catch (error) {
-        return algo_salio_mal(`Algo salio mal: ${error}, error al Generar Orden`)
+        return algo_salio_mal(`Algo salio mal: ${error}, error al Generar Orden 2`)
     }
 
     

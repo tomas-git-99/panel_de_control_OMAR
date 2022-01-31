@@ -485,7 +485,13 @@ const cambiar_stock_talle = (id, suma_resta) => {
             if(res.ok) {
                 
                 cambiarStock.innerHTML = `(${res.talle.cantidad})`;
-                salio_todo_bien(`Se quito correctamente la cantidad de: ${ input.value }`);
+                if(suma_resta == "restar"){
+
+                    salio_todo_bien(`Se quito correctamente la cantidad de: ${ input.value }`);
+                }else if(suma_resta == "suma"){
+                    salio_todo_bien(`Se agrego correctamente la cantidad de: ${ input.value }`);
+                    
+                }
                 input.value = "";
             }else {
                 algo_salio_mal(`Algo salio mal`)

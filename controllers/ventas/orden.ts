@@ -297,8 +297,6 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
     })
 
 
-    console.log(id);
-
     res.json({
         ok: true,
         orden,
@@ -316,7 +314,7 @@ export const historialOrden = async (req: Request, res: Response) => {
 
     try {
         
-        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
+        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
 
 
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
@@ -362,7 +360,7 @@ export const historialOrden = async (req: Request, res: Response) => {
             datos
         })
     } catch (error) {
-        console.log(error);
+    
         res.status(500).json({
             ok: false,
             msg: error

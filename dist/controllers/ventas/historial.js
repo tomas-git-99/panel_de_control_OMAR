@@ -54,7 +54,6 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
             let direcciones = direccion.find(h => h.id == i.id_direccion);
             datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
         }
-        console.log(datos);
         res.json({
             ok: true,
             contador,
@@ -62,7 +61,10 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        });
     }
 });
 exports.buscarPorLocal = buscarPorLocal;

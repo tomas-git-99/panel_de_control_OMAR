@@ -70,7 +70,6 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
             if ((productos === null || productos === void 0 ? void 0 : productos.cantidad) == null) {
                 let talleCurvaoTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
                 const data = descontar_orden_1.descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle, orden, productos);
-                console.log(data);
                 if (data.productosSinStock.length > 0) {
                     return res.json({
                         ok: false,
@@ -110,7 +109,6 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.log(error);
         res.json({
             ok: false,
             msg: error
