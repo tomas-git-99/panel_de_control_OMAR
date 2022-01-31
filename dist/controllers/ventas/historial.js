@@ -52,7 +52,7 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
         for (let i of orden.rows) {
             let newcliente = cliente.find(e => e.id == i.id_cliente);
             let direcciones = direccion.find(h => h.id == i.id_direccion);
-            datos = [...datos, { orden: i, cliente: newcliente, direccion: direcciones || "" }];
+            datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
         }
         console.log(datos);
         res.json({

@@ -24,6 +24,7 @@ const main_historial = () => {
             imprimirEnPantalla(res.datos);
         })
         .catch( err =>{
+            console.log(err)
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
@@ -40,7 +41,7 @@ const imprimirEnPantalla = (res) => {
     res.map ( e => {
         let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(e.orden.total)
 
-      
+      console.log(e)
         result += `
              <tr>
              <th scope="row">${e.orden.id}</th>

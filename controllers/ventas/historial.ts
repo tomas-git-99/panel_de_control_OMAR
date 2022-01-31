@@ -80,7 +80,7 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
             let newcliente = cliente.find( e => e.id == i.id_cliente);
             let direcciones = direccion.find( h => h.id == i.id_direccion);
     
-            datos = [...datos,{orden:i, cliente:newcliente, direccion:direcciones || ""}];
+            datos = [...datos,{orden:i, cliente:newcliente||"", direccion:direcciones || ""}];
     
         }
 
