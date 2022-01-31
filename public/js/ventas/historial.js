@@ -59,6 +59,11 @@ const imprimirEnPantalla = (res) => {
              <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
              <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
              </div>
+         
+             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+             </div>
+             
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
                  </div>
@@ -265,4 +270,75 @@ window.cambioDeLocal = (e) => {
         console.log(err)
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+}
+
+
+
+
+//MODIFICAR CARRITO
+
+const productos_orden = document.querySelector('.productos_orden')
+const modificarCarrito = document.querySelector('.modificarCarrito')
+const cantidadTalle = document.querySelector('.cantidadTalle')
+
+window.modificar_orden = (id) => {
+
+
+    fecthNormalGET("GET","orden/ordenDetalle/"+id)
+        .then( res => {
+
+            imprimirProductosOrden(res.ordenDetalle);
+
+            cerrar_abrir("modificarCarrito", true);
+        
+
+        })
+        .catch( err => {
+            return algo_salio_mal(`Algo salio mal: ${ error }`)
+        })
+}
+
+const imprimirProductosOrden = (res) => {
+
+    let historial = "";
+    res.map( e => {
+
+        historial += `
+        <td>${devolverString(e.id)}</td>
+        <td>${devolverString(e.nombre_producto)}</td>
+        <td>${devolverString(e.talle)}</td>
+        <td>${devolverString(e.cantidad)}</td>
+        <td>${devolverString(e.precio)}</td>
+        <td>
+        <div id="${e.id}" onclick="moificar_producto(this.id)" class="boton">
+        <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+        </div>
+        
+        </td>
+        `
+    })
+
+    productos_orden.innerHTML = historial;
+
+}
+
+{/* <td>${devolverString()}</td> */}
+
+
+window.moificar_producto = (id) => {
+
+    cerrar_abrir("cantidadTalle", true);
+}
+
+
+
+const cerrar_abrir = (tag, estado) => {
+
+    if(estado == true){
+        document.querySelector(`.${tag}`).style.display = 'grid';
+        document.querySelector(`.${tag}`).style.visibility = 'visible';
+    }else{
+        document.querySelector(`.${tag}`).style.display = 'none';
+        document.querySelector(`.${tag}`).style.visibility = 'hidden';
+    }
 }

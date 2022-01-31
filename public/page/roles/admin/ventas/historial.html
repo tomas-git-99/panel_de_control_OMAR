@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/style/inicio.css">
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet" href="./style/historial.css">
+    <link rel="stylesheet" href="./style/compra.css">
+
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/helpers/para_todos/html2pdf.bundle.min.js"></script>
@@ -418,6 +420,208 @@
     
                     </div>
                 </div>
+
+
+                <div class="modificarCarrito">
+                    <div class="boton_salir">
+                        <button type="button" class="btn-close" id="modificarCarrito" aria-label="Close" onclick="close_ventana(this.id)"></button>
+
+                    </div>
+
+                    <div class="productosDelComprobante">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">ARTICULO</th>
+                        <th scope="col">MODELO</th>
+                        <th scope="col">TALLE</th>
+                        <th scope="col">CANTIDAD</th>
+                        <th scope="col">PRECIO</th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="productos_orden">
+                        <tr>
+                            <td>Mark</td>
+                 
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <td>Mark</td>
+                     
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>@fat</td>
+                        <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <td>Mark</td>
+
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@fat</td>
+                        <td>@fat</td>
+                        <td>@twitter</td>
+                        </tr>
+                    </tbody>
+                    </table>
+
+                    </div>
+                    <div class="totalOrden">
+                        <h4>
+                           TOTAL: <span>$80909</span>
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="cantidadTalle">
+                  
+
+                    <div class="formCantidad">
+                        <div class="boton_salir">
+                            <button type="button" class="btn-close" id="cantidadTalle" aria-label="Close" onclick="close_ventana(this.id)"></button>
+    
+                        </div>
+                        <form action="">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">CANTIDAD</label>
+                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="CANTIDAD">
+                                <small id="emailHelp" class="form-text text-muted" style="font-size: 10px;">*Recuerda que si quieres cambiar a curva, <br> unicamente tienes que poner la cantidad</small>
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputEmail1">TALLE</label>
+                                <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="TALLE">
+                              </div>
+
+
+                              <button type="button" class="btn btn-primary">AGREGAR</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="agregarNuevoProducto">
+                    <div class="boton_salir">
+                        <button type="button" class="btn-close" id="agregarNuevoProducto" aria-label="Close" onclick="close_ventana(this.id)"></button>
+
+                    </div>
+                    <div class="buscadorProductos">
+                     
+                        <div class="input-group mb-3">
+    
+    
+                            <input type="text" class="form-control" placeholder="Buscar por DNI ..." aria-label="Recipient's username" aria-describedby="basic-addon2" id="buscar_producto">
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="tableParaProductosBuscados">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">ARTICULO</th>
+                                <th scope="col">MODELO</th>
+                                <th scope="col">TELA</th>
+                                <th scope="col">LOCAL</th>
+                                <th scope="col">TALLE</th>
+                                <th scope="col">CANTIDAD</th>
+                                <th scope="col">PRECIO</th>
+                                <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr>
+                                    <td>Mark</td>
+                    
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                <td>@mdo</td>
+                                <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                    <td>Mark</td>
+                             
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                                </tr>
+                                <tr>
+                                    <td>Mark</td>
+        
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>@fat</td>
+                                <td>@fat</td>
+                                <td>@twitter</td>
+                                </tr>
+                            </tbody>
+                            </table>
+        
+                    </div>
+                </div>
+
+                <div class="cantidad2">
+            
+                    <div class="pregunta">
+        
+                        <div class="nombreDeProducto">
+                            <img src="/img/close.svg" alt=""  width="20px" class="titleX">
+                            <h4>AGREGAR ...</h4>
+                        </div>
+        
+                            <div class="formAgregar">
+
+                                <div class="agregar">
+                                    <span>Cantidad</span>
+                                    <div class="boton_para_curva">
+                                        <input type="number" class="form-control" name="cantidad" id="cantidad_unica"  style="width:80px" autocomplete="off"
+                                        > 
+                                        
+                                         <div class="boton2">
+
+                                             <button id="aca_viene_id_producto" onclick="enviar_datos_producto(this.id)" class="boton_para_cargar">Curvas</button>
+                                         </div>
+
+                                    </div>
+                                </div>
+            <hr>
+            
+                                <div class="agregar talleUnica">
+                  
+                                    <span>Talle</span>
+
+                                    <div class="talles_del_producto">
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">1</label>
+                                            <input type="number" class="form-control" id="talle_unico" style="width:40px">
+                                          </div>
+                                    
+                                
+                            
+                                   
+                                    </div>
+
+                                    <span style="font-size:11px; text-align:center;">
+                                        *Para sumar mas talles, solo tiene que colocar el valor que quieres 
+                                        en la casilla <br/>  del talle correspondiente y despues apretar ENTER, para sumar al carrito
+                                    </span>
+
+                                </div>
+
+                            </div>
+                    </div>
+                    
 
         </div>
     </div>
