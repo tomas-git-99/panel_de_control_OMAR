@@ -293,6 +293,7 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
         let data = detalles_producto.find( h => h.id == e.id_producto);
 
         para_mi = [...para_mi, { producto:data, detalles:e} ]
+
     })
 
 
@@ -301,7 +302,7 @@ export const ordenParaImprimir = async (req: Request, res: Response) => {
     res.json({
         ok: true,
         orden,
-        cliente,
+        cliente:cliente || "",
         direccion,
         productos,
         para_mi

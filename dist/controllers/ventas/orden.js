@@ -194,7 +194,7 @@ const ordenParaImprimir = (req, res) => __awaiter(void 0, void 0, void 0, functi
     res.json({
         ok: true,
         orden,
-        cliente,
+        cliente: cliente || "",
         direccion,
         productos,
         para_mi
