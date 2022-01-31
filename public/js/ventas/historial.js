@@ -61,7 +61,9 @@ const imprimirEnPantalla = (res) => {
              <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
              <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
              </div>
-         
+             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+             </div> 
       
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
@@ -442,7 +444,7 @@ for(let e of res){
       <td data-label="LOCAL">${devolverString(e.productos.local)}</td>
       <td data-label="PRECIO">$${devolverString(e.productos.precio)}</td>
       <td>
-      <button type="button" class="btn btn-primary btn-sm" id="${e.productos.id}" onclick="agrgarProductoNEW(this.id)">AGREGAR</button>
+      <button type="button" value="${e.productos.talles}" class="btn btn-primary btn-sm" id="${e.productos.id}" onclick="agrgarProductoNEW(this)">AGREGAR</button>
       </td>
     </tr>
 
@@ -454,11 +456,48 @@ for(let e of res){
 imprimirTallesEnCadaProducto(res)
 
 }
+const talles_del_producto = document.querySelector(".talles_del_producto");
+const cantidad_unica = document.getElementById("cantidad_unica");
 
+let arrayTalle;
 
-window.agrgarProductoNEW = (id) => {
+window.agrgarProductoNEW = (event) => {
 
     cerrar_abrir("cantidad2", true);
+    let array = event.value.split(",");
 
-    
+  arrayTalle = array;
+  let historial = "";
+
+  for(let i of array) {
+
+    historial += `
+    <div class="form-group">
+    <label for="exampleFormControlInput1">${i}</label>
+    <input type="number" class="form-control" id="talle_unico_${i}" style="width:50px">
+    </div>
+    `
+  }
+
+  talles_del_producto.innerHTML = historial;
 }
+
+cantidad_unica.addEventListener("input", (valor) => {
+ 
+    for(let e of arrayTalle) {
+      let talle_unico = document.getElementById(`talle_unico_${e}`);
+      talle_unico.value = valor.target.value;
+      talle_unico.disabled = true;
+      
+    }
+  
+    if(valor.target.value.length == 0 || valor.target.value == ''){
+      for(let e of arrayTalle) {
+        let talle_unico = document.getElementById(`talle_unico_${e}`);
+        talle_unico.disabled = false;
+        
+      }
+    }
+  
+  })
+  

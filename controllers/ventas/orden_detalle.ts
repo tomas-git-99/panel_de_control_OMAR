@@ -179,3 +179,258 @@ export const ordenDetalleGet = async (req: Request, res: Response) => {
         
     }
 }
+
+
+
+
+export const agregarOrdenDetalle = async (req: Request, res: Response) => {
+
+
+    try {
+        const { idOrden } = req.params;
+
+        const { id, cantidad, talle } = req.body;
+
+let sumaTotal =0 ;
+        let productos_sin_stock:any = [];
+
+        const talles = await Talle.findAll({where:{id_producto:id}});
+        const productos = await Producto.findAll({where:{id:id}});
+
+        talles.map( e => {
+
+            if(talle == e.talle){
+                if(e.cantidad < cantidad || e.cantidad == 0){
+                    if(id == e.id_producto){
+                    
+                    
+                        let dato_producto:any = productos.find( e => e.id == id);
+
+                        productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${cantidad} ` );
+
+                    }
+                }else if(talle == null){
+                    if(e.cantidad < cantidad || e.cantidad == 0){
+
+                        let dato_producto:any = productos.find( e => e.id == id);
+
+                        productos_sin_stock.push(`El producto: "${dato_producto.nombre} y talle: ${e.talle}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${cantidad} ` );
+                    }
+
+                    }
+                }
+
+        });
+        productos.map( e => {
+
+       
+                if(e.id == id){
+
+                    if(talle == null){
+
+                        let cantidadDeTalle:any = e.talles.split(",");
+                        let contador = 0;
+
+                        for(let count of cantidadDeTalle){
+                            contador += cantidad;
+                        }
+
+                        
+                        if(e.cantidad < contador || e.cantidad == 0){
+                            productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito(curva): ${contador} ` );
+                        }
+
+                       
+
+                    }else{
+                       
+                        if(e.cantidad < cantidad || e.cantidad == 0){
+                            productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${cantidad} ` );
+                        }
+                    }
+
+
+                }
+            
+        });
+
+
+        if(productos_sin_stock.length > 0){
+            return res.json({
+                ok: false,
+                error:2,
+                msg: "No ahi stock suficiente con los productos ...",
+                productos_sin_stock
+            })
+        }
+        
+        for(let i of productos){
+
+            let Comprobar = talle == null ? false : true;
+
+            if(Comprobar == true){
+
+
+                for( let t of talles){
+
+                    if(talle == t.talle){
+
+                        let orden:any = {
+                        idOrden,
+                        id_producto:i.id, 
+                        nombre_producto:i.nombre,
+                        talle: talle, 
+                        cantidad: cantidad,
+                        precio: i.precio 
+                    }
+                    let nuevaSuma = cantidad * i.precio;
+                    sumaTotal = sumaTotal + nuevaSuma;
+
+                    let nuevoStock = t.cantidad - cantidad;
+
+                    await t.update({cantidad: nuevoStock});
+
+                    let orden_detalle = new OrdenDetalle(orden);
+
+                    await orden_detalle.save()
+                             .catch(err => {
+                                 return res.json({ok: false, msg: err})
+                             });
+                     
+                     
+                    }
+
+                }
+            }else{
+
+                let verdad = talles.some( k => k.id_producto == i.id);
+                if(verdad == true){
+                    let conteo = 0;
+
+
+                    for(let t of talles){
+
+                        let nuevaSuma = cantidad * i.precio;
+    
+                        sumaTotal = sumaTotal + nuevaSuma;
+
+                        await t.update({cantidad:t.cantidad - cantidad});
+                        conteo += cantidad;
+
+                    }
+
+
+                    let orden:any = {
+
+                        idOrden,
+                        id_producto:i.id, 
+                        nombre_producto:i.nombre,
+                        talle: i.talles, 
+                        cantidad: conteo,
+                        precio: i.precio 
+                    };
+
+                    let orden_detalle = new OrdenDetalle(orden);
+    
+                    await orden_detalle.save()
+                            .catch(err => {
+                                return res.json({ok: false, msg: err})
+                            });
+                }
+
+            }
+        }
+
+
+
+
+        for( let i of productos){
+
+            if(i.talles !== null){
+
+
+
+                if(talle == null){
+                   let cantidadDeTalle:any = i.talles.split(",");
+                   let contadorTotal = 0;
+
+                   for (let count of cantidadDeTalle){
+                    contadorTotal += i.cantidad;
+                }
+
+                let orden:any = {
+    
+                    idOrden,
+                    id_producto:i.id,
+                    nombre_producto:i.nombre,
+                    talle:i.talles,
+                    cantidad:contadorTotal,
+                    precio: i.precio
+                }
+
+
+                let nuevaSuma:any = contadorTotal * i.precio;
+                sumaTotal = sumaTotal + nuevaSuma;
+
+                let nuevoStock = i.cantidad - contadorTotal;
+              
+
+
+                await i.update({cantidad:nuevoStock});
+
+                let orden_detalle = new OrdenDetalle(orden);
+
+                await orden_detalle.save()
+                        .catch(err => {
+                            return res.json({ok: false, msg: err})
+                        });
+
+                }
+            }else{
+
+                let orden:any = {
+    
+                    idOrden,
+                    id_producto:i.id,
+                    nombre_producto:i.nombre,
+                    talle:talle,
+                    cantidad:cantidad,
+                    precio: i.precio
+                }
+                let nuevaSuma:any = cantidad * i.precio;
+
+                sumaTotal = sumaTotal + nuevaSuma;
+
+                let nuevoStock = i.cantidad - cantidad;
+                
+            
+
+                await i.update({cantidad:nuevoStock});
+
+
+                let orden_detalle = new OrdenDetalle(orden);
+
+                await orden_detalle.save()
+                        .catch(err => {
+                            return res.json({ok: false, msg: err})
+                        });
+
+            }
+        }
+
+
+
+
+    let ordenTotal = await Orden.findByPk(idOrden);
+
+
+    await ordenTotal?.update({total:ordenTotal.total + sumaTotal})
+
+
+
+
+
+    } catch (error) {
+        
+    }
+}

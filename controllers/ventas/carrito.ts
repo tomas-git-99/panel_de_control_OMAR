@@ -845,6 +845,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
         });
 
         let verificar_si_estaRepetido:any = []
+
         carrito.map( e => {
             ids_productos_total.map( (i:any) => {
 
@@ -961,6 +962,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                                 cantidad: ca.cantidad,
                                 precio: ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo  //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                             }
+
                             let precioNuevo:any = ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo;
                             let nuevaSuma = ca.cantidad * precioNuevo;
 
@@ -990,7 +992,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
 
                 let verdad = talles.some( k => k.id_producto == i.id);
 
-                if(verdad ==true){
+                if(verdad == true){
                     let tallesUnicoCurva = talles.filter( t => t.id_producto == i.id);
 
                     let carritoCurva = carrito.find( t => t.id_producto == i.id);
@@ -999,6 +1001,7 @@ export const pruebaParaDescontar = async(req: Request, res: Response ) => {
                
     
                     for(let o of tallesUnicoCurva){
+                        
                         let precioNuevo:any = carritoCurva!.precio_nuevo == null ? i.precio : carritoCurva!.precio_nuevo;
 
                         let nuevaSuma = carritoCurva!.cantidad * precioNuevo;
