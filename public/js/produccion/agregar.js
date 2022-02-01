@@ -85,11 +85,11 @@ formProducto.addEventListener("submit", (e) => {
         }
         } 
 
+
+
         boton.innerHTML = `
         <button class="btn btn-primary" type="button" disabled>
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      </button>
-      `
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>`
 
       
     
@@ -100,13 +100,30 @@ formProducto.addEventListener("submit", (e) => {
         .then( res => {
             if(res.ok){ 
                 salio_todo_bien("Salio todo correcto");
-                volverAtras(bienvenido_form, opciones);
+                //volverAtras(bienvenido_form, opciones);
+
+                boton.innerHTML = `
+                <div class="boton" type="submit" >
+                <button class="btn btn-primary">AGREGAR</button>
+                </div>`
+
+                for(let el of formProducto.elements){
+                    el.value = '';
+                }
+
             }else if (res.error == 10 || res.error == "10"){
                 localStorage.removeItem("x-token");
+                boton.innerHTML = `
+                <div class="boton" type="submit" >
+               <button class="btn btn-primary">AGREGAR</button></div>`
                 window.location.href = `${window.location.origin}/index.html`
             }
         })
         .catch (err => {
+            boton.innerHTML = `
+            <div class="boton" type="submit" >
+            <button class="btn btn-primary">AGREGAR</button>
+            </div>`
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
  
@@ -173,20 +190,36 @@ form_taller_agregar.addEventListener("submit", (event) => {
   </button>
   
     `
-
     fecthNormalPOST_PUT("POST", "produccion/taller", forData)
         .then( res => {
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
-                volverAtras(form_taller, opciones);
+                //volverAtras(form_taller, opciones);
+
+                for(let el of form_taller_agregar.elements){
+                    el.value = '';
+                    }
+
+                boton_taller.innerHTML = `
+                <button class="btn btn-primary">AGREGAR</button>
+                `
             }else if (res.error == 10 || res.error == "10"){
+                boton_taller.innerHTML = `
+                <button class="btn btn-primary">AGREGAR</button>
+                `
                 localStorage.removeItem("x-token");
                 window.location.href = `${window.location.origin}/index.html`
             }else{
+                boton_taller.innerHTML = `
+                <button class="btn btn-primary">AGREGAR</button>
+                `
                 algo_salio_mal(`Algo salio mal`)
             }
         })
         .catch (err => {
+            boton_taller.innerHTML = `
+            <button class="btn btn-primary">AGREGAR</button>
+            `
             algo_salio_mal(`Algo salio mal: ${ err.message }`)
         })
 
@@ -212,7 +245,11 @@ form_estanpador_agregar.addEventListener("submit", (e) => {
      
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
-                volverAtras(form_estanpador, opciones);
+                for(let el of form_estanpador_agregar.elements){
+                    el.value = '';  
+                    }
+            
+                //volverAtras(form_estanpador, opciones);
             }else if (res.error == 10 || res.error == "10"){
                 localStorage.removeItem("x-token");
                 window.location.href = `${window.location.origin}/index.html`
@@ -243,7 +280,10 @@ form_rollo_agregar.addEventListener ("submit", (e) => {
             
             if(res.ok){
                 salio_todo_bien("Salio todo correcto");
-                volverAtras(form_rollo, opciones);
+                for(let el of form_rollo_agregar.elements){
+                    el.value = '';
+                }
+                //volverAtras(form_rollo, opciones);
             }else if (res.error == 10 || res.error == "10"){
                 localStorage.removeItem("x-token");
                 window.location.href = `${window.location.origin}/index.html`

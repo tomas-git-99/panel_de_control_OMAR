@@ -1,7 +1,7 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { funcionParaImprimir, funcionParaImprimir_sin_nombre, imprimirComprobante_cliente, imprimir_parami } from "../helpers/ventas/imprimir_ticket.js";
-import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
+import { advertencia, algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
@@ -56,14 +56,7 @@ const imprimirEnPantalla = (res) => {
              <div class="botones_historial">
 
  
-             <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
-             <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
-             </div>
-
-             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
-             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
-             </div> 
-      
+       
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
@@ -80,8 +73,15 @@ const imprimirEnPantalla = (res) => {
     imprimir_historial.innerHTML = result;
 }
 
+{/* <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
+<img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+</div>
 
+<div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+<img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+</div> 
 
+ */}
 {/* <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
 <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
 </div> */}
@@ -189,6 +189,7 @@ nombre_usario.innerHTML =  nombre;
 //MODIFICAR ORDEN
 
 window.eliminar_orden = (e) => {
+    console.log(e)
     Swal.fire({
         title: '¿Esta seguro que quiere eliminar esta orden?',
         icon: 'warning',
@@ -202,6 +203,7 @@ window.eliminar_orden = (e) => {
             fecthNormalPOST_PUT("DELETE", `orden/${e}`)
               .then( res =>{
             
+        
 
                   if(res.ok == true){
                       salio_todo_bien("Se elimino correctamente");
@@ -423,7 +425,8 @@ modificador_producto_orden.addEventListener("submit", (e) => {
 
                 }else if(res.ok == false){
                     algo_salio_mal(`Algo salio mal`)
-                }
+                }else if(res.error == 2 || res.error == "2"){
+                    advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)}
             }) 
             .catch(err => {
                 algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -613,7 +616,9 @@ cantidad_unica.addEventListener("input", (valor) => {
                 }else if (res.error == 10 || res.error == "10"){
                     localStorage.removeItem("x-token");
                     window.location.href = `${window.location.origin}/index.html`
-                  }else{
+                  }else if(res.error == 2 || res.error == "2"){
+                    advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)}
+                  else{
                       return algo_salio_mal(`Algo salio mal: error al agregar Producto`)
                   }
               })

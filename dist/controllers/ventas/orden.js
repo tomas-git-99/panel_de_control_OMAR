@@ -322,6 +322,7 @@ exports.generarOrdenPublico = generarOrdenPublico;
 const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idOrden } = req.params;
+        console.log(idOrden);
         const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: idOrden } });
         let ids = [];
         ordenDetalle.map((e) => {
@@ -343,27 +344,29 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             let tallesFilter = talles.filter(h => h.id_producto == i.id_producto);
             for (let h of tallesFilter) {
                 let largo = i.talle;
-                let largoDetalle = largo.length;
-                if (largo.length == 1) {
+                let largoDetalle = largo.split(',').length;
+                console.log(largoDetalle);
+                if (largoDetalle.length == 1) {
                     if (h.talle == parseInt(i.talle)) {
                         let nuevaCantidad = h.cantidad + i.cantidad;
                         yield h.update({ cantidad: nuevaCantidad });
                         yield i.destroy();
                     }
                 }
-                else if (largo.length > 1) {
+                else {
                     let filtrarTalles = talles.filter(h => h.id_producto == i.id_producto);
                     let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
                     let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
                     yield h.update({ cantidad: nuevaCantidad });
                     yield i.destroy();
-                }
-                else {
+                } /* else{
+                   
                     return res.json({
+                    
                         ok: false,
                         msg: "Hablar con el administrador"
-                    });
-                }
+                    })
+                } */
             }
             let verdad = ids_productos_total.some(e => e.id == i.id_producto);
             if (verdad == true) {
@@ -375,6 +378,9 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             }
         }
         const orden = yield orden_1.Orden.findByPk(idOrden);
+        /*   const orden = await Orden.destroy({ where:{
+              id:idOrden,
+          }}) */
         yield (orden === null || orden === void 0 ? void 0 : orden.destroy());
         direccion_1.Direccion.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_direccion)
             .then((resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -384,11 +390,15 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }));
         const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
         yield (cliente === null || cliente === void 0 ? void 0 : cliente.destroy());
+        /*   for (let d of ordenDetalle){
+              await d.destroy();
+          } */
         res.json({
             ok: true
         });
     }
     catch (error) {
+        console.log(error);
         res.json({
             ok: false,
             msg: error

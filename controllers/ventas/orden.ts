@@ -483,6 +483,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
     try {
         
         const { idOrden } = req.params;
+        console.log(idOrden);
 
         
         const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden:idOrden }});
@@ -524,10 +525,11 @@ export const deshacerOrden = async(req: Request, res: Response) => {
             for(let h of tallesFilter){
 
                 let largo:any = i.talle;
-                let largoDetalle = largo.length;
+                let largoDetalle = largo.split(',').length;
+                console.log(largoDetalle)
 
 
-                if(largo.length == 1){
+                if(largoDetalle.length == 1){
 
                     if(h.talle == parseInt(i.talle)){
 
@@ -539,7 +541,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
                         
                     }
 
-                }else if(largo.length > 1){
+                }else{
 
                     let filtrarTalles = talles.filter( h => h.id_producto == i.id_producto);
 
@@ -553,13 +555,14 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
                
                     
-                }else{
+                }/* else{
                    
                     return res.json({
+                    
                         ok: false,
                         msg: "Hablar con el administrador"
                     })
-                }
+                } */
 
 
             }
@@ -586,6 +589,10 @@ export const deshacerOrden = async(req: Request, res: Response) => {
    
 
         const orden = await Orden.findByPk(idOrden);
+     /*   const orden = await Orden.destroy({ where:{
+           id:idOrden,
+       }}) */
+
         await orden?.destroy();
 
 
@@ -599,6 +606,10 @@ export const deshacerOrden = async(req: Request, res: Response) => {
         const cliente = await Cliente.findByPk(orden?.id_cliente);
 
         await cliente?.destroy();
+
+      /*   for (let d of ordenDetalle){
+            await d.destroy();
+        } */
         
 
         res.json({
@@ -607,6 +618,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
 
     } catch (error) {
+        console.log(error);
         res.json({
             ok:false,
             msg:error

@@ -328,6 +328,9 @@ const descontarProductosFull = (req, res) => __awaiter(void 0, void 0, void 0, f
         // VERIFICAR SI TIENE STOCK SUFICIENTE EN LA BASE DE DATOSAAA
         let productos_sin_stock = [];
         const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
+        res.json({
+            carrito
+        });
         talles.map(e => {
             carrito.map(p => {
                 if (p.id_producto == e.id_producto) {
@@ -396,33 +399,35 @@ const descontarProductosFull = (req, res) => __awaiter(void 0, void 0, void 0, f
                         let nuevaSuma = n.cantidad * dato_producto.precio;
                         sumaTotal = sumaTotal + nuevaSuma;
                         let nuevoStock = e.cantidad - n.cantidad;
-                        yield e.update({ cantidad: nuevoStock })
-                            .catch(err => {
-                            return res.json({ ok: false, msg: err });
-                        });
-                        let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
-                        yield orden_detalle.save()
-                            .catch(err => {
-                            return res.json({ ok: false, msg: err });
-                        });
-                        yield n.destroy().catch(err => {
-                            return res.json({ ok: false, msg: err });
-                        });
+                        /*   await e.update({cantidad:nuevoStock})
+                                      .catch(err => {
+                                          return res.json({ok: false, msg: err})
+                                      });
+                          let orden_detalle = new OrdenDetalle(orden);
+  
+                          await orden_detalle.save()
+                                  .catch(err => {
+                                      return res.json({ok: false, msg: err})
+                                  });
+      
+                          await n.destroy().catch( err => {
+                              return res.json({ok: false, msg: err})
+                          })
+                           */
                     }
                     else if (n.talle == null) {
                         let filtroDeTalles = talles.filter(p => p.id_producto == n.id_producto);
                         let dato_producto = productos.find(j => j.id == n.id_producto);
                         let canitdadTotalTalle = 0;
                         for (let f of filtroDeTalles) {
-                            /*  console.log(f) */
                             canitdadTotalTalle += n.cantidad;
                             let nuevaSuma = n.cantidad * dato_producto.precio;
                             sumaTotal = sumaTotal + nuevaSuma;
                             let nuevoStock = e.cantidad - n.cantidad;
-                            yield f.update({ cantidad: nuevoStock })
-                                .catch(err => {
-                                return res.json({ ok: false, msg: err });
-                            });
+                            /*          await f.update({cantidad:nuevoStock})
+                                     .catch(err => {
+                                         return res.json({ok: false, msg: err})
+                                     }); */
                         }
                         let orden = {
                             id_orden,
@@ -432,14 +437,17 @@ const descontarProductosFull = (req, res) => __awaiter(void 0, void 0, void 0, f
                             cantidad: canitdadTotalTalle,
                             precio: dato_producto.precio //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                         };
-                        let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
-                        yield orden_detalle.save()
-                            .catch(err => {
-                            return res.json({ ok: false, msg: err });
-                        });
-                        yield n.destroy().catch(err => {
-                            return res.json({ ok: false, msg: err });
-                        });
+                        /*     let orden_detalle = new OrdenDetalle(orden);
+    
+                            await orden_detalle.save()
+                                    .catch(err => {
+                                        return res.json({ok: false, msg: err})
+                                    });
+        
+                            await n.destroy().catch( err => {
+                                return res.json({ok: false, msg: err})
+                            })
+     */
                     }
                 }
             }
@@ -461,25 +469,31 @@ const descontarProductosFull = (req, res) => __awaiter(void 0, void 0, void 0, f
                     let nuevaSuma = p.cantidad * producto[0].precio;
                     sumaTotal = sumaTotal + nuevaSuma;
                     let nuevoStock = producto[0].cantidad - p.cantidad;
-                    yield producto[0].update({ cantidad: nuevoStock })
-                        .catch(err => {
-                        return res.json({ ok: false, msg: err });
-                    });
-                    let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
-                    yield orden_detalle.save()
-                        .catch(err => {
-                        return res.json({ ok: false, msg: err });
-                    });
-                    yield p.destroy();
+                    /*    await producto[0].update({cantidad: nuevoStock})
+                           .catch(err => {
+                               return res.json({ok: false, msg: err})
+                           });
+       
+                       let orden_detalle = new OrdenDetalle(orden);
+                       await orden_detalle.save()
+                           .catch(err => {
+                               return res.json({ok: false, msg: err})
+                           });
+   
+                      
+       
+                       await p.destroy(); */
                 }
             }
         }
-        const orden = yield orden_1.Orden.findByPk(id_orden);
-        yield orden.update({ total: sumaTotal });
-        res.json({
+        /*
+                const orden = await Orden.findByPk(id_orden);
+                await orden!.update({total:sumaTotal}); */
+        /* res.json({
             ok: true,
             msg: "Su compra fue exitosa"
-        });
+         })
+ */
     }
     catch (error) {
         res.json({
@@ -583,69 +597,72 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
             });
         }
         //DESCONTAR POR TALLES Y CANTIDAD INDIVIDUAL
-        for (let i of productos) {
-            let carritoComprobar = carrito.some(h => {
-                if (h.id_producto == i.id)
-                    return h.talle == null ? false : true;
+        for (let i of carrito) {
+            let carritoComprobar = productos.some(h => {
+                if (h.id == i.id_producto)
+                    return i.talle == null ? false : true;
             });
             //DESCONTAR POR TALLE
             if (carritoComprobar == true) {
-                let tallesPrueba = talles.filter(p => p.id_producto == i.id ? p : undefined);
+                let tallesPrueba = talles.filter(p => p.id_producto == i.id_producto ? p : undefined);
                 for (let t of tallesPrueba) {
-                    let carritoNoCurva = carrito.filter(h => { var _a; return (_a = h.id_producto == i.id) !== null && _a !== void 0 ? _a : h; });
-                    for (let ca of carritoNoCurva) {
-                        if (ca.talle == t.talle) {
-                            let dato_producto = productos.find(e => e.id == i.id);
-                            let orden = {
-                                id_orden,
-                                id_producto: ca.id_producto,
-                                nombre_producto: dato_producto.nombre,
-                                talle: ca.talle,
-                                cantidad: ca.cantidad,
-                                precio: ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
-                            };
-                            let precioNuevo = ca.precio_nuevo == null ? dato_producto.precio : ca.precio_nuevo;
-                            let nuevaSuma = ca.cantidad * precioNuevo;
-                            sumaTotal = sumaTotal + nuevaSuma;
-                            let nuevoStock = t.cantidad - ca.cantidad;
-                            yield t.update({ cantidad: nuevoStock });
-                            let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
-                            yield orden_detalle.save()
-                                .catch(err => {
-                                return res.json({ ok: false, msg: err });
-                            });
-                            yield ca.destroy();
-                        }
+                    /*   for( let ca of carritoNoCurva){ */
+                    if (i.talle == t.talle) {
+                        /*   let carritoNoCurva = carrito.filter( h => h.id_producto == i.id_producto ?? h); */
+                        let carritoCurva = carrito.find(t => t.id_producto == i.id_producto);
+                        let dato_producto = productos.find(e => e.id == i.id_producto);
+                        let orden = {
+                            id_orden,
+                            id_producto: i.id_producto,
+                            nombre_producto: dato_producto.nombre,
+                            talle: i.talle,
+                            cantidad: i.cantidad,
+                            precio: i.precio_nuevo == null ? dato_producto.precio : i.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        };
+                        let precioNuevo = i.precio_nuevo == null ? dato_producto.precio : i.precio_nuevo;
+                        let nuevaSuma = i.cantidad * precioNuevo;
+                        sumaTotal = sumaTotal + nuevaSuma;
+                        let nuevoStock = t.cantidad - i.cantidad;
+                        yield t.update({ cantidad: nuevoStock });
+                        let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
+                        yield orden_detalle.save()
+                            .catch(err => {
+                            return res.json({ ok: false, msg: err });
+                        });
+                        yield i.destroy();
                     }
+                    /*   } */
                 }
             }
             else {
-                let verdad = talles.some(k => k.id_producto == i.id);
+                let verdad = talles.some(k => k.id_producto == i.id_producto);
                 if (verdad == true) {
-                    let tallesUnicoCurva = talles.filter(t => t.id_producto == i.id);
-                    let carritoCurva = carrito.find(t => t.id_producto == i.id);
+                    let productoData = productos.find(p => p.id == i.id_producto);
+                    let tallesUnicoCurva = talles.filter(t => t.id_producto == i.id_producto);
+                    let carritoCurva = carrito.find(t => t.id_producto == i.id_producto);
                     let conteo = 0;
                     for (let o of tallesUnicoCurva) {
-                        let precioNuevo = carritoCurva.precio_nuevo == null ? i.precio : carritoCurva.precio_nuevo;
-                        let nuevaSuma = carritoCurva.cantidad * precioNuevo;
+                        let precioNuevo = carritoCurva.precio_nuevo == null ? productoData.precio : carritoCurva.precio_nuevo;
+                        let nuevaSuma = i.cantidad * precioNuevo;
                         sumaTotal = sumaTotal + nuevaSuma;
-                        yield o.update({ cantidad: o.cantidad - carritoCurva.cantidad });
-                        conteo += carritoCurva.cantidad;
+                        let nuevoStock = o.cantidad - i.cantidad;
+                        yield o.update({ cantidad: o.cantidad - i.cantidad });
+                        conteo += i.cantidad;
                     }
                     let orden = {
                         id_orden,
-                        id_producto: i.id,
-                        nombre_producto: i.nombre,
-                        talle: i.talles,
+                        id_producto: i.id_producto,
+                        nombre_producto: productoData.nombre,
+                        talle: productoData.talles,
                         cantidad: conteo,
-                        precio: carritoCurva.precio_nuevo == null ? i.precio : carritoCurva.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
+                        precio: i.precio_nuevo == null ? productoData.precio : i.precio_nuevo //PARA MODIFICAR EL PRECIO SERIA : n.nuevo_precio !== null ? n.nuevo_precio : dato_producto.precio
                     };
                     let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
                     yield orden_detalle.save()
                         .catch(err => {
                         return res.json({ ok: false, msg: err });
                     });
-                    yield (carritoCurva === null || carritoCurva === void 0 ? void 0 : carritoCurva.destroy());
+                    yield (i === null || i === void 0 ? void 0 : i.destroy());
                 }
             }
         }
@@ -657,6 +674,7 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                     let productoCurva = productos.find(o => o.id == i.id_producto ? o : undefined);
                     let cantidadDeTalle = productoCurva === null || productoCurva === void 0 ? void 0 : productoCurva.talles.split(",");
                     let contadorTotal = 0;
+                    let carritoCurva = carrito.find(t => t.id_producto == i.id_producto);
                     for (let count of cantidadDeTalle) {
                         contadorTotal += i.cantidad;
                     }
@@ -682,6 +700,7 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                 }
                 else {
                     let productoCurva = productos.find(o => o.id == i.id_producto ? o : undefined);
+                    let carritoCurva = carrito.find(t => t.id_producto == i.id_producto);
                     let orden = {
                         id_orden,
                         id_producto: i.id_producto,
@@ -700,17 +719,18 @@ const pruebaParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0, func
                         .catch(err => {
                         return res.json({ ok: false, msg: err });
                     });
-                    yield i.destroy();
+                    yield (i === null || i === void 0 ? void 0 : i.destroy());
+                    /*       await i.destroy(); */
                 }
             }
         }
         const orden = yield orden_1.Orden.findByPk(id_orden);
-        yield orden.update({ total: sumaTotal });
-        res.json({
-            ok: true,
-            msg: "Su compra fue exitosa",
-            suma: sumaTotal
-        });
+        yield (orden === null || orden === void 0 ? void 0 : orden.update({ total: sumaTotal }));
+        /*         await new Promise( (resolve, reject) => {
+                })
+                
+         */
+        return res.json({ ok: true, msg: 'Su compra fue exitosa', total: sumaTotal });
     }
     catch (error) {
         res.json({
