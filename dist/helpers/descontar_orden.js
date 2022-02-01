@@ -73,7 +73,7 @@ const descontarCurvaTalle = (cantidad, talles, ordenDetalle, orden, producto) =>
                     tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: nuevaCantidadTalle }];
                 }
                 else {
-                    nuevaCantidadTalle = t.cantidad + (cantidad - ordenDetalle.cantidad);
+                    nuevaCantidadTalle = t.cantidad - (cantidad - ordenDetalle.cantidad);
                     if (t.cantidad < (cantidad - ordenDetalle.cantidad) || t.cantidad == 0) {
                         productos_sin_stock.push(`El producto: "${producto.nombre} y talle: ${t.talle}" con stock de actual: ${t.cantidad}, no tiene stock suficiente para hacer esta modificacion, cantidad que quieres descontar: ${(cantidad - ordenDetalle.cantidad)} `);
                     }
@@ -177,7 +177,7 @@ const descontarCurvaTalle_talleManda = (cantidad, talle, talles, ordenDetalle, o
             if (t.talle == talle) {
                 if ((ordenDetalle.cantidad / largoDeTalle) > cantidad || (ordenDetalle.cantidad / largoDeTalle) == cantidad) {
                     nuevaCantidad = (ordenDetalle.cantidad / largoDeTalle) - cantidad;
-                    let nuevaCantidadTalle = t.cantidad - nuevaCantidad;
+                    let nuevaCantidadTalle = t.cantidad + nuevaCantidad;
                     tallesDescontar = [...tallesDescontar, { talle: t.talle, cantidad: nuevaCantidadTalle }];
                 }
                 else {
@@ -216,7 +216,7 @@ const descontarCurva_talleManda = (cantidad, talle, ordenDetalle, orden, product
             cantidaDeProducto = producto.cantidad + cantidaTotalDetalle;
         }
         else {
-            cantidaTotalDetalle = cantidad - ordenDetalle.cantidad;
+            cantidaTotalDetalle = ordenDetalle.cantidad - cantidad;
             cantidaDeProducto = producto.cantidad - cantidaTotalDetalle;
             if (producto.cantidad < cantidaTotalDetalle || producto.cantidad == 0) {
                 productos_sin_stock.push(`El producto: "${producto.nombre}" con stock de actual: ${producto.cantidad}, cantidad que quieres colocar: ${cantidaTotalDetalle} `);

@@ -59,7 +59,10 @@ const imprimirEnPantalla = (res) => {
              <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
              <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
              </div>
-    
+
+             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+             </div> 
       
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
@@ -279,6 +282,7 @@ window.cambioDeLocal = (e) => {
 const productos_orden = document.querySelector('.productos_orden')
 const modificarCarrito = document.querySelector('.modificarCarrito')
 const cantidadTalle = document.querySelector('.cantidadTalle')
+const totalOrden_detalle = document.querySelector('.totalOrden_detalle');
 
 let idORDEN
 
@@ -293,6 +297,7 @@ window.modificar_orden = (id) => {
             imprimirProductosOrden(res.ordenDetalle);
 
             cerrar_abrir("modificarCarrito", true);
+            totalOrden_detalle.innerHTML = `$ ${res.orden.total}`
         
 
         })
@@ -314,8 +319,13 @@ const imprimirProductosOrden = (res) => {
         <td>${devolverString(e.cantidad)}</td>
         <td>${devolverString(e.precio)}</td>
         <td>
+        <div class="botones_historial">
+        <div class="boton" id="${e.id}" onclick="eliminar_ordenDetalle(this.id)">
+             <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+        </div>
         <div id="${e.id}" onclick="moificar_producto(this.id)" class="boton">
         <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+        </div>
         </div>
         
         </td>
@@ -328,6 +338,39 @@ const imprimirProductosOrden = (res) => {
 }
 
 {/* <td>${devolverString()}</td> */}
+
+window.eliminar_ordenDetalle = (id) => {
+
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta orden?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            fecthNormalPOST_PUT("DELETE", `ordenDetalle/${idORDEN}/${id}`)
+              .then( res =>{
+            
+
+                  if(res.ok == true){
+                      salio_todo_bien("Se elimino correctamente");
+                      main_historial();
+
+                  }else{
+                    algo_salio_mal(`Algo salio mal: ${ res.msg }`)
+                  }
+              })
+              .catch( err => {
+                  algo_salio_mal(`Algo salio mal: ${ err }`)
+              })
+        }
+      })
+
+}
+
 
 let idProductoModificar 
 window.moificar_producto = (id) => {
@@ -369,18 +412,22 @@ modificador_producto_orden.addEventListener("submit", (e) => {
     }
 
     console.log(forData)
+    console.log(idProductoModificar)
 
-  /*   fecthNormalPOST_PUT("PUT", "ordenDetalle/" + idProductoModificar, forData)
+    fecthNormalPOST_PUT("PUT", "ordenDetalle/" + idProductoModificar, forData)
             .then( res => {
+                console.log(res)
                 if(res.ok == true){
+
                     salio_todo_bien("se cambio todo con exito")
-                }else{
+
+                }else if(res.ok == false){
                     algo_salio_mal(`Algo salio mal`)
                 }
             }) 
             .catch(err => {
                 algo_salio_mal(`Algo salio mal: ${ err }`)
-            }) */
+            })
 })
 
 window.agregarProductoID = () => {
@@ -401,13 +448,12 @@ search2.addEventListener("keyup", ({keyCode}) => {
     search2.value = "";
 });
 
-
 const getSearch2 = (valor, offset=0) => {
 
     fecthNormalGET("GET", "producto/search?" + `nombre=${valor}&offset=${offset}`)
     .then(res => {
 
-        imprimirHistorial(res.productos)
+        imprimirHistorial(res.productos);
     })
     .catch( err =>{
         
@@ -452,15 +498,19 @@ imprimirTallesEnCadaProducto(res)
 
 }
 const talles_del_producto = document.querySelector(".talles_del_producto");
+let boton_para_cargar = document.querySelector(".boton_para_cargar");
 const cantidad_unica = document.getElementById("cantidad_unica");
 
 let arrayTalle;
+let idProductoAgregar
 
 window.agrgarProductoNEW = (event) => {
 
     cerrar_abrir("cantidad2", true);
     let array = event.value.split(",");
 
+    idProductoAgregar = event.id;
+    boton_para_cargar.id = event.id
   arrayTalle = array;
   let historial = "";
 
@@ -494,5 +544,80 @@ cantidad_unica.addEventListener("input", (valor) => {
       }
     }
   
-  })
+  });
   
+  talles_del_producto.addEventListener("keyup", (keyCode) => {
+  
+  /*   console.log(keyCode.keyCode); */
+    if(keyCode.keyCode == 13) {
+   
+      let separador = keyCode.path[0].id; 
+      if(keyCode.path[0].value.length == 0){
+        return advertencia("Se te olvido colocar un valor")
+      }
+      
+      let talles = separador.split("_")[2];
+
+      let data = {
+        id: idProductoAgregar,
+        cantidad: keyCode.path[0].value,
+        talle:talles
+      }
+  
+      
+  
+      enviarFormCarrito(data)
+      
+      
+    }
+  })
+                  
+                  
+  window.enviar_datos_producto = (id) => {
+    let data = {
+        id:id,
+        cantidad:cantidad_unica.value,
+        talle:null
+
+    }
+    console.log(data)
+
+
+    enviarFormCarrito(data)
+  }
+
+
+
+
+  const enviarFormCarrito = (data) => {
+      console.log(data)
+      console.log(idORDEN)
+   
+      fecthNormalPOST_PUT("POST", "ordenDetalle/"+idORDEN, data)
+              .then( res => {
+
+                  console.log(res)
+                if(res.ok == true){
+
+
+                    cantidad_unica.value = "";
+               
+                    for(let e of arrayTalle) {
+                        let talle_unico = document.getElementById(`talle_unico_${e}`);
+
+                        talle_unico.disabled = false;
+                        talle_unico.value = "";
+                      }
+    
+                      return salio_todo_bien()
+                }else if (res.error == 10 || res.error == "10"){
+                    localStorage.removeItem("x-token");
+                    window.location.href = `${window.location.origin}/index.html`
+                  }else{
+                      return algo_salio_mal(`Algo salio mal: error al agregar Producto`)
+                  }
+              })
+              .catch( err => {
+                  algo_salio_mal(`Algo salio mal: ${ err }`)
+              })
+  }

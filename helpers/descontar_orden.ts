@@ -122,7 +122,7 @@ export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle
                     tallesDescontar =  [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}];             
                 }else{
 
-                    nuevaCantidadTalle = t.cantidad + (cantidad - ordenDetalle.cantidad);
+                    nuevaCantidadTalle = t.cantidad - (cantidad - ordenDetalle.cantidad);
 
                     if(t.cantidad < (cantidad - ordenDetalle.cantidad) || t.cantidad == 0){
 
@@ -302,7 +302,7 @@ export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,ta
                                 
                     nuevaCantidad = (ordenDetalle.cantidad / largoDeTalle) - cantidad;
 
-                    let nuevaCantidadTalle = t.cantidad - nuevaCantidad
+                    let nuevaCantidadTalle = t.cantidad + nuevaCantidad
 
                     tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidadTalle}];
             
@@ -320,7 +320,7 @@ export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,ta
                 }
             }else{
 
-                nuevaCantidad = t.cantidad +  (ordenDetalle.cantidad / largoDeTalle);
+                nuevaCantidad = t.cantidad + (ordenDetalle.cantidad / largoDeTalle);
                 tallesDescontar = [...tallesDescontar, { talle:t.talle, cantidad:nuevaCantidad}];
 
             }
@@ -368,7 +368,7 @@ export const descontarCurva_talleManda = (cantidad:number, talle:number, ordenDe
 
         }else{
 
-            cantidaTotalDetalle = cantidad - ordenDetalle!.cantidad;
+            cantidaTotalDetalle =  ordenDetalle!.cantidad - cantidad ;
 
             cantidaDeProducto = producto.cantidad - cantidaTotalDetalle;
 

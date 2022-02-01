@@ -3,6 +3,7 @@ import db from '../../DB/conectarDB';
 
 export interface TodoAtributos {
 
+ 
     id_orden: number;
     id_producto: number;
     nombre_producto:string;
@@ -26,7 +27,7 @@ export class OrdenDetalle extends Model <TodoAtributos>{
 
 OrdenDetalle.init(
     {
-
+   
         id_orden:{
             type:DataTypes.NUMBER
         },
