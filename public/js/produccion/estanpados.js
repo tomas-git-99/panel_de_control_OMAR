@@ -17,6 +17,7 @@ const main_historial = () => {
 
     fecthNormalGET("GET", "produccion/estanpado")
       .then( res => {
+        console.log(res)
 
         colorearTable(res.data)
       })

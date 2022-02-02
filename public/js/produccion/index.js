@@ -24,7 +24,8 @@ const main_historial = (valor=0) => {
     cargaMedio("spinner_load", true);
     
     fecthNormalGET("GET", `produccion/producto_produccion?offset=${valor}`)
-        .then( res => {
+        .then( async(res) => {
+           
             if(res.ok){
                 cargaMedio("spinner_load", false);
 
@@ -445,7 +446,8 @@ const seleccion_cambio_taller = document.getElementById("seleccion_cambio_taller
     
 }
 
- 
+
+
 const opcines_taller = (id) => {
 
     fecthNormalGET("GET","produccion/taller")
@@ -463,6 +465,9 @@ window.salir_cambios = () => {
     opciones_cambio.style.visibility = "hidden";
     input_con_el_valor.innerHTML = "";
     //main_historial(recargaPaginaIgual);
+
+
+    
 }
 
 
@@ -555,18 +560,32 @@ const imprimir_taller = (talleres) => {
 
 window.buscarDataTaller = (value) => {
 
+    bucardorDeTalleres(value)
+
+}
+
+
+const bucardorDeTalleres = (value, offset=0) => {
     if(value.value == "0" || value.value == 0){
         escribir_busquedas.style.display = "none";
         escribir_busquedas.style.visibility = "hidden";
         main_historial()
     }else{
         cargaMedio("spinner_load", true);
-        fecthNormalGET("GET","produccion/taller/full/" + value.value)
+        fecthNormalGET("GET","produccion/taller/full/" + value.value+"?offset="+offset)
         .then(res =>{
+
+         
+                paginacion(res.contador);
+
+     
 
             cargaMedio("spinner_load", false);
             numeroPaginas = null;
-            paginacion(res.contador)
+
+
+
+           /*  paginacion(res.contador) */
             colorearTable(res.produccion)
            
         })
@@ -575,7 +594,6 @@ window.buscarDataTaller = (value) => {
         })
     }
 }
-
 
 
 window.cambiar_filtro = (e) => {
@@ -634,6 +652,7 @@ const funcFiltroTodos = ( data, offset=0) => {
                 }
 
                 dataRango = [data[0], datos];
+
                 cargaMedio("spinner_load", false);
 
                 colorearTable(res.produccion);
@@ -707,6 +726,7 @@ search.addEventListener("keyup", ({keyCode}) => {
 });
 
 let palabraBuscada = "";
+
 const getSearch = (valor, offset=0) => {
 
     
@@ -770,6 +790,7 @@ const paginacion = (valor, query=undefined) => {
 
 }
 
+
 let recargaPaginaIgual
 window.pagina_id = (e) => {
 
@@ -821,6 +842,21 @@ window.pagina_id = (e) => {
         
         }
     }
+
+ /*    if(datos[2] == "taller"){
+
+        if(datos[1] == 0){
+     
+            return bucardorDeTalleres(palabraBuscada);
+
+        }else{
+           
+            return bucardorDeTalleres(palabraBuscada, datos[1]+"0");
+
+        
+        }
+    }
+ */
 
     if(datos[1] == 0){
         recargaPaginaIgual = "0";

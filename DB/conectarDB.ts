@@ -28,6 +28,6 @@ const db = new Sequelize(process.env.DB_NAME_DATABASE || "", process.env.DB_NAME
     port:25060,
     dialect: 'mysql',
     //logging: false,
-});  */
-
+}); 
+ */
 export default db;

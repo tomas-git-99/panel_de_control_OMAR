@@ -76,7 +76,10 @@ export const buscarSoloPortaller = async (req: Request, res: Response)=> {
 
     const { id } = req.params;
 
-    const produccion_productos = await Produccion_producto.findAndCountAll({ where:{ id_taller: id } });
+    let valor:any = req.query.offset;
+    let valorOffset = parseInt(valor);
+
+    const produccion_productos = await Produccion_producto.findAndCountAll({ where:{ id_taller: id }, limit:10, offset:valorOffset });
 
     const taller = await Taller.findAll()
 

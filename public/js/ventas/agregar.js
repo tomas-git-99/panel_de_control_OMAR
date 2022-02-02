@@ -89,8 +89,7 @@ formProducto.addEventListener("submit", (e) => {
          })
          .catch(err => {
              load_normal(boton_guardar, false, "GUARDAR")
-             console.log(err)
-
+          
              algo_salio_mal("Algo salio mal, espero unos minutos o comunicarse con el administrador")
             
         })

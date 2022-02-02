@@ -460,7 +460,7 @@ formCliente.addEventListener("submit", async(e) =>{
             fecthNormalPOST_PUT("POST", `direccion/${id_cliente} `,forDataDireccion)
                 .then( (res) => {
     
-                    load_normal(btnCliente, false, "CONFIRMAR")
+                 /*    load_normal(btnCliente, false, "CONFIRMAR") */
                     generarOrden(id_cliente, id_usuario, res.direcciones.id, forDataConfirmar);
                 })
                 .catch(err =>{
@@ -470,7 +470,6 @@ formCliente.addEventListener("submit", async(e) =>{
     
         }else{
             generarOrden(id_cliente, id_usuario, id_direccion, forDataConfirmar);
-            load_normal(btnCliente, false, "CONFIRMAR");
         }
     } catch (error) {
         load_normal(btnCliente, false, "CONFIRMAR")
@@ -763,6 +762,7 @@ nombre_usario.innerHTML =  nombre;
 //DATA = {nombre, email, cuil o dni}
 
 const venta_publico_form = document.querySelector(".venta_publico_form");
+const boton_publico2 = document.querySelector(".boton_publico2");
 
 
 
@@ -771,6 +771,7 @@ venta_publico_form.addEventListener("submit", async(e) => {
 
     try {
         e.preventDefault();
+        load_normal(boton_publico2, true);
     
     
         const forData = {}; // DATOS PARA MANDAR A DB DE CLIENTE NUEVO
@@ -873,6 +874,9 @@ function descontarTotalOporTalle (id_usuario, id_orden) {
                 aca_id_orden.id= id_orden;
                 aca_id_orden_para_mi.id = id_orden;
                 localStorage.removeItem("id_orden");
+                load_normal(btnCliente, false, "CONFIRMAR");
+                load_normal(boton_publico2, false, "CONFIRMAR");
+
 
                 //localStorage.setItem('id_orden', id_orden);
 
@@ -883,11 +887,19 @@ function descontarTotalOporTalle (id_usuario, id_orden) {
                 advertencia(`Productos sin stock : ${res.productos_sin_stock}`, res.msg)
                 volverAtras( cartelCliente, bienvenido);
                 volverAtras(venta_publico, bienvenido);
+            load_normal(btnCliente, false, "CONFIRMAR");
+            load_normal(boton_publico2, false, "CONFIRMAR");
+
+
             }else{
             
                 algo_salio_mal(`Algo salio mal`);
                 volverAtras( cartelCliente, bienvenido)
                 volverAtras(venta_publico, bienvenido);
+            load_normal(btnCliente, false, "CONFIRMAR");
+            load_normal(boton_publico2, false, "CONFIRMAR");
+
+
 
             }
         }

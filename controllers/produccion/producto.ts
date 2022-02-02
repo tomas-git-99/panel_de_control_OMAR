@@ -1,5 +1,6 @@
 import { query, Request, Response } from "express";
-import { Op, where } from "sequelize/dist";
+import { Op, QueryTypes, Sequelize, where } from "sequelize/dist";
+import sequelize from "sequelize/dist/lib/sequelize";
 import { Estanpados } from "../../models/produccion/estanpados";
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
 import { Taller } from "../../models/produccion/talller";
@@ -96,13 +97,30 @@ export const obtenerProduccion = async (req: Request, res: Response) => {
 
     let valorOffset = parseInt(valor)
 
-    
+    const producto:any = await Produccion_producto.sequelize?.query(`SELECT SQL_CALC_FOUND_ROWS * FROM producto_produccion  ORDER BY id_corte * 1 DESC, id_corte DESC LIMIT 10 OFFSET ${valorOffset};`,{ type: QueryTypes.SELECT });
+    const contadorSaca:any = await Produccion_producto.sequelize?.query(`SELECT FOUND_ROWS() AS count;`,{ type: QueryTypes.SELECT });
 
-    const produccion_test = await Produccion_producto.findAndCountAll({order: [['createdAt', 'DESC']], limit:10, offset:valorOffset});
+    const contador = contadorSaca[0].count;
+    const taller = await Taller.findAll()
+    let produccion:any = []
+    
+    producto!.map ( (e:any, i:any) =>{
+        taller.map ( (p,m) => {
+            if(e.id_taller == p.id){
+                produccion = [...produccion, {produccion:e, taller:taller[m]}];
+            }
+
+        })
+        if(e.id_taller === null){
+
+            produccion = [...produccion, {produccion:e}];
+        }
+    })
+   /*  const produccion_test = await Produccion_producto.findAndCountAll({order: [[Sequelize.literal("id_corte"), "DESC"]], limit:10, offset:valorOffset});
 
     const taller = await Taller.findAll()
 
-    let contador = produccion_test.count;
+    let contador2 = produccion_test.count;
     let produccion:any = []
     
     produccion_test.rows.map ( (e, i) =>{
@@ -117,13 +135,24 @@ export const obtenerProduccion = async (req: Request, res: Response) => {
             produccion = [...produccion, {produccion:e}];
         }
     })
+    produccion.sort( (a:any,b:any) =>{
+
+        return parseInt(a.id_corte) -parseInt(b.id_corte);
+    }) */
+
+
+ /*    res.json({
+        ok: true,
+        contador,
+        produccion
+    }); */
+
 
     res.json({
         ok: true,
         contador,
         produccion
-    });
-
+    })
 
 }
 

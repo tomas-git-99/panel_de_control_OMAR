@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import fecha from "fecha";
-import { Op, where } from "sequelize/dist";
+import { Op, QueryTypes, where } from "sequelize/dist";
 import { Estanpador } from "../../models/produccion/estanpador";
 import { Estanpados } from "../../models/produccion/estanpados"
 import { Produccion_producto } from "../../models/produccion/productos_produccion";
@@ -17,7 +17,7 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
 
     try {
         
-    const estanpado = await Estanpados.findAll();
+    const estanpado = await Estanpados.findAll({order: [['createdAt', 'DESC']]});
 
     let ids:any = [];
     let ids_estanpador:any = [];
@@ -29,7 +29,10 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
 
     })
 
-    const producto = await Produccion_producto.findAll({where: {id_corte: ids}});
+    const producto = await Produccion_producto.findAll({where: {id_corte: ids}, order: [['createdAt', 'DESC']]});
+
+    //const producto:any = await Produccion_producto.sequelize?.query(`SELECT  * FROM producto_produccion WHERE id_corte IN (:idsP) ORDER BY id_corte * 1 DESC, id_corte DESC;`,{ replacements: {idsP:ids},type: QueryTypes.SELECT });
+
     const estanpador = await Estanpador.findAll({where: {id: ids_estanpador}});
 
     let data:any = [];
@@ -38,13 +41,14 @@ export const obtenerEstanpados = async (req: Request, res: Response) => {
 
     for ( let i of estanpado){
 
-        let productoNew = producto.find( e => e.id_corte == i.id_corte);
+        
+
+        let productoNew = producto.find( (e:any) => e.id_corte == i.id_corte);
         let estanpadorNew = estanpador.find( e => e.id == i.id_estanpador);
 
         data = [...data, { producto:productoNew || "", estanpado:i, estanpador:estanpadorNew || ""}];
 
     }
-
 
 
     res.json({

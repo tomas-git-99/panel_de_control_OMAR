@@ -56,7 +56,14 @@ const imprimirEnPantalla = (res) => {
              <div class="botones_historial">
 
  
-       
+             <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
+             <img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+             </div>
+
+             <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
+             <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
+             </div> 
+      
              
                  <div class="boton imprimir" id="${e.orden.id}" onclick="imprimir_html(this.id)">
                      <img src="/img/imprimir.svg" alt="" width="35px">
@@ -73,15 +80,8 @@ const imprimirEnPantalla = (res) => {
     imprimir_historial.innerHTML = result;
 }
 
-{/* <div class="boton" id="${e.orden.id}" onclick="eliminar_orden(this.id)">
-<img width="35px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
-</div>
 
-<div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
-<img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
-</div> 
 
- */}
 {/* <div id="${e.orden.id}" onclick="modificar_orden(this.id)" class="boton">
 <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
 </div> */}
@@ -189,7 +189,7 @@ nombre_usario.innerHTML =  nombre;
 //MODIFICAR ORDEN
 
 window.eliminar_orden = (e) => {
-    console.log(e)
+
     Swal.fire({
         title: '¿Esta seguro que quiere eliminar esta orden?',
         icon: 'warning',
@@ -292,20 +292,25 @@ window.modificar_orden = (id) => {
 
     idORDEN = id;
  
+    MODIFICAR_ORDEN_FUNC(id)
+  
+}
 
+
+const MODIFICAR_ORDEN_FUNC = (id) => {
     fecthNormalGET("GET","ordenDetalle/"+id)
-        .then( res => {
+    .then( res => {
 
-            imprimirProductosOrden(res.ordenDetalle);
+        imprimirProductosOrden(res.ordenDetalle);
 
-            cerrar_abrir("modificarCarrito", true);
-            totalOrden_detalle.innerHTML = `$ ${res.orden.total}`
-        
+        cerrar_abrir("modificarCarrito", true);
+        totalOrden_detalle.innerHTML = `$ ${res.orden.total}`
+    
 
-        })
-        .catch( err => {
-            return algo_salio_mal(`Algo salio mal: ${ error }`)
-        })
+    })
+    .catch( err => {
+        return algo_salio_mal(`Algo salio mal: ${ error }`)
+    })
 }
 
 const imprimirProductosOrden = (res) => {
@@ -315,11 +320,11 @@ const imprimirProductosOrden = (res) => {
 
         historial += `
         <tr>
-        <td>${devolverString(e.id)}</td>
+        <td>${devolverString(e.id_producto)}</td>
         <td>${devolverString(e.nombre_producto)}</td>
         <td>${devolverString(e.talle)}</td>
         <td>${devolverString(e.cantidad)}</td>
-        <td>${devolverString(e.precio)}</td>
+        <td>$ ${devolverString(e.precio)}</td>
         <td>
         <div class="botones_historial">
         <div class="boton" id="${e.id}" onclick="eliminar_ordenDetalle(this.id)">
@@ -344,7 +349,7 @@ const imprimirProductosOrden = (res) => {
 window.eliminar_ordenDetalle = (id) => {
 
     Swal.fire({
-        title: '¿Esta seguro que quiere eliminar esta orden?',
+        title: '¿Estas seguro que quieres eliminar este producto de este comprobante?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -359,7 +364,9 @@ window.eliminar_ordenDetalle = (id) => {
 
                   if(res.ok == true){
                       salio_todo_bien("Se elimino correctamente");
-                      main_historial();
+        MODIFICAR_ORDEN_FUNC(idORDEN);
+
+                     /*  main_historial(); */
 
                   }else{
                     algo_salio_mal(`Algo salio mal: ${ res.msg }`)
@@ -382,6 +389,14 @@ window.moificar_producto = (id) => {
 
 
 window.close_ventana = (id) => {
+
+    if(id == 'cantidadTalle' || id == 'agregarNuevoProducto'){
+
+        MODIFICAR_ORDEN_FUNC(idORDEN);
+    }else if(id == 'modificarCarrito'){
+        main_historial();
+    }
+
     document.querySelector(`.${id}`).style.display = 'none';
     document.querySelector(`.${id}`).style.visibility = 'hidden';
 }
@@ -413,14 +428,17 @@ modificador_producto_orden.addEventListener("submit", (e) => {
         forData.talle = null
     }
 
-    console.log(forData)
-    console.log(idProductoModificar)
+  
 
     fecthNormalPOST_PUT("PUT", "ordenDetalle/" + idProductoModificar, forData)
             .then( res => {
-                console.log(res)
+               
                 if(res.ok == true){
-
+                    for(let el of modificador_producto_orden.elements){
+                     
+                        el.value = '';
+                    } 
+                
                     salio_todo_bien("se cambio todo con exito")
 
                 }else if(res.ok == false){
@@ -583,7 +601,7 @@ cantidad_unica.addEventListener("input", (valor) => {
         talle:null
 
     }
-    console.log(data)
+   
 
 
     enviarFormCarrito(data)
@@ -593,13 +611,12 @@ cantidad_unica.addEventListener("input", (valor) => {
 
 
   const enviarFormCarrito = (data) => {
-      console.log(data)
-      console.log(idORDEN)
+    
    
       fecthNormalPOST_PUT("POST", "ordenDetalle/"+idORDEN, data)
               .then( res => {
 
-                  console.log(res)
+                  
                 if(res.ok == true){
 
 

@@ -345,18 +345,21 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             for (let h of tallesFilter) {
                 let largo = i.talle;
                 let largoDetalle = largo.split(',').length;
-                console.log(largoDetalle);
-                if (largoDetalle.length == 1) {
+                if (largoDetalle == 1) {
                     if (h.talle == parseInt(i.talle)) {
+                        console.log('soy una talle');
                         let nuevaCantidad = h.cantidad + i.cantidad;
+                        console.log('cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad);
                         yield h.update({ cantidad: nuevaCantidad });
                         yield i.destroy();
                     }
                 }
                 else {
+                    console.log('soy unaa curva');
                     let filtrarTalles = talles.filter(h => h.id_producto == i.id_producto);
                     let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
                     let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
+                    console.log('cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad);
                     yield h.update({ cantidad: nuevaCantidad });
                     yield i.destroy();
                 } /* else{
@@ -378,9 +381,10 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             }
         }
         const orden = yield orden_1.Orden.findByPk(idOrden);
-        /*   const orden = await Orden.destroy({ where:{
-              id:idOrden,
-          }}) */
+        /*      const orden = await Orden.destroy({ where:{
+                 id:idOrden,
+             }})
+       */
         yield (orden === null || orden === void 0 ? void 0 : orden.destroy());
         direccion_1.Direccion.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_direccion)
             .then((resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -390,9 +394,9 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }));
         const cliente = yield cliente_1.Cliente.findByPk(orden === null || orden === void 0 ? void 0 : orden.id_cliente);
         yield (cliente === null || cliente === void 0 ? void 0 : cliente.destroy());
-        /*   for (let d of ordenDetalle){
-              await d.destroy();
-          } */
+        for (let d of ordenDetalle) {
+            yield d.destroy();
+        }
         res.json({
             ok: true
         });

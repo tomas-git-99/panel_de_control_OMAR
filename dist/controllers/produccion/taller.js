@@ -62,7 +62,9 @@ const buscarUnicTaller = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.buscarUnicTaller = buscarUnicTaller;
 const buscarSoloPortaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll({ where: { id_taller: id } });
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll({ where: { id_taller: id }, limit: 10, offset: valorOffset });
     const taller = yield talller_1.Taller.findAll();
     let contador = produccion_productos.count;
     let produccion = [];

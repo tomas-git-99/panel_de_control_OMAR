@@ -22,6 +22,7 @@ const db = new sequelize_1.Sequelize(process.env.DB_NAME_DATABASE || "", process
     port:25060,
     dialect: 'mysql',
     //logging: false,
-});  */
+});
+ */
 exports.default = db;
 //# sourceMappingURL=conectarDB.js.map

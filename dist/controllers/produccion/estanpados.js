@@ -16,18 +16,19 @@ const estanpados_1 = require("../../models/produccion/estanpados");
 const productos_produccion_1 = require("../../models/produccion/productos_produccion");
 const obtenerEstanpados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const estanpado = yield estanpados_1.Estanpados.findAll();
+        const estanpado = yield estanpados_1.Estanpados.findAll({ order: [['createdAt', 'DESC']] });
         let ids = [];
         let ids_estanpador = [];
         estanpado.map(e => {
             ids.push(e.id_corte);
             ids_estanpador.push(e.id_estanpador);
         });
-        const producto = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_corte: ids } });
+        const producto = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_corte: ids }, order: [['createdAt', 'DESC']] });
+        //const producto:any = await Produccion_producto.sequelize?.query(`SELECT  * FROM producto_produccion WHERE id_corte IN (:idsP) ORDER BY id_corte * 1 DESC, id_corte DESC;`,{ replacements: {idsP:ids},type: QueryTypes.SELECT });
         const estanpador = yield estanpador_1.Estanpador.findAll({ where: { id: ids_estanpador } });
         let data = [];
         for (let i of estanpado) {
-            let productoNew = producto.find(e => e.id_corte == i.id_corte);
+            let productoNew = producto.find((e) => e.id_corte == i.id_corte);
             let estanpadorNew = estanpador.find(e => e.id == i.id_estanpador);
             data = [...data, { producto: productoNew || "", estanpado: i, estanpador: estanpadorNew || "" }];
         }

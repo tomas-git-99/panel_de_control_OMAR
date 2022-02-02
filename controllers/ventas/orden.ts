@@ -526,14 +526,17 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
                 let largo:any = i.talle;
                 let largoDetalle = largo.split(',').length;
-                console.log(largoDetalle)
 
-
-                if(largoDetalle.length == 1){
-
+                
+                if(largoDetalle == 1){
+                    
                     if(h.talle == parseInt(i.talle)){
+                        console.log('soy una talle')
 
                         let nuevaCantidad = h.cantidad + i.cantidad;
+
+                        console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad)
+
 
                         await h.update({cantidad:nuevaCantidad});
                     
@@ -542,12 +545,15 @@ export const deshacerOrden = async(req: Request, res: Response) => {
                     }
 
                 }else{
+                    console.log('soy unaa curva')
 
                     let filtrarTalles = talles.filter( h => h.id_producto == i.id_producto);
 
                     let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
 
                     let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
+
+                    console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad)
 
                     await h.update({cantidad:nuevaCantidad});
 
@@ -589,10 +595,10 @@ export const deshacerOrden = async(req: Request, res: Response) => {
    
 
         const orden = await Orden.findByPk(idOrden);
-     /*   const orden = await Orden.destroy({ where:{
+  /*      const orden = await Orden.destroy({ where:{
            id:idOrden,
-       }}) */
-
+       }})
+ */
         await orden?.destroy();
 
 
@@ -607,9 +613,9 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
         await cliente?.destroy();
 
-      /*   for (let d of ordenDetalle){
+        for (let d of ordenDetalle){
             await d.destroy();
-        } */
+        }
         
 
         res.json({

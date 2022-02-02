@@ -71,13 +71,15 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
 exports.actualizarProducto = actualizarProducto;
 const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     /*  const produccion_productos = await Produccion_producto.findAll({order: [['updatedAt', 'DESC']], limit:10} ); */
+    var _a, _b;
     let valor = req.query.offset;
     let valorOffset = parseInt(valor);
-    const produccion_test = yield productos_produccion_1.Produccion_producto.findAndCountAll({ order: [['createdAt', 'DESC']], limit: 10, offset: valorOffset });
+    const producto = yield ((_a = productos_produccion_1.Produccion_producto.sequelize) === null || _a === void 0 ? void 0 : _a.query(`SELECT SQL_CALC_FOUND_ROWS * FROM producto_produccion  ORDER BY id_corte * 1 DESC, id_corte DESC LIMIT 10 OFFSET ${valorOffset};`, { type: dist_1.QueryTypes.SELECT }));
+    const contadorSaca = yield ((_b = productos_produccion_1.Produccion_producto.sequelize) === null || _b === void 0 ? void 0 : _b.query(`SELECT FOUND_ROWS() AS count;`, { type: dist_1.QueryTypes.SELECT }));
+    const contador = contadorSaca[0].count;
     const taller = yield talller_1.Taller.findAll();
-    let contador = produccion_test.count;
     let produccion = [];
-    produccion_test.rows.map((e, i) => {
+    producto.map((e, i) => {
         taller.map((p, m) => {
             if (e.id_taller == p.id) {
                 produccion = [...produccion, { produccion: e, taller: taller[m] }];
@@ -87,6 +89,34 @@ const obtenerProduccion = (req, res) => __awaiter(void 0, void 0, void 0, functi
             produccion = [...produccion, { produccion: e }];
         }
     });
+    /*  const produccion_test = await Produccion_producto.findAndCountAll({order: [[Sequelize.literal("id_corte"), "DESC"]], limit:10, offset:valorOffset});
+ 
+     const taller = await Taller.findAll()
+ 
+     let contador2 = produccion_test.count;
+     let produccion:any = []
+     
+     produccion_test.rows.map ( (e, i) =>{
+         taller.map ( (p,m) => {
+             if(e.id_taller == p.id){
+                 produccion = [...produccion, {produccion:e, taller:taller[m]}];
+             }
+ 
+         })
+         if(e.id_taller === null){
+ 
+             produccion = [...produccion, {produccion:e}];
+         }
+     })
+     produccion.sort( (a:any,b:any) =>{
+ 
+         return parseInt(a.id_corte) -parseInt(b.id_corte);
+     }) */
+    /*    res.json({
+           ok: true,
+           contador,
+           produccion
+       }); */
     res.json({
         ok: true,
         contador,
