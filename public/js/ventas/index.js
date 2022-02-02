@@ -94,7 +94,7 @@ window.actualizar_salir = () => {
     previsualizar.style.display = "none";
     previsualizar.style.visibility = "hidden";
   
-    historialGet(recargaPaginaIgual);
+    /* historialGet(recargaPaginaIgual); */
 }
 
 window.salir = (id) => {

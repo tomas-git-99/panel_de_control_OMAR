@@ -322,7 +322,7 @@ exports.generarOrdenPublico = generarOrdenPublico;
 const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idOrden } = req.params;
-        console.log(idOrden);
+        /*  console.log(idOrden); */
         const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findAll({ where: { id_orden: idOrden } });
         let ids = [];
         ordenDetalle.map((e) => {
@@ -347,19 +347,20 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 let largoDetalle = largo.split(',').length;
                 if (largoDetalle == 1) {
                     if (h.talle == parseInt(i.talle)) {
-                        console.log('soy una talle');
+                        /*      console.log('soy una talle') */
                         let nuevaCantidad = h.cantidad + i.cantidad;
-                        console.log('cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad);
+                        /*
+                                                console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad) */
                         yield h.update({ cantidad: nuevaCantidad });
                         yield i.destroy();
                     }
                 }
                 else {
-                    console.log('soy unaa curva');
+                    /*    console.log('soy unaa curva') */
                     let filtrarTalles = talles.filter(h => h.id_producto == i.id_producto);
                     let calcularCantidadPorunidad = i.cantidad / filtrarTalles.length;
                     let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
-                    console.log('cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad);
+                    /*  console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad) */
                     yield h.update({ cantidad: nuevaCantidad });
                     yield i.destroy();
                 } /* else{
@@ -402,7 +403,7 @@ const deshacerOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        console.log(error);
+        /*   console.log(error); */
         res.json({
             ok: false,
             msg: error

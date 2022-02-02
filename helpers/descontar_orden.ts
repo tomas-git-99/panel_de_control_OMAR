@@ -4,7 +4,7 @@ import { Producto } from "../models/ventas/producto";
 import { Talle } from "../models/ventas/talles";
 
 //CURVAS PARA PRODUCTOS QUE NO TIENE TALLES
-export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle:any, orden:any, producto:any) =>{
+export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle:any, orden:any, producto:any, precio:number) =>{
 
     let cantidadDescontarOsumar
 
@@ -26,7 +26,7 @@ export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle
         cantidadTotalProducto   = largoDeTalle * cantidad;
 
         let descontarOrden = orden!.total - (ordenDetalle!.cantidad * ordenDetalle!.precio);
-        cantidadTotalOrden = descontarOrden + (ordenDetalle!.precio *cantidadTotalProducto);
+        cantidadTotalOrden = descontarOrden + ((precio == null ? ordenDetalle!.precio : precio) * cantidadTotalProducto);
 
         if(ordenDetalle!.talle.split(',').length == 1){
 
@@ -63,7 +63,7 @@ export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle
         }
 
         let descontarOrden = orden!.total - (ordenDetalle!.cantidad * ordenDetalle!.precio);
-        cantidadTotalOrden = descontarOrden + (ordenDetalle!.precio *cantidadTotalProducto);
+        cantidadTotalOrden = descontarOrden + ((precio == null ? ordenDetalle!.precio : precio) * cantidadTotalProducto);
 
         if(ordenDetalle!.talle.split(',').length == 1){
 
@@ -90,7 +90,7 @@ export const descontarCurvas = (cantidad:any, cantidad_antigua:any, ordenDetalle
 //CURVAS QUE TIENEN TALLES POR SEPARADO
 
 
-export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto ) => {
+export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto, precio:number) => {
 
 
     let largoDeTalle = talles.length;
@@ -151,7 +151,7 @@ export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle
         cantidaTotalDetalle = largoDeTalle * cantidad;
 
 
-        cantidadTotalOrden = (ordenDetalle.precio * cantidaTotalDetalle) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
+        cantidadTotalOrden = (( precio == null ? ordenDetalle.precio : precio ) * cantidaTotalDetalle) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
 
         return data = {
 
@@ -195,7 +195,7 @@ export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle
         }
         cantidaTotalDetalle = largoDeTalle * cantidad;
 
-        cantidadTotalOrden = (ordenDetalle.precio * cantidaTotalDetalle) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
+        cantidadTotalOrden = (( precio == null ? ordenDetalle.precio : precio ) * cantidaTotalDetalle) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
 
         return data = {
 
@@ -212,7 +212,7 @@ export const descontarCurvaTalle = (cantidad:number,talles:Talle[], ordenDetalle
 
 
 
-export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,talles:Talle[], ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto) =>{
+export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,talles:Talle[], ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto, precio:number) =>{
     let largoDeTalle = talles.length;
 
     let talleEnProducto = ordenDetalle.talle.split(',').length;
@@ -277,7 +277,7 @@ export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,ta
             }
         }
 
-        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
+        cantidadTotalOrden = ((precio == null ? ordenDetalle!.precio : precio) * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
 
 
 
@@ -326,7 +326,7 @@ export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,ta
             }
         }
 
-        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
+        cantidadTotalOrden = ((precio == null ? ordenDetalle!.precio : precio) * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
 
 
         return data = {
@@ -340,7 +340,7 @@ export const descontarCurvaTalle_talleManda = (cantidad:number, talle:number ,ta
 
 
 
-export const descontarCurva_talleManda = (cantidad:number, talle:number, ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto)=>{
+export const descontarCurva_talleManda = (cantidad:number, talle:number, ordenDetalle:OrdenDetalle, orden:Orden, producto:Producto, precio:number)=>{
 
 
     let talleEnProducto = ordenDetalle.talle.split(',').length;
@@ -379,7 +379,7 @@ export const descontarCurva_talleManda = (cantidad:number, talle:number, ordenDe
 
         }
 
-        cantidadTotalOrden = (ordenDetalle.precio * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
+        cantidadTotalOrden = ((precio == null ? ordenDetalle!.precio : precio) * cantidad) + (orden.total - (ordenDetalle!.cantidad * ordenDetalle!.precio))
         return data ={
             productosSinStock:productos_sin_stock,
             cantidadTotalOrden: cantidadTotalOrden,

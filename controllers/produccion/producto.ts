@@ -83,7 +83,11 @@ export const actualizarProducto = async (req: Request, res: Response) => {
             producto
         })
     } catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        })
+      
     }
 
 }
@@ -205,7 +209,7 @@ export const ordenarPorRango = async (req: Request, res: Response) => {
         }
     }
     
-    console.log(valor);
+    
 
     
  

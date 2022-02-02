@@ -65,7 +65,10 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
     catch (error) {
-        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        });
     }
 });
 exports.actualizarProducto = actualizarProducto;
@@ -154,7 +157,6 @@ const ordenarPorRango = (req, res) => __awaiter(void 0, void 0, void 0, function
             valor = false;
         }
     }
-    console.log(valor);
     searchFunc(query, valor, offset)
         .then(({ produccion, contador }) => {
         return res.json({

@@ -412,6 +412,7 @@ const cerrar_abrir = (tag, estado) => {
 }
 
 const modificador_producto_orden = document.querySelector('.modificador_producto_orden');
+const precioCambiarID = document.querySelector('#precioCambiarID');
 
 
 modificador_producto_orden.addEventListener("submit", (e) => {
@@ -427,9 +428,16 @@ modificador_producto_orden.addEventListener("submit", (e) => {
     if(forData.talle == ''){
         forData.talle = null
     }
+    if(forData.precio == ''){
+        forData.precio = null
+    }
 
-  
+    if(forData.cantidad == ''){
+        return advertencia("No estas enviando un cantidad para este producto")
+    }
 
+
+    
     fecthNormalPOST_PUT("PUT", "ordenDetalle/" + idProductoModificar, forData)
             .then( res => {
                
@@ -521,6 +529,7 @@ imprimirTallesEnCadaProducto(res)
 const talles_del_producto = document.querySelector(".talles_del_producto");
 let boton_para_cargar = document.querySelector(".boton_para_cargar");
 const cantidad_unica = document.getElementById("cantidad_unica");
+const precioCambiarID2 = document.getElementById("precioCambiarID2");
 
 let arrayTalle;
 let idProductoAgregar
@@ -582,7 +591,8 @@ cantidad_unica.addEventListener("input", (valor) => {
       let data = {
         id: idProductoAgregar,
         cantidad: keyCode.path[0].value,
-        talle:talles
+        talle:talles,
+        precio: precioCambiarID2.value == '' ? null : precioCambiarID2.value
       }
   
       
@@ -595,10 +605,16 @@ cantidad_unica.addEventListener("input", (valor) => {
                   
                   
   window.enviar_datos_producto = (id) => {
+
+
+    if( cantidad_unica.value == '' ) {
+        return advertencia("Se te olvido colocar un valor")
+    }
     let data = {
         id:id,
         cantidad:cantidad_unica.value,
-        talle:null
+        talle:null,
+        precio: precioCambiarID2.value == '' ? null : precioCambiarID2.value
 
     }
    
@@ -643,3 +659,34 @@ cantidad_unica.addEventListener("input", (valor) => {
                   algo_salio_mal(`Algo salio mal: ${ err }`)
               })
   }
+
+
+  const flexCheckDefault = document.getElementById('flexCheckDefault');
+  const flexCheckDefault2 = document.getElementById('flexCheckDefault2');
+  
+
+  flexCheckDefault.addEventListener('click', () => {
+
+    if(flexCheckDefault.checked === true) {
+
+        cerrar_abrir('precioCambiar', true)
+    }else{
+        cerrar_abrir('precioCambiar', false);
+        precioCambiarID.value = ''
+    }
+
+  })
+ 
+  flexCheckDefault2.addEventListener('click', () => {
+     
+
+    if(flexCheckDefault2.checked === true) {
+
+        cerrar_abrir('precioCambiar2', true)
+    }else{
+        cerrar_abrir('precioCambiar2', false);
+        precioCambiarID2.value = '';
+    }
+
+  })
+ 

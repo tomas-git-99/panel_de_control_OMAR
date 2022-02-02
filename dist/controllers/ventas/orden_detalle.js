@@ -19,7 +19,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
     var _a;
     try {
         const { id } = req.params;
-        const { cantidad, talle } = req.body;
+        const { cantidad, talle, precio } = req.body;
         const ordenDetalle = yield orden_detalle_1.OrdenDetalle.findByPk(id);
         const productos = yield producto_1.Producto.findByPk(ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.id_producto);
         const talles = yield talles_1.Talle.findAndCountAll({ where: { id_producto: ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.id_producto } });
@@ -29,7 +29,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (talle == null) {
             //VERIFICAR SI ES POR TALLE O TOTAL
             if ((productos === null || productos === void 0 ? void 0 : productos.cantidad) == null) {
-                let data = descontar_orden_1.descontarCurvaTalle(cantidad, talles.rows, ordenDetalle, orden, productos);
+                let data = descontar_orden_1.descontarCurvaTalle(cantidad, talles.rows, ordenDetalle, orden, productos, precio);
                 if (data.productosSinStock.length > 0) {
                     return res.json({
                         ok: false,
@@ -45,13 +45,13 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         }
                     }
                 }
-                yield ordenDetalle.update({ cantidad: data === null || data === void 0 ? void 0 : data.cantidadTotalDetalle, talle: productos === null || productos === void 0 ? void 0 : productos.talles });
+                yield ordenDetalle.update({ cantidad: data === null || data === void 0 ? void 0 : data.cantidadTotalDetalle, talle: productos === null || productos === void 0 ? void 0 : productos.talles, precio: (precio == null ? ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.precio : precio) });
                 yield orden.update({ total: data === null || data === void 0 ? void 0 : data.cantidadTotalOrden });
             }
             else {
                 let largoDeTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
                 let cantidadAntigua = ordenDetalle.cantidad / largoDeTalle.split(',').length;
-                let data = descontar_orden_1.descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
+                let data = descontar_orden_1.descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos, precio);
                 if (((_a = data === null || data === void 0 ? void 0 : data.err) === null || _a === void 0 ? void 0 : _a.length) > 0) {
                     return res.json({
                         ok: false,
@@ -60,8 +60,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         productos_sin_stock: data === null || data === void 0 ? void 0 : data.err
                     });
                 }
-                console.log(data);
-                yield (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.update({ cantidad: data.cantidadTotalDetalle, talle: productos.talles }));
+                yield (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.update({ cantidad: data.cantidadTotalDetalle, talle: productos.talles, precio: (precio == null ? ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.precio : precio) }));
                 yield (productos === null || productos === void 0 ? void 0 : productos.update({ cantidad: data.productoStock }));
                 yield (orden === null || orden === void 0 ? void 0 : orden.update({ total: data.cantidadTotalOrden }));
             }
@@ -70,7 +69,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
             //ACA ES CUANDO EL USUARIO MANDA EL TALLE Y LA CANTIDAD
             if ((productos === null || productos === void 0 ? void 0 : productos.cantidad) == null) {
                 let talleCurvaoTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
-                const data = descontar_orden_1.descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle, orden, productos);
+                const data = descontar_orden_1.descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle, orden, productos, precio);
                 if (data.productosSinStock.length > 0) {
                     return res.json({
                         ok: false,
@@ -86,12 +85,12 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         }
                     }
                 }
-                yield (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.update({ cantidad: cantidad, talle: talle }));
+                yield (ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.update({ cantidad: cantidad, talle: talle, precio: (precio == null ? ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.precio : precio) }));
                 yield (orden === null || orden === void 0 ? void 0 : orden.update({ total: data === null || data === void 0 ? void 0 : data.cantidadTotalOrden }));
             }
             else {
                 let largoDeTalle = ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.talle;
-                let data = descontar_orden_1.descontarCurva_talleManda(cantidad, talle, ordenDetalle, orden, productos);
+                let data = descontar_orden_1.descontarCurva_talleManda(cantidad, talle, ordenDetalle, orden, productos, precio);
                 if (data.productosSinStock.length > 0) {
                     return res.json({
                         ok: false,
@@ -100,7 +99,7 @@ const modificarOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         productos_sin_stock: data === null || data === void 0 ? void 0 : data.productosSinStock
                     });
                 }
-                yield ordenDetalle.update({ cantidad: cantidad, talle: talle });
+                yield ordenDetalle.update({ cantidad: cantidad, talle: talle, precio: (precio == null ? ordenDetalle === null || ordenDetalle === void 0 ? void 0 : ordenDetalle.precio : precio) });
                 yield productos.update({ cantidad: data === null || data === void 0 ? void 0 : data.cantidaDeProducto });
                 yield (orden === null || orden === void 0 ? void 0 : orden.update({ total: data === null || data === void 0 ? void 0 : data.cantidadTotalOrden }));
             }
@@ -136,7 +135,7 @@ exports.ordenDetalleGet = ordenDetalleGet;
 const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { idOrden } = req.params;
-        const { id, cantidad, talle } = req.body;
+        const { id, cantidad, talle, precio } = req.body;
         let sumaTotal = 0;
         let productos_sin_stock = [];
         const talles = yield talles_1.Talle.findAll({ where: { id_producto: id } });
@@ -198,9 +197,9 @@ const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, func
                             nombre_producto: i.nombre,
                             talle: talle,
                             cantidad: cantidad,
-                            precio: i.precio
+                            precio: precio == null ? i.precio : precio
                         };
-                        let nuevaSuma = cantidad * i.precio;
+                        let nuevaSuma = cantidad * (precio == null ? i.precio : precio);
                         sumaTotal = sumaTotal + nuevaSuma;
                         let nuevoStock = t.cantidad - cantidad;
                         yield t.update({ cantidad: nuevoStock });
@@ -220,7 +219,7 @@ const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, func
                         yield t.update({ cantidad: t.cantidad - cantidad });
                         //conteo = cantidad + conteo;
                     }
-                    let nuevaSuma = (cantidad * talles.length) * i.precio;
+                    let nuevaSuma = (cantidad * talles.length) * (precio == null ? i.precio : precio);
                     sumaTotal = sumaTotal + nuevaSuma;
                     let orden = {
                         id_orden: idOrden,
@@ -228,7 +227,7 @@ const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: i.nombre,
                         talle: i.talles,
                         cantidad: cantidad * talles.length,
-                        precio: i.precio
+                        precio: precio == null ? i.precio : precio
                     };
                     let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
                     yield orden_detalle.save()
@@ -252,9 +251,9 @@ const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: i.nombre,
                         talle: i.talles,
                         cantidad: contadorTotal,
-                        precio: i.precio
+                        precio: precio == null ? i.precio : precio
                     };
-                    let nuevaSuma = contadorTotal * i.precio;
+                    let nuevaSuma = contadorTotal * (precio == null ? i.precio : precio);
                     sumaTotal = sumaTotal + nuevaSuma;
                     let nuevoStock = i.cantidad - contadorTotal;
                     yield i.update({ cantidad: nuevoStock });
@@ -271,14 +270,11 @@ const agregarOrdenDetalle = (req, res) => __awaiter(void 0, void 0, void 0, func
                         nombre_producto: i.nombre,
                         talle: talle,
                         cantidad: cantidad,
-                        precio: i.precio
+                        precio: precio == null ? i.precio : precio
                     };
-                    let nuevaSuma = cantidad * i.precio;
+                    let nuevaSuma = cantidad * (precio == null ? i.precio : precio);
                     sumaTotal = sumaTotal + nuevaSuma;
                     let nuevoStock = i.cantidad - cantidad;
-                    console.log(orden);
-                    console.log(nuevoStock);
-                    console.log(i.cantidad);
                     yield i.update({ cantidad: nuevoStock });
                     let orden_detalle = new orden_detalle_1.OrdenDetalle(orden);
                     yield orden_detalle.save()

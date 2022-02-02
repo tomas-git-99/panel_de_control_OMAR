@@ -483,7 +483,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
     try {
         
         const { idOrden } = req.params;
-        console.log(idOrden);
+       /*  console.log(idOrden); */
 
         
         const ordenDetalle = await OrdenDetalle.findAll({ where:{ id_orden:idOrden }});
@@ -531,11 +531,11 @@ export const deshacerOrden = async(req: Request, res: Response) => {
                 if(largoDetalle == 1){
                     
                     if(h.talle == parseInt(i.talle)){
-                        console.log('soy una talle')
+                   /*      console.log('soy una talle') */
 
                         let nuevaCantidad = h.cantidad + i.cantidad;
-
-                        console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad)
+/* 
+                        console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad) */
 
 
                         await h.update({cantidad:nuevaCantidad});
@@ -545,7 +545,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
                     }
 
                 }else{
-                    console.log('soy unaa curva')
+                 /*    console.log('soy unaa curva') */
 
                     let filtrarTalles = talles.filter( h => h.id_producto == i.id_producto);
 
@@ -553,7 +553,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
                     let nuevaCantidad = h.cantidad + calcularCantidadPorunidad;
 
-                    console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad)
+                   /*  console.log( 'cantidad nueva: ' + nuevaCantidad + ' talles: ' + h.talle + ' cantidad: ' + h.cantidad) */
 
                     await h.update({cantidad:nuevaCantidad});
 
@@ -624,7 +624,7 @@ export const deshacerOrden = async(req: Request, res: Response) => {
 
 
     } catch (error) {
-        console.log(error);
+      /*   console.log(error); */
         res.json({
             ok:false,
             msg:error

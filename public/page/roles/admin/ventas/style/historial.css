@@ -335,6 +335,22 @@
   
 }
 
+.checkPrecio{
+    display:grid;
+  
+    justify-content: center;
+}
+.precioCambiar{
+    display: none;
+    visibility: hidden;
+    padding-bottom:10px
+}
+
+.precioCambiar2{
+    display: none;
+    visibility: hidden;
+    padding-bottom:10px
+}
 .formCantidad form{
     gap: 15px;
     display: grid;
@@ -387,7 +403,10 @@
 
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
+    height: auto;
+ 
 }
+
 
 
 .boton_salir{

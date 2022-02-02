@@ -17,7 +17,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
         const { id } = req.params;
 
        
-        const { cantidad, talle } = req.body;
+        const { cantidad, talle, precio} = req.body;
 
         const ordenDetalle = await OrdenDetalle.findByPk(id);
         const productos = await Producto.findByPk(ordenDetalle?.id_producto);
@@ -36,7 +36,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
             if(productos?.cantidad == null) {
                 
                 
-                let data = descontarCurvaTalle(cantidad, talles.rows, ordenDetalle!, orden!, productos!)
+                let data = descontarCurvaTalle(cantidad, talles.rows, ordenDetalle!, orden!, productos!, precio)
 
                 if(data!.productosSinStock!.length > 0){
                     return res.json({ 
@@ -59,7 +59,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                     }
                 }
 
-                await ordenDetalle!.update({cantidad:data?.cantidadTotalDetalle, talle:productos?.talles})
+                await ordenDetalle!.update({cantidad:data?.cantidadTotalDetalle, talle:productos?.talles, precio:(precio == null? ordenDetalle?.precio : precio)})
 
                 await orden!.update({total:data?.cantidadTotalOrden})
  
@@ -72,7 +72,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
 
                 let largoDeTalle:any = ordenDetalle?.talle;
                 let cantidadAntigua = ordenDetalle!.cantidad / largoDeTalle.split(',').length;
-                let data:any = descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos);
+                let data:any = descontarCurvas(cantidad, cantidadAntigua, ordenDetalle, orden, productos, precio);
 
                 if(data?.err?.length > 0){
                     return res.json({
@@ -82,9 +82,9 @@ export const modificarOrden = async (req: Request, res: Response) => {
                         productos_sin_stock: data?.err
                     })
                 }
-                    console.log(data)
+                
 
-              await ordenDetalle?.update({cantidad:data.cantidadTotalDetalle, talle:productos.talles})
+              await ordenDetalle?.update({cantidad:data.cantidadTotalDetalle, talle:productos.talles, precio:(precio == null? ordenDetalle?.precio : precio)})
               await productos?.update({cantidad:data.productoStock})
               await orden?.update({total:data.cantidadTotalOrden})
 
@@ -98,7 +98,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                 let talleCurvaoTalle:any = ordenDetalle?.talle;
 
                 
-                const data = descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle!, orden!, productos!)
+                const data = descontarCurvaTalle_talleManda(cantidad, talle, talles.rows, ordenDetalle!, orden!, productos!, precio)
             ;
 
                 if(data!.productosSinStock!.length > 0){
@@ -122,7 +122,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                     }
                 }
 
-                await ordenDetalle?.update({cantidad:cantidad, talle:talle})
+                await ordenDetalle?.update({cantidad:cantidad, talle:talle, precio:(precio == null? ordenDetalle?.precio : precio)})
 
                 await orden?.update({total:data?.cantidadTotalOrden})
 
@@ -130,7 +130,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
             }else{
 
                 let largoDeTalle:any = ordenDetalle?.talle;
-                let data = descontarCurva_talleManda(cantidad, talle, ordenDetalle!, orden!, productos)
+                let data = descontarCurva_talleManda(cantidad, talle, ordenDetalle!, orden!, productos, precio)
                 if(data!.productosSinStock!.length > 0){
                     return res.json({ 
                         ok: false,
@@ -140,7 +140,7 @@ export const modificarOrden = async (req: Request, res: Response) => {
                     })
                 }
 
-                await ordenDetalle!.update({cantidad:cantidad, talle:talle});
+                await ordenDetalle!.update({cantidad:cantidad, talle:talle, precio:(precio == null? ordenDetalle?.precio : precio)});
 
                 await productos.update({cantidad:data?.cantidaDeProducto});
 
@@ -195,7 +195,7 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
     try {
         const { idOrden } = req.params;
 
-        const { id, cantidad, talle } = req.body;
+        const { id, cantidad, talle, precio } = req.body;
         
         
         let sumaTotal = 0;
@@ -296,9 +296,10 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
                         nombre_producto:i.nombre,
                         talle: talle, 
                         cantidad: cantidad,
-                        precio: i.precio 
+                        precio: precio == null ? i.precio : precio 
                     }
-                    let nuevaSuma = cantidad * i.precio;
+
+                    let nuevaSuma = cantidad * (precio == null ? i.precio : precio);
                     sumaTotal = sumaTotal + nuevaSuma;
                  
 
@@ -333,7 +334,7 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
 
                     }
 
-                    let nuevaSuma = (cantidad * talles.length) * i.precio;
+                    let nuevaSuma = (cantidad * talles.length) * (precio == null ? i.precio : precio);
                     sumaTotal = sumaTotal + nuevaSuma;
 
 
@@ -344,7 +345,7 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
                         nombre_producto:i.nombre,
                         talle: i.talles, 
                         cantidad: cantidad * talles.length,
-                        precio: i.precio 
+                        precio: precio == null ? i.precio : precio 
                     };
                   
 
@@ -383,11 +384,11 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
                     nombre_producto:i.nombre,
                     talle:i.talles,
                     cantidad:contadorTotal,
-                    precio: i.precio
+                    precio: precio == null ? i.precio : precio 
                 }
 
 
-                let nuevaSuma:any = contadorTotal * i.precio;
+                let nuevaSuma:any = contadorTotal * (precio == null ? i.precio : precio);
                 sumaTotal = sumaTotal + nuevaSuma;
 
                 let nuevoStock = i.cantidad - contadorTotal;
@@ -413,20 +414,16 @@ export const agregarOrdenDetalle = async (req: Request, res: Response) => {
                         nombre_producto:i.nombre,
                         talle:talle,
                         cantidad:cantidad,
-                        precio: i.precio
+                        precio: precio == null ? i.precio : precio 
                     }
-                    let nuevaSuma:any = cantidad * i.precio;
+                    let nuevaSuma:any = cantidad * (precio == null ? i.precio : precio);
     
                     sumaTotal = sumaTotal + nuevaSuma;
     
                     let nuevoStock = i.cantidad - cantidad;
                     
-                    console.log(orden)
-                    console.log(nuevoStock)
-    
-                    console.log(i.cantidad)
-                  
-    
+              
+                
                     await i.update({cantidad:nuevoStock});
     
     
