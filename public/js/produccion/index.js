@@ -484,6 +484,7 @@ window.ordenar = (e) => {
         escribir_busquedas.style.visibility = "hidden";
         opciones_input.innerHTML = "";
         main_historial()
+        valorDetaller = "";
     }else if( "fecha_de_entrada" == e.value || "fecha_de_salida" == e.value || "fecha_de_pago" == e.value){
         
         opciones_input.innerHTML = `
@@ -560,32 +561,46 @@ const imprimir_taller = (talleres) => {
 
 window.buscarDataTaller = (value) => {
 
-    bucardorDeTalleres(value)
+    bucardorDeTalleres(value.value)
 
 }
-
+let valorDetaller = "";
+let nombre_taller
 
 const bucardorDeTalleres = (value, offset=0) => {
-    if(value.value == "0" || value.value == 0){
+
+    if(value == "0" || value == 0){
         escribir_busquedas.style.display = "none";
         escribir_busquedas.style.visibility = "hidden";
         main_historial()
+        valorDetaller = "";
     }else{
         cargaMedio("spinner_load", true);
-        fecthNormalGET("GET","produccion/taller/full/" + value.value+"?offset="+offset)
+        fecthNormalGET("GET","produccion/taller/full/" + value+ "?offset="+offset)
         .then(res =>{
 
+
+
          
-                paginacion(res.contador);
-
-     
-
-            cargaMedio("spinner_load", false);
-            numeroPaginas = null;
+          /*   paginacion(res.contador); */
 
 
 
-           /*  paginacion(res.contador) */
+   /*        if(valorDetaller == '' || valorDetaller == value){ */
+              if(res.produccion[0].taller.nombre_completo !== nombre_taller){
+                paginacion(res.contador, "taller")
+
+              }
+
+       /*    }
+ */
+          numeroPaginas = null;
+          cargaMedio("spinner_load", false);
+          valorDetaller = value;
+
+    /*         paginacion(res.contador, "taller") */
+
+    nombre_taller = res.produccion[0].taller.nombre_completo
             colorearTable(res.produccion)
            
         })
@@ -843,20 +858,20 @@ window.pagina_id = (e) => {
         }
     }
 
- /*    if(datos[2] == "taller"){
-
+    if(datos[2] == "taller"){
+      
         if(datos[1] == 0){
      
-            return bucardorDeTalleres(palabraBuscada);
+            return bucardorDeTalleres(valorDetaller);
 
         }else{
            
-            return bucardorDeTalleres(palabraBuscada, datos[1]+"0");
+            return bucardorDeTalleres(valorDetaller, datos[1]+"0");
 
         
         }
     }
- */
+
 
     if(datos[1] == 0){
         recargaPaginaIgual = "0";
