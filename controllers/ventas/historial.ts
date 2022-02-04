@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Op, where } from "sequelize/dist";
 import { Cliente } from "../../models/ventas/cliente";
 import { Direccion } from "../../models/ventas/direccion";
 import { Orden } from "../../models/ventas/orden";
@@ -38,7 +39,8 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
         const { local } = req.params;
 
 
-        const locales = await Usuario.findAll({where: { local: local }});
+        const locales = await Usuario.findAll({where: { local: local}});
+
 
         let ids_local:any = []
 
@@ -56,7 +58,7 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
     let valorOffset = parseInt(valor)
 
         
-        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local}, order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
+        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local,  total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
 
         let contador = orden.count;
 
@@ -84,6 +86,8 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
     
         }
 
+        console.log(contador);
+
         res.json({
             ok: true,
             contador,
@@ -96,5 +100,68 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
             ok: false,
             msg: error
         })
+    }
+}
+
+
+
+export const filtroPorFechas = async (req: Request, res: Response) => {
+    try {
+
+   
+
+        let data
+
+        req.body.fecha[1] == undefined ? data = [req.body.fecha[0]] : data = [req.body.fecha[1], req.body.fecha[1]]
+
+        let valor = {[Op.between]:data}; 
+        let buscar:any = {
+            where: {
+
+            },order: [['createdAt', 'DESC']]
+        }
+
+
+    let local = req.query.local == undefined ? '' : req.query.local;
+
+    buscar.where[`createdAt`] = valor;
+
+    buscar.where[`id_usuario`] = {[Op.like]: '%'+ local +'%'};
+
+    //buscar.where['fecha'] = {[Op.like]: {[Op.any]: data}};
+
+
+    const orden = await Orden.findAndCountAll(buscar)
+
+
+    let id_cliente:any = []
+    let id_direccion:any = []
+    
+    orden.rows.map(async(e, i)=> {
+        id_cliente.push(e.id_cliente);
+        id_direccion.push(e.id_direccion);
+    });
+    const cliente = await Cliente.findAll({where:{id:id_cliente}});
+
+    const direccion = await Direccion.findAll({where:{id:id_direccion}});
+    
+    let datos:any = [];
+
+    for ( let i of orden.rows){
+    
+        let newcliente = cliente.find( e => e.id == i.id_cliente);
+        let direcciones = direccion.find( h => h.id == i.id_direccion);
+    
+        datos = [...datos,{orden:i, cliente:newcliente || "", direccion:direcciones || ""}];
+    
+    }
+
+    res.json({
+        ok: true,
+        datos
+    })
+
+    } catch (error) {
+        
     }
 }

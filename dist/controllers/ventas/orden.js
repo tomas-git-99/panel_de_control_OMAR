@@ -205,6 +205,7 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
+        console.log(orden.length);
         let id_cliente = [];
         let id_direccion = [];
         orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {

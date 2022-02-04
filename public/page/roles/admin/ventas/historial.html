@@ -94,12 +94,34 @@
                   </div>
             </div>
 
-            <div class="opcionesDeLocal">
-                <select class="form-control form-control-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
-                    <option value="0">Ordenar por local</option>
+            <div class="filtroDeHistorial">
 
-                  </select>
+                <div class="opcionesDeLocal">
+                    <select class="form-control form-control-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
+                        <option value="0">Ordenar por local</option>
+    
+                      </select>
+                </div>
+
+                <div class="soloFechas">
+                    <div class="fechas_rangos">
+
+                        <select class="form-control form-control-sm" id="casita" onchange="cambiar_filtro(this)">
+                            <option selected value="0">Filtrar ...</option>
+                            <option value="1">Rango de fecha</option>
+                            <option value="2">Fecha exacta</option>
+                          </select>
+                        </div>
+    
+                           <div class="input_fecha">
+    
+                           </div>
+                </div>
+           
+
             </div>
+       
+
                 <div class="cartel">
                     <table class="table">
                         <thead>

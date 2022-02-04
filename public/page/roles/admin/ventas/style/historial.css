@@ -412,3 +412,23 @@
 .boton_salir{
     padding:5px;
 }
+
+.filtroDeHistorial{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.soloFechas{
+ /*    border: 1px solid; */
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+}
+
+.input_fecha{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

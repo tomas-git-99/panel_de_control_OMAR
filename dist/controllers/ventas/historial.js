@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarPorLocal = exports.buscarLocales = void 0;
+exports.filtroPorFechas = exports.buscarPorLocal = exports.buscarLocales = void 0;
+const dist_1 = require("sequelize/dist");
 const cliente_1 = require("../../models/ventas/cliente");
 const direccion_1 = require("../../models/ventas/direccion");
 const orden_1 = require("../../models/ventas/orden");
@@ -40,7 +41,7 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
         let id_direccion = [];
         let valor = req.query.offset;
         let valorOffset = parseInt(valor);
-        const orden = yield orden_1.Orden.findAndCountAll({ where: { id_usuario: ids_local }, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
+        const orden = yield orden_1.Orden.findAndCountAll({ where: { id_usuario: ids_local, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
         let contador = orden.count;
         orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
             id_cliente.push(e.id_cliente);
@@ -54,6 +55,7 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
             let direcciones = direccion.find(h => h.id == i.id_direccion);
             datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
         }
+        console.log(contador);
         res.json({
             ok: true,
             contador,
@@ -68,4 +70,40 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.buscarPorLocal = buscarPorLocal;
+const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let data;
+        req.body.fecha[1] == undefined ? data = [req.body.fecha[0]] : data = [req.body.fecha[1], req.body.fecha[1]];
+        let valor = { [dist_1.Op.between]: data };
+        let buscar = {
+            where: {}, order: [['createdAt', 'DESC']]
+        };
+        let local = req.query.local == undefined ? '' : req.query.local;
+        buscar.where[`createdAt`] = valor;
+        buscar.where[`id_usuario`] = { [dist_1.Op.like]: '%' + local + '%' };
+        //buscar.where['fecha'] = {[Op.like]: {[Op.any]: data}};
+        const orden = yield orden_1.Orden.findAndCountAll(buscar);
+        let id_cliente = [];
+        let id_direccion = [];
+        orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
+            id_cliente.push(e.id_cliente);
+            id_direccion.push(e.id_direccion);
+        }));
+        const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
+        const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
+        let datos = [];
+        for (let i of orden.rows) {
+            let newcliente = cliente.find(e => e.id == i.id_cliente);
+            let direcciones = direccion.find(h => h.id == i.id_direccion);
+            datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
+        }
+        res.json({
+            ok: true,
+            datos
+        });
+    }
+    catch (error) {
+    }
+});
+exports.filtroPorFechas = filtroPorFechas;
 //# sourceMappingURL=historial.js.map

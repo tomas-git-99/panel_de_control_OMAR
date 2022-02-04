@@ -267,7 +267,7 @@ window.cambioDeLocal = (e) => {
     fecthNormalGET("GET",`historial/buscar/${e.value}?offset=0`)
     .then( res => {
 
-        
+        localNombre = e.value
         imprimirEnPantalla(res.datos)
     })
     .catch( err => {
@@ -690,3 +690,55 @@ cantidad_unica.addEventListener("input", (valor) => {
 
   })
  
+
+
+//filtro de fecha del historial
+
+let localNombre = undefined;
+window.cambiar_filtro = (e) => {
+
+    const input_fecha = document.querySelector(".input_fecha")
+    if(e.value == 1){
+        input_fecha.innerHTML = `
+        <input type="date" id="startDate" class="form-control form-control-sm">
+        <input type="date" id="endDate" class="form-control form-control-sm">
+        <button id="${e.id}" class="btn btn-primary btn-sm" onclick="filtroPorFechas(this.id)">Buscar</button>
+        `
+
+    }else if(e.value == 2){
+        input_fecha.innerHTML = `
+        <input type="date" id="fecha_exacta" class="form-control form-control-sm">
+        <button id="${e.id}" class="btn btn-primary btn-sm" onclick="filtroPorFechas(this.id)">Buscar</button>
+        `
+    }else{
+        input_fecha.innerHTML = ``
+    }
+}
+
+
+window.filtroPorFechas = (e) => {
+
+    /* dataRango = [];  */
+
+    const startDate    = document.getElementById("startDate");
+    const endDate      = document.getElementById("endDate");
+    const fecha_exacta = document.getElementById("fecha_exacta");
+    let dato
+   
+
+    fecha_exacta?.value == '' || fecha_exacta?.value == undefined ? dato =  {fecha:[startDate.value, endDate.value]} : dato = {fecha:fecha_exacta.value}
+
+    console.log(dato)
+}
+
+
+
+const funcFechas = (fecha) => {
+
+    
+    fecthNormalPOST_PUT("GET",`historial/fecha/local?local=${localNombre}`, fecha)
+            .then(res => {
+                
+            })
+
+}

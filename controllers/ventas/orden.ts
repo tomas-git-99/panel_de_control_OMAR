@@ -319,6 +319,7 @@ export const historialOrden = async (req: Request, res: Response) => {
 
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
 
+        console.log(orden.length)
 
         
 

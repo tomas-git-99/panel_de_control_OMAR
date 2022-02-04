@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarLocales, buscarPorLocal } from "../../controllers/ventas/historial";
+import { buscarLocales, buscarPorLocal, filtroPorFechas } from "../../controllers/ventas/historial";
 
 
 
@@ -10,6 +10,9 @@ router.get('/', buscarLocales)
 
 
 router.get('/buscar/:local', buscarPorLocal)
+
+
+router.get('/fecha/local', filtroPorFechas)
 
 
 

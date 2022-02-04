@@ -15,6 +15,7 @@ const productos_produccion_1 = require("../../models/produccion/productos_produc
 const historialTaller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_taller } = req.params;
     const productos = yield productos_produccion_1.Produccion_producto.findAll({ where: { id_taller: id_taller } });
+    console.log(productos.length);
     res.json({
         ok: true,
         productos

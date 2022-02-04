@@ -10,7 +10,8 @@ export interface TodoAtributos {
     fecha: number;
     transporte: string;
     total:number;
-
+    createdAt: number;
+    updatedAt: number;
 }
 
 
@@ -22,6 +23,8 @@ export class Orden extends Model <TodoAtributos>{
     public fecha!: number;
     public transporte!: string;
     public total!:number;
+    public createdAt!: number;
+    public updatedAt!: number;
 }
 
 
@@ -50,6 +53,12 @@ Orden.init(
         },
         total:{
             type:DataTypes.NUMBER
+        },
+        createdAt:{
+            type:DataTypes.DATE
+        },
+        updatedAt:{
+            type:DataTypes.DATE
         }
 
         
