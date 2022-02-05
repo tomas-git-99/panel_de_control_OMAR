@@ -726,9 +726,9 @@ window.filtroPorFechas = (e) => {
     let dato
    
 
-    fecha_exacta?.value == '' || fecha_exacta?.value == undefined ? dato =  {fecha:[startDate.value, endDate.value]} : dato = {fecha:fecha_exacta.value}
+    fecha_exacta?.value == '' || fecha_exacta?.value == undefined ? dato =  {fecha:[startDate.value, endDate.value]} : dato = {fecha:[fecha_exacta.value]}
 
-    console.log(dato)
+    funcFechas(dato)
 }
 
 
@@ -736,9 +736,11 @@ window.filtroPorFechas = (e) => {
 const funcFechas = (fecha) => {
 
     
-    fecthNormalPOST_PUT("GET",`historial/fecha/local?local=${localNombre}`, fecha)
+    fecthNormalPOST_PUT("POST",`historial/fecha/local?local=${localNombre}`, fecha)
             .then(res => {
-                
+                console.log(res)
+            imprimirEnPantalla(res.datos);
+        
             })
 
 }

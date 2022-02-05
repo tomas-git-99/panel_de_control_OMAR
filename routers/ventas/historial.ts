@@ -12,7 +12,7 @@ router.get('/', buscarLocales)
 router.get('/buscar/:local', buscarPorLocal)
 
 
-router.get('/fecha/local', filtroPorFechas)
+router.post('/fecha/local', filtroPorFechas)
 
 
 

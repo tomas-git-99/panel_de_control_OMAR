@@ -73,37 +73,54 @@ exports.buscarPorLocal = buscarPorLocal;
 const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data;
-        req.body.fecha[1] == undefined ? data = [req.body.fecha[0]] : data = [req.body.fecha[1], req.body.fecha[1]];
-        let valor = { [dist_1.Op.between]: data };
+        req.body.fecha[1] == undefined ? data = req.body.fecha[0] : data = { [dist_1.Op.between]: [req.body.fecha[0], req.body.fecha[1]] };
+        /*  new Date(req.body.fecha[1]), new Date(req.body.fecha[1]) */
+        //let valor = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
         let buscar = {
             where: {}, order: [['createdAt', 'DESC']]
         };
+        console.log(data);
         let local = req.query.local == undefined ? '' : req.query.local;
-        buscar.where[`createdAt`] = valor;
-        buscar.where[`id_usuario`] = { [dist_1.Op.like]: '%' + local + '%' };
+        buscar.where[`createdAt`] = '2022-02-01';
+        /*  buscar.where[`id_usuario`] = {[Op.like]: '%'+ local +'%'}; */
         //buscar.where['fecha'] = {[Op.like]: {[Op.any]: data}};
-        const orden = yield orden_1.Orden.findAndCountAll(buscar);
-        let id_cliente = [];
-        let id_direccion = [];
-        orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
-            id_cliente.push(e.id_cliente);
-            id_direccion.push(e.id_direccion);
-        }));
-        const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
-        const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
-        let datos = [];
-        for (let i of orden.rows) {
-            let newcliente = cliente.find(e => e.id == i.id_cliente);
-            let direcciones = direccion.find(h => h.id == i.id_direccion);
-            datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
-        }
+        const orden = yield orden_1.Orden.findAndCountAll({ where: { createdAt: { [dist_1.Op.like]: { [dist_1.Op.any]: ['2022-02-01'] } } } });
+        /*     let id_cliente:any = []
+            let id_direccion:any = []
+            
+            orden.rows.map(async(e, i)=> {
+                id_cliente.push(e.id_cliente);
+                id_direccion.push(e.id_direccion);
+            });
+            const cliente = await Cliente.findAll({where:{id:id_cliente}});
+        
+            const direccion = await Direccion.findAll({where:{id:id_direccion}});
+            
+            let datos:any = [];
+        
+            for ( let i of orden.rows){
+            
+                let newcliente = cliente.find( e => e.id == i.id_cliente);
+                let direcciones = direccion.find( h => h.id == i.id_direccion);
+            
+                datos = [...datos,{orden:i, cliente:newcliente || "", direccion:direcciones || ""}];
+            
+            } */
         res.json({
             ok: true,
-            datos
+            orden
         });
     }
     catch (error) {
     }
 });
 exports.filtroPorFechas = filtroPorFechas;
+const filtroFechaHistorial = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    let buscar = {
+        where: {}, order: [['createdAt', 'DESC']]
+    };
+    buscar.where[`createdAt`] = data;
+    const orden = yield orden_1.Orden.findAll(buscar);
+    return orden;
+});
 //# sourceMappingURL=historial.js.map

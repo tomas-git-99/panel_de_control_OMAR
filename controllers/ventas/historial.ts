@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import moment from "moment";
 import { Op, where } from "sequelize/dist";
 import { Cliente } from "../../models/ventas/cliente";
 import { Direccion } from "../../models/ventas/direccion";
@@ -112,29 +113,36 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
 
         let data
 
-        req.body.fecha[1] == undefined ? data = [req.body.fecha[0]] : data = [req.body.fecha[1], req.body.fecha[1]]
+       req.body.fecha[1] == undefined ? data = req.body.fecha[0] : data = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
 
-        let valor = {[Op.between]:data}; 
+      /*  new Date(req.body.fecha[1]), new Date(req.body.fecha[1]) */
+      //let valor = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
+ 
+     
         let buscar:any = {
             where: {
-
+                
             },order: [['createdAt', 'DESC']]
         }
 
 
+        console.log(data)
+
+
     let local = req.query.local == undefined ? '' : req.query.local;
 
-    buscar.where[`createdAt`] = valor;
+    buscar.where[`createdAt`] = '2022-02-01'
 
-    buscar.where[`id_usuario`] = {[Op.like]: '%'+ local +'%'};
+   /*  buscar.where[`id_usuario`] = {[Op.like]: '%'+ local +'%'}; */
 
     //buscar.where['fecha'] = {[Op.like]: {[Op.any]: data}};
 
 
-    const orden = await Orden.findAndCountAll(buscar)
+   const orden = await Orden.findAndCountAll({where:{createdAt: '2022-02-01'}})
+  
 
 
-    let id_cliente:any = []
+/*     let id_cliente:any = []
     let id_direccion:any = []
     
     orden.rows.map(async(e, i)=> {
@@ -154,14 +162,29 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
     
         datos = [...datos,{orden:i, cliente:newcliente || "", direccion:direcciones || ""}];
     
-    }
+    } */
+    
 
     res.json({
         ok: true,
-        datos
+        orden
     })
 
     } catch (error) {
         
     }
+}
+
+const filtroFechaHistorial = async(data:any) => {
+    let buscar:any = {
+        where: {
+
+        },order: [['createdAt', 'DESC']]
+    }
+
+    buscar.where[`createdAt`] = data;
+
+    const orden = await Orden.findAll(buscar)
+
+    return orden
 }

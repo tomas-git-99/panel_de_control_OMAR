@@ -15,6 +15,7 @@ const db = new sequelize_1.Sequelize(process.env.DB_NAME_DATABASE || "", process
     host: process.env.DB_HOST,
     port: 25060,
     dialect: 'mysql',
+    //logging: false,
 });
 ////UNICAMENTE PRUEBAS NADA MAS
 /*   const db = new Sequelize(process.env.DB_NAME_DATABASE_PRUEBA || "", process.env.DB_NAME_USER_PRUEBA || "", process.env.DB_PASSWORD_PRUEBA || "", {
