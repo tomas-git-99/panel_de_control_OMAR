@@ -231,6 +231,7 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                datos = [...datos,{orden:i, cliente:newcliente,direccion:""}]
            }
     */
+        console.log(datos.length);
         res.json({
             datos
         });
@@ -244,7 +245,7 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.historialOrden = historialOrden;
 const buscarPorID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const clienteDNI = yield cliente_1.Cliente.findAll({ where: { dni_cuil: req.query.id }, order: [['updatedAt', 'DESC']] });
+    const clienteDNI = yield cliente_1.Cliente.findAll({ where: { id: req.query.id }, order: [['updatedAt', 'DESC']] });
     let ids_clientesDNI = [];
     clienteDNI.forEach(e => {
         ids_clientesDNI.push(e.id);

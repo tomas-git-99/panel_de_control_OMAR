@@ -158,7 +158,7 @@ export const imprimirComprobante_cliente = (id) => {
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
             id_comprobante.innerHTML = `ID : ${res.orden.id}`
 
-            funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido}`, "imprimirCliente_publico" );
+            funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido == null ? '' : res.cliente.apellido }`, "imprimirCliente_publico" );
         }else{
             const precio_final = document.querySelector(".precio_final_envio");
             const id_comprobante = document.querySelector(".id_comprobante_envio");

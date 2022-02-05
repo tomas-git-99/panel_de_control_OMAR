@@ -53,13 +53,15 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
         let id_cliente:any = []
         let id_direccion:any = []
 
+        console.log(ids_local)
+
         
     let valor:any = req.query.offset;
 
     let valorOffset = parseInt(valor)
 
         
-        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local,  total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
+        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local,  total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]/* , limit:10, offset:valorOffset */});
 
         let contador = orden.count;
 
@@ -113,7 +115,7 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
 
         let data
 
-       req.body.fecha[1] == undefined ? data = req.body.fecha[0] : data = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
+       req.body.fecha[1] == undefined ? data = {[Op.between]:[req.body.fecha[0]+'T00:00:00.000Z', req.body.fecha[0]+'T23:59:59.000Z']}: data = {[Op.between]:[req.body.fecha[0]+'T00:00:00.000Z', req.body.fecha[1]+'T23:59:59.000Z']}
 
       /*  new Date(req.body.fecha[1]), new Date(req.body.fecha[1]) */
       //let valor = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
@@ -121,7 +123,7 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
      
         let buscar:any = {
             where: {
-                
+                total:{ [Op.gt]: 0}
             },order: [['createdAt', 'DESC']]
         }
 
@@ -129,20 +131,38 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
         console.log(data)
 
 
-    let local = req.query.local == undefined ? '' : req.query.local;
-
-    buscar.where[`createdAt`] = '2022-02-01'
-
-   /*  buscar.where[`id_usuario`] = {[Op.like]: '%'+ local +'%'}; */
-
-    //buscar.where['fecha'] = {[Op.like]: {[Op.any]: data}};
+    let local:any = req.query.local;
 
 
-   const orden = await Orden.findAndCountAll({where:{createdAt: '2022-02-01'}})
+    buscar.where[`createdAt`] = data;
+    
+
+
+    if(local.length > 0) {
+        console.log(req.query.local )
+        let ids_local:any = []
+
+        const locales = await Usuario.findAll({where: { local: local}});
+    
+    
+        locales.map(e => {
+            ids_local.push(e.id);
+        })
+    
+        buscar.where[`id_usuario`] = ids_local.length > 1 ? ids_local : ids_local[0];
+    }
+
+
+
+    /* {[Op.like]: '%' + [6,8] + '%' } */
+    //buscar.where['fecha'] = req.body.fecha[1] == undefined ?req.body.fecha[0]:{[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
+
+
+   const orden = await Orden.findAndCountAll(buscar)
   
 
 
-/*     let id_cliente:any = []
+    let id_cliente:any = []
     let id_direccion:any = []
     
     orden.rows.map(async(e, i)=> {
@@ -162,12 +182,11 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
     
         datos = [...datos,{orden:i, cliente:newcliente || "", direccion:direcciones || ""}];
     
-    } */
-    
+    }
 
     res.json({
         ok: true,
-        orden
+        datos
     })
 
     } catch (error) {

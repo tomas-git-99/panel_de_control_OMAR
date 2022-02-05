@@ -356,6 +356,9 @@ export const historialOrden = async (req: Request, res: Response) => {
             datos = [...datos,{orden:i, cliente:newcliente,direccion:""}]
         }
  */
+
+
+        console.log(datos.length);
         
         res.json({
             datos
@@ -372,7 +375,7 @@ export const historialOrden = async (req: Request, res: Response) => {
 export const buscarPorID = async (req: Request, res: Response) => {
 
 
-    const clienteDNI = await Cliente.findAll({where:{  dni_cuil: req.query.id}, order: [['updatedAt', 'DESC']]});
+    const clienteDNI = await Cliente.findAll({where:{  id: req.query.id}, order: [['updatedAt', 'DESC']]});
 
     let ids_clientesDNI:any = [];
 

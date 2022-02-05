@@ -260,7 +260,7 @@ localesFiltro();
 window.cambioDeLocal = (e) => {
 
     if(e.value == "0"){
-
+        localNombre = '';
         return main_historial();
     }
 
@@ -694,7 +694,7 @@ cantidad_unica.addEventListener("input", (valor) => {
 
 //filtro de fecha del historial
 
-let localNombre = undefined;
+let localNombre = '';
 window.cambiar_filtro = (e) => {
 
     const input_fecha = document.querySelector(".input_fecha")
