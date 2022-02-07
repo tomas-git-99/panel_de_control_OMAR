@@ -258,6 +258,7 @@ const opcionesDelocales = (res) => {
 localesFiltro();
 
 window.cambioDeLocal = (e) => {
+    cargaMedio("spinner_load", true);
 
     if(e.value == "0"){
         localNombre = '';
@@ -266,11 +267,13 @@ window.cambioDeLocal = (e) => {
 
     fecthNormalGET("GET",`historial/buscar/${e.value}?offset=0`)
     .then( res => {
+        cargaMedio("spinner_load", false);
 
         localNombre = e.value
         imprimirEnPantalla(res.datos)
     })
     .catch( err => {
+        cargaMedio("spinner_load", false);
         
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
@@ -735,12 +738,17 @@ window.filtroPorFechas = (e) => {
 
 const funcFechas = (fecha) => {
 
+    cargaMedio("spinner_load", true);
     
     fecthNormalPOST_PUT("POST",`historial/fecha/local?local=${localNombre}`, fecha)
             .then(res => {
-                console.log(res)
-            imprimirEnPantalla(res.datos);
-        
+    cargaMedio("spinner_load", false);
+                imprimirEnPantalla(res.datos);
+            })
+            .catch( err => {
+    cargaMedio("spinner_load", false);
+
+                return algo_salio_mal(`algo_salio_mal(Algo salio mal: ${ err }`)
             })
 
 }
