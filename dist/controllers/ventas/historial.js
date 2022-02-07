@@ -18,9 +18,23 @@ const usuario_1 = require("../../models/ventas/usuario");
 const buscarLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const locales = yield usuario_1.Usuario.findAll();
     let local = [];
-    locales.map(e => {
-        if (e.local !== null) {
-            local.push(e.local);
+    /*     locales.forEach( (e) => {
+            
+            if(e.local !== null){
+            
+                local.push(e.local);
+    
+    
+            }
+    
+    
+        })
+     */
+    locales.forEach((c) => {
+        if (!local.includes(c.local)) {
+            if (c.local !== null) {
+                local.push(c.local);
+            }
         }
     });
     res.json({
@@ -39,7 +53,6 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         let id_cliente = [];
         let id_direccion = [];
-        console.log(ids_local);
         let valor = req.query.offset;
         let valorOffset = parseInt(valor);
         const orden = yield orden_1.Orden.findAndCountAll({ where: { id_usuario: ids_local, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] /* , limit:10, offset:valorOffset */ });
@@ -56,7 +69,6 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
             let direcciones = direccion.find(h => h.id == i.id_direccion);
             datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
         }
-        console.log(contador);
         res.json({
             ok: true,
             contador,
@@ -82,11 +94,9 @@ const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function
                 total: { [dist_1.Op.gt]: 0 }
             }, order: [['createdAt', 'DESC']]
         };
-        console.log(data);
         let local = req.query.local;
         buscar.where[`createdAt`] = data;
         if (local.length > 0) {
-            console.log(req.query.local);
             let ids_local = [];
             const locales = yield usuario_1.Usuario.findAll({ where: { local: local } });
             locales.map(e => {

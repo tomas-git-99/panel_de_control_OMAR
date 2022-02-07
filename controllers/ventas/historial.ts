@@ -17,12 +17,32 @@ export const buscarLocales = async (req: Request, res: Response) => {
 
     let local:any = [];
 
-    locales.map( e => {
+/*     locales.forEach( (e) => {
+        
         if(e.local !== null){
-
+        
             local.push(e.local);
+
+
         }
+
+
     })
+ */
+  
+
+ 
+    locales.forEach((c) => {
+        if (!local.includes(c.local)) {
+            if(c.local !== null){
+                local.push(c.local);
+
+            }
+        }
+    });
+    
+
+    
 
 
     res.json({
@@ -53,7 +73,6 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
         let id_cliente:any = []
         let id_direccion:any = []
 
-        console.log(ids_local)
 
         
     let valor:any = req.query.offset;
@@ -89,7 +108,6 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
     
         }
 
-        console.log(contador);
 
         res.json({
             ok: true,
@@ -128,7 +146,6 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
         }
 
 
-        console.log(data)
 
 
     let local:any = req.query.local;
@@ -139,7 +156,6 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
 
 
     if(local.length > 0) {
-        console.log(req.query.local )
         let ids_local:any = []
 
         const locales = await Usuario.findAll({where: { local: local}});
