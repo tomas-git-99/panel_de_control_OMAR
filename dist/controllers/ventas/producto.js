@@ -250,12 +250,14 @@ const soloLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const result = [];
     locales.forEach((item) => {
         //pushes only unique element
-        if (!result.includes(item.local)) {
-            if (item.local.length > 0) {
-                result.push(item.local);
+        let local = item.local.toUpperCase();
+        if (!result.includes(local)) {
+            if (local.length > 0) {
+                result.push(local);
             }
         }
     });
+    result.sort();
     res.json({
         ok: true,
         result

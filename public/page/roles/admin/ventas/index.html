@@ -71,7 +71,10 @@
         
         <div class="centro">
 
+    
+
         <div class="bienvenido">
+
 
             <div class="search">
                 
@@ -94,7 +97,12 @@
             
 
                 <div class="cartel">
-
+                    <div class="opcionesDeLocal">
+                        <select class="custom-select custom-select-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
+                            <option value="0">Ordenar por local</option>
+        
+                          </select>
+                    </div>
                     <table class="table">
                         <thead>
                           <tr>
@@ -116,13 +124,12 @@
                       </table>
 
                       
-                      <div class="paginacion">
+                      <div class="paginacion" style="overflow-x: scroll;">
   
                         <nav aria-label="...">
                             <ul class="pagination pagination-sm">
   
-                       
-  
+                               
                             </ul>
                           </nav>
                       </div>

@@ -373,15 +373,19 @@ export const soloLocales = async (req: Request, res: Response) => {
 
     locales.forEach((item)=>{
     	//pushes only unique element
-        if(!result.includes(item.local)){
-            if(item.local.length > 0){
-                result.push(item.local);
+        let local = item.local.toUpperCase()
+        if(!result.includes(local)){
+            if(local.length > 0){
+               
+                result.push(local);
             }
     	}
     })
 
 
+    
 
+    result.sort();
     
     
       res.json({

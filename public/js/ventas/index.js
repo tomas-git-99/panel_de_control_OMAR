@@ -626,6 +626,16 @@ window.pagina_id = (e) => {
         }
       }
 
+    if(datos[2] == "locales"){
+
+        if(datos[1] == 0){
+            return buscarLocales(valorGuardado)
+          }else{
+      
+            return buscarLocales(valorGuardado, datos[1]+"0")
+          }
+    }
+
     if(datos[1] == 0){
         recargaPaginaIgual = "0";
         historialGet();
@@ -638,3 +648,62 @@ window.pagina_id = (e) => {
 
     
 }
+
+
+
+const seleccion_locales = document.querySelector("#seleccion_locales");
+
+
+const opcionesDeLocales = () => {
+  fecthNormalGET("GET", "producto/locales/todos")
+      .then( res => {
+        let datos = res.result;
+        let result = ""
+        datos.map( e => {
+
+          result = `
+          <option value="${e}">${e}</option>
+          `
+          seleccion_locales.innerHTML += result;
+        })
+      })
+      .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+opcionesDeLocales();
+
+window.cambioDeLocal = (dato) => {
+
+    numeroPaginas = null;
+  
+    cargaMedio("spinner_load", true);
+  
+    if (dato.value == 0){
+      main_historial();
+      }else{
+        buscarLocales(dato.value);
+    }
+  
+  }
+
+const buscarLocales = (valor, offset=0) => {
+    fecthNormalPOST_PUT("GET", `producto/locales/seleccionado/local?local=${valor}&offset=${offset}`)
+    .then((res) => {
+      cargaMedio("spinner_load", false);
+  
+      if(numeroPaginas == null || numeroPaginas == "null" ){
+        paginacion(res.contador, "locales")
+      }
+      numeroPaginas = res.contador;
+      valorGuardado = valor;
+      leerHistorial(res.productos);
+      })
+      .catch( err =>{
+      cargaMedio("spinner_load", false);
+  
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+  }
+  
