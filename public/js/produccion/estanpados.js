@@ -29,6 +29,19 @@ const main_historial = () => {
 
 main_historial()
 
+const fechaARG = (data) => {
+  console.log(data)
+
+  if(data == "- -" ){
+      return "- -"
+  }else{
+      let fecha = new Date(data);
+
+      return fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + fecha.getFullYear();
+  }
+
+
+}
 
 
 
@@ -46,7 +59,7 @@ const imprimirHistorial = (e, color) => {
         <td data-label="NOMBRE / MODELO">${devolverString(e.producto.nombre)}</td>
         <td data-label="DIBUJO">${devolverString(e.estanpado.dibujo)}</td>
         <td data-label="ESTAMPADOR">${devolverString(e.estanpador.nombre)}</td>
-        <td data-label="FECHA DE ENTRADA">${devolverString(e.estanpado.fecha_de_entrada)}</td>
+        <td data-label="FECHA DE ENTRADA">${fechaARG(devolverString(e.estanpado.fecha_de_entrada))}</td>
         <td data-label="PAGADO">${e.estanpado.pagado == false ? "NO PAGADO" : "PAGADO"}</td>
 
         <td data-label= "AJUSTES"> 
@@ -286,7 +299,7 @@ window.fecha_De_pago = (e) => {
   if(e == true || e == "true") {
       fecthNormalPOST_PUT("PUT", `produccion/estanpado/${id_para_pagar}`, {pagado:true})
       .then( (res) => {
-          salio_todo_bien("Todo salio exelente")
+          salio_todo_bien("Todo salio bien")
       })
       .catch( err => {
           algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -296,7 +309,7 @@ window.fecha_De_pago = (e) => {
 
       fecthNormalPOST_PUT("PUT", `produccion/estanpado/${id_para_pagar}`, {pagado:false})
       .then( (res) => {
-          salio_todo_bien("Todo salio exelente")
+          salio_todo_bien("Todo salio bien")
       })
       .catch( err => {
           algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -344,6 +357,7 @@ const imprimir_previsualizar = (id) => {
 }
 
 
+
 const imprimir_html_datos = (res) => {
     
 /*     res.map ( e => { */
@@ -357,7 +371,7 @@ const imprimir_html_datos = (res) => {
 
     <tr>
         <td><span>DIBUJO : </span>${devolverString(res.estanpados.dibujo)}</td>
-        <td><span>FECHA DE ENTREGA : </span>${devolverString(res.estanpados.fecha_de_entrada)}</td>
+        <td><span>FECHA DE ENTREGA : </span>${fechaARG(devolverString(res.estanpados.fecha_de_entrada))}</td>
         <td><span>PAGO : </span>${res.estanpados.pagado == false ? "NO PAGADO" : "PAGADO"} </td>
 
     </tr>

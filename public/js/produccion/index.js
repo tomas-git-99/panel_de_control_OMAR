@@ -75,7 +75,19 @@ const colorearTable = (res) => {
         table_produccion.innerHTML = resultado;
     })
 }
+const fechaARG = (data) => {
+    console.log(data)
 
+    if(data == "- -" ){
+        return "- -"
+    }else{
+        let fecha = new Date(data);
+
+        return fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + fecha.getFullYear();
+    }
+
+  
+}
 
 const imprimirTable = (e, color) => {
 
@@ -88,9 +100,9 @@ const imprimirTable = (e, color) => {
     <td data-label="TELA">${devolverString(e.produccion.tela)}</td>
     <td data-label="PESO PROMEDIO">${devolverString(e.produccion.peso_promedio)} Kg</td>
     <td data-label="TALLER">${e.produccion.id_taller == undefined || e.produccion.id_taller == null ? "-" : e.taller.nombre_completo}</td>
-    <td data-label="FECHA DE SALIDA">${devolverString(e.produccion.fecha_de_salida)}</td>
-    <td data-label="FECHA DE ENTRA">${devolverString(e.produccion.fecha_de_entrada)}</td>
-    <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${e.produccion.fecha_de_pago}</span>` } </td>
+    <td data-label="FECHA DE SALIDA">${fechaARG(devolverString(e.produccion.fecha_de_salida))}</td>
+    <td data-label="FECHA DE ENTRA">${fechaARG(devolverString(e.produccion.fecha_de_entrada))}</td>
+    <td data-label="ESTADO" style="font-size:12px">${e.produccion.estado == false? "NO PAGADO" : `PAGADO<br> <span style=font-size:9px>${fechaARG(e.produccion.fecha_de_pago)}</span>` } </td>
 
     <td data-label="ELIMINAR">
     <div class="boton_seleccion" id="${e.produccion.id}" onclick="eliminar_Producto(this.id)">
@@ -208,7 +220,7 @@ const imprimir_html_datos = (res) => {
             <tr>
             <td><span>CODIGO : </span>${devolverString(e.producto.id_corte)}</td>
             <td><span>MODELO : </span>${devolverString(e.producto.nombre)}</td>
-            <td><span>FECHA DE CORTE : </span>${devolverString(e.producto.fecha_de_corte)}</td>
+            <td><span>FECHA DE CORTE : </span>${fechaARG(devolverString(e.producto.fecha_de_corte))}</td>
             <td><span>EDAD : </span>${devolverString(e.producto.edad)}</td>
         </tr>
         <tr>
@@ -223,8 +235,8 @@ const imprimir_html_datos = (res) => {
           </tr>
         <tr>
             <td><span>TALLER : </span>${devolverString(e.taller.nombre_completo)}</td>
-            <td><span>FECHA DE SALIDA : </span>${devolverString(e.producto.fecha_de_salida)}</td>
-            <td><span>FECHA DE ENTRADA : </span>${devolverString(e.producto.fecha_de_entrada)}</td>
+            <td><span>FECHA DE SALIDA : </span>${fechaARG(devolverString(e.producto.fecha_de_salida))}</td>
+            <td><span>FECHA DE ENTRADA : </span>${fechaARG(devolverString(e.producto.fecha_de_entrada))}</td>
             <td><span>PAGO : </span>${e.producto.estado == false ? "NO PAGADO" : "PAGADO"} </td>
             
             </tr>
@@ -363,7 +375,7 @@ window.fecha_De_pago = (e) => {
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:true, fecha_de_pago:todayDate})
         .then( (res) => {
            
-            salio_todo_bien("Todo salio exelente")
+            salio_todo_bien("Todo salio bien")
         })
         .catch( err => {
             algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -373,7 +385,7 @@ window.fecha_De_pago = (e) => {
 
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:false})
         .then( (res) => {
-            salio_todo_bien("Todo salio exelente")
+            salio_todo_bien("Todo salio bien")
         })
         .catch( err => {
             algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -420,7 +432,7 @@ window.enviar_cambio = (id) => {
 
     fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id}`, dato)
         .then( res => {
-            salio_todo_bien("Todo salio exelente")
+            salio_todo_bien("Todo salio bien")
             input_cambio = "";
         })
         .catch( err =>{

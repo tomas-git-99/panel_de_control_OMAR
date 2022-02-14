@@ -94,6 +94,9 @@ const buscarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
             valorBusqueda = usuario.local;
         }
     }
+    /*     let sinEspacio:any = req.query.nombre;
+    
+        console.log(sinEspacio.replace(/ /g, "")); */
     const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
             estado: true,
             local: { [dist_1.Op.like]: '%' + valorBusqueda + '%' },

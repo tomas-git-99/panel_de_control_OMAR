@@ -88,7 +88,7 @@ window.enviar_cambio = (id) => {
     fecthNormalPOST_PUT("PUT", `produccion/taller/${id}`, dato)
         .then( res => {
 
-            salio_todo_bien("Todo salio exelente")
+            salio_todo_bien("Todo salio bien")
             input_cambio.value = "";
            
             

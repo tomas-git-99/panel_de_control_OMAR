@@ -21,7 +21,19 @@ const opcines_taller = () => {
         })
 }
 opcines_taller();
-
+const fechaARG = (data) => {
+    console.log(data)
+  
+    if(data == "- -" ){
+        return "- -"
+    }else{
+        let fecha = new Date(data);
+  
+        return fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + fecha.getFullYear();
+    }
+  
+  
+  }
 const imprimir_opciones = (res) => {
     let talleres = "";
 
@@ -52,10 +64,10 @@ const cargar_datos_productos = (res) => {
                 
         <td data-label="CODIGO">${devolverString(e.id_corte)}</td>
         <td data-label="MODELO">${devolverString(e.nombre)}</td>
-        <td data-label="FECHA DE ENTREGA">${devolverString(e.fecha_de_entrada)}</td>
+        <td data-label="FECHA DE ENTREGA">${fechaARG(devolverString(e.fecha_de_entrada))}</td>
         <td data-label="CANTIDAD ENTRGADA">
             <div class="cantidad_entregada">
-                <input type="text" class="form-control form-control-sm" id="cantidad_entregada_${e.id}" disabled value="${e.cantidad_entregada}" style="width:80px">
+                <input type="text" class="form-control form-control-sm" id="cantidad_entregada_${e.id}" disabled value="${devolverString(e.cantidad_entregada)}" style="width:80px">
             </div>
 
         </td>

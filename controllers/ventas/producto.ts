@@ -138,6 +138,9 @@ export const buscarProducto = async (req: Request, res: Response) => {
     }
 
 
+/*     let sinEspacio:any = req.query.nombre;
+
+    console.log(sinEspacio.replace(/ /g, "")); */
 
  
     const productos_rows = await Producto.findAndCountAll({ where:{ 
@@ -175,6 +178,8 @@ export const buscarProducto = async (req: Request, res: Response) => {
         let tallesNew = talles.filter( i => i.id_producto == e.id ?? i)
         productos = [...productos, {productos:e, talles:tallesNew}]
     })
+
+  
     
     res.json({
         ok:true,
