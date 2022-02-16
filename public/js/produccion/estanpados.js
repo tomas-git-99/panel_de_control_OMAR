@@ -1,5 +1,6 @@
 import { algo_salio_mal, salio_todo_bien } from "../helpers/para_todos/alertas.js";
 import { cerrar_login } from "../helpers/para_todos/cerrar.js";
+import { fechaARG } from "../helpers/para_todos/fecha_arg.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
@@ -29,7 +30,7 @@ const main_historial = () => {
 
 main_historial()
 
-const fechaARG = (data) => {
+/* const fechaARG = (data) => {
   console.log(data)
 
   if(data == "- -" ){
@@ -42,8 +43,7 @@ const fechaARG = (data) => {
 
 
 }
-
-
+ */
 
 
 const imprimirHistorial = (e, color) => {

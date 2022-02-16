@@ -6,6 +6,7 @@ import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
+import { fechaARG } from "../helpers/para_todos/fecha_arg.js";
 
 
 const rol = localStorage.getItem('roles');
@@ -75,19 +76,24 @@ const colorearTable = (res) => {
         table_produccion.innerHTML = resultado;
     })
 }
-const fechaARG = (data) => {
+/* const fechaARG = (data) => {
     console.log(data)
 
     if(data == "- -" ){
         return "- -"
     }else{
         let fecha = new Date(data);
-
-        return fecha.getDate() + "/" + (fecha.getMonth() +1) + "/" + fecha.getFullYear();
+        var month = fecha.getUTCMonth() + 1; //months from 1-12
+        var day = fecha.getUTCDate();
+        var year = fecha.getUTCFullYear();
+        
+        return day + "/" + month + "/" + year;
     }
 
   
-}
+} */
+
+
 
 const imprimirTable = (e, color) => {
 
