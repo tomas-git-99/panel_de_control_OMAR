@@ -313,20 +313,23 @@ export const historialOrden = async (req: Request, res: Response) => {
     //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
 
     try {
-        
-        const orden = await Orden.findAll({where:{ total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]});
+        let valor:any = req.query.offset;
+
+        let valorOffset = parseInt(valor)
+
+        const orden = await Orden.findAndCountAll({where:{ total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
 
 
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
 
-        console.log(orden.length)
+        let contador = orden.count;
 
         
 
         let id_cliente:any = []
         let id_direccion:any = []
         
-        orden.map(async(e, i)=> {
+        orden.rows.map(async(e, i)=> {
             id_cliente.push(e.id_cliente);
             id_direccion.push(e.id_direccion);
         });
@@ -340,7 +343,7 @@ export const historialOrden = async (req: Request, res: Response) => {
     
         let datos:any = [];
     
-        for ( let i of orden){
+        for ( let i of orden.rows){
     
             let newcliente = cliente.find( e => e.id == i.id_cliente);
             let direcciones = direccion.find( h => h.id == i.id_direccion);
@@ -358,10 +361,11 @@ export const historialOrden = async (req: Request, res: Response) => {
  */
 
 
-        console.log(datos.length);
         
         res.json({
-            datos
+            ok: true,
+            datos,
+            contador
         })
     } catch (error) {
     

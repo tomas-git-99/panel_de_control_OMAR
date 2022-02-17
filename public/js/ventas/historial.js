@@ -12,21 +12,30 @@ import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "produccion");
 
+let numeroPaginas = null;
+let valorGuardado 
 
-const main_historial = () => {
+const main_historial = (offset=0) => {
 
     cargaMedio("spinner_load", true);
-    fecthNormalGET("GET","orden/historial/full")
+    fecthNormalGET("GET","orden/historial/full?offset="+offset)
     
         .then( res => {
             cargaMedio("spinner_load", false);
-            
+
+            if(numeroPaginas == null || numeroPaginas == "null" ){
+
+                paginacion(res.contador)
+    
+            }
+            numeroPaginas = res.contador;
             imprimirEnPantalla(res.datos);
         })
         .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
         })
 }
+
 main_historial();
 
 
@@ -143,7 +152,8 @@ buscar_producto.addEventListener("keyup", ({keyCode}) => {
 
     if( keyCode !== 13){return;}
     if(buscar_producto.length === 0){return;}
-
+    const pagination = document.querySelector(".pagination");
+    pagination.innerHTML = "";
     getSearch(buscar_producto.value);
     buscar_producto.value = "";
 });
@@ -258,7 +268,9 @@ const opcionesDelocales = (res) => {
 localesFiltro();
 
 window.cambioDeLocal = (e) => {
-    cargaMedio("spinner_load", true);
+    numeroPaginas = null;
+
+   /*  cargaMedio("spinner_load", true);
 
     if(e.value == "0"){
         localNombre = '';
@@ -277,8 +289,37 @@ window.cambioDeLocal = (e) => {
         
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+ */
+
+    cambiarLocalValue(e.value);
 }
 
+const cambiarLocalValue = (value, offset =0) => {
+    cargaMedio("spinner_load", true);
+
+    if(value == "0"){
+        localNombre = '';
+        return main_historial();
+    }
+
+    fecthNormalGET("GET",`historial/buscar/${value}?offset=${offset}`)
+    .then( res => {
+        cargaMedio("spinner_load", false);
+
+        if(numeroPaginas == null || numeroPaginas == "null" ){
+            paginacion(res.contador, "local")
+        }
+    
+        numeroPaginas = res.contador;
+        localNombre = value
+        imprimirEnPantalla(res.datos)
+    })
+    .catch( err => {
+        cargaMedio("spinner_load", false);
+        
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
 
 
 
@@ -396,8 +437,9 @@ window.close_ventana = (id) => {
     if(id == 'cantidadTalle' || id == 'agregarNuevoProducto'){
 
         MODIFICAR_ORDEN_FUNC(idORDEN);
+
     }else if(id == 'modificarCarrito'){
-        main_historial();
+       /*  main_historial(); */
     }
 
     document.querySelector(`.${id}`).style.display = 'none';
@@ -471,7 +513,7 @@ window.agregarProductoID = () => {
 const search2 = document.querySelector("#search2");
 
 search2.addEventListener("keyup", ({keyCode}) => {
-   
+
 
     if( keyCode !== 13){return;}
     if(search2.length === 0){return;}
@@ -484,7 +526,7 @@ const getSearch2 = (valor, offset=0) => {
 
     fecthNormalGET("GET", "producto/search?" + `nombre=${valor}&offset=${offset}`)
     .then(res => {
-
+    
         imprimirHistorial(res.productos);
     })
     .catch( err =>{
@@ -722,6 +764,7 @@ window.cambiar_filtro = (e) => {
 window.filtroPorFechas = (e) => {
 
     /* dataRango = [];  */
+    numeroPaginas = null;
 
     const startDate    = document.getElementById("startDate");
     const endDate      = document.getElementById("endDate");
@@ -731,19 +774,27 @@ window.filtroPorFechas = (e) => {
 
     fecha_exacta?.value == '' || fecha_exacta?.value == undefined ? dato =  {fecha:[startDate.value, endDate.value]} : dato = {fecha:[fecha_exacta.value]}
 
-    funcFechas(dato)
+    funcFechas(dato);
 }
 
 
-
-const funcFechas = (fecha) => {
+let fechaSave
+const funcFechas = (fecha, offset=0) => {
 
     cargaMedio("spinner_load", true);
     
-    fecthNormalPOST_PUT("POST",`historial/fecha/local?local=${localNombre}`, fecha)
+    fecthNormalPOST_PUT("POST",`historial/fecha/local?local=${localNombre}&offset=${offset}`, fecha)
             .then(res => {
-    cargaMedio("spinner_load", false);
+
+                cargaMedio("spinner_load", false);
+                if(numeroPaginas == null || numeroPaginas == "null" ){
+                    paginacion(res.contador, "fecha")
+                }
+            
+                numeroPaginas = res.contador;
+                fechaSave = fecha;
                 imprimirEnPantalla(res.datos);
+
             })
             .catch( err => {
     cargaMedio("spinner_load", false);
@@ -751,4 +802,117 @@ const funcFechas = (fecha) => {
                 return algo_salio_mal(`algo_salio_mal(Algo salio mal: ${ err }`)
             })
 
+}
+
+const paginacion = (valor, query=undefined) => {
+
+    if(query !== undefined){
+        numeroPaginas = null;
+    }
+
+    let valorNumero = parseInt(valor);
+
+    const pagination = document.querySelector(".pagination");
+
+    let calcularPagina = valorNumero / 10;
+
+    let paginas = Math.ceil(calcularPagina);
+
+    let historial = ""
+
+    for (let i = 1; i <= paginas; i++) {
+        let valor = 0
+
+        if (i == 1){
+            historial += `
+            <li class="page-item active" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+
+            `
+        }else{
+            valor = i - 1;
+            historial += `
+            <li class="page-item" onclick="pagina_id(this.id)" id=${"pagina-"+valor+"-"+query} ><a class="page-link" href="#">${i}</a></li>
+    
+            `
+        }
+
+    }
+
+    pagination.innerHTML = historial;
+
+
+}
+
+let recargaPaginaIgual
+
+window.pagina_id = (e) => {
+
+    const arrNombresFiltro = ["fecha_de_salida", "fecha_de_entrada", "fecha_de_pago", "id_taller"]
+
+    const cambiarSeleccion = document.getElementById(`${e}`);
+    const active = document.querySelector(`.active`);
+
+
+    let datos = e.split("-")
+
+    if(active.id == e){
+        return
+    }
+
+    cambiarSeleccion.className = "page-item active";
+    active.className = "";
+
+    if(datos[2] == "local"){
+
+        if(datos[1] == 0){
+
+          return cambiarLocalValue(localNombre)
+
+        }else{
+    
+          return cambiarLocalValue(localNombre, datos[1]+"0")
+        }
+      }
+      if(datos[2] == "fecha"){
+
+        if(datos[1] == 0){
+          return funcFechas(fechaSave)
+        }else{
+    
+          return funcFechas(fechaSave, datos[1]+"0")
+        }
+      }
+
+/* 
+    if(datos[2] == "buscador"){
+
+        if(datos[1] == 0){
+          return getSearch(valorGuardado)
+        }else{
+    
+          return getSearch(valorGuardado, datos[1]+"0")
+        }
+      }
+
+    if(datos[2] == "locales"){
+
+        if(datos[1] == 0){
+            return buscarLocales(valorGuardado)
+          }else{
+      
+            return buscarLocales(valorGuardado, datos[1]+"0")
+          }
+    }
+ */
+    if(datos[1] == 0){
+        recargaPaginaIgual = "0";
+        main_historial();
+      
+    }else{
+        
+        main_historial(datos[1]+"0") 
+        recargaPaginaIgual = datos[1]+"0";
+    }
+
+    
 }

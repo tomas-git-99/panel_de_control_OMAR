@@ -336,7 +336,7 @@ window.agregarEstampador = (e) => {
         .then( res=> {
             if(res.ok == true){
 
-                salio_todo_bien("Los cambios fueron exitosos")
+                salio_todo_bien("Salio Bien!")
             }else{
                 advertencia(res.msg)
             }
@@ -381,7 +381,7 @@ window.fecha_De_pago = (e) => {
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:true, fecha_de_pago:todayDate})
         .then( (res) => {
            
-            salio_todo_bien("Todo salio bien")
+            salio_todo_bien("Salio Bien!")
         })
         .catch( err => {
             algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -391,7 +391,7 @@ window.fecha_De_pago = (e) => {
 
         fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id_para_pagar}`, {estado:false})
         .then( (res) => {
-            salio_todo_bien("Todo salio bien")
+            salio_todo_bien("Salio Bien!")
         })
         .catch( err => {
             algo_salio_mal(`Algo salio mal: ${ err}`)
@@ -414,7 +414,7 @@ window.enviar_taller_nuevo = (id) => {
 
     fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${palabras[1]}`, {id_taller:palabras[0]})
         .then( res => {
-            salio_todo_bien("Todo salio exlente")
+            salio_todo_bien("Salio Bien!")
         })
         .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -438,7 +438,7 @@ window.enviar_cambio = (id) => {
 
     fecthNormalPOST_PUT("PUT", `produccion/producto_produccion/${id}`, dato)
         .then( res => {
-            salio_todo_bien("Todo salio bien")
+            salio_todo_bien("Salio Bien!")
             input_cambio = "";
         })
         .catch( err =>{

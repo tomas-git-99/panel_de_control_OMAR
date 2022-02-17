@@ -203,12 +203,14 @@ exports.ordenParaImprimir = ordenParaImprimir;
 const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //const orden = await Orden.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
     try {
-        const orden = yield orden_1.Orden.findAll({ where: { total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] });
+        let valor = req.query.offset;
+        let valorOffset = parseInt(valor);
+        const orden = yield orden_1.Orden.findAndCountAll({ where: { total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
         //const orden_publico = await Orden_publico.findAll({where:{ total:{ [Op.gt]: 0}},limit:10 , order: [['updatedAt', 'DESC']]});
-        console.log(orden.length);
+        let contador = orden.count;
         let id_cliente = [];
         let id_direccion = [];
-        orden.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
+        orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
             id_cliente.push(e.id_cliente);
             id_direccion.push(e.id_direccion);
         }));
@@ -219,7 +221,7 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const cliente = yield cliente_1.Cliente.findAll({ where: { id: id_cliente } });
         const direccion = yield direccion_1.Direccion.findAll({ where: { id: id_direccion } });
         let datos = [];
-        for (let i of orden) {
+        for (let i of orden.rows) {
             let newcliente = cliente.find(e => e.id == i.id_cliente);
             let direcciones = direccion.find(h => h.id == i.id_direccion);
             datos = [...datos, { orden: i, cliente: newcliente || "", direccion: direcciones || "" }];
@@ -231,9 +233,10 @@ const historialOrden = (req, res) => __awaiter(void 0, void 0, void 0, function*
                datos = [...datos,{orden:i, cliente:newcliente,direccion:""}]
            }
     */
-        console.log(datos.length);
         res.json({
-            datos
+            ok: true,
+            datos,
+            contador
         });
     }
     catch (error) {

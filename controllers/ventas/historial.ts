@@ -80,7 +80,7 @@ export const buscarPorLocal = async (req: Request, res: Response) => {
     let valorOffset = parseInt(valor)
 
         
-        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local,  total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']]/* , limit:10, offset:valorOffset */});
+        const orden = await Orden.findAndCountAll({where:{id_usuario:ids_local,  total:{ [Op.gt]: 0}}, order: [['updatedAt', 'DESC']], limit:10, offset:valorOffset});
 
         let contador = orden.count;
 
@@ -132,7 +132,10 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
    
 
         let data
+        let valor:any = req.query.offset;
 
+        let valorOffset = parseInt(valor)
+        
        req.body.fecha[1] == undefined ? data = {[Op.between]:[req.body.fecha[0]+'T00:00:00.000Z', req.body.fecha[0]+'T23:59:59.000Z']}: data = {[Op.between]:[req.body.fecha[0]+'T00:00:00.000Z', req.body.fecha[1]+'T23:59:59.000Z']}
 
       /*  new Date(req.body.fecha[1]), new Date(req.body.fecha[1]) */
@@ -143,6 +146,7 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
             where: {
                 total:{ [Op.gt]: 0}
             },order: [['createdAt', 'DESC']]
+            , limit:10, offset:valorOffset
         }
 
 
@@ -177,6 +181,7 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
    const orden = await Orden.findAndCountAll(buscar)
   
 
+   let contador = orden.count;
 
     let id_cliente:any = []
     let id_direccion:any = []
@@ -202,7 +207,8 @@ export const filtroPorFechas = async (req: Request, res: Response) => {
 
     res.json({
         ok: true,
-        datos
+        datos,
+        contador
     })
 
     } catch (error) {

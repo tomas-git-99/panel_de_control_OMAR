@@ -238,6 +238,7 @@ const getSearch = (valor, offset=0) => {
         if(numeroPaginas == null || numeroPaginas == "null" ){
             paginacion(res.contador, "buscador")
         }
+        
         numeroPaginas = res.contador;
         valorGuardado = valor;
         volver_Atras_buscar.style.display = "grid";
@@ -687,6 +688,8 @@ window.cambioDeLocal = (dato) => {
     }
   
   }
+
+
 
 const buscarLocales = (valor, offset=0) => {
     fecthNormalPOST_PUT("GET", `producto/locales/seleccionado/local?local=${valor}&offset=${offset}`)

@@ -55,7 +55,7 @@ const buscarPorLocal = (req, res) => __awaiter(void 0, void 0, void 0, function*
         let id_direccion = [];
         let valor = req.query.offset;
         let valorOffset = parseInt(valor);
-        const orden = yield orden_1.Orden.findAndCountAll({ where: { id_usuario: ids_local, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']] /* , limit:10, offset:valorOffset */ });
+        const orden = yield orden_1.Orden.findAndCountAll({ where: { id_usuario: ids_local, total: { [dist_1.Op.gt]: 0 } }, order: [['updatedAt', 'DESC']], limit: 10, offset: valorOffset });
         let contador = orden.count;
         orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
             id_cliente.push(e.id_cliente);
@@ -86,13 +86,16 @@ exports.buscarPorLocal = buscarPorLocal;
 const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let data;
+        let valor = req.query.offset;
+        let valorOffset = parseInt(valor);
         req.body.fecha[1] == undefined ? data = { [dist_1.Op.between]: [req.body.fecha[0] + 'T00:00:00.000Z', req.body.fecha[0] + 'T23:59:59.000Z'] } : data = { [dist_1.Op.between]: [req.body.fecha[0] + 'T00:00:00.000Z', req.body.fecha[1] + 'T23:59:59.000Z'] };
         /*  new Date(req.body.fecha[1]), new Date(req.body.fecha[1]) */
         //let valor = {[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
         let buscar = {
             where: {
                 total: { [dist_1.Op.gt]: 0 }
-            }, order: [['createdAt', 'DESC']]
+            }, order: [['createdAt', 'DESC']],
+            limit: 10, offset: valorOffset
         };
         let local = req.query.local;
         buscar.where[`createdAt`] = data;
@@ -107,6 +110,7 @@ const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function
         /* {[Op.like]: '%' + [6,8] + '%' } */
         //buscar.where['fecha'] = req.body.fecha[1] == undefined ?req.body.fecha[0]:{[Op.between]:[req.body.fecha[0], req.body.fecha[1]]}
         const orden = yield orden_1.Orden.findAndCountAll(buscar);
+        let contador = orden.count;
         let id_cliente = [];
         let id_direccion = [];
         orden.rows.map((e, i) => __awaiter(void 0, void 0, void 0, function* () {
@@ -123,7 +127,8 @@ const filtroPorFechas = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         res.json({
             ok: true,
-            datos
+            datos,
+            contador
         });
     }
     catch (error) {
