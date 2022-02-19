@@ -856,6 +856,8 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
             }
         }
 
+        
+
         productos.map( (e, i) => {
 
             ids_productos_total.map( async(p:any, c:any) => {

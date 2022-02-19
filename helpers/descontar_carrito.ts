@@ -67,10 +67,33 @@ export async function descontarDelCarrito (id_orden:number | string, id_usuario:
     }
     )
 
-    //creamos un array llamado talles
-    //donde vamos a buscar await en Talle, con productosConTalles
 
-    let talles = await Talle.findAll({where:{id_producto:productosConTalles}});
+    const miCarritoSinDuplicados = carrito.reduce((acumulador:any, valorActual:any) => {
+
+        const elementoYaExiste = acumulador.find((elemento:any) => elemento.id_producto === valorActual.id_producto);
+        if (elementoYaExiste) {
+          return acumulador.map((elemento:any) => {
+            if (elemento.id_producto === valorActual.id_producto) {
+              return {
+                ...elemento,
+                cantidad: elemento.cantidad + valorActual.cantidad
+              }
+            }
+      
+            return elemento;
+          });
+        }
+      
+        return [...acumulador, valorActual];
+      }, []);
+
+      
+
+
+
+
+
+
 }                            
 
 
