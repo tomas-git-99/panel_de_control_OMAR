@@ -916,3 +916,8 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
         })
     }
 }
+
+
+
+
+
