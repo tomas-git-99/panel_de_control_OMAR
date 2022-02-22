@@ -837,7 +837,7 @@ export const descontarProductosFull = async (req: Request, res: Response) => {
 
                         let nuevaSuma = n.cantidad * dato_producto.precio;
                         sumaTotal += sumaTotal + nuevaSuma;
-                        let nuevoStock = e.cantidad -n.cantidad ;
+                        let nuevoStock = e.cantidad - n.cantidad ;
 
                         await e.update({cantidad:nuevoStock})
                                     .catch(err => {

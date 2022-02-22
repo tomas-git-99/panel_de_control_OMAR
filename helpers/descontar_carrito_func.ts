@@ -72,7 +72,7 @@ export const sumaDeTodoLosProductos = (idsTalles:Productos[], carrito:any[]) => 
 
 
 
-export const creandoOrdenDetalle = async( productosSinRepetir:ProductoSinDuplicados[], talles:Talle[], carrito:Carrito[], productos:Producto[], id_orden:number) => {
+export const creandoOrdenDetallePorTalle = async( productosSinRepetir:ProductoSinDuplicados[], talles:Talle[], carrito:Carrito[], productos:Producto[], id_orden:number) => {
 
     let nuevoOrdenes:OrdenDetalle[] = [];
 
@@ -86,7 +86,7 @@ export const creandoOrdenDetalle = async( productosSinRepetir:ProductoSinDuplica
                 if(e.talle == n.talle){
 
                     let dato_producto = productos.find( e => e.id == n.id_producto);
-                    let dato_carrito = carrito.find( e => e.id_producto == n.id_producto && e.talle == n.talle);
+                    let dato_carrito = carrito.find( e => e.id_producto == n.id_producto && (e.talle == n.talle || e.talle == null));
 
                     let orden:any = {
                         id_orden,
@@ -104,7 +104,13 @@ export const creandoOrdenDetalle = async( productosSinRepetir:ProductoSinDuplica
         }
     }
 
-    
+
     //await OrdenDetalle.bulkCreate(nuevoOrdenes);
   
+}
+
+
+export const creandoOrdenDetallePorTotal = async () => {
+ 
+     
 }

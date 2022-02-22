@@ -13,6 +13,7 @@ export interface TodoAtributos {
 
 
 export class Carrito extends Model <TodoAtributos>{
+    
     public id!: number;
     public id_usuario!: number;
     public id_producto!: number;
