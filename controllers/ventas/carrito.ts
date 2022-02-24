@@ -1190,7 +1190,7 @@ interface ProductoSinDuplicados{
 }
 
 export const nuevaFuncionParaDescontar = async (req: Request, res: Response) => {
-
+try {
     const { id, id_orden} = req.params;
 
         
@@ -1232,14 +1232,13 @@ export const nuevaFuncionParaDescontar = async (req: Request, res: Response) => 
 
     let tallesCompletados = armarLasCurvas(carrito, talles).filter( a => ids_productos_unidad.includes(a.id_producto))
 
-
   
     let tallesPorSeparado = juntarTodosLosTallesEnUno(ids_productos_unidad, tallesCompletados);
 
     let sumaDeTodasLasTalles  = sumaDeTodoLosProductos(tallesPorSeparado, tallesCompletados);
 
     let productos_sin_stock = verifcarSiTienenStock(talles, sumaDeTodasLasTalles, productos);
-    console.log(productos_sin_stock)
+
     if(productos_sin_stock.length > 0){
         return res.json({
             ok: false,
@@ -1249,7 +1248,7 @@ export const nuevaFuncionParaDescontar = async (req: Request, res: Response) => 
         })
     }
 
-    let totasLasOrdenes = creandoOrdenDetallePorTalle(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
+    let totasLasOrdenes = await creandoOrdenDetallePorTalle(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
 
 
     for(let i of totasLasOrdenes){
@@ -1258,11 +1257,24 @@ export const nuevaFuncionParaDescontar = async (req: Request, res: Response) => 
 
         sumaTotal += i.cantidad * i.precio;
 
-        //await talleCambiar!.update({cantidad: talleCambiar!.cantidad - i.cantidad});
+        await talleCambiar!.update({cantidad: talleCambiar!.cantidad - i.cantidad});
 
     }
+
+    await Carrito.destroy({where:{id_usuario:id}});
+
     console.log(sumaTotal)
-    res.json({sumaDeTodasLasTalles
+
+    res.json({
+        ok: true,
+        msg: "Su compra fue exitosa",
     })
+
+} catch (error) {
+    res.json({
+        ok: false,
+        msg: "Hable con el administrador"
+    })
+}
 
 }
