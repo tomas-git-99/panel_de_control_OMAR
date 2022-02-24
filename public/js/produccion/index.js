@@ -172,7 +172,7 @@ window.previsualizar_id = (id) => {
 window.eliminar_Producto = (e) => {
 
     Swal.fire({
-        title: '¿Esta seguro que quiere eliminar esta orden?',
+        title: '¿Esta seguro que quiere eliminar esta producto?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

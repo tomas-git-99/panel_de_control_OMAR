@@ -287,3 +287,26 @@ export const buscarEstampados = async (req: Request, res: Response) => {
 
 
 }
+
+export const eliminarEstampado = async (req: Request, res: Response) => {
+
+    try {
+        const { id } = req.params;
+        
+        const estanpado = await Estanpados.findByPk(id);
+
+        await estanpado!.destroy();
+
+        res.json({
+            ok: true,
+            msg: 'Eliminado'
+        })
+
+    } catch (error) {
+ 
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+}

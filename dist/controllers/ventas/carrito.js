@@ -765,10 +765,10 @@ const nuevaFuncionParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0
         }
     }
     const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
-    let tallesCompletados = (0, descontar_carrito_func_1.armarLasCurvas)(carrito, talles).filter(a => ids_productos_unidad.includes(a.id_producto));
-    let tallesPorSeparado = (0, descontar_carrito_func_1.juntarTodosLosTallesEnUno)(ids_productos_unidad, tallesCompletados);
-    let sumaDeTodasLasTalles = (0, descontar_carrito_func_1.sumaDeTodoLosProductos)(tallesPorSeparado, tallesCompletados);
-    let productos_sin_stock = (0, descontar_carrito_func_1.verifcarSiTienenStock)(talles, sumaDeTodasLasTalles, productos);
+    let tallesCompletados = descontar_carrito_func_1.armarLasCurvas(carrito, talles).filter(a => ids_productos_unidad.includes(a.id_producto));
+    let tallesPorSeparado = descontar_carrito_func_1.juntarTodosLosTallesEnUno(ids_productos_unidad, tallesCompletados);
+    let sumaDeTodasLasTalles = descontar_carrito_func_1.sumaDeTodoLosProductos(tallesPorSeparado, tallesCompletados);
+    let productos_sin_stock = descontar_carrito_func_1.verifcarSiTienenStock(talles, sumaDeTodasLasTalles, productos);
     console.log(productos_sin_stock);
     if (productos_sin_stock.length > 0) {
         return res.json({
@@ -778,7 +778,7 @@ const nuevaFuncionParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0
             productos_sin_stock
         });
     }
-    let totasLasOrdenes = (0, descontar_carrito_func_1.creandoOrdenDetallePorTalle)(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
+    let totasLasOrdenes = descontar_carrito_func_1.creandoOrdenDetallePorTalle(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
     for (let i of totasLasOrdenes) {
         let talleCambiar = talles.find(t => t.id_producto == i.id_producto && t.talle == parseInt(i.talle));
         sumaTotal += i.cantidad * i.precio;

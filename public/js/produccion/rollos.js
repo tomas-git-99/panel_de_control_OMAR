@@ -94,6 +94,12 @@ const imprimir_historial = (res) => {
         <tr id="${e.rollo.id}_${e.rollo.nombre}" onclick="abrir_id(this.id)">
         <td data-label="NOMBRE">${devolverString(e.rollo.nombre)}</td>
         <td data-label="TOTAL">${devolverString(contador)}</td>
+
+        <td data-label="ELIMINAR">
+        <div class="boton_seleccion" id="${e.rollo.id}" onclick="eliminar_Producto(this.id)">
+        <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+        </div>
+        </td>
         </tr>
         `
         contador = 0;
@@ -131,6 +137,14 @@ const imprimir_historial_view = (res) => {
         <td>${devolverString(e.color)}</td>
         <td>${devolverString(e.estanpado)}</td>
         <td>${devolverString(e.cantidad)}</td>
+
+
+        <td data-label="ELIMINAR">
+        <div class="boton_seleccion" id="${e.id}" onclick="eliminar_Producto(this.id)">
+        <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+        </div>
+        </td>
+
 
         <td data-label= "AJUSTES"> 
         <div id="${e.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
@@ -185,7 +199,7 @@ form_agregar_rollo.addEventListener("submit", (e) => {
     fecthNormalPOST_PUT("POST", `produccion/rollos/rollos/${aca_va_solo_el_ID.id}`, forData)
         .then( res => {
             
-            salio_todo_bien("Todo salio exlente")
+            salio_todo_bien("Todo salio bien")
         })
         .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -247,7 +261,7 @@ window.enviar_id = (id) => {
     fecthNormalPOST_PUT("PUT", `produccion/rollos/${id}`, dato)
     .then( res => {
         input_cambio.value = "";
-        salio_todo_bien("Todo salio exlente")
+        salio_todo_bien("Todo salio bien")
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)

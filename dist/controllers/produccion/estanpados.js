@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarEstampados = exports.buscarEstapados = exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
+exports.eliminarEstampado = exports.buscarEstampados = exports.buscarEstapados = exports.obtenerEstanpadorID = exports.nuevoEstanpador = exports.getEstanpadores = exports.cambiarEstanpado = exports.obtenerEstanpados = void 0;
 const dist_1 = require("sequelize/dist");
 const estanpador_1 = require("../../models/produccion/estanpador");
 const estanpados_1 = require("../../models/produccion/estanpados");
@@ -163,7 +163,6 @@ const buscarEstampados = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const dato = req.query;
         const produccion_productos = yield productos_produccion_1.Produccion_producto.findAll({ where: {
                 nombre: { [dist_1.Op.like]: '%' + dato.nombre + '%' },
-                // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
             } });
         let ids = [];
         produccion_productos.map(e => {
@@ -190,4 +189,22 @@ const buscarEstampados = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.buscarEstampados = buscarEstampados;
+const eliminarEstampado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const estanpado = yield estanpados_1.Estanpados.findByPk(id);
+        yield estanpado.destroy();
+        res.json({
+            ok: true,
+            msg: 'Eliminado'
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.eliminarEstampado = eliminarEstampado;
 //# sourceMappingURL=estanpados.js.map

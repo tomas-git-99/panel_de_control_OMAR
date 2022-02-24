@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { buscarEstampados, buscarEstapados, cambiarEstanpado, getEstanpadores, nuevoEstanpador, obtenerEstanpadorID, obtenerEstanpados } from "../../controllers/produccion/estanpados";
+import { buscarEstampados, buscarEstapados, cambiarEstanpado, eliminarEstampado, getEstanpadores, nuevoEstanpador, obtenerEstanpadorID, obtenerEstanpados } from "../../controllers/produccion/estanpados";
 
 
 const router = Router();
@@ -13,6 +13,8 @@ router.get('/unico/:id', obtenerEstanpadorID)
 
 
 router.put('/:id', cambiarEstanpado)
+
+router.delete('/:id', eliminarEstampado)
 
 
 

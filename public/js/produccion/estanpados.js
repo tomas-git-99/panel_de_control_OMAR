@@ -62,6 +62,13 @@ const imprimirHistorial = (e, color) => {
         <td data-label="FECHA DE ENTRADA">${fechaARG(devolverString(e.estanpado.fecha_de_entrada))}</td>
         <td data-label="PAGADO">${e.estanpado.pagado == false ? "NO PAGADO" : "PAGADO"}</td>
 
+
+        <td data-label="ELIMINAR">
+        <div class="boton_seleccion" id="${e.estanpado.id}" onclick="eliminar_Estampado(this.id)">
+        <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
+        </div>
+        </td>
+
         <td data-label= "AJUSTES"> 
         <div id="${e.estanpado.id}" onclick="enviar_id(this.id)" class="boton_seleccion">
         <img src="https://img.icons8.com/ios/50/000000/settings--v1.png" width="25px"/> 
@@ -84,6 +91,33 @@ const imprimirHistorial = (e, color) => {
 }
 
 
+
+window.eliminar_Estampado = (id) => {
+  
+
+      Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta producto?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          fecthNormalPOST_PUT("DELETE", "produccion/estanpado/" + id)
+          .then( res => {
+
+            salio_todo_bien("Se elimino correctamente");
+
+          })
+          .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err}`)
+          })
+    
+        }
+      })
+}
 
 const colorearTable = (res) => {
 
@@ -208,7 +242,7 @@ window.enviar_cambio = (id) => {
 
   fecthNormalPOST_PUT("PUT", `produccion/estanpado/${id}`, dato)
   .then( res => {
-      salio_todo_bien("Todo salio exlente")
+      salio_todo_bien("Todo salio bien")
   })
   .catch( err =>{
       algo_salio_mal(`Algo salio mal: ${ err }`)
@@ -266,7 +300,7 @@ const imprimir_opciones = (res , id) => {
 
     fecthNormalPOST_PUT("PUT", `produccion/estanpado/${palabras[1]}`, {id_estanpador:palabras[0]})
         .then( res => {
-            salio_todo_bien("Todo salio exlente")
+            salio_todo_bien("Todo salio bien")
         })
         .catch( err =>{
             algo_salio_mal(`Algo salio mal: ${ err }`)
