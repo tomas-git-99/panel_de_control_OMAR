@@ -149,3 +149,50 @@ export const cambiarDatosDeRollos = async (req: Request, res: Response) => {
         })
     }
 }
+
+
+export const eliminarRolloTodos = async (req: Request, res: Response) => {
+
+    try {
+        const {id} = req.params;
+
+        const rollos = await Rollo.findByPk(id);
+
+        await Rollos.destroy({where:{id_rollo:id}});
+
+        await rollos?.destroy();
+
+        res.json({
+            ok: true,
+            msg:"Se elimino"
+        })
+    } catch (error) {
+        res.json({
+            ok:false,
+            msg: error
+        })
+    }
+}
+
+export const eliminarUnRollo = async (req: Request, res: Response) => {
+
+    try {
+        const {id} = req.params;
+
+
+        const rollo = await Rollos.findByPk(id);
+
+        await rollo?.destroy();
+
+        res.json({
+            ok: true,
+            msg:"Se elimino"
+        })
+
+    } catch (error) {
+        res.json({
+            ok:false,
+            msg: error
+        })
+    }
+}

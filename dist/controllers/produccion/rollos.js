@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cambiarDatosDeRollos = exports.agregarRollosID = exports.obtenerRollosID = exports.obtenerTodoRollo = exports.crearNuevoRollo = void 0;
+exports.eliminarUnRollo = exports.eliminarRolloTodos = exports.cambiarDatosDeRollos = exports.agregarRollosID = exports.obtenerRollosID = exports.obtenerTodoRollo = exports.crearNuevoRollo = void 0;
 const rollo_1 = require("../../models/produccion/rollo");
 const rollos_1 = require("../../models/produccion/rollos");
 const crearNuevoRollo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -113,4 +113,41 @@ const cambiarDatosDeRollos = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.cambiarDatosDeRollos = cambiarDatosDeRollos;
+const eliminarRolloTodos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const rollos = yield rollo_1.Rollo.findByPk(id);
+        yield rollos_1.Rollos.destroy({ where: { id_rollo: id } });
+        yield (rollos === null || rollos === void 0 ? void 0 : rollos.destroy());
+        res.json({
+            ok: true,
+            msg: "Se elimino"
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.eliminarRolloTodos = eliminarRolloTodos;
+const eliminarUnRollo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const rollo = yield rollos_1.Rollos.findByPk(id);
+        yield (rollo === null || rollo === void 0 ? void 0 : rollo.destroy());
+        res.json({
+            ok: true,
+            msg: "Se elimino"
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.eliminarUnRollo = eliminarUnRollo;
 //# sourceMappingURL=rollos.js.map

@@ -13,5 +13,8 @@ router.get('/:id', rollos_1.obtenerRollosID);
 router.post('/rollos/:id', rollos_1.agregarRollosID);
 //CAMBIAR DATOS DE UN ROLLO
 router.put('/:id', rollos_1.cambiarDatosDeRollos);
+//ELIMINAR ROLLOS NUEVO CON ID_ROLLO
+router.delete('/:id', rollos_1.eliminarRolloTodos);
+router.delete('/rollo/:id', rollos_1.eliminarUnRollo);
 exports.default = router;
 //# sourceMappingURL=rollos.js.map

@@ -96,10 +96,12 @@ const imprimir_historial = (res) => {
         <td data-label="TOTAL">${devolverString(contador)}</td>
 
         <td data-label="ELIMINAR">
-        <div class="boton_seleccion" id="${e.rollo.id}" onclick="eliminar_Producto(this.id)">
+        <div class="boton_seleccion" id="${e.rollo.id}" onclick="eliminar_rolloCompleto(this.id)">
         <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
         </div>
         </td>
+
+
         </tr>
         `
         contador = 0;
@@ -111,6 +113,37 @@ const imprimir_historial = (res) => {
 
 }
 
+
+window.eliminar_rolloCompleto = (id) => {
+
+
+
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta rollo completo?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+  
+            fecthNormalGET("DELETE", "produccion/rollos/" + id)
+            .then( res => {
+                volverAtras(view_data_rollos, bienvenido);
+
+                main_historial()
+            })
+            .catch (err => {
+                algo_salio_mal(`Algo salio mal: ${ err }`);
+            })
+        }else{
+            volverAtras(view_data_rollos, bienvenido);
+
+        }
+      })
+  
+}
 
 
 const abrir_buscar_id = (id) => {
@@ -140,7 +173,7 @@ const imprimir_historial_view = (res) => {
 
 
         <td data-label="ELIMINAR">
-        <div class="boton_seleccion" id="${e.id}" onclick="eliminar_Producto(this.id)">
+        <div class="boton_seleccion" id="${e.id}_${e.id_rollo}" onclick="eliminar_rollo_por_uno(this.id)">
         <img width="25px" src="https://img.icons8.com/ios-glyphs/30/000000/filled-trash.png"/>
         </div>
         </td>
@@ -159,6 +192,34 @@ const imprimir_historial_view = (res) => {
     table_rollos_data.innerHTML = historial;
 
 
+}
+
+window.eliminar_rollo_por_uno = (id) => {
+
+    let idsArray = id.split("_");
+
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar esta rollo?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            fecthNormalGET("DELETE", "produccion/rollos/rollo/" + idsArray[0])
+            .then( res => {
+                abrir_buscar_id(idsArray[1])
+            })
+            .catch (err => {
+                algo_salio_mal(`Algo salio mal: ${ err }`);
+            })
+    
+        }
+      })
+        
+  
 }
 
 const form_agregar_rollo= document.querySelector(".form_agregar_rollo");

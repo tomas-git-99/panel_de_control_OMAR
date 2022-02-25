@@ -39,8 +39,8 @@ router.put("/:id/:id_orden", descontarPorUnidad)
 router.put("/total/:id/:id_orden", descontarElTotal)
 
 
-//router.put("/confirmar/compra/:id/:id_orden", pruebaParaDescontar) /// estas el prueba
-router.put("/confirmar/compra/:id/:id_orden", nuevaFuncionParaDescontar) /// estas el prueba
+router.put("/confirmar/compra/:id/:id_orden", pruebaParaDescontar) /// estas es para pruccion
+//router.put("/confirmar/compra/:id/:id_orden", nuevaFuncionParaDescontar) /// estas el prueba
 
 
 export default router;
