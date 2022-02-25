@@ -249,7 +249,7 @@ const obtenerUnoProducto = (req, res, next) => __awaiter(void 0, void 0, void 0,
 });
 exports.obtenerUnoProducto = obtenerUnoProducto;
 const soloLocales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const locales = yield producto_1.Producto.findAll({ attributes: ['local'] });
+    const locales = yield producto_1.Producto.findAll({ where: { estado: true }, attributes: ['local'] });
     const result = [];
     locales.forEach((item) => {
         //pushes only unique element

@@ -370,7 +370,7 @@ export const obtenerUnoProducto = async (req: Request, res: Response, next: Next
 
 export const soloLocales = async (req: Request, res: Response) => {
 
-    const locales = await Producto.findAll({attributes:['local']});
+    const locales = await Producto.findAll({ where:{estado:true}, attributes:['local']});
 
 
     const result:any = [];
