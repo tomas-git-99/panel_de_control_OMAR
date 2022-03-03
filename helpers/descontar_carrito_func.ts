@@ -9,7 +9,7 @@ interface Productos{
 }
 interface ProductoSinDuplicados{
     id_producto:number,
-    talle      :number,
+    talle      :number | null,
     cantidad   :number,
 }
 
@@ -187,4 +187,172 @@ export const verifcarSiTienenStock = (talles:Talle[], carrito:ProductoSinDuplica
 });
 
 return productos_sin_stock;
+}
+
+
+
+
+//PRODUCTOS QUE SOLO TIENE EL TOTAL
+
+
+export const unirCurvasOUnidadTotal = (ids_productos_unidad:number[], carrito:Carrito[], productos:Producto[]) => {
+
+  try {
+
+    let productosTotal = carrito.filter( e => ids_productos_unidad.includes(e.id_producto));
+
+    let productosCurvasUnidad:ProductoSinDuplicados[] = []
+    
+    for(let e of productosTotal){
+
+      if(e.talle == null){
+
+        let talleTotal:any = productos.find( h => h.id == e.id_producto)?.talles.split(",").length;
+
+
+        productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:(e.cantidad * talleTotal), talle:e.talle})
+
+      }else{
+
+        productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:e.cantidad , talle:e.talle})
+
+      }
+    }
+
+    return productosCurvasUnidad;
+    
+  } catch (error) {
+    return {
+      error:"Error al unir productos con las curvas, function 'unirCurvasOUnidadTotal'",
+      mesanje:error
+    }
+  }
+
+}
+
+//PRIMERO VERIFICAR SI SE REPITE EL PRODUCTO
+
+export const repeticionDeProductos = (productosCurvas:ProductoSinDuplicados[]) => {
+
+  try {
+    
+  //let productosTotal = carrito.filter( e => ids_productos_unidad.includes(e.id_producto));
+
+  let productosSinRepetir = productosCurvas.reduce((acumulador:any, valorActual:any) => {
+
+    const elementoYaExiste = acumulador.find((elemento:any) => elemento.id_producto === valorActual.id_producto && elemento.talle !== null);
+    if (elementoYaExiste) {
+       
+      return acumulador.map((elemento:any) => {
+        if (elemento.id_producto === valorActual.id_producto && elemento.talle !== null) {
+          return {
+            ...elemento,
+            cantidad: elemento.cantidad + valorActual.cantidad
+          }
+        }
+      
+        return elemento;
+      });
+    }
+
+  
+    return [...acumulador, valorActual];
+  },[]);
+
+  return productosSinRepetir;
+
+  } catch (error) {
+    return {
+      error:"Error al verificar si se repite el producto, function 'repeticionDeProductos'",
+      mensaje:error
+    }
+  }
+
+
+}
+
+export const verificarSiHayStock = (productosSinRepetir:any[], productos:Producto[]) => {
+
+  try {
+
+  let productos_sin_stock:any = [];
+
+    productos.map( e => {
+
+      productosSinRepetir.map( (p:any) => {
+          if(e.id == p.id_producto){
+
+              if(p.talle == null){
+
+                  let cantidadDeTalle:any = e.talles.split(",");
+                  let contador = 0;
+
+                  for(let count of cantidadDeTalle){
+                      contador += p.cantidad;
+                  }
+
+                  
+                  if(e.cantidad < contador || e.cantidad == 0){
+                      productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito(curva): ${contador} ` );
+                  }
+
+                 
+
+              }else{
+                 
+                  if(e.cantidad < p.cantidad || e.cantidad == 0){
+                      productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
+                  }
+              }
+
+
+          }
+      })
+
+
+  });
+
+  return productos_sin_stock;
+  
+  } catch (error) {
+    return { 
+      error: "Error al verificar si hay stock, function 'verificarSiHayStock'",
+      mensaje: error
+    }
+  }
+}
+
+
+
+export const crearOrdenDetalleTotal =  async (id_orden:number, productosSinRepetir:any[], productos:Producto[], carrito:Carrito[]) => {
+  try {
+    
+    let nuevoOrdenes:any[] = [];
+
+    for(let n of productosSinRepetir){
+
+        let dato_producto:any = productos.find( e => e.id == n.id_producto);
+
+        let dato_carrito:any = carrito.find( e => e.id_producto == n.id_producto && (e.talle == n.talle || e.talle == null));
+
+        let orden:any = {
+            id_orden,
+            id_producto:n.id_producto, 
+            nombre_producto:dato_producto!.nombre,
+            talle: n.talle, 
+            cantidad: n.cantidad,
+            precio: dato_carrito?.precio_nuevo == null ?  dato_producto?.precio :  dato_carrito?.precio_nuevo 
+        }
+
+        nuevoOrdenes.push(orden);
+
+    }
+
+    await OrdenDetalle.bulkCreate(nuevoOrdenes);
+
+    return nuevoOrdenes;
+
+  } catch (error) {
+    
+  }
 }
