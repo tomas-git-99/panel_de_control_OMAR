@@ -104,7 +104,7 @@ export const sumaDeTodoLosProductos = (idsTalles:Productos[], carrito:any[]) => 
 /* function sumarTodo ( uno:any, dos:any ){
   return uno + dos
 } */
-export const creandoOrdenDetallePorTalle = ( productosSinRepetir:ProductoSinDuplicados[], talles:Talle[], carrito:Carrito[], productos:Producto[], id_orden:any):OrdenDetalle[] => {
+export const creandoOrdenDetallePorTalle = async( productosSinRepetir:ProductoSinDuplicados[], talles:Talle[], carrito:Carrito[], productos:Producto[], id_orden:any):Promise<OrdenDetalle[]> => {
 
     let nuevoOrdenes:OrdenDetalle[] = [];
 
@@ -136,7 +136,7 @@ export const creandoOrdenDetallePorTalle = ( productosSinRepetir:ProductoSinDupl
         }
     }
 
-  //await OrdenDetalle.bulkCreate(nuevoOrdenes);
+  await OrdenDetalle.bulkCreate(nuevoOrdenes);
 return nuevoOrdenes;
   
 }
@@ -192,47 +192,56 @@ return productos_sin_stock;
 
 
 
-//PRODUCTOS QUE SOLO TIENE EL TOTAL
+///////////////////////////////////////////////PRODUCTOS QUE SOLO TIENE EL TOTAL////////////////////////////////////////////////
 
 
-export const unirCurvasOUnidadTotal = (ids_productos_unidad:number[], carrito:Carrito[], productos:Producto[]) => {
+
+//con esta funcion separamos las curvas por separado
+export const unirCurvasOUnidadTotal = (ids_productos_unidad:number[], carrito:Carrito[], productos:Producto[]): ProductoSinDuplicados[] | any[]  => {
 
   try {
 
     let productosTotal = carrito.filter( e => ids_productos_unidad.includes(e.id_producto));
 
     let productosCurvasUnidad:ProductoSinDuplicados[] = []
+
     
     for(let e of productosTotal){
 
-      if(e.talle == null){
+      if(e.talle === null){
 
-        let talleTotal:any = productos.find( h => h.id == e.id_producto)?.talles.split(",").length;
+        let talleTotal:any = productos.find( h => h.id == e.id_producto)?.talles.split(",");
 
+     
 
-        productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:(e.cantidad * talleTotal), talle:e.talle})
+        for( let talles of talleTotal){
+
+          productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:e.cantidad , talle:parseInt(talles)});
+
+        }
+
 
       }else{
 
-        productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:e.cantidad , talle:e.talle})
-
+        productosCurvasUnidad.push({id_producto:e.id_producto, cantidad:e.cantidad , talle:e.talle});
       }
     }
 
     return productosCurvasUnidad;
     
   } catch (error) {
-    return {
+    return [{
       error:"Error al unir productos con las curvas, function 'unirCurvasOUnidadTotal'",
       mesanje:error
-    }
+    }]
   }
 
 }
 
-//PRIMERO VERIFICAR SI SE REPITE EL PRODUCTO
 
-export const repeticionDeProductos = (productosCurvas:ProductoSinDuplicados[]) => {
+//verificas si el producto se repite, y si es asi lo unimos solo en un array
+
+export const repeticionDeProductos = (productosCurvas:ProductoSinDuplicados[])  => {
 
   try {
     
@@ -271,7 +280,8 @@ export const repeticionDeProductos = (productosCurvas:ProductoSinDuplicados[]) =
 
 }
 
-export const verificarSiHayStock = (productosSinRepetir:any[], productos:Producto[]) => {
+//ya verificado que los productos no se repiten, ahora verificamos si tiene stock
+export const verificarSiHayStockTotal = (productosSinRepetir:any[], productos:Producto[]) => {
 
   try {
 
@@ -282,7 +292,7 @@ export const verificarSiHayStock = (productosSinRepetir:any[], productos:Product
       productosSinRepetir.map( (p:any) => {
           if(e.id == p.id_producto){
 
-              if(p.talle == null){
+/*               if(p.talle == null){
 
                   let cantidadDeTalle:any = e.talles.split(",");
                   let contador = 0;
@@ -298,12 +308,12 @@ export const verificarSiHayStock = (productosSinRepetir:any[], productos:Product
 
                  
 
-              }else{
+              }else{ */
                  
                   if(e.cantidad < p.cantidad || e.cantidad == 0){
                       productos_sin_stock.push(`El producto "${e.nombre}" con stock de actual: ${e.cantidad}, cantidad de tu carrito: ${p.cantidad} ` );
                   }
-              }
+             /*  } */
 
 
           }
@@ -311,6 +321,7 @@ export const verificarSiHayStock = (productosSinRepetir:any[], productos:Product
 
 
   });
+
 
   return productos_sin_stock;
   
@@ -324,7 +335,65 @@ export const verificarSiHayStock = (productosSinRepetir:any[], productos:Product
 
 
 
-export const crearOrdenDetalleTotal =  async (id_orden:number, productosSinRepetir:any[], productos:Producto[], carrito:Carrito[]) => {
+
+//unimos los productos que fueron mandados separados de la curva, para crear un ordenDetalle
+export const unirPortalleParaOrdenDetallada = (produstosSeparados:ProductoSinDuplicados[], ids_productos_total:number[], productos:Producto[], carrito:Carrito[]):ProductoSinDuplicados[] | any[] => {
+
+  try {
+
+    let nuevaProductos:ProductoSinDuplicados[] = [];
+
+    for(let p of ids_productos_total){
+
+      let todosLosProductos = produstosSeparados.filter( e => e.id_producto == p);
+     
+
+      let cantidad = 0;
+
+
+      if( todosLosProductos.length > 1){
+
+        
+
+        let tallesTotal = productos.find( h => h.id == p)?.talles.split(",");
+
+        for( let talles of tallesTotal!){
+
+          if(produstosSeparados.some(f => f.talle == parseInt(talles) && f.id_producto == p)){
+
+            todosLosProductos.filter( g => g.talle == parseInt(talles)).map( r => cantidad += r.cantidad);
+
+            nuevaProductos.push({id_producto:p, cantidad:cantidad, talle:parseInt(talles)});
+            cantidad = 0;
+          }
+          
+        }
+      }else{
+        nuevaProductos.push({id_producto:p, cantidad:cantidad, talle:todosLosProductos[0].talle});
+        cantidad = 0;
+
+      }
+
+     
+  
+
+    }
+
+
+    return nuevaProductos;
+
+  } catch (error) {
+    return [{
+      error:"Error al unir productos para hacer las ordenes, function 'unirPortalleParaOrdenDetallada'",
+      mensaje:error
+    }]
+  }
+}
+
+
+//creamos el ordenDetalle
+export const crearOrdenDetalleTotal =  async (id_orden:number, productosSinRepetir:any[], productos:Producto[], carrito:Carrito[]):Promise<any[]>  => {
+
   try {
     
     let nuevoOrdenes:any[] = [];
@@ -348,11 +417,17 @@ export const crearOrdenDetalleTotal =  async (id_orden:number, productosSinRepet
 
     }
 
+
+
     await OrdenDetalle.bulkCreate(nuevoOrdenes);
 
     return nuevoOrdenes;
 
   } catch (error) {
-    
-  }
+    return [{
+      error:"Error al crear orden detalle, function 'crearOrdenDetalleTotal'",
+      mensaje:error
+  }]
+}
+
 }

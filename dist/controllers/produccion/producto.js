@@ -248,7 +248,6 @@ const buscar = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let valorOffset = parseInt(valor);
     const produccion_productos = yield productos_produccion_1.Produccion_producto.findAndCountAll({ where: {
             id_corte: { [dist_1.Op.like]: '%' + req.query.nombre + '%' },
-            // tela: { [Op.like]: '%'+ buscarProducto.tela +'%' }, buscar por tela opcionB
         }, limit: 10, offset: valorOffset });
     let contador = produccion_productos.count;
     const taller = yield talller_1.Taller.findAll();

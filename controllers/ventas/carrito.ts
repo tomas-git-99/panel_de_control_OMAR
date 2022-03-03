@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { Op } from "sequelize/dist";
 import { iLike } from "sequelize/dist/lib/operators";
-import { armarLasCurvas, creandoOrdenDetallePorTalle, juntarTodosLosTallesEnUno, sumaDeTodoLosProductos, verifcarSiTienenStock } from "../../helpers/descontar_carrito_func";
+import { armarLasCurvas, creandoOrdenDetallePorTalle, crearOrdenDetalleTotal, juntarTodosLosTallesEnUno, repeticionDeProductos, sumaDeTodoLosProductos, unirCurvasOUnidadTotal, unirPortalleParaOrdenDetallada, verifcarSiTienenStock, verificarSiHayStockTotal } from "../../helpers/descontar_carrito_func";
 import { Carrito } from "../../models/ventas/carrito";
 import { Orden } from "../../models/ventas/orden";
 import { OrdenDetalle } from "../../models/ventas/orden_detalle";
 import { Orden_publico } from "../../models/ventas/orden_publico";
 import { Producto } from "../../models/ventas/producto";
 import { Talle } from "../../models/ventas/talles";
+import carrito from "../../routers/ventas/carrito";
 
 import producto from "../../routers/ventas/producto";
 
@@ -1217,7 +1218,7 @@ try {
 
     for (let i of productos){
 
-        if( i.cantidad == null){
+        if( i.cantidad === null){
 
             ids_productos_unidad.push(i.id);
 
@@ -1226,6 +1227,21 @@ try {
             ids_productos_total.push(i.id)
         }
     }
+
+
+
+
+
+    let curvasDeTotal = unirCurvasOUnidadTotal(ids_productos_total, carrito, productos);
+
+    let verificarStockProducto = repeticionDeProductos(curvasDeTotal);
+
+    let curvasCompletasTotal = unirPortalleParaOrdenDetallada(curvasDeTotal, ids_productos_total, productos, carrito);
+
+
+
+
+
 
 
     const talles = await Talle.findAll({where:{id_producto:ids_productos_unidad}});
@@ -1237,7 +1253,9 @@ try {
 
     let sumaDeTodasLasTalles  = sumaDeTodoLosProductos(tallesPorSeparado, tallesCompletados);
 
-    let productos_sin_stock = verifcarSiTienenStock(talles, sumaDeTodasLasTalles, productos);
+  
+    //verificamos el stock de los productos
+    let productos_sin_stock:string[] = [].concat(verifcarSiTienenStock(talles, sumaDeTodasLasTalles, productos), verificarSiHayStockTotal(verificarStockProducto, productos));
 
     if(productos_sin_stock.length > 0){
         return res.json({
@@ -1248,7 +1266,13 @@ try {
         })
     }
 
+    
+
+    //crear orden detalle, de los productos que tiene solo talles
     let totasLasOrdenes = await creandoOrdenDetallePorTalle(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
+
+    //crear orden detalle, de los productos que tiene solo total
+    let totalDeOrdenSoloTOTAL  = await crearOrdenDetalleTotal(parseInt(id_orden), curvasCompletasTotal, productos, carrito )
 
 
     for(let i of totasLasOrdenes){
@@ -1261,13 +1285,32 @@ try {
 
     }
 
+    for( let p of verificarStockProducto){
+            
+        let productoCambiar = productos.find( t => t.id == p.id_producto);
+
+
+        let ordenDetalleTOTAL = totalDeOrdenSoloTOTAL.find( u => u.id_producto == p.id_producto);
+
+        sumaTotal += p.cantidad * ordenDetalleTOTAL.precio;
+    
+        await productoCambiar!.update({cantidad: productoCambiar!.cantidad - p.cantidad});
+    
+    }
+
+
+
     await Carrito.destroy({where:{id_usuario:id}});
 
-    console.log(sumaTotal)
+
+    const orden = await Orden.findByPk(id_orden);
+    await orden?.update({total:sumaTotal})
+   
 
     res.json({
         ok: true,
         msg: "Su compra fue exitosa",
+        sumaTotal
     })
 
 } catch (error) {
