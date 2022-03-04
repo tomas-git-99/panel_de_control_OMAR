@@ -1,7 +1,8 @@
 import { advertencia, algo_salio_mal} from "./helpers/para_todos/alertas.js";
 import { verificarToken } from "./helpers/para_todos/permisos.js";
-import { fecthNormalPOST_PUT } from "./helpers/ventas/fetch.js";
+import { fecthNormalGET, fecthNormalPOST_PUT } from "./helpers/ventas/fetch.js";
 import { cerrar_login } from "./helpers/para_todos/cerrar.js";
+import { devolverString } from "./helpers/para_todos/null.js";
 
 const form = document.querySelector("form");
 let value_rol;
@@ -120,3 +121,75 @@ window.cerrar_seccion = () => {
 
 
 
+const search = document.querySelector("#search");
+
+search.addEventListener("keyup", ({keyCode}) => {
+
+    if( keyCode !== 13){return;}
+    if(search.length === 0){return;}
+
+    getSearch(search.value);
+
+    console.log(search.value)
+    search.value = "";
+});
+
+let palabraBuscada = "";
+
+const getSearch = (valor, offset=0) => {
+
+    
+   /*  cargaMedio("spinner_load", true); */
+
+
+    fecthNormalGET("GET", "usuario/buscar/user/v?" + `value=${valor}`)
+    .then(res => {
+        console.log(res)
+        imprimirENLaTabla(res.usuario);
+ /*        cargaMedio("spinner_load", false);
+        if(palabraBuscada == ""){
+            paginacion(res.contador, "search");
+        }
+
+        palabraBuscada = valor;
+        colorearTable(res.produccion); */
+    })
+    .catch( err =>{
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+const tablaDeUsuarios = document.querySelector(".tablaDeUsuarios");
+
+
+const imprimirENLaTabla = (res) => {
+
+    let historial = ""
+
+    res.map ( e => {
+
+        historial += `
+        <tr>
+            <td>${devolverString(e.nombre)}</td>
+
+            <td>${devolverString(e.rol)}</td>
+          
+            <td>${devolverString(e.local)}</td>
+      
+            <td>
+
+                <button class="btn btn-warning btn-sm" onclick="editarUsuario(${e.id})">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${e.id})">Eliminar</button>
+            </td>
+        </tr>
+        `
+    })
+
+    tablaDeUsuarios.innerHTML = historial;
+
+}
+
+window.funCambiar = (valor) => {
+
+    console.log(valor);
+}

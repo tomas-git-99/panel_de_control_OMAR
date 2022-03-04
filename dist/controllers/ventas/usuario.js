@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verificarToken = exports.eliminarUsuario = exports.editarUsuario = exports.crearUsuario = exports.login = void 0;
+exports.buscarUsuario = exports.verificarToken = exports.eliminarUsuario = exports.editarUsuario = exports.crearUsuario = exports.login = void 0;
 const usuario_1 = require("../../models/ventas/usuario");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generar_JWT_1 = require("../../helpers/generar-JWT");
+const dist_1 = require("sequelize/dist");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { nombre, password } = req.body;
@@ -144,4 +145,20 @@ const verificarToken = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.verificarToken = verificarToken;
+const buscarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const usuario = yield usuario_1.Usuario.findAll({ where: { estado: true, nombre: { [dist_1.Op.like]: '%' + req.query.value + '%' } } });
+        res.json({
+            ok: true,
+            usuario
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.buscarUsuario = buscarUsuario;
 //# sourceMappingURL=usuario.js.map

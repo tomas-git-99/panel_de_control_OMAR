@@ -286,9 +286,9 @@ const leerHistorial = (res) => {
         historial += `
    
         <tr>
-          <td data-label="NOMBRE">${e.nombre}</td>
-          <td data-label="APELLIDO">${e.apellido}</td>
-          <td data-label="DNI O CUIL">${e.dni_cuil}</td>
+          <td data-label="NOMBRE">${devolverString(e.nombre)}</td>
+          <td data-label="APELLIDO">${devolverString(e.apellido)}</td>
+          <td data-label="DNI O CUIL">${devolverString(e.dni_cuil)}</td>
           <td data-label="AGREGAR">
           <div class="preview">
               <button id="${e.id}" onclick="mandarID(this.id)" >

@@ -73,10 +73,7 @@
                             <span>Nombre</span>
                             <input type="text"class="form-control" name="nombre">
                         </div>
-<!--                         <div class="email">
-                            <span>Email</span>
-                            <input type="text"class="form-control" name="email">
-                        </div> -->
+
                         <div class="dni">
                             <span>DNI O CUIL</span>
                             <input type="text"class="form-control" name="dni_cuil">
@@ -114,6 +111,59 @@
                 </div>
 
                 
+            </div>
+
+
+            <div class="modificarUsuario">
+
+                <div class="contenidoDeModificador">
+                    <div class="search">
+                
+                        <div class="input-group mb-3">
+                            <input id="search" type="text" class="form-control" placeholder="Buscar por nombre ..." aria-label="Recipient's username" aria-describedby="basic-addon2" autocomplete="off">
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
+                            </div>
+                          </div>
+                    </div>
+
+
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">ROL</th>
+                            <th scope="col">LOCAL</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody class="tablaDeUsuarios">
+                  
+                        </tbody>
+                      </table>
+
+
+                </div>
+    
+            </div>
+
+
+            <div class="opcionesDeParaModificaciones">
+                <div class="tituloDeOpciones">
+                    <H4>MODIFICAR</H4>
+                </div>
+                <select class="form-select" aria-label="Default select example" onchange="funCambiar(this.value)">
+                    <option selected>Cambiar...</option>
+                    <option value="1">Nombre</option>
+                    <option value="2">Local</option>
+                    <option value="3">Contraseña</option>
+                </select>
+
+                <div class="inputValor">
+             <!--        <input type="text" class="form-control" id="inputValor" placeholder="Ingrese el valor">
+                    <button type="button" class="btn btn-primary">Cambiar</button> -->
+                </div>
+        
             </div>
         </div>
     </div>

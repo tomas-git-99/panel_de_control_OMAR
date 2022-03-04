@@ -147,24 +147,30 @@ export const imprimirComprobante_cliente = (id) => {
     
     fecthNormalGET("GET", `orden/full/${id}`)
     .then( res => {
+
         if(res.direccion == null){
 
             const precio_final = document.querySelector(".precio_final_publico");
             const id_comprobante = document.querySelector(".id_comprobante_publico");
 
             escribirEnHTML(res, "info_numero_2", true);
-            imprimirProducto(res.productos, "imprimir_productos_publico")
+            let arrayProducto = unirProductos(res)
+            imprimirProducto(arrayProducto, "imprimir_productos_publico")
+
             let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
             id_comprobante.innerHTML = `ID : ${res.orden.id}`
 
             funcionParaImprimir(`${res.cliente.nombre} ${res.cliente.apellido == null ? '' : res.cliente.apellido }`, "imprimirCliente_publico" );
+
         }else{
             const precio_final = document.querySelector(".precio_final_envio");
             const id_comprobante = document.querySelector(".id_comprobante_envio");
 
             escribirEnHTML(res, "infoCliente_envio_10");
-            imprimirProducto(res.productos, "imprimir_productos_envio")
+            let arrayProducto = unirProductos(res)
+
+            imprimirProducto(arrayProducto, "imprimir_productos_envio")
             let cambio_de_moneda = new Intl.NumberFormat('es-AR', { currency: 'ARS' }).format(res.orden.total)
             precio_final.innerHTML = `$ ${cambio_de_moneda}`;
             id_comprobante.innerHTML = `ID : ${res.orden.id}`
@@ -186,7 +192,7 @@ const escribirEnHTML = (e, data="", estado=false) => {
 
         escribir += `
         <div class="nombre">
-        <label for="">NOMBRE: <span>${devolverString(e.cliente.nombre)}</span> </label>
+        <label for="">NOMBRE COMPLETO: <span>${devolverString(e.cliente.nombre)+ " " + devolverString(e.cliente.apellido)}</span> </label>
         </div>
         <div class="DNI O CUIL">
         <label for="">DNI O CUIL: <span>${devolverString(e.cliente.dni_cuil)}</span> </label>
@@ -217,7 +223,7 @@ const escribirEnHTML = (e, data="", estado=false) => {
 
         escribir += `
         <div class="nombre">
-        <label for="">NOMBRE: <span>${devolverString(e.cliente.nombre)}</span> </label>
+        <label for="">NOMBRE COMPLETO: <span>${devolverString(e.cliente.nombre)+ " " + devolverString(e.cliente.apellido)}</span> </label>
         </div>
         <div class="DNI O CUIL">
         <label for="">DNI O CUIL: <span>${devolverString(e.cliente.dni_cuil )}</span> </label>
@@ -239,7 +245,6 @@ const escribirEnHTML = (e, data="", estado=false) => {
 
 
 const imprimirProducto = (res, elemento) => {
-    
     const imprimir_productos = document.querySelector(`.${elemento}`);
     let escribir = "";
     
@@ -248,10 +253,10 @@ const imprimirProducto = (res, elemento) => {
         escribir += `
         <tr>
         
-        <td>${devolverString(e.nombre_producto)}</td>
+        <td>${devolverString(e.nombre)}</td>
         <td>${devolverString(e.cantidad)}</td>
         <td>$ ${devolverString(e.precio)}</td>
-        <td>$ ${e.precio * e.cantidad}</td>
+        <td>$ ${e.total}</td>
         
         
         
@@ -320,3 +325,37 @@ const ticket_parami = (res, elemento) => {
 
 
 
+const unirProductos = (res) => {
+
+    let arrayIDProductos = res.productos.map( e => e.id_producto);
+
+    let arrayProductosSinRepetir = [];
+
+    arrayIDProductos.forEach((element) => {
+
+        if (!arrayProductosSinRepetir.includes(element)) {
+            arrayProductosSinRepetir.push(element);
+        }
+    });
+
+    let arrayProductoSinRepetirParaImprimir = [];
+
+    for( let id of arrayProductosSinRepetir){
+
+        let cantidad = 0;
+        let precioTotal = 0;
+        let juntarTodosLosTallesEnUno
+
+        res.productos.filter( e => e.id_producto == id).map( p => {
+            cantidad += p.cantidad;
+            precioTotal += p.precio * p.cantidad;
+            juntarTodosLosTallesEnUno += p.talle
+        });
+        let dataProducto = res.productos.find( l => l.id_producto == id)
+      
+        arrayProductoSinRepetirParaImprimir.push({nombre: dataProducto.nombre_producto, cantidad: cantidad, precio: dataProducto.precio, total: precioTotal})
+    }
+    
+
+    return arrayProductoSinRepetirParaImprimir;
+}

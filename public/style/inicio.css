@@ -188,6 +188,49 @@ li{
   
   
 }
+
+.modificarUsuario{
+    position: fixed;
+    place-self: center;
+    background: white;
+    border-radius: 15px;
+    width:  500px;
+    height: auto;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+.search{
+   
+    display: grid;
+    place-content: center;
+    margin-top: 10px;
+}
+.contenidoDeModificador{
+    padding: 20px;
+}
+.opcionesDeParaModificaciones{
+    padding: 20px;
+    border-radius: 10px;
+
+    position: fixed;
+    place-self: center;
+    background: white;
+
+    width:  280px;
+   
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+}
+
+.tituloDeOpciones{
+    text-align: center;
+}
+
+.inputValor{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 @media screen and (max-height: 720px){
 
     .hamburger{

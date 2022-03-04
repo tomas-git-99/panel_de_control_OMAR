@@ -24,5 +24,6 @@ router.post('/login', usuario_1.login);
 router.get('/token/verificar', [
     validar_JWT_1.validarJWT_Parmans_ID
 ], usuario_1.verificarToken);
+router.get('/buscar/user/v', usuario_1.buscarUsuario);
 exports.default = router;
 //# sourceMappingURL=usuario.js.map

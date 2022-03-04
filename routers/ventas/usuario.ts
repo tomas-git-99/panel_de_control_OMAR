@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { crearUsuario, editarUsuario, eliminarUsuario, login, verificarToken } from "../../controllers/ventas/usuario";
+import { buscarUsuario, crearUsuario, editarUsuario, eliminarUsuario, login, verificarToken } from "../../controllers/ventas/usuario";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT, validarJWT_Parmans_ID } from "../../middlewares/validar-JWT";
 
@@ -37,4 +37,5 @@ router.get('/token/verificar',[
     validarJWT_Parmans_ID
 ],verificarToken)
 
+router.get('/buscar/user/v', buscarUsuario);
 export default router;

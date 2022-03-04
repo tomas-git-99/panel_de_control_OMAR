@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Usuario } from "../../models/ventas/usuario";
 import bcryptjs from 'bcryptjs';
 import { generarJWT } from "../../helpers/generar-JWT";
+import { Op } from "sequelize/dist";
 
 
 export const login = async( req: Request, res: Response) => {
@@ -183,5 +184,25 @@ export const verificarToken = async(req:Request, res:Response) => {
          ok: false,
          msg:error
      })   
+    }
+}
+
+
+export const buscarUsuario = async(req:Request, res:Response) => {
+    try {
+        
+
+        const usuario = await Usuario.findAll({where:{ estado:true, nombre:{ [Op.like]: '%'+ req.query.value +'%'}}});
+
+        res.json({
+            ok:true,
+            usuario
+        })
+    } catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg:error
+        })   
+        
     }
 }
