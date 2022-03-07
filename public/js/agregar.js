@@ -189,7 +189,58 @@ const imprimirENLaTabla = (res) => {
 
 }
 
+
+const CAMBIOS = {
+    1: "nombre",
+    2: "local",
+    3: "password",
+}
+
+let valorDeCambio
+
 window.funCambiar = (valor) => {
 
-    console.log(valor);
+    document.querySelector('.inputValor').innerHTML = 
+    `
+    <input type="text" class="form-control" id="inputValor" placeholder="Ingrese el valor">
+    <button type="button" class="btn btn-primary">Cambiar</button> 
+    `
+
+    valorDeCambio = CAMBIOS[parseInt(valor)]
+    
+}
+
+
+window.editarUsuario = (id) => {
+    abrirCerrar('opcionesDeParaModificaciones',true)
+}
+    
+
+const abrirCerrar = (valor, estado) => {
+
+
+    if(estado){
+
+
+        document.querySelector(`.${valor}`).style.display = "grid";
+        document.querySelector(`.${valor}`).style.visibility = "visible";
+
+    }else{
+            
+        document.querySelector(`.${valor}`).style.display = "none";
+        document.querySelector(`.${valor}`).style.visibility = "hidden";
+    }
+}
+
+
+
+window.cerrarVentana = (valor) => {
+    abrirCerrar(valor, false);
+}
+
+
+window.abrirVentanaCerrar = (valorOpen, valorClose) => {
+    abrirCerrar(valorOpen, true);
+    abrirCerrar(valorClose, false);
+
 }

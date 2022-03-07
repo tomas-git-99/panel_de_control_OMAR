@@ -61,7 +61,7 @@
 
             <div class="form_usuario">
 
-                <button type="button" class="btn-close" aria-label="Close" style="padding-right:20px"></button>
+                <button type="button" class="btn-close" aria-label="Close" style="padding-right:20px" onclick="abrirVentanaCerrar('opcionesCrearOModificar','form_usuario')"></button>
 
          
                 <div class="cartel_form_usuario">
@@ -120,7 +120,7 @@
 
             <div class="modificarUsuario">
                 <div class="contenidoDeModificador">
-                <button type="button" class="btn-close" aria-label="Close"></button>
+                <button type="button" class="btn-close" aria-label="Close" onclick="abrirVentanaCerrar('opcionesCrearOModificar', 'modificarUsuario')"></button>
 
                     <div class="search">
                 
@@ -154,7 +154,7 @@
 
 
             <div class="opcionesDeParaModificaciones">
-                <button type="button" class="btn-close" aria-label="Close"></button>
+                <button type="button" class="btn-close" aria-label="Close" onclick="abrirVentanaCerrar('modificarUsuario', 'opcionesDeParaModificaciones')"></button>
                 <div class="tituloDeOpciones">
                     
                     <H4>MODIFICAR</H4>
@@ -176,11 +176,11 @@
 
             <div class="opcionesCrearOModificar">
 
-                <div class="cartelOpcion">
+                <div class="cartelOpcion" onclick="abrirVentanaCerrar('form_usuario','opcionesCrearOModificar')">
                     <h3>Crear</h3>
                 </div>
 
-                <div class="cartelOpcion">
+                <div class="cartelOpcion" onclick="abrirVentanaCerrar('modificarUsuario','opcionesCrearOModificar')">
                     <h3>Modificar</h3>
                 </div>
             </div>
