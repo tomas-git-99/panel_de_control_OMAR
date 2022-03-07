@@ -83,7 +83,9 @@ const editarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const { id } = req.params;
         const { body } = req;
+        console.log(body);
         const usuario = yield usuario_1.Usuario.findByPk(id);
+        let nombre = Object.keys(body);
         if (!usuario) {
             return res.status(404).json({
                 ok: false,
@@ -98,6 +100,20 @@ const editarUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         
                     });
                 } */
+        if (nombre[0] == 'password') {
+            const salt = yield bcryptjs_1.default.genSaltSync(10);
+            const newPassword = yield bcryptjs_1.default.hashSync(body.password, salt);
+            body.password = newPassword;
+        }
+        if (nombre[0] == 'nombre') {
+            const usuario = yield usuario_1.Usuario.findAll({ where: { nombre: body.nombre, estado: true } });
+            if (usuario.length > 0) {
+                return res.json({
+                    ok: false,
+                    msg: "El usuario con este nombre ya esta registrado: " + body.nombre
+                });
+            }
+        }
         yield usuario.update(body);
         res.json({
             ok: true,

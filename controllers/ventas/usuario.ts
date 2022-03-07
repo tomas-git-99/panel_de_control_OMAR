@@ -107,8 +107,11 @@ export const editarUsuario = async (req:Request, res:Response) => {
         const { id } = req.params;
         const { body } = req;
 
+        console.log(body);
+
         const usuario = await Usuario.findByPk(id);
 
+        let nombre = Object.keys(body);
 
         if (!usuario){
             return res.status(404).json({
@@ -117,6 +120,7 @@ export const editarUsuario = async (req:Request, res:Response) => {
             }
             );
         }
+
 //aca colocar por estado
 /*         if (!usuario){
             return res.status(404).json({
@@ -125,6 +129,29 @@ export const editarUsuario = async (req:Request, res:Response) => {
 
             });
         } */
+
+        if(nombre[0] == 'password'){
+
+            const salt = await bcryptjs.genSaltSync(10);
+        
+            const newPassword = await bcryptjs.hashSync( body.password, salt );
+
+            body.password = newPassword;
+
+        }
+
+        if(nombre[0] == 'nombre'){
+            const usuario = await Usuario.findAll({where:{ nombre:body.nombre, estado:true}});
+
+            if(usuario.length > 0) {
+                return res.json({
+                    ok:false, 
+                    msg: "El usuario con este nombre ya esta registrado: " + body.nombre
+                })
+            }
+
+        }
+
 
         await usuario.update(body);
 
@@ -161,7 +188,7 @@ export const eliminarUsuario = async (req: Request, res: Response) => {
         })
     } 
 
-     usuario.estado = false;
+    usuario.estado = false;
 
     await usuario.save();
 

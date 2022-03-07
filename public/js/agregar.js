@@ -1,4 +1,4 @@
-import { advertencia, algo_salio_mal} from "./helpers/para_todos/alertas.js";
+import { advertencia, algo_salio_mal, salio_todo_bien} from "./helpers/para_todos/alertas.js";
 import { verificarToken } from "./helpers/para_todos/permisos.js";
 import { fecthNormalGET, fecthNormalPOST_PUT } from "./helpers/ventas/fetch.js";
 import { cerrar_login } from "./helpers/para_todos/cerrar.js";
@@ -153,10 +153,13 @@ const getSearch = (valor, offset=0) => {
 
         palabraBuscada = valor;
         colorearTable(res.produccion); */
+
     })
     .catch( err =>{
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
+
+
 }
 
 const tablaDeUsuarios = document.querySelector(".tablaDeUsuarios");
@@ -165,7 +168,6 @@ const tablaDeUsuarios = document.querySelector(".tablaDeUsuarios");
 const imprimirENLaTabla = (res) => {
 
     let historial = ""
-
     res.map ( e => {
 
         historial += `
@@ -178,11 +180,12 @@ const imprimirENLaTabla = (res) => {
       
             <td>
 
-                <button class="btn btn-warning btn-sm" onclick="editarUsuario(${e.id})">Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${e.id})">Eliminar</button>
+                <button class="btn btn-warning btn-sm" onclick="editarUsuario(${e.id}, this)">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${e.id}, this)">Eliminar</button>
             </td>
         </tr>
         `
+
     })
 
     tablaDeUsuarios.innerHTML = historial;
@@ -197,22 +200,118 @@ const CAMBIOS = {
 }
 
 let valorDeCambio
+let idDelUsuairo
 
+let thisUpdate
 window.funCambiar = (valor) => {
 
     document.querySelector('.inputValor').innerHTML = 
     `
-    <input type="text" class="form-control" id="inputValor" placeholder="Ingrese el valor">
-    <button type="button" class="btn btn-primary">Cambiar</button> 
+    <input type="text" class="form-control" id="inputValue" placeholder="Ingrese el valor">
+    <button type="button" class="btn btn-primary" onclick="enviarCambios()">Cambiar</button> 
     `
-
     valorDeCambio = CAMBIOS[parseInt(valor)]
     
 }
 
+let valorIndex
+window.enviarCambios = () => {
 
-window.editarUsuario = (id) => {
-    abrirCerrar('opcionesDeParaModificaciones',true)
+    let data = {
+        data:document.querySelector("#inputValue").value
+    }
+
+
+
+    data[`${valorDeCambio}`] = data['data'];
+    delete data.data
+
+    let nombre = Object.keys(data);
+
+
+    fecthNormalPOST_PUT("PUT", `usuario/${idDelUsuairo}`, data)
+    .then( res => {
+
+        if(res.ok == true){
+            if(nombre[0] !== "password"){
+                const tablaB = document.getElementById("tablaDeUsuariosID")
+                tablaB.deleteRow(thisUpdate);
+    
+                let fila = tablaB.insertRow(thisUpdate);
+    
+    
+                fila.innerHTML = `
+                <td>${devolverString(res.usuario.nombre)}</td>
+                <td>${devolverString(res.usuario.rol)}</td>
+                <td>${devolverString(res.usuario.local)}</td>
+                <td>
+        
+                <button class="btn btn-warning btn-sm" onclick="editarUsuario(${res.usuario.id}, this)">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${res.usuario.id}, this)">Eliminar</button>
+    
+                </td>
+                `
+        
+        
+        
+                salio_todo_bien();
+
+            }else{
+                
+                salio_todo_bien();
+
+            }
+
+
+        }else{
+            advertencia(res.msg);
+        }
+
+     
+    })
+    .catch( err => {
+        algo_salio_mal(`Algo salio mal: ${ err }`)
+    })
+}
+
+window.eliminarUsuario = (id, This) => {
+
+
+
+    Swal.fire({
+        title: '¿Esta seguro que quiere eliminar este usuario?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'SI'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            fecthNormalPOST_PUT("DELETE", `usuario/${id}`)
+            .then( res => {
+
+                const row = This.parentNode.parentNode;
+                document.getElementById("tablaDeUsuariosID").deleteRow(row.rowIndex);
+
+                salio_todo_bien();
+            }
+            )
+            .catch( err => {
+                algo_salio_mal(`Algo salio mal: ${ err }`)
+            }
+            )
+        
+        }
+      })
+
+
+
+}
+
+window.editarUsuario = (id, This) => {
+    abrirCerrar('opcionesDeParaModificaciones',true);
+    idDelUsuairo = id;
+    thisUpdate = This.parentNode.parentNode.rowIndex;
 }
     
 
