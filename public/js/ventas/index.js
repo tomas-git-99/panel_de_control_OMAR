@@ -9,6 +9,7 @@ import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/productos_ventas.js";
+import { abrirCerrarVentanas } from "../helpers/para_todos/cerrarVentanasAbrir.js";
 
 
 
@@ -709,4 +710,55 @@ const buscarLocales = (valor, offset=0) => {
         algo_salio_mal(`Algo salio mal: ${ err }`)
     })
   }
-  
+
+
+
+
+
+  var dropdown = document.querySelector('.dropdown');
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
+const opciolesDeLocalesMigrar = document.querySelector("#opcionesDeLocalesMigrar");
+
+const migrarProductosLocal = () => {
+
+    fecthNormalGET("GET", "producto/locales/todos")
+    .then( res => {
+        console.log(res)
+      let datos = res.result;
+      let result = ""
+      datos.map( e => {
+
+        result = `
+        <option value="${e}">${e}</option>
+        `
+        opciolesDeLocalesMigrar.innerHTML += result;
+      })
+    })
+    .catch( err =>{
+        console.log(err)
+      algo_salio_mal(`Algo salio mal: ${ err }`)
+  })
+}
+
+
+
+const OPCIONES_DROP = {
+    "cambiarLocalProductos": () => migrarProductosLocal(),
+}
+
+window.opcionesDrop = (tag) => {
+    abrirCerrarVentanas(tag, true);
+    OPCIONES_DROP[tag]
+    ? OPCIONES_DROP[tag]()
+    : false
+}
+
+window.salirVentana = (tag) => {
+    abrirCerrarVentanas(tag, false);
+}
+
+
+
