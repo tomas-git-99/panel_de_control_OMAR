@@ -22,5 +22,6 @@ router.put("/:id/:id_orden", carrito_1.descontarPorUnidad);
 router.put("/total/:id/:id_orden", carrito_1.descontarElTotal);
 /* router.put("/confirmar/compra/:id/:id_orden", pruebaParaDescontar)  */ /// estas es para pruccion
 router.put("/confirmar/compra/:id/:id_orden", carrito_1.nuevaFuncionParaDescontar); /// estas el prueba
+router.post("/cambiar/p", carrito_1.cambiarPrecioAtodoELproducto);
 exports.default = router;
 //# sourceMappingURL=carrito.js.map

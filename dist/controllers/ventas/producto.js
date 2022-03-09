@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cambiarProductosDeLocal = exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
+exports.buscarProductosDoble = exports.cambiarProductosDeLocal = exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
@@ -312,4 +312,46 @@ const cambiarProductosDeLocal = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.cambiarProductosDeLocal = cambiarProductosDeLocal;
+const buscarProductosDoble = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let valor = req.query.offset;
+    let valorOffset = parseInt(valor);
+    let valorID = req.query.usuario;
+    let valorBusqueda = req.query.local;
+    const productos_rows = yield producto_1.Producto.findAndCountAll({ where: {
+            estado: true,
+            local: { [dist_1.Op.like]: '%' + valorBusqueda + '%' },
+            [dist_1.Op.or]: [
+                {
+                    nombre: { [dist_1.Op.like]: '%' + req.query.nombre + '%' }
+                },
+                {
+                    id: { [dist_1.Op.like]: '%' + req.query.nombre + '%' }
+                }
+            ]
+        }, limit: 10, offset: valorOffset });
+    /*   const productos_rows = await Producto.findAndCountAll({ where:{
+          estado:true,
+          nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
+          id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+          
+      }, limit:10, offset:valorOffset} );
+     */
+    let contador = productos_rows.count;
+    let ids_productos = [];
+    productos_rows.rows.map(e => {
+        ids_productos.push(e.id);
+    });
+    const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos } });
+    let productos = [];
+    productos_rows.rows.forEach(e => {
+        let tallesNew = talles.filter(i => { var _a; return (_a = i.id_producto == e.id) !== null && _a !== void 0 ? _a : i; });
+        productos = [...productos, { productos: e, talles: tallesNew }];
+    });
+    res.json({
+        ok: true,
+        contador,
+        productos
+    });
+});
+exports.buscarProductosDoble = buscarProductosDoble;
 //# sourceMappingURL=producto.js.map

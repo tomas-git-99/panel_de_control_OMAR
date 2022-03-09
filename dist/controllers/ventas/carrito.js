@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.nuevaFuncionParaDescontar = exports.pruebaParaDescontar = exports.descontarProductosFull = exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
+exports.cambiarPrecioAtodoELproducto = exports.nuevaFuncionParaDescontar = exports.pruebaParaDescontar = exports.descontarProductosFull = exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const dist_1 = require("sequelize/dist");
 const descontar_carrito_func_1 = require("../../helpers/descontar_carrito_func");
 const carrito_1 = require("../../models/ventas/carrito");
@@ -814,4 +814,23 @@ const nuevaFuncionParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.nuevaFuncionParaDescontar = nuevaFuncionParaDescontar;
+const cambiarPrecioAtodoELproducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const datoBody = req.body;
+        const carrito = yield carrito_1.Carrito.findAll({ where: { id_usuario: datoBody.id } });
+        carrito
+            .filter(e => e.id_producto == datoBody.id_producto)
+            .map((p) => __awaiter(void 0, void 0, void 0, function* () {
+            yield p.update({ precio_nuevo: datoBody.precio_nuevo });
+        }));
+        res.json({
+            ok: true,
+            msg: "Se cambio el precio del producto"
+        });
+    }
+    catch (error) {
+        res.json({ ok: false, msg: error });
+    }
+});
+exports.cambiarPrecioAtodoELproducto = cambiarPrecioAtodoELproducto;
 //# sourceMappingURL=carrito.js.map

@@ -7,6 +7,7 @@ import { cargaMedio } from "../helpers/para_todos/carga_de_botones.js";
 import { devolverString } from "../helpers/para_todos/null.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { conteoPorTalle, imprimirTallesEnCadaProducto } from "../helpers/ventas/productos_ventas.js";
+import { abrirCerrarVentanas } from "../helpers/para_todos/cerrarVentanasAbrir.js";
 
 
 const rol = localStorage.getItem('roles');
@@ -345,6 +346,7 @@ const MODIFICAR_ORDEN_FUNC = (id) => {
     fecthNormalGET("GET","ordenDetalle/"+id)
     .then( res => {
 
+        agregarOpcionesDeModificacionCliente(res.orden)
         imprimirProductosOrden(res.ordenDetalle);
 
         cerrar_abrir("modificarCarrito", true);
@@ -435,12 +437,15 @@ window.moificar_producto = (id) => {
 window.close_ventana = (id) => {
 
     if(id == 'cantidadTalle' || id == 'agregarNuevoProducto'){
+        valueLocal = '';
 
         MODIFICAR_ORDEN_FUNC(idORDEN);
 
     }else if(id == 'modificarCarrito'){
        /*  main_historial(); */
     }
+
+    valueLocal = '';
 
     document.querySelector(`.${id}`).style.display = 'none';
     document.querySelector(`.${id}`).style.visibility = 'hidden';
@@ -523,8 +528,8 @@ search2.addEventListener("keyup", ({keyCode}) => {
 });
 
 const getSearch2 = (valor, offset=0) => {
-
-    fecthNormalGET("GET", "producto/search?" + `nombre=${valor}&offset=${offset}`)
+let local = valueLocal;
+    fecthNormalGET("GET", "producto/search/index/new/h/u?" + `nombre=${valor}&offset=${offset}&local=${local}`)
     .then(res => {
     
         imprimirHistorial(res.productos);
@@ -915,4 +920,131 @@ window.pagina_id = (e) => {
     }
 
     
+}
+
+const seleccion_locales_agregar = document.querySelector("#seleccion_locales_agregar");
+const opcionesDeLocales = () => {
+    fecthNormalGET("GET", "producto/locales/todos")
+        .then( res => {
+          let datos = res.result;
+          let result = ""
+          datos.map( e => {
+  
+            result = `
+            <option value="${e}">${e}</option>
+            `
+            seleccion_locales_agregar.innerHTML += result;
+  
+  
+          })
+        })
+        .catch( err =>{
+          algo_salio_mal(`Algo salio mal: ${ err }`)
+      })
+  }
+  
+  opcionesDeLocales();
+let valueLocal = '';
+
+window.cambioDeLocales = (This) => {
+    valueLocal = This.value;
+}
+
+
+
+var dropdown = document.querySelector('.dropdown');
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
+;
+
+const agregarOpcionesDeModificacionCliente = (orden) => {
+
+    if(orden.id_direccion == null){
+        document.querySelector("#seleccion_cambio").innerHTML = 
+        `
+        <option value="0">Opciones...</option>
+        <option value="nombre">Nombre</option>
+        <option value="apellido">Apellido</option>
+        <option value="dni_cuil">DNI O CUIL</option>
+        <option value="tel_cel">Telefono o Celular</option>
+        <option value="email">Email</option>
+        `
+
+    }else{
+        document.querySelector("#seleccion_cambio").innerHTML = 
+        `
+        <option value="0">Opciones...</option>
+
+        <option value="nombre">Nombre</option>
+        <option value="apellido">Apellido</option>
+        <option value="dni_cuil">DNI O CUIL</option>
+        <option value="tel_cel">Telefono o Celular</option>
+        <option value="email">Email</option>
+        <option value="direccion">Direccion</option>
+        <option value="cp">Codigo Postal</option>
+        <option value="provincia">Provincia</option>
+        <option value="localidad">Localidad</option>
+        `
+    }
+}
+
+const input_con_el_valor = document.querySelector(".input_con_el_valor");
+
+window.opcionesDrop = (tag, estado) => {
+    abrirCerrarVentanas(tag, estado)
+}
+
+
+let valueCambio
+window.selecciconCambios = (e) => {
+
+    valueCambio = e.value;
+
+
+    if( e.value == '0' || e.value == undefined ) {
+        input_con_el_valor.innerHTML = ""
+    }else{
+      
+
+        input_con_el_valor.innerHTML = `
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" aria-describedby="basic-addon2" name="${e.value}" id="input_cambio">
+        <div class="input-group-append">
+        <button class="btn btn-outline-primary " type="button" onclick="enviar_cambio(this)">Cambiar</button>
+        </div>
+        </div>
+        `
+    }
+
+}
+
+
+
+let dataArray = ['nombre', 'apellido', 'dni_cuil', 'tel_cel', 'email'];
+
+
+window.enviar_cambio = (e) => {
+
+    let data = {
+        valor: document.getElementById('input_cambio').value
+    }
+
+    data[`${valueCambio}`] = data.valor;
+    delete data.valor;
+
+    if( dataArray.some( h => h == valueCambio) == true){
+
+        //cambiar cliente
+
+        console.log(data)
+
+
+    }else{
+        //cambiar direccion
+
+        console.log(data)
+
+    }
 }

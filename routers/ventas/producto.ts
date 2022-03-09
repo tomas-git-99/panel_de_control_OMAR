@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { agregarMasStock, buscarLocal,
-         buscarProducto, cambiarProductosDeLocal, crearProducto, 
+         buscarProducto, buscarProductosDoble, cambiarProductosDeLocal, crearProducto, 
          editarProducto, eliminarProducto, 
          hitorialProductos, obtenerUnoProducto, 
          quitarStock, soloLocales } from "../../controllers/ventas/producto";
@@ -34,6 +34,7 @@ router.put('/:id', editarProducto)
 
 //BUSCAR PRODUCTO POR NOMBRE
 router.get('/search', buscarProducto)
+router.get('/search/index/new/h/u', buscarProductosDoble)
 
 
 //ELIMINAR PRODUCTO 

@@ -470,3 +470,68 @@ export const cambiarProductosDeLocal = async (req: Request, res: Response) => {
         res.json({ok: false, msg: error})
     }
 }
+
+
+
+
+
+export const buscarProductosDoble = async (req: Request, res: Response) => {
+
+
+    let valor:any = req.query.offset;
+
+    let valorOffset = parseInt(valor);
+
+
+    let valorID:any = req.query.usuario;
+
+    let valorBusqueda = req.query.local;
+
+
+
+ 
+    const productos_rows = await Producto.findAndCountAll({ where:{ 
+        estado:true,
+        local:{ [Op.like]: '%'+ valorBusqueda +'%'} ,
+       [Op.or]:[
+           {
+               nombre:{ [Op.like]: '%'+ req.query.nombre +'%'}
+           },
+           {
+               id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+           }
+       ]
+
+    }, limit:10, offset:valorOffset} );
+
+
+  /*   const productos_rows = await Producto.findAndCountAll({ where:{ 
+        estado:true,
+        nombre:{ [Op.like]: '%'+ req.query.nombre +'%'},
+        id:{ [Op.like]: '%'+ req.query.nombre +'%'}
+        
+    }, limit:10, offset:valorOffset} );
+   */
+
+    let contador = productos_rows.count;
+    let ids_productos:any = [];
+    productos_rows.rows.map( e => {
+        ids_productos.push(e.id);
+    });
+    const talles = await Talle.findAll({where:{id_producto:ids_productos}});
+
+    let productos:any = [];
+    productos_rows.rows.forEach( e =>{
+        let tallesNew = talles.filter( i => i.id_producto == e.id ?? i)
+        productos = [...productos, {productos:e, talles:tallesNew}]
+    })
+
+  
+    
+    res.json({
+        ok:true,
+        contador,
+        productos
+
+    })
+}

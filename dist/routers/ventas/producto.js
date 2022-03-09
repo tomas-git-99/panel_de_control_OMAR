@@ -21,6 +21,7 @@ router.put('/quitar/:id', producto_1.quitarStock);
 router.put('/:id', producto_1.editarProducto);
 //BUSCAR PRODUCTO POR NOMBRE
 router.get('/search', producto_1.buscarProducto);
+router.get('/search/index/new/h/u', producto_1.buscarProductosDoble);
 //ELIMINAR PRODUCTO 
 router.delete('/:id', producto_1.eliminarProducto);
 router.get('/', producto_1.hitorialProductos);

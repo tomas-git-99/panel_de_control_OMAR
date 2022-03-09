@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./style/historial.css">
     <link rel="stylesheet" href="./style/compra.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/helpers/para_todos/html2pdf.bundle.min.js"></script>
@@ -94,14 +95,15 @@
                   </div>
             </div>
 
-            <div class="filtroDeHistorial">
+            <div class="filtroDeHistorial" >
 
                 <div class="opcionesDeLocal">
                     <select class="form-control form-control-sm" id="seleccion_locales" onchange="cambioDeLocal(this)">
                         <option value="0">Ordenar por local</option>
     
-                      </select>
+                    </select>
                 </div>
+                
 
                 <div class="soloFechas">
                     <div class="fechas_rangos">
@@ -117,12 +119,18 @@
     
                            </div>
                 </div>
-           
 
+
+        
+    
+           
             </div>
-       
+
+    
 
                 <div class="cartel">
+
+                    
                     <table class="table">
                         <thead>
                           <tr>
@@ -461,6 +469,35 @@
 
                     </div>
 
+
+                    <div class="moverDrop" style="display: grid; width: 100%; padding-right: 20px;">
+                        <div class="dropdown is-right ">
+                            <div class="dropdown-trigger">
+                              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span>Opciones</span>
+                                <span class="icon is-small">
+                                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                              </button>
+                            </div>
+        
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                              <div class="dropdown-content">
+        
+                                <a href="#" class="dropdown-item" onclick="agregarProductoID()">
+                                  Agregar Producto
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="opcionesDrop('opciones_cambio', true)">
+                                  Editar Cliente
+                                </a>
+                              </div>
+        
+                            </div>
+        
+                          </div>
+                    </div>
+
+
                     <div class="productosDelComprobante">
                     <table class="table">
                     <thead>
@@ -505,19 +542,19 @@
                     </table>
 
                     </div>
-
+<!-- 
                     <div class="agregarProducto">
 
                         <button type="button" class="btn btn-success" onclick="agregarProductoID()">Agregar Producto</button>
-                    </div>
-                    <div class="totalOrden">
+                    </div> -->
+                    <div class="totalOrden" style="padding: 15px;">
                         <h4>
-                           TOTAL: <span class="totalOrden_detalle">$8009</span>
+                           TOTAL: <span class="totalOrden_detalle" style="font-size:30px"></span>
                         </h4>
                     </div>
                 </div>
 
-                <div class="cantidadTalle">
+                <div class="cantidadTalle" style="z-index: 200;">
                   
 
                     <div class="formCantidad">
@@ -568,7 +605,7 @@
                 </div>
 
 
-                <div class="agregarNuevoProducto">
+                <div class="agregarNuevoProducto" style="z-index: 200;">
                     <div class="boton_salir">
                         <button type="button" class="btn-close" id="agregarNuevoProducto" aria-label="Close" onclick="close_ventana(this.id)"></button>
 
@@ -583,7 +620,20 @@
                               <span class="input-group-text" id="basic-addon2"><img  class="imgSearch" src="/img/search.png" alt=""width="30" height="30"></span>
                             </div>
                           </div>
+
+
+               
+
                     </div>
+
+                    <div class="opcionesDeLocales">
+                        <select class="custom-select custom-select-sm" id="seleccion_locales_agregar" onchange="cambioDeLocales(this)">
+                            <option value="">Ordenar por local</option>
+        
+                        </select>
+                    </div>
+
+
 
                     <div class="tableParaProductosBuscados">
                         <table class="table">
@@ -606,6 +656,17 @@
                             </table>
         
                     </div>
+                </div>
+
+                <div class="opciones_cambio" id="aca_va_el_ID">
+                    <img src="https://img.icons8.com/ios/50/000000/close-window.png" class="img_salir" onclick="opcionesDrop('opciones_cambio', false )"/>
+                    <h3>Cambiar ...</h3>
+                    <select class="custom-select" id="seleccion_cambio" onchange="selecciconCambios(this)">
+            
+                      </select>
+                      <div class="input_con_el_valor">
+        
+                      </div>
                 </div>
 
                 <div class="cantidad2">
@@ -680,10 +741,17 @@
                               </div>
                          
                             </div>
+
+
+                            
                     </div>
+
                     
 
+
+
         </div>
+        
     </div>
 
     <script src="/js/ventas/historial.js" type="module"></script>

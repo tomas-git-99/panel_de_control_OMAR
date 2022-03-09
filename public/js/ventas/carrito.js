@@ -989,3 +989,61 @@ const opcionesDeArticulos = (array) => {
     })
 
 }
+
+ const botonCargaBulma = (tag, estado) => {
+
+    if(estado){
+        document.querySelector(tag).innerHTML = 
+        `
+        <button class="button is-info is-rounded is-loading" onclick="cambiarDeLocal()">Confirmar</button>
+
+        `;
+    }else{
+        document.querySelector(tag).innerHTML = 
+        `
+        <button class="button is-info is-rounded" onclick="cambiarDeLocal()">Confirmar</button>
+
+        `;
+    }
+}
+
+let idValue
+window.seleccionDeArticulo = (This) => {
+    idValue = This.value
+}
+
+window.cambiarPrecio = () => {
+    
+    let data = {
+        id: localStorage.getItem("id"),
+        id_producto:idValue,
+        precio_nuevo: document.getElementById('valueParaCambiarPrecio').value,
+    }
+
+    if(idValue == 0 || idValue == undefined) { return advertencia("Seleccione un articulo") }
+    if(document.getElementById('valueParaCambiarPrecio').value.length < 1) { return advertencia("Inserte nuevo precio") }
+
+    fecthNormalPOST_PUT("POST", `carrito/cambiar/p`, data)
+    .then( res => {
+        botonCargaBulma('.botonConfirmar', true);
+
+        if(res.ok == true){
+            salio_todo_bien();
+            document.getElementById('valueParaCambiarPrecio').value = "";
+            botonCargaBulma('.botonConfirmar', false);
+
+        }else{
+            algo_salio_mal(`Algo salio mal`);
+            botonCargaBulma('.botonConfirmar', false);
+            
+        }
+    }
+    )
+    .catch( err => {
+        algo_salio_mal(`Algo salio mal: ${ err }`);
+        botonCargaBulma('.botonConfirmar', false);
+
+    }
+    )
+
+}

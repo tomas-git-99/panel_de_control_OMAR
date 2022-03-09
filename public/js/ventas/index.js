@@ -225,10 +225,10 @@ const volver_Atras_buscar = document.querySelector(".volver_Atras_buscar");
 
 const getSearch = (valor, offset=0) => {
 
-    
+    let local = valorGuardadoLocal;
     cargaMedio("spinner_load", true);
 
-    fetch(url + "producto/search?" + `nombre=${valor}&offset=${offset}`,{ 
+    fetch(url + "producto/search/index/new/h/u?" + `nombre=${valor}&offset=${offset}&local=${local}`,{ 
         method: "GET",
         headers: {'Content-Type': 'application/json'},
     })
@@ -258,6 +258,7 @@ window.volver_inicio = () => {
     volver_Atras_buscar.style.display = "none";
     volver_Atras_buscar.style.visibility = "hidden";
     historialGet();
+    valorGuardadoLocal = '';
   }
 
 
@@ -680,6 +681,7 @@ const opcionesDeLocales = () => {
 
 opcionesDeLocales();
 
+let valorGuardadoLocal = "";
 window.cambioDeLocal = (dato) => {
 
     numeroPaginas = null;
@@ -687,9 +689,11 @@ window.cambioDeLocal = (dato) => {
     cargaMedio("spinner_load", true);
   
     if (dato.value == 0){
-      main_historial();
-      }else{
+        valorGuardadoLocal = '';
+        historialGet();
+    }else{
         buscarLocales(dato.value);
+        valorGuardadoLocal = dato.value;
     }
   
   }
@@ -757,7 +761,7 @@ window.seleccionDeLocalCambiar = (dato) => {
 
 
 
-const botonCargaBulma = (tag, estado) => {
+ const botonCargaBulma = (tag, estado) => {
 
     if(estado){
         document.querySelector(tag).innerHTML = 

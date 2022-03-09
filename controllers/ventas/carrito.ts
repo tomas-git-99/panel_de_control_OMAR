@@ -1324,3 +1324,33 @@ try {
 
 
 
+
+interface CambiarPrecioTotal {
+    id          :number,
+    id_producto : number,
+    precio_nuevo:number ,
+}
+
+export const cambiarPrecioAtodoELproducto = async(req: Request, res: Response) => {
+    try {
+        
+
+        const datoBody:CambiarPrecioTotal = req.body;
+
+        const carrito = await Carrito.findAll({where:{id_usuario:datoBody.id}});
+
+
+        carrito
+        .filter( e => e.id_producto == datoBody.id_producto)
+        .map( async(p) => {
+            await p.update({precio_nuevo:datoBody.precio_nuevo})
+        });
+
+        res.json({
+            ok: true,
+            msg: "Se cambio el precio del producto"
+        })
+    } catch (error) {
+        res.json({ok: false, msg:error})
+    }
+}
