@@ -27,5 +27,6 @@ router.get('/', producto_1.hitorialProductos);
 router.get('/:id', producto_1.obtenerUnoProducto);
 router.get('/locales/todos', producto_1.soloLocales);
 router.get('/locales/seleccionado/local', producto_1.buscarLocal);
+router.post('/locales/migrar/p/new', producto_1.cambiarProductosDeLocal);
 exports.default = router;
 //# sourceMappingURL=producto.js.map

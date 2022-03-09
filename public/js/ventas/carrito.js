@@ -9,6 +9,7 @@ import { cerrar_login } from "../helpers/para_todos/cerrar.js";
 import { cargaMedio, load_normal } from "../helpers/para_todos/carga_de_botones.js";
 import { usuarioPermisos } from "../helpers/para_todos/usuarios_permisos.js";
 import { devolverString } from "../helpers/para_todos/null.js";
+import { abrirCerrarVentanas } from "../helpers/para_todos/cerrarVentanasAbrir.js";
 
 const rol = localStorage.getItem('roles');
 usuarioPermisos( rol, "produccion");
@@ -35,6 +36,12 @@ const carritoActualizar = () => {
 
     fecthNormalGET("GET", `carrito/${id}`)
     .then( res => {
+
+        console.log(res)
+
+        
+
+        opcionesDeArticulos(sinRepetir(res.carrito_full))
         cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);
         
@@ -914,5 +921,71 @@ function descontarTotalOporTalle (id_usuario, id_orden) {
             volverAtras(venta_publico, bienvenido);
 
         })
+
+}
+
+
+
+
+var dropdown = document.querySelector('.dropdown');
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
+;
+
+window.opcionesDrop = (tag) => {
+    abrirCerrarVentanas(tag, true);
+/*     OPCIONES_DROP[tag]
+    ? OPCIONES_DROP[tag]()
+    : false
+ */
+
+    
+}
+
+window.salirVentana = (tag) => {
+    abrirCerrarVentanas(tag, false);
+}
+
+
+const sinRepetir = (array) => {
+
+    let nuevoArray = [];
+
+    array.forEach(el => {
+      /*   if(!nuevoArray.includes(el.productos)){
+            nuevoArray.push(el.productos)
+        } */
+
+        if(nuevoArray.some(id => el.productos.id == id.id) == false){
+            nuevoArray.push(el.productos)
+
+        }
+    })
+
+
+
+
+
+    return nuevoArray;
+}
+
+const opciolesDeLocalesMigrar = document.querySelector("#opciolesDeLocalesMigrar");
+
+const opcionesDeArticulos = (array) => {
+
+    let historial = ""
+
+    array.forEach(e => {
+        historial = 
+        `
+        <option value="${e.id}">Articulo:${e.id}, ${e.nombre}</option>
+
+        `
+
+        opciolesDeLocalesMigrar.innerHTML += historial;
+
+    })
 
 }

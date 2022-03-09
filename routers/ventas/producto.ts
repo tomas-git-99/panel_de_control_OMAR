@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { agregarMasStock, buscarLocal,
-         buscarProducto, crearProducto, 
+         buscarProducto, cambiarProductosDeLocal, crearProducto, 
          editarProducto, eliminarProducto, 
          hitorialProductos, obtenerUnoProducto, 
          quitarStock, soloLocales } from "../../controllers/ventas/producto";
@@ -49,6 +49,9 @@ router.get('/locales/todos', soloLocales)
 
 
 router.get('/locales/seleccionado/local', buscarLocal)
+
+
+router.post('/locales/migrar/p/new', cambiarProductosDeLocal)
 
 
 export default router;

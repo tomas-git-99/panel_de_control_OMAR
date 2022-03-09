@@ -434,3 +434,39 @@ export const buscarLocal = async (req: Request, res: Response) => {
 }
 
 
+
+
+interface BodyCambioLocal{
+    OldValue: string,
+    NewValue: string,
+}
+
+export const cambiarProductosDeLocal = async (req: Request, res: Response) => {
+    
+    try {
+        
+        const datos:BodyCambioLocal = req.body;
+
+
+        const productos = await Producto.findAll({ where:{
+            estado:true,
+            local:{[Op.like]: '%' + datos.OldValue + '%' }
+        }});
+
+
+        for( let p of productos ) {
+
+            await p.update({local:datos.NewValue});
+
+        }
+    
+
+        res.json({
+            ok: true,
+            msg: "Bien!!"
+        })
+        
+    } catch (error) {
+        res.json({ok: false, msg: error})
+    }
+}

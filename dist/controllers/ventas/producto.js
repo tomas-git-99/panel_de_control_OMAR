@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
+exports.cambiarProductosDeLocal = exports.buscarLocal = exports.soloLocales = exports.obtenerUnoProducto = exports.hitorialProductos = exports.quitarStock = exports.agregarMasStock = exports.eliminarProducto = exports.buscarProducto = exports.editarProducto = exports.crearProducto = void 0;
 const dist_1 = require("sequelize/dist");
 const producto_1 = require("../../models/ventas/producto");
 const talles_1 = require("../../models/ventas/talles");
@@ -292,4 +292,24 @@ const buscarLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 exports.buscarLocal = buscarLocal;
+const cambiarProductosDeLocal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const datos = req.body;
+        const productos = yield producto_1.Producto.findAll({ where: {
+                estado: true,
+                local: { [dist_1.Op.like]: '%' + datos.OldValue + '%' }
+            } });
+        for (let p of productos) {
+            yield p.update({ local: datos.NewValue });
+        }
+        res.json({
+            ok: true,
+            msg: "Bien!!"
+        });
+    }
+    catch (error) {
+        res.json({ ok: false, msg: error });
+    }
+});
+exports.cambiarProductosDeLocal = cambiarProductosDeLocal;
 //# sourceMappingURL=producto.js.map

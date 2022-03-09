@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+
     <link rel="stylesheet" href="/style/inicio.css">
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet" href="./style/historial.css">
@@ -81,8 +85,34 @@
                 <h4>CARRITO</h4>
             </div>
 
-                <div class="cartel" id="cartel">
+      
 
+                <div class="cartel" id="cartel">
+                    <div class="moverDrop">
+                        <div class="dropdown is-right ">
+                            <div class="dropdown-trigger">
+                              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span>Opciones</span>
+                                <span class="icon is-small">
+                                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                              </button>
+                            </div>
+        
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                              <div class="dropdown-content">
+        
+                                <a href="#" class="dropdown-item" onclick="opcionesDrop('cambiarLocalProductos')">
+                                Cambiar Precios
+                                </a>
+                                
+                              </div>
+        
+                            </div>
+        
+                          </div>
+                      </div>
+        
                     <div id="message"></div>
                     
                     <table class="table" id="tableContact">
@@ -276,6 +306,59 @@
 
                 
             </div>
+
+
+
+            <div class="cambiarLocalProductos">
+
+                
+
+                <div class="tituloMIgrar" style="text-align:center;"> 
+                <button type="button" class="btn-close" aria-label="Close" style="padding: 10px;" onclick="salirVentana('cambiarLocalProductos')"></button>
+                    
+                    <h3 class="title is-3">Cambiar precio</h3>
+                </div>
+                
+          
+                <div class="contenidoDeMigrar">
+                    <div class="buscadoresDeNombresLocales">
+                        <label class="label">Locales</label>
+    
+                  <!--       <div class="select">
+
+                            <select class="is-focused " id="opciolesDeLocalesMigrar">
+                              <option>Locales...</option>
+                              
+                            </select>
+
+                        </div> -->
+                        <select class="form-select " aria-label="Default select example" id="opciolesDeLocalesMigrar" onchange="seleccionDeLocalCambiar(this)">
+                            <option selected value="0">Articulos</option>
+
+                          </select>
+                    </div>
+                    
+                    <div class="inputNuevoLocal">
+                        <div class="field">
+                            <label class="label">Nuevo Precio</label>
+                            <div class="control">
+                              <input class="input" type="text" id="valueParaCambiarDeLocal">
+                            </div>
+                          </div>
+                    </div>
+    
+                    <div class="botonConfirmar">
+                        <button class="button is-info is-rounded" onclick="cambiarDeLocal()">Confirmar</button>
+    
+                    </div>
+    
+    
+                </div>
+
+             
+            </div>
+
+
 
             <div class="modificarCarrito">
 

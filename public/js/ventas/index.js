@@ -1,5 +1,5 @@
 import { fecthNormalGET, fecthNormalPOST_PUT } from "../helpers/ventas/fetch.js";
-import { salio_todo_bien, algo_salio_mal } from "../helpers/para_todos/alertas.js";
+import { salio_todo_bien, algo_salio_mal, advertencia } from "../helpers/para_todos/alertas.js";
 import { agregarPorTalle } from "../helpers/ventas/agregar_por_talle.js";
 import { volverAtras } from "../helpers/ventas/volver_atras.js";
 import { verificarToken } from "../helpers/para_todos/permisos.js";
@@ -654,6 +654,7 @@ window.pagina_id = (e) => {
 
 
 const seleccion_locales = document.querySelector("#seleccion_locales");
+const opciolesDeLocalesMigrar = document.querySelector("#opciolesDeLocalesMigrar");
 
 
 const opcionesDeLocales = () => {
@@ -667,6 +668,9 @@ const opcionesDeLocales = () => {
           <option value="${e}">${e}</option>
           `
           seleccion_locales.innerHTML += result;
+
+          opciolesDeLocalesMigrar.innerHTML += result;
+
         })
       })
       .catch( err =>{
@@ -715,33 +719,14 @@ const buscarLocales = (valor, offset=0) => {
 
 
 
-  var dropdown = document.querySelector('.dropdown');
+var dropdown = document.querySelector('.dropdown');
 dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
   dropdown.classList.toggle('is-active');
 });
-const opciolesDeLocalesMigrar = document.querySelector("#opcionesDeLocalesMigrar");
+;
 
-const migrarProductosLocal = () => {
 
-    fecthNormalGET("GET", "producto/locales/todos")
-    .then( res => {
-        console.log(res)
-      let datos = res.result;
-      let result = ""
-      datos.map( e => {
-
-        result = `
-        <option value="${e}">${e}</option>
-        `
-        opciolesDeLocalesMigrar.innerHTML += result;
-      })
-    })
-    .catch( err =>{
-        console.log(err)
-      algo_salio_mal(`Algo salio mal: ${ err }`)
-  })
-}
 
 
 
@@ -751,14 +736,87 @@ const OPCIONES_DROP = {
 
 window.opcionesDrop = (tag) => {
     abrirCerrarVentanas(tag, true);
-    OPCIONES_DROP[tag]
+/*     OPCIONES_DROP[tag]
     ? OPCIONES_DROP[tag]()
     : false
+ */
+
+    
 }
 
 window.salirVentana = (tag) => {
     abrirCerrarVentanas(tag, false);
+    historialGet()
+}
+
+
+let OldValue
+window.seleccionDeLocalCambiar = (dato) => {
+    OldValue = dato.value;
 }
 
 
 
+const botonCargaBulma = (tag, estado) => {
+
+    if(estado){
+        document.querySelector(tag).innerHTML = 
+        `
+        <button class="button is-info is-rounded is-loading" onclick="cambiarDeLocal()">Confirmar</button>
+
+        `;
+    }else{
+        document.querySelector(tag).innerHTML = 
+        `
+        <button class="button is-info is-rounded" onclick="cambiarDeLocal()">Confirmar</button>
+
+        `;
+    }
+}
+
+window.cambiarDeLocal = () => {
+
+    let data = {
+        'OldValue': OldValue,
+        'NewValue': document.getElementById("valueParaCambiarDeLocal").value
+    }
+
+    if(OldValue == '0' || OldValue == undefined) return advertencia("Tienes que seleccionar el local que quieres cambiar");
+    if(document.getElementById("valueParaCambiarDeLocal").value.length < 1) return advertencia("Tienes que insertar un nuevo local");
+
+    Swal.fire({
+        title: 'Estas seguro de los cambios?',
+        text: `Local Antiguo: ${OldValue}, Local Nuevo: ${document.getElementById("valueParaCambiarDeLocal").value}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            botonCargaBulma('.botonConfirmar', true);
+            fecthNormalPOST_PUT("POST", "producto/locales/migrar/p/new", data)
+            .then( res => {
+                if(res.ok == true){
+                    salio_todo_bien()
+                    document.getElementById("valueParaCambiarDeLocal").value = "";
+                    botonCargaBulma('.botonConfirmar', false);
+
+                }else{
+                    botonCargaBulma('.botonConfirmar', false);
+
+                    algo_salio_mal(`Algo salio mal: ${ res }`)
+                }
+            }
+            )
+            .catch( err =>{
+                botonCargaBulma('.botonConfirmar', false);
+
+                algo_salio_mal(`Algo salio mal: ${ err }`)
+            }
+            )
+        }else{
+            botonCargaBulma('.botonConfirmar', false);
+        }
+      })
+}
