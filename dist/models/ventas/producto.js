@@ -38,7 +38,10 @@ Producto.init({
     },
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN
-    }
+    },
+    color: {
+        type: sequelize_1.DataTypes.STRING
+    },
 }, {
     sequelize: conectarDB_1.default,
     tableName: "producto"

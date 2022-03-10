@@ -155,7 +155,7 @@ const leerHistorial = (res) => {
 
           <td data-label="MODELO">${devolverString(e.productos.nombre)}</td>
           <td data-label="DISEÑO">${devolverString(e.productos.diseño)}</td>
-          <td data-label="DISEÑO">${devolverString(e.productos.color)}</td>
+          <td data-label="COLOR">${devolverString(e.productos.color)}</td>
           <td data-label="STOCK">${e.talles.length > 0 ? conteoPorTalle(e.talles) : devolverString(e.productos.cantidad)}</td>
           <td data-label="TALLES">
           <div class="opcionesDeTalles">

@@ -44,9 +44,7 @@ const carritoActualizar = () => {
         leerCarrito(res.carrito_full);
         arrayINFOcarrito = res.carrito_full;
 
-        console.log(
-            res.carrito_full
-        )
+      
         })
     .catch( err => {
        
@@ -979,7 +977,7 @@ const opciolesDeLocalesMigrar2 = document.querySelector("#opciolesDeLocalesMigra
 
 const opcionesDeArticulos = (array) => {
 
-    console.log(array)
+    
     let historial = ""
 
     historial +=
@@ -1022,7 +1020,7 @@ let idValue
 /*  */
 window.seleccionDeArticulo = (This, number=0) => {
     idValue = This.value
-    console.log(buscarSiTieneNota(arrayINFOcarrito, idValue ))
+    
     if(number == 1){ 
 
         if(This.value == 0){ return document.querySelector('.botonYtextarea').innerHTML = ''}

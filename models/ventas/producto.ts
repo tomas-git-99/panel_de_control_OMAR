@@ -13,6 +13,7 @@ export interface TodoAtributos {
     precio:number;
     talles: string;
     estado: boolean;
+    color: string;
     // talles_unidad: number;
 }
 
@@ -28,6 +29,7 @@ export class Producto extends Model <TodoAtributos>{
     public precio!:number;
     public talles!: string;
     public estado!: boolean;
+    public color!: string;
 
     // public talles_unidad!: number; 
 
@@ -66,7 +68,10 @@ Producto.init(
         },
         estado:{
             type:DataTypes.BOOLEAN
-        }
+        },
+        color:{
+            type:DataTypes.STRING
+        },
         
     },{
         sequelize: db,

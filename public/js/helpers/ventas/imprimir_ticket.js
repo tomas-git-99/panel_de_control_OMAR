@@ -320,8 +320,8 @@ const ticket_parami = (res, elemento) => {
         <th>${devolverString(e.producto.color)}</th>
         <th style="font-size:12px">${devolverString(e.detalles.nota)}</th>
         <td>${devolverString(e.producto.tela)}</td>
-        <td>${devolverString(e.detalles.talle)}</td>
-        <td>${devolverString(e.detalles.cantidad)}</td>
+        <td style="font-size:14px; text-align: center;">${devolverString(e.detalles.talle)}</td>
+        <td style="text-align: center;" >${devolverString(e.detalles.cantidad)}</td>
         </tr>
         `
     })

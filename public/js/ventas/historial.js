@@ -348,7 +348,6 @@ const MODIFICAR_ORDEN_FUNC = (id) => {
     fecthNormalGET("GET","ordenDetalle/"+id)
     .then( res => {
 
-        console.log(res)
 
         infoOrden = res.orden
 

@@ -14,6 +14,7 @@ export const usuarioPermisos = (rol, tag) => {
 
     let cerrarVentanas = document.querySelector(`.${tag}`);
     let historial_borrar = document.querySelector(`.historial_borrar`);
+    let agregar_solo = document.querySelector(`.agregar_solo`);
 
     let crear_usuario = document.querySelector(".crear_usuario")
 
@@ -27,11 +28,17 @@ export const usuarioPermisos = (rol, tag) => {
             
             historial_borrar.style.display = "grid";
             historial_borrar.style.visibility = "visibility";
+             
+            agregar_solo.style.display = "grid";
+            agregar_solo.style.visibility = "visibility";
 
         }else{
                        
             historial_borrar.style.display = "none";
             historial_borrar.style.visibility = "hidden";
+
+            agregar_solo.style.display = "none";
+            agregar_solo.style.visibility = "hidden";
         }
         
         cerrarVentanas.style.display = "none";
