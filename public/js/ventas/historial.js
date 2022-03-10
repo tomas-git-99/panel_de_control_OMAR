@@ -342,9 +342,15 @@ window.modificar_orden = (id) => {
 }
 
 
+let infoOrden
+
 const MODIFICAR_ORDEN_FUNC = (id) => {
     fecthNormalGET("GET","ordenDetalle/"+id)
     .then( res => {
+
+        console.log(res)
+
+        infoOrden = res.orden
 
         agregarOpcionesDeModificacionCliente(res.orden)
         imprimirProductosOrden(res.ordenDetalle);
@@ -1038,13 +1044,35 @@ window.enviar_cambio = (e) => {
 
         //cambiar cliente
 
-        console.log(data)
+        fecthNormalPOST_PUT("PUT", "cliente/" + infoOrden.id_cliente, data)
+        .then( res => {
+            if(res.ok == true){
+                salio_todo_bien()
+                document.getElementById('input_cambio').value = "";
+            }
+        })
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        })
+
 
 
     }else{
         //cambiar direccion
 
-        console.log(data)
+        fecthNormalPOST_PUT("PUT", "direccion/" + infoOrden.id_direccion, data)
+        .then( res => {
+            if(res.ok == true){
+                salio_todo_bien()
+                document.getElementById('input_cambio').value = "";
+
+            }
+        }
+        )
+        .catch( err => {
+            algo_salio_mal(`Algo salio mal: ${ err }`)
+        }
+        )
 
     }
 }

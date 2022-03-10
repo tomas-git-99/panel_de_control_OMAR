@@ -9,6 +9,7 @@ export interface TodoAtributos {
     talle: number;
     cantidad:number;
     precio_nuevo:number;
+    nota:string;
 }
 
 
@@ -21,6 +22,7 @@ export class Carrito extends Model <TodoAtributos>{
 
     public cantidad!:number;
     public precio_nuevo!:number;
+    public nota!:string;
 
 
 }
@@ -48,6 +50,9 @@ Carrito.init(
         },
         precio_nuevo:{
             type:DataTypes.NUMBER
+        },
+        nota:{
+            type:DataTypes.STRING
         }
         
     },{

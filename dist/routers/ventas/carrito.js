@@ -23,5 +23,6 @@ router.put("/total/:id/:id_orden", carrito_1.descontarElTotal);
 /* router.put("/confirmar/compra/:id/:id_orden", pruebaParaDescontar)  */ /// estas es para pruccion
 router.put("/confirmar/compra/:id/:id_orden", carrito_1.nuevaFuncionParaDescontar); /// estas el prueba
 router.post("/cambiar/p", carrito_1.cambiarPrecioAtodoELproducto);
+router.post("/agregar/nota/new/:id", carrito_1.agregarAclaraciones);
 exports.default = router;
 //# sourceMappingURL=carrito.js.map

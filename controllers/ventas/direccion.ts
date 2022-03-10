@@ -69,3 +69,26 @@ export const obtenerDireccion = async (req: Request, res: Response) => {
     }
 
 }
+
+
+export const editarDireccion = async (req: Request, res: Response) => {
+
+    try {
+        
+        const direccion = await Direccion.findByPk(req.params.id);
+
+
+        await direccion!.update(req.body);
+
+        res.json({
+            ok: true,
+            direccion
+        })
+
+    } catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+}

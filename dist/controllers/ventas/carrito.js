@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cambiarPrecioAtodoELproducto = exports.nuevaFuncionParaDescontar = exports.pruebaParaDescontar = exports.descontarProductosFull = exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
+exports.agregarAclaraciones = exports.cambiarPrecioAtodoELproducto = exports.nuevaFuncionParaDescontar = exports.pruebaParaDescontar = exports.descontarProductosFull = exports.mostrarCantidad_Actual_Carrito = exports.modificarCarrito = exports.descontarElTotal = exports.descontarPorUnidad = exports.eliminarCarrito = exports.mostrarCarrito = exports.agregarCarrito = void 0;
 const dist_1 = require("sequelize/dist");
 const descontar_carrito_func_1 = require("../../helpers/descontar_carrito_func");
 const carrito_1 = require("../../models/ventas/carrito");
@@ -833,4 +833,27 @@ const cambiarPrecioAtodoELproducto = (req, res) => __awaiter(void 0, void 0, voi
     }
 });
 exports.cambiarPrecioAtodoELproducto = cambiarPrecioAtodoELproducto;
+const agregarAclaraciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+        const carrito = yield carrito_1.Carrito.findAll({ where: { id_usuario: req.params.id } });
+        carrito
+            .filter(e => e.id_producto == req.body.id_producto)
+            .map((p) => __awaiter(void 0, void 0, void 0, function* () {
+            yield p.update({ nota: req.body.nota });
+        }));
+        res.json({
+            ok: true,
+            msg: "Se agrego la nota"
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.agregarAclaraciones = agregarAclaraciones;
 //# sourceMappingURL=carrito.js.map

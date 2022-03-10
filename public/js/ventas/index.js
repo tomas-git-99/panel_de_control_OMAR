@@ -315,6 +315,18 @@ const ordenarProductoTable = (res, talles) => {
             </td>
             </tr>
 
+
+
+            <tr>
+            <td>Tela: ${devolverString(res.tela)} : </td>
+            <td><input type="text" id="producto_tela" name="tela"></td>
+            <td> 
+                <button  id="tela_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+            </td>
+            </tr>
+
+
+
             <tr>
             <td>Cantidad Total: (${res.cantidad == null ? conteoPorTalle(talles) : res.cantidad}) : </td>
             <td><input type="text" id="producto_cantidad" name="cantidad"></td>

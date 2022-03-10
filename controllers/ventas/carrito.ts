@@ -1354,3 +1354,41 @@ export const cambiarPrecioAtodoELproducto = async(req: Request, res: Response) =
         res.json({ok: false, msg:error})
     }
 }
+
+
+
+
+
+
+
+export const agregarAclaraciones = async (req: Request, res: Response) => {
+
+
+    try {
+
+        console.log(req.body)
+        
+
+        const carrito = await Carrito.findAll({where:{id_usuario:req.params.id}});
+
+
+        carrito
+        .filter( e => e.id_producto == req.body.id_producto)
+        .map( async(p) => {
+            await p.update({nota:req.body.nota})
+        })
+
+
+        res.json({
+            ok: true,
+            msg: "Se agrego la nota"
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.json({
+            ok: false,
+            msg: error
+        })
+    }
+}

@@ -7,5 +7,6 @@ const router = express_1.Router();
 router.post('/:id', direccion_1.agregarDirecciones);
 //OBTENER TODAS LA DIRECCION CON UN ID
 router.get('/:id', direccion_1.obtenerDireccion);
+router.put('/:id', direccion_1.editarDireccion);
 exports.default = router;
 //# sourceMappingURL=direccion.js.map

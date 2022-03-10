@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerDireccion = exports.agregarDirecciones = void 0;
+exports.editarDireccion = exports.obtenerDireccion = exports.agregarDirecciones = void 0;
 const direccion_1 = require("../../models/ventas/direccion");
 const agregarDirecciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -60,4 +60,21 @@ const obtenerDireccion = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.obtenerDireccion = obtenerDireccion;
+const editarDireccion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const direccion = yield direccion_1.Direccion.findByPk(req.params.id);
+        yield direccion.update(req.body);
+        res.json({
+            ok: true,
+            direccion
+        });
+    }
+    catch (error) {
+        res.json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.editarDireccion = editarDireccion;
 //# sourceMappingURL=direccion.js.map

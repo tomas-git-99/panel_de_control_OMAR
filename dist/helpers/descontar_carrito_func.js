@@ -84,7 +84,8 @@ const creandoOrdenDetallePorTalle = (productosSinRepetir, talles, carrito, produ
                         nombre_producto: dato_producto.nombre,
                         talle: n.talle,
                         cantidad: n.cantidad,
-                        precio: (dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo) == null ? dato_producto === null || dato_producto === void 0 ? void 0 : dato_producto.precio : dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo
+                        precio: (dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo) == null ? dato_producto === null || dato_producto === void 0 ? void 0 : dato_producto.precio : dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo,
+                        nota: dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.nota,
                     };
                     nuevoOrdenes.push(orden);
                 }
@@ -262,7 +263,8 @@ const crearOrdenDetalleTotal = (id_orden, productosSinRepetir, productos, carrit
                 nombre_producto: dato_producto.nombre,
                 talle: n.talle,
                 cantidad: n.cantidad,
-                precio: (dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo) == null ? dato_producto === null || dato_producto === void 0 ? void 0 : dato_producto.precio : dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo
+                precio: (dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo) == null ? dato_producto === null || dato_producto === void 0 ? void 0 : dato_producto.precio : dato_carrito === null || dato_carrito === void 0 ? void 0 : dato_carrito.precio_nuevo,
+                nota: dato_carrito.nota,
             };
             nuevoOrdenes.push(orden);
         }

@@ -28,6 +28,7 @@ comprobarCarritoStorage();
 
  ////////////////ACTUALIZAR CARRITO A PENAS ENTRA////////////////////////////////
 
+ let arrayINFOcarrito 
 
 const carritoActualizar = () => {
     let id = localStorage.getItem("id")
@@ -37,14 +38,15 @@ const carritoActualizar = () => {
     fecthNormalGET("GET", `carrito/${id}`)
     .then( res => {
 
-        console.log(res)
-
-        
 
         opcionesDeArticulos(sinRepetir(res.carrito_full))
         cargaMedio("spinner_load", false)
         leerCarrito(res.carrito_full);
-        
+        arrayINFOcarrito = res.carrito_full;
+
+        console.log(
+            res.carrito_full
+        )
         })
     .catch( err => {
        
@@ -946,6 +948,7 @@ window.opcionesDrop = (tag) => {
 
 window.salirVentana = (tag) => {
     abrirCerrarVentanas(tag, false);
+    carritoActualizar();
 }
 
 
@@ -972,21 +975,29 @@ const sinRepetir = (array) => {
 }
 
 const opciolesDeLocalesMigrar = document.querySelector("#opciolesDeLocalesMigrar");
+const opciolesDeLocalesMigrar2 = document.querySelector("#opciolesDeLocalesMigrar2");
 
 const opcionesDeArticulos = (array) => {
 
+    console.log(array)
     let historial = ""
 
+    historial +=
+    `
+    <option value="0">Articulos...</option>
+
+    `
     array.forEach(e => {
-        historial = 
+        historial += 
         `
         <option value="${e.id}">Articulo:${e.id}, ${e.nombre}</option>
 
         `
 
-        opciolesDeLocalesMigrar.innerHTML += historial;
 
     })
+    opciolesDeLocalesMigrar.innerHTML = historial;
+    opciolesDeLocalesMigrar2.innerHTML = historial;
 
 }
 
@@ -1008,8 +1019,42 @@ const opcionesDeArticulos = (array) => {
 }
 
 let idValue
-window.seleccionDeArticulo = (This) => {
+/*  */
+window.seleccionDeArticulo = (This, number=0) => {
     idValue = This.value
+    console.log(buscarSiTieneNota(arrayINFOcarrito, idValue ))
+    if(number == 1){ 
+
+        if(This.value == 0){ return document.querySelector('.botonYtextarea').innerHTML = ''}
+        document.querySelector('.botonYtextarea').innerHTML = 
+        `
+        ${buscarSiTieneNota(arrayINFOcarrito, idValue ) == null ? "" :  `
+        <div class="notification aclaracionNota" style="margin-bottom: -10px; font-size:15px; max-width:400px;">
+        <button class="delete" onclick="salirVentana('aclaracionNota')"></button>
+
+        Este articulo ya tiene una nota: <br/>
+        <p  style = "font-style: italic; margin-bottom: -5px;">
+        ${buscarSiTieneNota(arrayINFOcarrito, idValue )}
+        </p>
+        </div>`}
+
+        <textarea class="textarea" id="valueTextArea"></textarea>
+        <div class="botonDetextarea" style="justify-self: center;">
+        <button class="button is-info is-rounded"  onclick="agregarAclaraciones()">Agregar</button>
+        </div>
+        `;
+    }
+}
+
+
+const buscarSiTieneNota = (array, id_producto) => {
+    let nota = "";
+
+    array
+    .find(b => {if(b.carritos.id_producto == id_producto){ nota = b.carritos.nota}})
+
+    return nota;
+    
 }
 
 window.cambiarPrecio = () => {
@@ -1042,6 +1087,41 @@ window.cambiarPrecio = () => {
     .catch( err => {
         algo_salio_mal(`Algo salio mal: ${ err }`);
         botonCargaBulma('.botonConfirmar', false);
+
+    }
+    )
+
+}
+
+
+window.agregarAclaraciones = () => {
+
+
+
+    let data = {
+        id_producto:idValue,
+        nota: document.getElementById('valueTextArea').value,
+    }
+
+    fecthNormalPOST_PUT("POST", `carrito/agregar/nota/new/${localStorage.getItem("id")}`, data)
+    .then( res => {
+
+        if(res.ok == true){
+
+            salio_todo_bien();
+            document.getElementById('valueTextArea').value = "";
+            
+
+        }else{
+
+            algo_salio_mal(`Algo salio mal`);
+            
+        }
+    }
+    )
+    .catch( err => {
+
+        algo_salio_mal(`Algo salio mal: ${ err }`);
 
     }
     )

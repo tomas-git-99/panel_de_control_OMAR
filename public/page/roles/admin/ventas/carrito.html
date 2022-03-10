@@ -105,6 +105,10 @@
                                 <a href="#" class="dropdown-item" onclick="opcionesDrop('cambiarLocalProductos')">
                                 Cambiar Precios
                                 </a>
+
+                                <a href="#" class="dropdown-item" onclick="opcionesDrop('agregarAclaracion')">
+                                Agregar Notas Articulos
+                                </a>
                                 
                               </div>
         
@@ -321,6 +325,7 @@
                 
           
                 <div class="contenidoDeMigrar">
+
                     <div class="buscadoresDeNombresLocales">
                         <label class="label">Locales</label>
     
@@ -332,7 +337,7 @@
                             </select>
 
                         </div> -->
-                        <select class="form-select " aria-label="Default select example" id="opciolesDeLocalesMigrar" onchange="seleccionDeArticulo(this)">
+                        <select class="form-select " aria-label="Default select example" id="opciolesDeLocalesMigrar2" onchange="seleccionDeArticulo(this)">
                             <option selected value="0">Articulos</option>
 
                           </select>
@@ -356,6 +361,33 @@
                 </div>
 
              
+            </div>
+
+
+
+            <div class="agregarAclaracion" style="position: fixed; place-self: center; background: white; border: 1px solid; border-radius:10px; padding:10px; display: none; visibility: hidden; gap: 20px;">
+                <button type="button" class="btn-close" aria-label="Close" onclick="salirVentana('agregarAclaracion')" style="padding: -20px;"></button>
+
+                <div class="tituloAclaracion" style="text-align:  center;">
+                    
+                    <h3>Notas</h3>
+                </div>
+
+                <div class="buscadoresDeNombresLocales">
+                   <!--  <label class="label">Locales</label> -->
+
+                    <select class="form-select " aria-label="Default select example" id="opciolesDeLocalesMigrar" onchange="seleccionDeArticulo(this, 1)">
+                        <option selected value="0">Articulos</option>
+
+                    </select>
+
+                </div>
+                
+
+                <div class="botonYtextarea"  style="display:grid; width:100%; gap: 20px;">
+
+                </div>
+
             </div>
 
 

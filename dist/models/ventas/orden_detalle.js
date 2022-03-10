@@ -27,6 +27,9 @@ OrdenDetalle.init({
     },
     precio: {
         type: sequelize_1.DataTypes.NUMBER
+    },
+    nota: {
+        type: sequelize_1.DataTypes.STRING
     }
 }, {
     sequelize: conectarDB_1.default,

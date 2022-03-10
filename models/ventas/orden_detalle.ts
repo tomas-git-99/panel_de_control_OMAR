@@ -10,6 +10,8 @@ export interface TodoAtributos {
     cantidad:number;
     talle:string;
     precio:number;
+    nota:string;
+
 }
 
 
@@ -21,6 +23,7 @@ export class OrdenDetalle extends Model <TodoAtributos>{
     public cantidad!:number;
     public talle!:string;
     public precio!:number;
+    public nota!:string;
 
 }
 
@@ -45,7 +48,11 @@ OrdenDetalle.init(
         },
         precio:{
             type:DataTypes.NUMBER
+        },
+        nota:{
+            type:DataTypes.STRING
         }
+        
         
     },{
         sequelize: db,

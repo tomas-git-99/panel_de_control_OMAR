@@ -126,7 +126,8 @@ export const creandoOrdenDetallePorTalle = async( productosSinRepetir:ProductoSi
                         nombre_producto:dato_producto!.nombre,
                         talle: n.talle, 
                         cantidad: n.cantidad,
-                        precio: dato_carrito?.precio_nuevo == null ?  dato_producto?.precio :  dato_carrito?.precio_nuevo 
+                        precio: dato_carrito?.precio_nuevo == null ?  dato_producto?.precio :  dato_carrito?.precio_nuevo,
+                        nota:dato_carrito?.nota,
                     }
 
                     nuevoOrdenes.push(orden);
@@ -410,7 +411,8 @@ export const crearOrdenDetalleTotal =  async (id_orden:number, productosSinRepet
             nombre_producto:dato_producto!.nombre,
             talle: n.talle, 
             cantidad: n.cantidad,
-            precio: dato_carrito?.precio_nuevo == null ?  dato_producto?.precio :  dato_carrito?.precio_nuevo 
+            precio: dato_carrito?.precio_nuevo == null ?  dato_producto?.precio :  dato_carrito?.precio_nuevo,
+            nota:dato_carrito.nota,
         }
 
         nuevoOrdenes.push(orden);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarCarrito, cambiarPrecioAtodoELproducto, descontarElTotal, descontarPorUnidad, descontarProductosFull, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito, nuevaFuncionParaDescontar, pruebaParaDescontar } from "../../controllers/ventas/carrito";
+import { agregarAclaraciones, agregarCarrito, cambiarPrecioAtodoELproducto, descontarElTotal, descontarPorUnidad, descontarProductosFull, eliminarCarrito, modificarCarrito, mostrarCantidad_Actual_Carrito, mostrarCarrito, nuevaFuncionParaDescontar, pruebaParaDescontar } from "../../controllers/ventas/carrito";
 import { validarCampos } from "../../middlewares/validar-campo";
 import { validarJWT } from "../../middlewares/validar-JWT";
 
@@ -45,4 +45,6 @@ router.put("/confirmar/compra/:id/:id_orden", nuevaFuncionParaDescontar) /// est
 
 
 router.post("/cambiar/p", cambiarPrecioAtodoELproducto)
+
+router.post("/agregar/nota/new/:id", agregarAclaraciones)
 export default router;

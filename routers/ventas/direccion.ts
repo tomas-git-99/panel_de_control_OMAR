@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { agregarDirecciones, obtenerDireccion } from "../../controllers/ventas/direccion";
+import { agregarDirecciones, editarDireccion, obtenerDireccion } from "../../controllers/ventas/direccion";
 
 
 
@@ -11,5 +11,5 @@ router.post('/:id', agregarDirecciones)
 
 //OBTENER TODAS LA DIRECCION CON UN ID
 router.get('/:id', obtenerDireccion)
-
+router.put('/:id', editarDireccion)
 export default router;
