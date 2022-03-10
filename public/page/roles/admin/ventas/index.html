@@ -112,7 +112,7 @@
                   
 
                           <div class="moverDrop">
-                            <div class="dropdown is-right ">
+                            <div class="dropdown is-right" id="dropdown1">
                                 <div class="dropdown-trigger">
                                   <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                                     <span>Opciones</span>
@@ -146,6 +146,7 @@
                             <th scope="col">ARTICULO</th>
                             <th scope="col">MODELO</th>
                             <th scope="col">DISEÑO</th>
+                            <th scope="col">COLOR</th>
                             <th scope="col">STOCK</th>
                             <th scope="col">TALLES</th>
                             <th scope="col">TELA</th>
@@ -177,13 +178,45 @@
                   </div>
 
                 <div class="previsualizar">
+
+                    <button type="button" class="btn-close" onclick="actualizar_salir(this)" aria-label="Close" style="padding-left: 20px; margin-top: 10px; "></button>
+
                     <div class="contenido_producto">
+
+
                         <div class="titulo_producto">
                             <h2>Producto</h2>
                             <hr>
                         </div>
                         <div class="datos_producto">
 
+                            <div class="moverDrop">
+                                <div class="dropdown is-right" id="dropdown2">
+                                    <div class="dropdown-trigger">
+                                      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                        <span>Opciones</span>
+                                        <span class="icon is-small">
+                                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                      </button>
+                                    </div>
+    
+                                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                      <div class="dropdown-content">
+    
+                                        <a href="#" class="dropdown-item id_Para_modificar" onclick="abrirVentana(this.id)">
+                                         Agregar Nueva Talle
+                                        </a>
+                                        
+                                        <a href="#" class="dropdown-item id_Para_modificar_eliminar" onclick="eliminar_Producto(this.id)">
+                                            Eliminar Producto
+                                           </a>
+                                      </div>
+    
+                                    </div>
+    
+                                  </div>
+                            </div>
 
                         <table  class="table" >
                         <tbody class="datos_producto_table">
@@ -211,6 +244,20 @@
                                 </td>
                             </tr>
 
+                            <tr>
+                                <td>talle</td>
+                                <td><input type="text"></td>
+                                <td> 
+                                    <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>talle</td>
+                                <td><input type="text"></td>
+                                <td> 
+                                    <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>talle</td>
                                 <td><input type="text"></td>
@@ -255,25 +302,16 @@
                             </div>
 
 
-                            <div class="datos_talle">
-                                <label for="">Talle : <span class="label_talle">1</span> <span class="label_stock">(23)</span></label>
-                        
-                                <input type="text">
-                                <button  type="button"  class="btn btn-outline-primary  btn-sm">CAMBIAR</button>
-
-                            </div>
-
-
                         </div>
                     </div>
                     
-                    <div class="boton_salir">
+           <!--          <div class="boton_salir">
                         <hr>
                         <button type="button" class="btn btn-danger id_elimanar_producto"  onclick="eliminar_Producto(this.id)"> ELIMAR PRODUCTO</button>
                         <button type="button" class="btn btn-warning"  onclick="actualizar_salir(this)"> SALIR</button>
                         <button type="button" class="btn btn-success" id="producto_id" onclick="abrirVentana(this.id)">AGREGAR TALLE</button>
 
-                    </div>
+                    </div> -->
                 </div>
                 
                 

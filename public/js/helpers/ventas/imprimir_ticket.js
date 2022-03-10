@@ -206,15 +206,20 @@ const escribirEnHTML = (e, data="", estado=false) => {
         <div class="Localida">
         <label for="">Localidad: <span>${devolverString(e.direccion.localidad)}</span> </label>
         </div>
-        <div class="Direccion">
-        <label for="">Direccion: <span>${devolverString(e.direccion.direccion)}</span> </label>
-        </div>
+
+ 
+
         <div class="Codigo">
         <label for="">CP: <span>${devolverString(e.direccion.cp)}</span> </label>
         </div>
         <div class="transporte">
         <label for="">Transporte: <span>${devolverString(e.orden.transporte)}</span> </label>
         </div>
+
+        <div class="Direccion">
+        <label for="">Direccion: <span>${devolverString(e.direccion.direccion)}</span> </label>
+        </div>
+        
         `
         
         infoCliente.innerHTML = escribir;
@@ -312,6 +317,8 @@ const ticket_parami = (res, elemento) => {
         <tr>
         <th>${devolverString(e.detalles.nombre_producto)}</th>
         <th>${devolverString(e.producto.diseño)}</th>
+        <th>${devolverString(e.producto.color)}</th>
+        <th style="font-size:12px">${devolverString(e.detalles.nota)}</th>
         <td>${devolverString(e.producto.tela)}</td>
         <td>${devolverString(e.detalles.talle)}</td>
         <td>${devolverString(e.detalles.cantidad)}</td>

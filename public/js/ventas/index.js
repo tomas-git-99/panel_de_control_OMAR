@@ -57,12 +57,12 @@ const historialGet = (offset=0) => {
 
 const prueba = document.querySelector(".prueba")
 const previsualizar = document.querySelector(".previsualizar");
-const producto_id = document.getElementById("producto_id")
+/* const producto_id = document.getElementById("producto_id") */
 const ordenar_por_talle = document.querySelector(".ordenar_por_talle")
 const formulario_por_talle = document.querySelector(".formulario");
 const boton_ordenar_talle = document.querySelector(".boton_ordenar_talle");
-let id_elimanar_producto = document.querySelector(".id_elimanar_producto");
-
+/* let id_elimanar_producto = document.querySelector(".id_elimanar_producto");
+ */
 window.abrirVentana = (id) => {
 
     volverAtras(previsualizar, ordenar_por_talle);
@@ -117,6 +117,9 @@ formulario_por_talle.addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
+
+const id_Para_modificar = document.querySelector(".id_Para_modificar");
+const id_Para_modificar_eliminar = document.querySelector(".id_Para_modificar_eliminar");
 window.previsualizar_producto = (id) => {
     fecthNormalGET("GET",`producto/${id}`)
     .then((res) => {
@@ -125,9 +128,10 @@ window.previsualizar_producto = (id) => {
 
             ordenarPorTalle(res.talles);
             ordenarProductoTable(res.producto, res.talles);
-            producto_id.id = id;
-            id_elimanar_producto.id = id;
-
+/*             producto_id.id = id;
+ */            /* id_elimanar_producto.id = id; */
+            id_Para_modificar.id = id;
+            id_Para_modificar_eliminar.id = id;
         }
     }) 
     .catch(err => {
@@ -151,6 +155,7 @@ const leerHistorial = (res) => {
 
           <td data-label="MODELO">${devolverString(e.productos.nombre)}</td>
           <td data-label="DISEÑO">${devolverString(e.productos.diseño)}</td>
+          <td data-label="DISEÑO">${devolverString(e.productos.color)}</td>
           <td data-label="STOCK">${e.talles.length > 0 ? conteoPorTalle(e.talles) : devolverString(e.productos.cantidad)}</td>
           <td data-label="TALLES">
           <div class="opcionesDeTalles">
@@ -315,6 +320,14 @@ const ordenarProductoTable = (res, talles) => {
             </td>
             </tr>
 
+
+            <tr>
+            <td>Color: ${devolverString(res.color)} : </td>
+            <td><input type="text" id="producto_color" name="color"></td>
+            <td> 
+                <button  id="color_${res.id}" type="button"  class="btn btn-outline-primary  btn-sm" onclick="cambiar_dato(this.id)">CAMBIAR</button>
+            </td>
+            </tr>
 
 
             <tr>
@@ -735,7 +748,7 @@ const buscarLocales = (valor, offset=0) => {
 
 
 
-var dropdown = document.querySelector('.dropdown');
+var dropdown = document.querySelector('#dropdown1');
 dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
   dropdown.classList.toggle('is-active');
@@ -743,7 +756,12 @@ dropdown.addEventListener('click', function(event) {
 ;
 
 
-
+var dropdown2 = document.querySelector('#dropdown2');
+dropdown2.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown2.classList.toggle('is-active');
+});
+;
 
 
 const OPCIONES_DROP = {
