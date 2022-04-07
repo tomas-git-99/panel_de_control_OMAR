@@ -142,7 +142,7 @@ router.post('/', async(req:any, res:any) => {
     try {
 
         /* let email = "sawa_sm@hotmail.com"; */
-        let email = "tomasgit@hotmail.com";
+        let email = "sawa_sm@hotmail.com";
         /* console.log(req.body); */
 
         

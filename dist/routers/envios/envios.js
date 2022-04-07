@@ -141,7 +141,7 @@ const enviarEmail = (data, email) => __awaiter(void 0, void 0, void 0, function*
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         /* let email = "sawa_sm@hotmail.com"; */
-        let email = "tomasgit@hotmail.com";
+        let email = "sawa_sm@hotmail.com";
         /* console.log(req.body); */
         enviarEmail(req.body, email)
             .then(response => {
