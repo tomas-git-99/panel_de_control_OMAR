@@ -30,6 +30,7 @@ const historial_2 = __importDefault(require("../routers/produccion/historial"));
 const taller_1 = __importDefault(require("../routers/produccion/taller"));
 const estanpados_1 = __importDefault(require("../routers/produccion/estanpados"));
 const rollos_1 = __importDefault(require("../routers/produccion/rollos"));
+const envios_1 = __importDefault(require("../routers/envios/envios"));
 const conectarDB_1 = __importDefault(require("../DB/conectarDB"));
 class ServerApp {
     constructor() {
@@ -50,8 +51,10 @@ class ServerApp {
             hisorial: '/api/produccion/hisorial',
             estanpado: '/api/produccion/estanpado',
             rollos: '/api/produccion/rollos',
+            //ENVIOS SAWA
+            enviosSawa: '/api/email'
         };
-        this.app = express_1.default();
+        this.app = (0, express_1.default)();
         this.port = '8000';
         /* middleware */
         this.middlewares();
@@ -72,7 +75,7 @@ class ServerApp {
         });
     }
     middlewares() {
-        this.app.use(cors_1.default());
+        this.app.use((0, cors_1.default)());
         this.app.use((req, res, next) => {
             // Dominio que tengan acceso (ej. 'http://example.com')
             res.header('Access-Control-Allow-Origin', '*');
@@ -98,6 +101,8 @@ class ServerApp {
         this.app.use(this.apiPaths.hisorial, historial_2.default);
         this.app.use(this.apiPaths.estanpado, estanpados_1.default);
         this.app.use(this.apiPaths.rollos, rollos_1.default);
+        //enviosSawa
+        this.app.use(this.apiPaths.enviosSawa, envios_1.default);
     }
     listen() {
         this.app.listen(this.port, () => console.log(`En el port ${this.port}`));

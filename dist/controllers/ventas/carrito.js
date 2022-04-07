@@ -765,15 +765,15 @@ const nuevaFuncionParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0
                 ids_productos_total.push(i.id);
             }
         }
-        let curvasDeTotal = descontar_carrito_func_1.unirCurvasOUnidadTotal(ids_productos_total, carrito, productos);
-        let verificarStockProducto = descontar_carrito_func_1.repeticionDeProductos(curvasDeTotal);
-        let curvasCompletasTotal = descontar_carrito_func_1.unirPortalleParaOrdenDetallada(curvasDeTotal, ids_productos_total, productos, carrito);
+        let curvasDeTotal = (0, descontar_carrito_func_1.unirCurvasOUnidadTotal)(ids_productos_total, carrito, productos);
+        let verificarStockProducto = (0, descontar_carrito_func_1.repeticionDeProductos)(curvasDeTotal);
+        let curvasCompletasTotal = (0, descontar_carrito_func_1.unirPortalleParaOrdenDetallada)(curvasDeTotal, ids_productos_total, productos, carrito);
         const talles = yield talles_1.Talle.findAll({ where: { id_producto: ids_productos_unidad } });
-        let tallesCompletados = descontar_carrito_func_1.armarLasCurvas(carrito, talles).filter(a => ids_productos_unidad.includes(a.id_producto));
-        let tallesPorSeparado = descontar_carrito_func_1.juntarTodosLosTallesEnUno(ids_productos_unidad, tallesCompletados);
-        let sumaDeTodasLasTalles = descontar_carrito_func_1.sumaDeTodoLosProductos(tallesPorSeparado, tallesCompletados);
+        let tallesCompletados = (0, descontar_carrito_func_1.armarLasCurvas)(carrito, talles).filter(a => ids_productos_unidad.includes(a.id_producto));
+        let tallesPorSeparado = (0, descontar_carrito_func_1.juntarTodosLosTallesEnUno)(ids_productos_unidad, tallesCompletados);
+        let sumaDeTodasLasTalles = (0, descontar_carrito_func_1.sumaDeTodoLosProductos)(tallesPorSeparado, tallesCompletados);
         //verificamos el stock de los productos
-        let productos_sin_stock = [].concat(descontar_carrito_func_1.verifcarSiTienenStock(talles, sumaDeTodasLasTalles, productos), descontar_carrito_func_1.verificarSiHayStockTotal(verificarStockProducto, productos));
+        let productos_sin_stock = [].concat((0, descontar_carrito_func_1.verifcarSiTienenStock)(talles, sumaDeTodasLasTalles, productos), (0, descontar_carrito_func_1.verificarSiHayStockTotal)(verificarStockProducto, productos));
         if (productos_sin_stock.length > 0) {
             return res.json({
                 ok: false,
@@ -783,9 +783,9 @@ const nuevaFuncionParaDescontar = (req, res) => __awaiter(void 0, void 0, void 0
             });
         }
         //crear orden detalle, de los productos que tiene solo talles
-        let totasLasOrdenes = yield descontar_carrito_func_1.creandoOrdenDetallePorTalle(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
+        let totasLasOrdenes = yield (0, descontar_carrito_func_1.creandoOrdenDetallePorTalle)(sumaDeTodasLasTalles, talles, carrito, productos, id_orden);
         //crear orden detalle, de los productos que tiene solo total
-        let totalDeOrdenSoloTOTAL = yield descontar_carrito_func_1.crearOrdenDetalleTotal(parseInt(id_orden), curvasCompletasTotal, productos, carrito);
+        let totalDeOrdenSoloTOTAL = yield (0, descontar_carrito_func_1.crearOrdenDetalleTotal)(parseInt(id_orden), curvasCompletasTotal, productos, carrito);
         for (let i of totasLasOrdenes) {
             let talleCambiar = talles.find(t => t.id_producto == i.id_producto && t.talle == parseInt(i.talle));
             sumaTotal += i.cantidad * i.precio;

@@ -5,12 +5,12 @@ const producto_1 = require("../../controllers/ventas/producto");
 const express_validator_1 = require("express-validator");
 const validar_campo_1 = require("../../middlewares/validar-campo");
 const validar_JWT_1 = require("../../middlewares/validar-JWT");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //CREAR PRODUCTO
 router.post('/', [
     validar_JWT_1.validarJWT,
-    express_validator_1.check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    express_validator_1.check('precio', 'Es obligatorio el precio').not().isEmpty(),
+    (0, express_validator_1.check)('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    (0, express_validator_1.check)('precio', 'Es obligatorio el precio').not().isEmpty(),
     validar_campo_1.validarCampos,
 ], producto_1.crearProducto);
 //AGREGAR STOCK DE buscarProducto

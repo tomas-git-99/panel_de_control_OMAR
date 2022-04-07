@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const rollos_1 = require("../../controllers/produccion/rollos");
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 //CREAR NUEVO ROLLO 
 router.post('/', rollos_1.crearNuevoRollo);
 //OBTENER TODOS LOS ROLLO 
